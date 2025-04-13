@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
@@ -12,6 +13,8 @@ import AvailableRewardsTab from '@/components/wallet/AvailableRewardsTab';
 import RewardDialog from '@/components/wallet/RewardDialog';
 import EmptyState from '@/components/wallet/EmptyState';
 import LoadingState from '@/components/wallet/LoadingState';
+import TransactionHistory from '@/components/wallet/TransactionHistory';
+import GameficationTab from '@/components/wallet/GameficationTab';
 import { useToast } from '@/hooks/use-toast';
 import { useWalletData } from '@/hooks/useWalletData';
 import { claimReward, claimChallengeReward } from '@/services/walletService';
@@ -29,7 +32,8 @@ const Wallet = () => {
     rewards,
     userRewards, 
     setUserRewards,
-    setWalletData
+    setWalletData,
+    boostedChallenges
   } = useWalletData();
 
   const handleClaimReward = async (rewardId: string, xpRequired: number) => {
@@ -119,6 +123,15 @@ const Wallet = () => {
     setRewardDialogOpen(false);
   };
 
+  const handleGenerateQRCode = (reward: UserReward) => {
+    // This would typically connect to a backend service to generate a QR code
+    toast({
+      title: "QR-Code generiert",
+      description: "Der QR-Code wurde erfolgreich generiert und kann in Geschäften gescannt werden.",
+    });
+    // We would update the reward with QR code data here in a real implementation
+  };
+
   if (isLoading) {
     return <LoadingState />;
   }
@@ -141,6 +154,7 @@ const Wallet = () => {
         level={level}
         progress={progress}
         nextLevelXP={nextLevelXP}
+        boostedChallenges={boostedChallenges}
       />
       
       <Tabs defaultValue="challenge-rewards" className="mb-6">
@@ -148,6 +162,8 @@ const Wallet = () => {
           <TabsTrigger value="challenge-rewards">Challenge Belohnungen</TabsTrigger>
           <TabsTrigger value="available">Level Belohnungen</TabsTrigger>
           <TabsTrigger value="claimed">Eingelöste Belohnungen</TabsTrigger>
+          <TabsTrigger value="gamification">VIP & Status</TabsTrigger>
+          <TabsTrigger value="history">Transaktionen</TabsTrigger>
         </TabsList>
         
         <TabsContent value="challenge-rewards">
@@ -170,7 +186,20 @@ const Wallet = () => {
             rewards={rewards}
             userRewards={userRewards}
             onOpenRewardDetails={openRewardDetails}
+            onGenerateQRCode={handleGenerateQRCode}
           />
+        </TabsContent>
+
+        <TabsContent value="gamification">
+          <GameficationTab 
+            level={level} 
+            xp={walletData.xp_total}
+            userRewards={userRewards}
+          />
+        </TabsContent>
+
+        <TabsContent value="history">
+          <TransactionHistory walletData={walletData} />
         </TabsContent>
       </Tabs>
 
@@ -180,6 +209,7 @@ const Wallet = () => {
         onOpenChange={setRewardDialogOpen}
         onClaim={handleClaimChallengeReward}
         onNavigate={navigateToReward}
+        onGenerateQRCode={handleGenerateQRCode}
       />
     </div>
   );

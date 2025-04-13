@@ -21,6 +21,7 @@ export const useWalletData = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [rewards, setRewards] = useState<any[]>([]);
   const [userRewards, setUserRewards] = useState<UserReward[]>([]);
+  const [boostedChallenges, setBoostedChallenges] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchWalletData = async () => {
@@ -77,10 +78,41 @@ export const useWalletData = () => {
             xpRequired: 10000,
             isClaimed: claimedRewards.includes('vip'),
             isUnlocked: xp >= 10000
+          },
+          {
+            id: 'premium',
+            name: 'Premium-Mitgliedschaft',
+            description: '1 Monat Premium-Status mit allen Vorteilen',
+            xpRequired: 15000,
+            isClaimed: claimedRewards.includes('premium'),
+            isUnlocked: xp >= 15000
+          },
+          {
+            id: 'exclusive',
+            name: 'Limitierte Edition Box',
+            description: 'Eine Box mit exklusiven Produkten unserer Marke',
+            xpRequired: 20000,
+            isClaimed: claimedRewards.includes('exclusive'),
+            isUnlocked: xp >= 20000
           }
         ];
         
         setRewards(availableRewards);
+
+        // Fetch boosted challenges (double XP)
+        const { data: challengesData } = await supabase
+          .from('challenges')
+          .select('id, title, xp_reward')
+          .gt('xp_reward', 250) // Get challenges with higher than standard XP
+          .limit(3);
+        
+        if (challengesData) {
+          setBoostedChallenges(challengesData.map(challenge => ({
+            id: challenge.id,
+            title: challenge.title,
+            xpMultiplier: Math.round(challenge.xp_reward / 250) // Assuming 250 is standard
+          })));
+        }
 
         const userChallengeRewards = await getUserRewards(user.id);
         
@@ -111,6 +143,7 @@ export const useWalletData = () => {
     rewards,
     userRewards,
     setUserRewards,
-    setWalletData
+    setWalletData,
+    boostedChallenges
   };
 };

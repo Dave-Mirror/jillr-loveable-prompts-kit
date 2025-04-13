@@ -1,8 +1,9 @@
+
 import React from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Check, Gift } from 'lucide-react';
+import { Check, Gift, QrCode } from 'lucide-react';
 import { UserReward } from '@/utils/challenge/rewards/types';
 
 interface ClaimedRewardsTabProps {
@@ -14,12 +15,14 @@ interface ClaimedRewardsTabProps {
   }>;
   userRewards: UserReward[];
   onOpenRewardDetails: (reward: UserReward) => void;
+  onGenerateQRCode: (reward: UserReward) => void;
 }
 
 const ClaimedRewardsTab: React.FC<ClaimedRewardsTabProps> = ({ 
   rewards, 
   userRewards, 
-  onOpenRewardDetails 
+  onOpenRewardDetails,
+  onGenerateQRCode
 }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -69,14 +72,26 @@ const ClaimedRewardsTab: React.FC<ClaimedRewardsTabProps> = ({
             <CardTitle className="line-clamp-1">{reward.name}</CardTitle>
           </CardHeader>
           
-          <CardFooter className="mt-auto">
+          <CardFooter className="mt-auto flex gap-2">
             <Button 
               onClick={() => onOpenRewardDetails(reward)}
               variant="outline"
-              className="w-full"
+              className="flex-1"
             >
-              Details anzeigen
+              Details
             </Button>
+            
+            {/* Add QR code generation for in-store redemption */}
+            {reward.type === 'product' || reward.type === 'voucher' ? (
+              <Button 
+                onClick={() => onGenerateQRCode(reward)}
+                variant="outline"
+                className="flex-1"
+              >
+                <QrCode className="h-4 w-4 mr-2" />
+                QR-Code
+              </Button>
+            ) : null}
           </CardFooter>
         </Card>
       ))}
