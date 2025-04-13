@@ -39,7 +39,11 @@ const AchievementsCard: React.FC<AchievementsCardProps> = ({ userRewards, xp, le
                   ? 'bg-jillr-neonGreen/20' 
                   : 'bg-jillr-darkBlue/30'
               }`}>
-                {achievement.icon}
+                {React.createElement(achievement.icon as any, {
+                  className: achievement.completed
+                    ? "h-5 w-5 text-jillr-neonGreen"
+                    : "h-5 w-5 text-muted-foreground"
+                })}
               </div>
               <h3 className="font-medium mb-1">{achievement.name}</h3>
               <p className="text-xs text-muted-foreground mb-2">{achievement.description}</p>

@@ -35,7 +35,11 @@ const VipChallengesCard: React.FC<VipChallengesCardProps> = ({ level }) => {
             >
               <div className="flex items-start justify-between mb-2">
                 <h3 className="font-medium flex items-center gap-2">
-                  {challenge.icon}
+                  {React.createElement(challenge.icon as any, {
+                    className: level >= challenge.requiredLevel
+                      ? "h-5 w-5 text-jillr-neonPink"
+                      : "h-5 w-5 text-muted-foreground"
+                  })}
                   {challenge.name}
                 </h3>
                 {level < challenge.requiredLevel && (
