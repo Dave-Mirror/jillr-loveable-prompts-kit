@@ -62,6 +62,7 @@ const App = () => (
                   <Route path="/leaderboard" element={<Leaderboard />} />
                   <Route path="/shop" element={<Shop />} />
                   <Route path="/livemap" element={<LiveMap />} />
+                  <Route path="/content-editor" element={<ContentEditor />} />
                   <Route path="/challenge-builder" element={<ContentEditor />} />
                   <Route path="/auth" element={<Auth />} />
                   <Route path="/auth/callback" element={<AuthCallback />} />
