@@ -1,16 +1,30 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Coins, Zap, Award, User } from 'lucide-react';
+import { Coins, Zap, Award, User, LogOut } from 'lucide-react';
+import { useAuth } from '@/providers/AuthProvider';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
 
 const Header = () => {
-  // Placeholder data, in a real app this would come from authentication/database
+  const { user, signOut } = useAuth();
+  const { toast } = useToast();
+  
+  // Placeholder data, in a real app this would come from database
   const userData = {
     name: 'User',
     xp: 1250,
     coins: 780,
     level: 7,
     badges: 3
+  };
+
+  const handleSignOut = async () => {
+    await signOut();
+    toast({
+      title: "Signed out",
+      description: "You have been signed out successfully",
+    });
   };
 
   return (
@@ -33,24 +47,43 @@ const Header = () => {
         </nav>
         
         <div className="flex items-center gap-4">
-          <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-jillr-darkBlue">
-            <Zap size={16} className="text-jillr-neonPurple" />
-            <span className="text-sm font-medium">{userData.xp} XP</span>
-          </div>
-          
-          <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-jillr-darkBlue">
-            <Coins size={16} className="text-jillr-neonGreen" />
-            <span className="text-sm font-medium">{userData.coins}</span>
-          </div>
-          
-          <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-jillr-darkBlue">
-            <Award size={16} className="text-jillr-neonPink" />
-            <span className="text-sm font-medium">Lvl {userData.level}</span>
-          </div>
-          
-          <Link to="/profile" className="w-9 h-9 flex items-center justify-center rounded-full bg-jillr-darkBlue hover:bg-jillr-neonPurple/20 transition-colors">
-            <User size={20} />
-          </Link>
+          {user ? (
+            <>
+              <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-jillr-darkBlue">
+                <Zap size={16} className="text-jillr-neonPurple" />
+                <span className="text-sm font-medium">{userData.xp} XP</span>
+              </div>
+              
+              <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-jillr-darkBlue">
+                <Coins size={16} className="text-jillr-neonGreen" />
+                <span className="text-sm font-medium">{userData.coins}</span>
+              </div>
+              
+              <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-jillr-darkBlue">
+                <Award size={16} className="text-jillr-neonPink" />
+                <span className="text-sm font-medium">Lvl {userData.level}</span>
+              </div>
+              
+              <Link to="/profile" className="w-9 h-9 flex items-center justify-center rounded-full bg-jillr-darkBlue hover:bg-jillr-neonPurple/20 transition-colors">
+                <User size={20} />
+              </Link>
+              
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={handleSignOut}
+                className="hover:bg-jillr-neonPink/20"
+              >
+                <LogOut size={20} />
+              </Button>
+            </>
+          ) : (
+            <Link to="/auth">
+              <Button className="neon-button">
+                Login
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
     </header>

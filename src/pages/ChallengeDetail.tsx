@@ -1,15 +1,20 @@
 
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Zap, Clock, Upload, ExternalLink } from 'lucide-react';
 import CountdownTimer from '@/components/CountdownTimer';
+import { useAuth } from '@/providers/AuthProvider';
+import { useToast } from '@/hooks/use-toast';
 
 const ChallengeDetail = () => {
   const { id } = useParams<{ id: string }>();
   const [challenge, setChallenge] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   useEffect(() => {
     const fetchChallenge = async () => {
@@ -36,6 +41,20 @@ const ChallengeDetail = () => {
     
     fetchChallenge();
   }, [id]);
+
+  const handleJoinClick = () => {
+    if (!user) {
+      toast({
+        title: "Login Required",
+        description: "Please login to join this challenge",
+        variant: "destructive"
+      });
+      navigate('/auth', { state: { from: { pathname: `/challenge/${id}` } } });
+      return;
+    }
+    
+    navigate(`/upload/${id}`);
+  };
 
   if (isLoading) {
     return (
@@ -100,12 +119,10 @@ const ChallengeDetail = () => {
                 </div>
               </div>
               
-              <Link to={`/upload/${id}`}>
-                <Button className="neon-button">
-                  <Upload size={18} className="mr-2" />
-                  Join Challenge
-                </Button>
-              </Link>
+              <Button className="neon-button" onClick={handleJoinClick}>
+                <Upload size={18} className="mr-2" />
+                Join Challenge
+              </Button>
             </div>
             
             <div className="bg-jillr-darkBlue/50 rounded-lg p-6">
@@ -118,9 +135,12 @@ const ChallengeDetail = () => {
               </ol>
               
               <div className="mt-6 flex justify-end">
-                <Link to={`/upload/${id}`} className="flex items-center text-jillr-neonPink hover:underline">
+                <button
+                  className="flex items-center text-jillr-neonPink hover:underline"
+                  onClick={handleJoinClick}
+                >
                   Go to submission page <ExternalLink size={16} className="ml-1" />
-                </Link>
+                </button>
               </div>
             </div>
           </div>
