@@ -17,6 +17,12 @@ const LeaderboardPage = () => {
     badgeSystem: badges
   } = useLeaderboardData(mockUsers, badgeSystem);
 
+  // Ensure each badge has an id property
+  const formattedBadges = badges.map(badge => ({
+    ...badge,
+    id: badge.id || `badge-${badge.name.toLowerCase().replace(/\s+/g, '-')}`
+  }));
+
   const cityFilters = ['Berlin', 'New York', 'London', 'Tokyo', 'Paris', '+ Add Your City'];
   const challengeFilters = ['Dance', 'Comedy', 'Lifestyle', 'Fitness', 'Tutorial', 'Food'];
   const teamFilters = ['Dance Crew', 'Comedy Club', 'Fitness Heroes', '+ Create Team'];
@@ -39,7 +45,7 @@ const LeaderboardPage = () => {
         </div>
         
         <div className="md:col-span-1">
-          <BadgeSystem badges={badges} />
+          <BadgeSystem badges={formattedBadges} />
         </div>
       </div>
     </div>

@@ -20,6 +20,7 @@ type User = {
 };
 
 type BadgeType = {
+  id: string; // Added id to match Badge type in BadgeList
   name: string;
   xp_required: number;
   challenges_required?: number;
