@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
 import SearchButton from './SearchButton';
 import NotificationBell from './NotificationBell';
 import UserProfile from './UserProfile';
@@ -8,6 +7,7 @@ import UserStats from './UserStats';
 import MobileMenu from './MobileMenu';
 import GuestMobileMenu from './GuestMobileMenu';
 import AuthButtons from './AuthButtons';
+import QuickAccessLinks from './QuickAccessLinks';
 import { 
   Home, BarChart, Zap, Trophy, Map, ShoppingBag, Wallet, User
 } from 'lucide-react';
@@ -33,24 +33,8 @@ const RightSection: React.FC<RightSectionProps> = ({ user, userProfile, signOut 
     <div className="flex items-center gap-3">
       <SearchButton />
       
-      {/* Consistent Wallet and Profile Quick Access Icons */}
-      <div className="flex items-center gap-2 group">
-        <Link 
-          to="/wallet" 
-          className="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-white/10 transition-colors"
-        >
-          <Wallet size={16} />
-          <span className="text-xs hidden md:inline">Wallet</span>
-        </Link>
-        
-        <Link 
-          to="/profile" 
-          className="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-white/10 transition-colors"
-        >
-          <User size={16} />
-          <span className="text-xs hidden md:inline">Pril</span>
-        </Link>
-      </div>
+      {/* Quick Access Links Component */}
+      <QuickAccessLinks />
       
       {user ? (
         <>
@@ -70,4 +54,3 @@ const RightSection: React.FC<RightSectionProps> = ({ user, userProfile, signOut 
 };
 
 export default RightSection;
-
