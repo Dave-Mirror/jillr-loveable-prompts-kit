@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -25,7 +26,7 @@ const BrandDashboard = () => {
             Settings
             <ChevronDown className="h-4 w-4 ml-1" />
           </Button>
-          <Link to="/content-editor">
+          <Link to="/challenge-editor">
             <Button className="bg-jillr-neonPurple hover:bg-jillr-neonPurple/80 flex items-center gap-2">
               <Video className="h-4 w-4" />
               Create Challenge

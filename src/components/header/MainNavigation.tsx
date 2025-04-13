@@ -28,6 +28,7 @@ const MainNavigation: React.FC<MainNavigationProps> = ({ user }) => {
     { name: 'Brand Portal', icon: Briefcase, path: '/brand-dashboard' },
     { name: 'Creator Studio', icon: Video, path: '/creator-dashboard' },
     { name: 'Content Editor', icon: Edit, path: '/content-editor' },
+    { name: 'Challenge Editor', icon: Edit, path: '/challenge-editor' },
   ];
 
   return (

@@ -26,6 +26,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ user, userProfile, onSignOut })
     { name: 'Leaderboard', icon: Trophy, path: '/leaderboard' },
     { name: 'Shop', icon: ShoppingBag, path: '/shop' },
     { name: 'Content Editor', icon: Edit, path: '/content-editor' },
+    { name: 'Challenge Editor', icon: Edit, path: '/challenge-editor' },
   ];
 
   return (
