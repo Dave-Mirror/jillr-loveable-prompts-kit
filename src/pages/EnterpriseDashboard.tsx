@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -14,7 +13,7 @@ import {
   ChartBarIcon, 
   BellIcon, 
   CogIcon, 
-  UserGroupIcon,
+  Users,
   PlusCircle,
   Building,
   Palette,
@@ -44,7 +43,6 @@ const EnterpriseDashboard = () => {
           .single();
         
         if (error) {
-          // If no profile exists, we'll create one
           if (error.code === 'PGRST116') {
             const newProfile = {
               user_id: user.id,
@@ -165,7 +163,7 @@ const EnterpriseDashboard = () => {
             <span className="hidden md:inline">Easter Eggs</span>
           </TabsTrigger>
           <TabsTrigger value="influencers" className="flex items-center">
-            <UserGroupIcon className="mr-2 h-4 w-4" />
+            <Users className="mr-2 h-4 w-4" />
             <span className="hidden md:inline">Influencers</span>
           </TabsTrigger>
           <TabsTrigger value="newCampaign" className="flex items-center">
@@ -242,13 +240,13 @@ const EnterpriseDashboard = () => {
               </CardHeader>
               <CardContent>
                 <div className="py-8 text-center">
-                  <UserGroupIcon className="mx-auto h-12 w-12 text-muted-foreground" />
+                  <Users className="mx-auto h-12 w-12 text-muted-foreground" />
                   <h3 className="mt-4 text-lg font-medium">No collaborations yet</h3>
                   <p className="mt-2 text-sm text-muted-foreground">
                     Connect with influencers to amplify your campaigns
                   </p>
                   <Button className="mt-4">
-                    <UserGroupIcon className="mr-2 h-4 w-4" />
+                    <Users className="mr-2 h-4 w-4" />
                     Find Influencers
                   </Button>
                 </div>
