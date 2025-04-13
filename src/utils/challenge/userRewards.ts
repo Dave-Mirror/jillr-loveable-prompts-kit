@@ -251,3 +251,13 @@ export const getSampleRewards = (): UserReward[] => {
     }
   ];
 };
+
+// Group rewards by type
+export const groupRewardsByType = (rewards: UserReward[]): Record<string, UserReward[]> => {
+  return rewards.reduce((acc, reward) => {
+    const type = reward.type;
+    if (!acc[type]) acc[type] = [];
+    acc[type].push(reward);
+    return acc;
+  }, {} as Record<string, UserReward[]>);
+};
