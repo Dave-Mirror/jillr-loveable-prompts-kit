@@ -22,7 +22,7 @@ import {
   getChallengeTypeIcon, 
   getChallengeRewards,
   fetchChallengeDetails
-} from '@/utils/challengeUtils';
+} from '@/utils/challenge';
 
 const ChallengeDetail = () => {
   const { id } = useParams<{ id: string }>();
