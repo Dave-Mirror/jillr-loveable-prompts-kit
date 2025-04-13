@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
@@ -12,20 +11,6 @@ import StatCards from '@/components/dashboard/StatCards';
 import ChallengesTab from '@/components/dashboard/ChallengesTab';
 import ShopTab from '@/components/dashboard/ShopTab';
 import StatsTab from '@/components/dashboard/StatsTab';
-
-interface ChallengeData {
-  id: string;
-  title: string;
-  status: string;
-  type?: string;
-  description?: string;
-  coin_reward?: number;
-  xp_reward?: number;
-  start_date?: string;
-  end_date?: string;
-  hashtags?: string[];
-  views?: number;
-}
 
 const CreatorDashboard = () => {
   const { user } = useAuth();
@@ -100,10 +85,10 @@ const CreatorDashboard = () => {
         setProducts(mockProducts);
         
         // Ensure challengesData is an array before processing
-        const challenges: ChallengeData[] = Array.isArray(challengesData) ? challengesData : [];
+        const challenges: Challenge[] = Array.isArray(challengesData) ? challengesData : [];
         
         // Add default views value of 0 for challenges that don't have it
-        const challengesWithViews = challenges.map((challenge) => ({
+        const challengesWithViews = challenges.map(challenge => ({
           ...challenge,
           views: challenge.views || 0
         }));
