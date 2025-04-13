@@ -42,7 +42,8 @@ export const fetchChallengeDetails = async (
     const challengeWithImage: Challenge = {
       ...data,
       imageUrl: challengeTypeImages[data.type] || challengeTypeImages['default'],
-      type: (data.type as ChallengeType) || undefined
+      type: (data.type as ChallengeType) || undefined,
+      status: (data.status as "active" | "completed" | "draft") || "active"
     };
     
     setChallenge(challengeWithImage);
