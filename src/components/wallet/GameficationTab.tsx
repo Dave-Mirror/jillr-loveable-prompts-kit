@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { 
   Award, Crown, Lock, Star, Trophy, TrendingUp, 
-  Zap, ShieldCheck, Gift, Rocket
+  Zap, ShieldCheck, Gift, Rocket, Check // Add Check to the import
 } from 'lucide-react';
 import { UserReward } from '@/utils/challenge/rewards/types';
 
