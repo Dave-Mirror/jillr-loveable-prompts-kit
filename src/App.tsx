@@ -56,7 +56,11 @@ const App = () => (
                     <Wallet />
                   </ProtectedRoute>
                 } />
-                <Route path="/creator-dashboard" element={<CreatorDashboard />} />
+                <Route path="/creator-dashboard" element={
+                  <ProtectedRoute>
+                    <CreatorDashboard />
+                  </ProtectedRoute>
+                } />
                 <Route path="/brand-dashboard" element={<BrandDashboard />} />
                 <Route path="/enterprise-dashboard" element={<EnterpriseDashboard />} />
                 <Route path="/leaderboard" element={<Leaderboard />} />
