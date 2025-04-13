@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { useLiveMap } from '@/hooks/useLiveMap';
 import { Button } from '@/components/ui/button';
@@ -22,8 +21,8 @@ const defaultCenter = {
   lng: 13.404954
 };
 
-// Use Vite's environment variables instead of process.env
-const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || 'YOUR_FALLBACK_API_KEY';
+// Use Vite's environment variables
+const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '';
 
 const LiveMapView = () => {
   const { mapData, activeMapElements, loadingMap } = useLiveMap();
@@ -31,6 +30,7 @@ const LiveMapView = () => {
   const [mapCenter, setMapCenter] = useState(defaultCenter);
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [infoWindow, setInfoWindow] = useState<any>(null);
+  const [isApiKeyMissing, setIsApiKeyMissing] = useState(!GOOGLE_MAPS_API_KEY);
   const navigate = useNavigate();
   const { toast } = useToast();
   const { user } = useAuth();
@@ -38,8 +38,19 @@ const LiveMapView = () => {
   // Load Google Maps API
   const { isLoaded, loadError } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: GOOGLE_MAPS_API_KEY // Use variable instead of process.env
+    googleMapsApiKey: GOOGLE_MAPS_API_KEY
   });
+
+  // Show a toast if API key is missing
+  useEffect(() => {
+    if (isApiKeyMissing) {
+      toast({
+        title: "Google Maps API Key Missing",
+        description: "Please add your Google Maps API key in the .env file",
+        variant: "destructive",
+      });
+    }
+  }, [isApiKeyMissing, toast]);
 
   const onMapLoad = useCallback((map: google.maps.Map) => {
     setMap(map);
@@ -132,8 +143,32 @@ const LiveMapView = () => {
     }
   };
 
-  if (loadError) {
-    return <div className="w-full h-[70vh] flex items-center justify-center">Error loading maps</div>;
+  if (loadError || isApiKeyMissing) {
+    return (
+      <div className="w-full h-[70vh] relative rounded-lg glassmorphism overflow-hidden">
+        <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
+          <h3 className="text-xl font-bold mb-2">Google Maps could not be loaded</h3>
+          {isApiKeyMissing ? (
+            <>
+              <p className="mb-4 text-muted-foreground">Please add your Google Maps API key in the .env file:</p>
+              <div className="bg-muted p-3 rounded-md text-left w-full max-w-md mb-4">
+                <code className="text-sm">VITE_GOOGLE_MAPS_API_KEY=your_api_key_here</code>
+              </div>
+              <a 
+                href="https://console.cloud.google.com/google/maps-apis/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-primary underline text-sm"
+              >
+                Get an API key from Google Cloud Console
+              </a>
+            </>
+          ) : (
+            <p className="text-muted-foreground">There was an error loading the map: {loadError?.message}</p>
+          )}
+        </div>
+      </div>
+    );
   }
 
   return (
