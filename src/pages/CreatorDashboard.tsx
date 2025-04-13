@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
@@ -43,7 +44,7 @@ const CreatorDashboard = () => {
         if (challengesError) throw challengesError;
         
         // Explicitly type the data as Challenge[] to prevent deep type instantiation
-        const challengesData: Challenge[] = data || [];
+        const challengesData = data || [];
         
         // Fetch wallet data for XP and coins
         const { data: walletData, error: walletError } = await supabase
@@ -88,7 +89,7 @@ const CreatorDashboard = () => {
         setProducts(mockProducts);
         
         // Add default views value of 0 for challenges that don't have it
-        const challengesWithViews = challengesData.map(challenge => ({
+        const challengesWithViews = challengesData.map((challenge: Challenge) => ({
           ...challenge,
           views: challenge.views || 0
         }));
