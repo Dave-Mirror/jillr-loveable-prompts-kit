@@ -33,6 +33,149 @@ const challengeTypeImages = {
   'default': 'https://images.unsplash.com/photo-1579547621869-0dbd72cf4caa?q=80&w=800'
 };
 
+// Spezifische Coach-Tipps für verschiedene Challenge-Typen
+const coachTips = {
+  'Video': `
+1. Verwende gute Beleuchtung, idealerweise natürliches Licht.
+2. Halte dein Smartphone im Hochformat (9:16) für TikTok-optimiertes Format.
+3. Die ersten 3 Sekunden sind entscheidend - starte mit einem Blickfang!
+4. Verwende Musik oder Sound-Effekte für mehr Engagement.
+5. Nutze den Schnitt-Effekt für dynamische Übergänge.`,
+
+  'Geofencing': `
+1. Aktiviere präzise Standortdienste auf deinem Gerät.
+2. Mache erkennbare Aufnahmen der Orte, an denen du eincheckst.
+3. Verbinde dein Erlebnis mit einer interessanten Story.
+4. Trage auffällige Kleidung, um in deinen Videos hervorzustechen.
+5. Nutze lokale Hashtags für mehr Reichweite.`,
+
+  'Photo & Video': `
+1. Kombiniere Standbilder mit kurzen Videosequenzen für Dynamik.
+2. Experimentiere mit verschiedenen Perspektiven für den gleichen Ort oder Gegenstand.
+3. Verwende die "Goldene Stunde" kurz nach Sonnenaufgang oder vor Sonnenuntergang.
+4. Erstelle eine konsistente visuelle Ästhetik durch ähnliche Filter.
+5. Zeige Authentizität durch unerwartete Momente und echte Reaktionen.`,
+
+  'Fashion': `
+1. Nutze Outfit-Transitionen mit einem einfachen Wipe- oder Schnapp-Effekt.
+2. Wähle ein konsistentes Farbschema, das zu deinem Mood passt.
+3. Der Hintergrund sollte einfach sein, um den Fokus auf dein Outfit zu legen.
+4. Zeige Details wie Accessoires, Schuhe oder Make-up in Nahaufnahmen.
+5. Bewege dich natürlich, um zu zeigen, wie der Look wirkt.`,
+
+  'Sport': `
+1. Filme aus verschiedenen Winkeln, um die Komplexität deiner Tricks zu zeigen.
+2. Nutze Slow-Motion für besonders beeindruckende Momente.
+3. Kombiniere POV-Aufnahmen mit Aufnahmen aus der Ferne.
+4. Zeige sowohl Erfolge als auch Fehlversuche für Authentizität.
+5. Füge Musik hinzu, die zum Rhythmus deiner Bewegungen passt.`,
+
+  'AR': `
+1. Stelle sicher, dass die AR-Elemente gut erkennbar und mit der Umgebung integriert sind.
+2. Bewege dich langsam und gleichmäßig für stabile AR-Erfahrungen.
+3. Nutze gut beleuchtete Umgebungen für bessere AR-Erkennung.
+4. Zeige deine Reaktion auf das AR-Erlebnis für mehr Engagement.
+5. Experimentiere mit verschiedenen Perspektiven der AR-Elemente.`,
+
+  'Beauty': `
+1. Zeige deutlich das Vorher und Nachher für maximalen Effekt.
+2. Nutze gute, gleichmäßige Beleuchtung - ideal ist Ringlight.
+3. Füge Nahaufnahmen der Details hinzu.
+4. Erkläre kurz die verwendeten Produkte oder Techniken.
+5. Musik und Übergänge können dein Vorher-Nachher dramatischer wirken lassen.`,
+
+  'Fitness': `
+1. Filme dich aus einem Winkel, der deine Technik gut zeigt.
+2. Nutze intensive, motivierende Musik für den Hintergrund.
+3. Zeige echte Anstrengung und Emotionen - Authentizität ist wichtig.
+4. Füge Text oder Voice-Over hinzu, um Motivation zu vermitteln.
+5. Achte auf gute Beleuchtung, die deine Form und Muskeldefinition betont.`,
+
+  'Travel': `
+1. Beginne mit einem atemberaubenden Panorama-Shot des Hotels.
+2. Zeige eine Sequenz vom Aufstehen bis zum Sonnenaufgang.
+3. Nimm Details wie das Frühstück, die Aussicht oder besondere Hoteleinrichtungen auf.
+4. Verwende sanfte Übergänge zwischen den Szenen für ein ruhiges Morgengefühl.
+5. Schließe mit einem inspirierenden Moment ab, der den perfekten Start in den Tag verkörpert.`,
+
+  'Food': `
+1. Beleuchte das Essen von vorne oder leicht seitlich.
+2. Zeige Details wie Dampf, schmelzender Käse oder tropfende Saucen.
+3. Nimm den "ersten Bissen" oder das "Aufschneiden" auf.
+4. Variiere zwischen Nahaufnahmen und Gesamtansichten des Gerichts.
+5. Achte auf ansprechende Farbkontraste bei der Präsentation.`,
+
+  'Dance': `
+1. Finde einen Platz mit ausreichend Bewegungsfreiheit und gutem Licht.
+2. Stelle die Kamera so auf, dass deine gesamte Bewegung zu sehen ist.
+3. Übe den Tanz mehrmals, bevor du aufnimmst.
+4. Trage Kleidung, die deine Bewegungen betont und zur Musik passt.
+5. Füge Text mit dem Songtitel und Choreografen hinzu.`,
+
+  // Fallback-Tipps für andere Challenge-Typen
+  'default': `
+1. Achte auf gute Beleuchtung und Tonqualität.
+2. Die ersten 3 Sekunden sind entscheidend - starte mit einem Hingucker!
+3. Halte dich an die vorgegebenen Hashtags für mehr Reichweite.
+4. Sei authentisch und kreativ in deinem Content.
+5. Füge Musik oder Sound-Effekte für mehr Engagement hinzu.`
+};
+
+// Belohnungsideen basierend auf Challenge-Typen
+const rewardsData = {
+  'Video': [
+    { type: 'coins', description: '250 Coins für verifizierte Teilnahme', immediate: false },
+    { type: 'xp', description: '500 XP nach Upload', immediate: true },
+    { type: 'product', description: 'Red Bull Sixpack bei 500+ Views', level: 500, immediate: false, viral_bonus: true }
+  ],
+  'Geofencing': [
+    { type: 'coins', description: '150 Coins für jeden Check-in', immediate: true },
+    { type: 'xp', description: '300 XP nach Abschluss aller Orte', immediate: false },
+    { type: 'voucher', description: 'Lokale Rabatt-Codes freischalten', immediate: true }
+  ],
+  'Photo & Video': [
+    { type: 'coins', description: '300 Coins für Festival-Content', immediate: false },
+    { type: 'xp', description: '600 XP nach Verifizierung', immediate: false },
+    { type: 'ticket', description: 'VIP-Upgrade bei 1000+ Likes', level: 1000, immediate: false, viral_bonus: true }
+  ],
+  'Fashion': [
+    { type: 'coins', description: '200 Coins für Upload', immediate: true },
+    { type: 'xp', description: '400 XP nach Verifizierung', immediate: false },
+    { type: 'voucher', description: '15% Fashion-Gutschein', immediate: true }
+  ],
+  'Sport': [
+    { type: 'coins', description: '400 Coins für verifizierten Trick', immediate: false },
+    { type: 'xp', description: '800 XP nach Upload', immediate: true },
+    { type: 'product', description: 'Limitierte Sneaker bei 2000+ Views', level: 2000, immediate: false, viral_bonus: true }
+  ],
+  'AR': [
+    { type: 'coins', description: '350 Coins pro AR-Interaktion', immediate: true },
+    { type: 'xp', description: '700 XP nach Abschluss', immediate: false },
+    { type: 'ticket', description: 'Exklusiver digitaler Drop', immediate: false }
+  ],
+  'Beauty': [
+    { type: 'coins', description: '200 Coins für Vorher-Nachher', immediate: true },
+    { type: 'xp', description: '400 XP nach Verifizierung', immediate: false },
+    { type: 'product', description: 'Beauty-Box im Wert von 50€', immediate: false }
+  ],
+  'Fitness': [
+    { type: 'coins', description: '300 Coins für deinen härtesten Moment', immediate: true },
+    { type: 'xp', description: '600 XP nach Verifizierung', immediate: false },
+    { type: 'product', description: 'Gymshark Outfit bei 1500+ Views', level: 1500, immediate: false, viral_bonus: true }
+  ],
+  'Travel': [
+    { type: 'coins', description: '250 Coins für Hotel-Content', immediate: true },
+    { type: 'xp', description: '500 XP nach Verifizierung', immediate: false },
+    { type: 'voucher', description: 'Marriott Bonvoy Punkte', immediate: false }
+  ],
+  // Standardbelohnungen für andere Challenge-Typen
+  'default': [
+    { type: 'coins', description: '250 Coins sofort nach Upload', immediate: true },
+    { type: 'xp', description: '500 XP für verifizierte Teilnahme', immediate: false },
+    { type: 'product', description: 'T-Shirt bei über 1000 Views', level: 1000, immediate: false, viral_bonus: true }
+  ]
+};
+
 type Submission = {
   id: string;
   user_id: string;
@@ -65,14 +208,6 @@ const ChallengeDetail = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
-
-  // Mock rewards for now
-  const mockRewards: Reward[] = [
-    { type: 'coins', description: '250 Coins sofort nach Upload', immediate: true },
-    { type: 'xp', description: '500 XP für verifizierte Teilnahme', immediate: false },
-    { type: 'product', description: 'T-Shirt bei über 1000 Views', level: 1000, immediate: false, viral_bonus: true },
-    { type: 'voucher', description: '10% Rabatt-Code', immediate: true },
-  ];
 
   useEffect(() => {
     const fetchChallengeDetails = async () => {
@@ -169,16 +304,24 @@ const ChallengeDetail = () => {
     
     setIsLoadingTip(true);
     try {
-      // Mock API call since the edge function isn't implemented yet
-      // In a real implementation, this would call the coachTip edge function
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // In einer realen Implementierung würde hier die KI-Edge-Funktion aufgerufen werden
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
-      setCoachTip(
-        `Für diese "${challenge.type || 'Video'}" Challenge empfehle ich dir: ` +
-        `1. Achte auf gute Beleuchtung und Tonqualität. ` +
-        `2. Halte dich an die Hashtags: ${challenge.hashtags?.join(', ') || '#jillr'}. ` +
-        `3. Zeige Authentizität und Kreativität in deinem Content.`
-      );
+      // Wähle spezifischen Tipp basierend auf dem Challenge-Typ
+      const specificTips = coachTips[challenge.type] || coachTips['default'];
+      
+      // Füge Hashtags und persönliche Anrede hinzu
+      const personalizedTip = `Hey ${user?.email?.split('@')[0] || 'Creator'}! 
+
+Hier sind meine Tipps für deine "${challenge.title}" (${challenge.type || 'Video'})-Challenge:
+
+${specificTips}
+
+Wichtig: Vergiss nicht die Hashtags ${challenge.hashtags?.map((tag: string) => '#' + tag).join(' ') || '#jillr'} zu verwenden!
+
+Viel Erfolg! 🚀`;
+      
+      setCoachTip(personalizedTip);
     } catch (error) {
       console.error('Error fetching coach tip:', error);
       toast({
@@ -242,6 +385,12 @@ const ChallengeDetail = () => {
     }
   };
 
+  // Ermittle die passenden Belohnungen basierend auf dem Challenge-Typ
+  const getRewards = (): Reward[] => {
+    if (!challenge?.type) return rewardsData['default'];
+    return rewardsData[challenge.type] || rewardsData['default'];
+  };
+
   if (isLoading) {
     return (
       <div className="container mx-auto px-4 py-12">
@@ -267,6 +416,9 @@ const ChallengeDetail = () => {
       </div>
     );
   }
+
+  // Verwende die Challenge-spezifischen Belohnungen
+  const challengeRewards = getRewards();
 
   // Set dynamic accent color from challenge branding (fallback to default)
   const accentColor = challenge.brand_color || '#9b87f5';
@@ -362,7 +514,7 @@ const ChallengeDetail = () => {
                       <Award size={20} className="text-jillr-neonPink" />
                       <div>
                         <div className="font-semibold">Belohnung</div>
-                        <div className="text-sm">{challenge.coin_reward || 0} Coins</div>
+                        <div className="text-sm">{challenge.coin_reward || 0} Coins & {challenge.xp_reward || 0} XP</div>
                       </div>
                     </div>
                     
@@ -447,7 +599,7 @@ const ChallengeDetail = () => {
                   <DialogHeader>
                     <DialogTitle>Tipp vom KI-Coach</DialogTitle>
                     <DialogDescription>
-                      Persönliche Empfehlungen für diese Challenge
+                      Spezifische Empfehlungen für deine "{challenge.type}"-Challenge
                     </DialogDescription>
                   </DialogHeader>
                   <div className="py-4">
@@ -456,7 +608,7 @@ const ChallengeDetail = () => {
                         <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-jillr-neonPurple"></div>
                       </div>
                     ) : (
-                      <p className="text-md">{coachTip}</p>
+                      <div className="whitespace-pre-line text-md">{coachTip}</div>
                     )}
                   </div>
                 </DialogContent>
@@ -543,7 +695,7 @@ const ChallengeDetail = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {mockRewards.map((reward, index) => {
+                {challengeRewards.map((reward, index) => {
                   const isReachable = reward.immediate || (reward.level && reward.level <= 1000);
                   
                   return (
@@ -601,7 +753,7 @@ const ChallengeDetail = () => {
                       <Zap size={20} className="text-jillr-neonPurple mr-2" />
                       <span>XP für diese Challenge</span>
                     </div>
-                    <div className="font-bold text-jillr-neonPurple">+250 XP</div>
+                    <div className="font-bold text-jillr-neonPurple">+{challenge.xp_reward || 250} XP</div>
                   </div>
                   
                   <div className="flex justify-between items-center p-3 rounded-lg glassmorphism">
@@ -609,7 +761,7 @@ const ChallengeDetail = () => {
                       <Coins size={20} className="text-yellow-500 mr-2" />
                       <span>Coins für diese Challenge</span>
                     </div>
-                    <div className="font-bold text-yellow-500">+100 Coins</div>
+                    <div className="font-bold text-yellow-500">+{challenge.coin_reward || 100} Coins</div>
                   </div>
                   
                   {submissions.length === 0 && (
@@ -652,3 +804,4 @@ const ChallengeDetail = () => {
 };
 
 export default ChallengeDetail;
+
