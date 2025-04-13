@@ -1,31 +1,71 @@
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { useLiveMap } from '@/hooks/useLiveMap';
 import { Button } from '@/components/ui/button';
 import { Gift, Package, Target, Users, Info } from 'lucide-react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Challenge } from '@/components/challenge/types';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { joinChallenge } from '@/utils/challenge';
 import { useAuth } from '@/hooks/useAuth';
+import { GoogleMap, useJsApiLoader, Marker, InfoWindow } from '@react-google-maps/api';
+
+// Map container style
+const containerStyle = {
+  width: '100%',
+  height: '100%',
+  borderRadius: '0.5rem'
+};
+
+const defaultCenter = {
+  lat: 52.520008, // Berlin coordinates as default
+  lng: 13.404954
+};
 
 const LiveMapView = () => {
-  const mapContainer = useRef<HTMLDivElement>(null);
   const { mapData, activeMapElements, loadingMap } = useLiveMap();
   const [selectedItem, setSelectedItem] = useState<any>(null);
+  const [mapCenter, setMapCenter] = useState(defaultCenter);
+  const [map, setMap] = useState<google.maps.Map | null>(null);
+  const [infoWindow, setInfoWindow] = useState<any>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
   const { user } = useAuth();
 
+  // Load Google Maps API
+  const { isLoaded, loadError } = useJsApiLoader({
+    id: 'google-map-script',
+    googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY || 'YOUR_FALLBACK_API_KEY' // Replace with your API key
+  });
+
+  const onMapLoad = useCallback((map: google.maps.Map) => {
+    setMap(map);
+  }, []);
+
+  const onMapUnmount = useCallback(() => {
+    setMap(null);
+  }, []);
+
+  // Get user's current location
   useEffect(() => {
-    // This would normally initialize the map using a mapping library like Mapbox or Leaflet
-    // For now, we'll use a placeholder div with a background image for demonstration
-    console.log("Map would initialize here with actual mapping library");
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setMapCenter({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          });
+        },
+        (error) => {
+          console.error("Error getting location:", error);
+        }
+      );
+    }
   }, []);
 
   const handleItemClick = (item: any) => {
     setSelectedItem(item);
+    setInfoWindow(null);
   };
 
   const handleCloseDialog = () => {
@@ -49,6 +89,14 @@ const LiveMapView = () => {
     setSelectedItem(null);
   };
 
+  const handleMarkerClick = (item: any) => {
+    setInfoWindow(item);
+  };
+
+  const handleInfoWindowClose = () => {
+    setInfoWindow(null);
+  };
+
   const getIconForItemType = (type: string) => {
     switch (type) {
       case 'easteregg': return <Gift className="text-yellow-500" />;
@@ -59,45 +107,131 @@ const LiveMapView = () => {
     }
   };
 
+  // Convert map elements to actual coordinates
+  const getMapMarkers = () => {
+    return activeMapElements.map(item => ({
+      ...item,
+      position: {
+        lat: defaultCenter.lat + (item.position.y - 50) / 500,
+        lng: defaultCenter.lng + (item.position.x - 50) / 500
+      }
+    }));
+  };
+
+  // Get marker icon URL based on type
+  const getMarkerIcon = (type: string) => {
+    switch (type) {
+      case 'easteregg': return 'https://maps.google.com/mapfiles/ms/icons/yellow-dot.png';
+      case 'drop': return 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png';
+      case 'challenge': return 'https://maps.google.com/mapfiles/ms/icons/red-dot.png';
+      case 'teamevent': return 'https://maps.google.com/mapfiles/ms/icons/purple-dot.png';
+      default: return 'https://maps.google.com/mapfiles/ms/icons/green-dot.png';
+    }
+  };
+
+  if (loadError) {
+    return <div className="w-full h-[70vh] flex items-center justify-center">Error loading maps</div>;
+  }
+
   return (
     <div className="w-full h-[70vh] relative rounded-lg glassmorphism overflow-hidden">
-      {loadingMap ? (
+      {loadingMap || !isLoaded ? (
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="animate-spin h-10 w-10 border-4 border-primary border-t-transparent rounded-full"></div>
         </div>
       ) : (
         <>
-          <div 
-            ref={mapContainer} 
-            className="w-full h-full bg-cover bg-center"
-            style={{ 
-              backgroundImage: "url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80')",
-              backgroundBlendMode: "overlay",
-              backgroundColor: "rgba(0,0,0,0.3)"
+          <GoogleMap
+            mapContainerStyle={containerStyle}
+            center={mapCenter}
+            zoom={14}
+            onLoad={onMapLoad}
+            onUnmount={onMapUnmount}
+            options={{
+              styles: [
+                { 
+                  featureType: "all", 
+                  elementType: "labels.text.fill", 
+                  stylers: [{ color: "#ffffff" }] 
+                },
+                {
+                  featureType: "all",
+                  elementType: "labels.text.stroke",
+                  stylers: [{ visibility: "on" }, { color: "#3e606f" }, { weight: 2 }, { gamma: 0.84 }]
+                },
+                {
+                  featureType: "all",
+                  elementType: "labels.icon",
+                  stylers: [{ visibility: "off" }]
+                },
+                {
+                  featureType: "administrative",
+                  elementType: "geometry.fill",
+                  stylers: [{ color: "#111827" }]
+                },
+                {
+                  featureType: "administrative",
+                  elementType: "geometry.stroke",
+                  stylers: [{ color: "#c9b2a6" }, { weight: 1.2 }]
+                },
+                {
+                  featureType: "landscape",
+                  elementType: "geometry",
+                  stylers: [{ color: "#1f2937" }]
+                },
+                {
+                  featureType: "poi",
+                  elementType: "geometry",
+                  stylers: [{ color: "#283548" }]
+                },
+                {
+                  featureType: "road",
+                  elementType: "geometry",
+                  stylers: [{ color: "#2d3748" }, { lightness: -20 }]
+                },
+                {
+                  featureType: "transit",
+                  elementType: "geometry",
+                  stylers: [{ color: "#406d80" }]
+                },
+                {
+                  featureType: "water",
+                  elementType: "geometry",
+                  stylers: [{ color: "#0c4a6e" }]
+                }
+              ]
             }}
           >
-            {/* Map items would be dynamically positioned in a real implementation */}
-            {activeMapElements.map((item) => (
-              <div 
+            {getMapMarkers().map((item) => (
+              <Marker
                 key={item.id}
-                className="absolute cursor-pointer hover-scale transition-all duration-300 hover:z-10"
-                style={{ 
-                  top: `${item.position.y}%`, 
-                  left: `${item.position.x}%` 
+                position={item.position}
+                icon={{
+                  url: getMarkerIcon(item.type),
+                  scaledSize: new window.google.maps.Size(40, 40)
                 }}
-                onClick={() => handleItemClick(item)}
-              >
-                <div className={`p-2 rounded-full ${
-                  item.type === 'easteregg' ? 'bg-yellow-500/20 border-2 border-yellow-500' :
-                  item.type === 'drop' ? 'bg-blue-500/20 border-2 border-blue-500' :
-                  item.type === 'challenge' ? 'bg-red-500/20 border-2 border-red-500' :
-                  'bg-purple-500/20 border-2 border-purple-500'
-                }`}>
-                  {getIconForItemType(item.type)}
-                </div>
-              </div>
+                onClick={() => handleMarkerClick(item)}
+              />
             ))}
-          </div>
+
+            {infoWindow && (
+              <InfoWindow
+                position={infoWindow.position}
+                onCloseClick={handleInfoWindowClose}
+              >
+                <div className="p-2">
+                  <h3 className="font-bold text-gray-900">{infoWindow.title}</h3>
+                  <p className="text-sm text-gray-700">{infoWindow.description}</p>
+                  <button 
+                    className="mt-2 text-sm font-medium text-blue-600 hover:text-blue-800"
+                    onClick={() => handleItemClick(infoWindow)}
+                  >
+                    View Details
+                  </button>
+                </div>
+              </InfoWindow>
+            )}
+          </GoogleMap>
           
           <div className="absolute bottom-4 right-4 flex flex-col gap-2">
             <Button size="sm" variant="secondary" className="bg-yellow-500/20 text-yellow-400 border border-yellow-500">

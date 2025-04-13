@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import LiveMapView from '@/components/livemap/LiveMapView';
 import EventCalendar from '@/components/livemap/EventCalendar';
-import { Filter, Search, MapPin, Bell, Calendar } from 'lucide-react';
+import { Filter, Search, MapPin, Bell, Calendar, Scan, LampDesk } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import LiveMapFilters from '@/components/livemap/LiveMapFilters';
@@ -11,14 +11,19 @@ import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
 import NotificationCenter from '@/components/livemap/NotificationCenter';
 import { LiveMapProvider } from '@/contexts/LiveMapContext';
+import ARScanner from '@/components/livemap/ARScanner';
 
 const LiveMap = () => {
   const { toast } = useToast();
   const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
+  const [showScanner, setShowScanner] = useState(false);
+  const [activeTab, setActiveTab] = useState('map');
   
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!searchQuery.trim()) return;
+    
     toast({
       title: "Searching...",
       description: `Finding "${searchQuery}" on the map`,
@@ -51,6 +56,14 @@ const LiveMap = () => {
     }
   };
 
+  const handleScanComplete = (result: string) => {
+    toast({
+      title: "Easter Egg Found!",
+      description: "You've discovered a hidden Easter egg!",
+    });
+    console.log("Scan result:", result);
+  };
+
   return (
     <LiveMapProvider>
       <div className="container max-w-7xl mx-auto px-4 py-4">
@@ -58,7 +71,7 @@ const LiveMap = () => {
           <div className="flex items-center justify-between flex-wrap gap-2">
             <h1 className="text-2xl font-bold neon-text">Jillr Live Map</h1>
             
-            <Tabs defaultValue="map" className="w-full max-w-md">
+            <Tabs defaultValue="map" className="w-full max-w-md" value={activeTab} onValueChange={setActiveTab}>
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="map">Map View</TabsTrigger>
                 <TabsTrigger value="calendar">Event Calendar</TabsTrigger>
@@ -80,6 +93,15 @@ const LiveMap = () => {
             </form>
             
             <div className="flex items-center space-x-2">
+              <Button 
+                variant="outline" 
+                size="icon" 
+                onClick={() => setShowScanner(true)}
+                title="Scan AR/QR"
+              >
+                <Scan className="h-5 w-5" />
+              </Button>
+              
               <Sheet>
                 <SheetTrigger asChild>
                   <Button variant="outline" size="icon" title="Filter Map">
@@ -108,7 +130,7 @@ const LiveMap = () => {
             </div>
           </div>
           
-          <Tabs defaultValue="map" className="w-full">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsContent value="map" className="mt-0">
               <LiveMapView />
             </TabsContent>
@@ -117,6 +139,14 @@ const LiveMap = () => {
             </TabsContent>
           </Tabs>
         </div>
+        
+        <ARScanner 
+          open={showScanner} 
+          onOpenChange={setShowScanner}
+          onScanComplete={handleScanComplete}
+          title="Scan Easter Egg"
+          description="Point your camera at the QR code or AR marker to discover hidden Easter eggs, challenges, or exclusive drops!"
+        />
       </div>
     </LiveMapProvider>
   );

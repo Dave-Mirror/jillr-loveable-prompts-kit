@@ -2,15 +2,53 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
+interface Coordinates {
+  lat: number;
+  lng: number;
+}
+
+interface MapElement {
+  id: string;
+  type: 'easteregg' | 'drop' | 'challenge' | 'teamevent';
+  title: string;
+  description: string;
+  position: { x: number; y: number };
+  coordinates?: Coordinates;
+  reward?: string;
+  expiresIn?: string;
+  challengeId?: string;
+}
+
+interface Event {
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  location?: string;
+  type: 'easteregg' | 'drop' | 'challenge' | 'teamevent';
+  challengeId?: string;
+}
+
+interface Notification {
+  id: string;
+  title: string;
+  message: string;
+  time: string;
+  type: string;
+  actionText: string;
+  navigateTo?: string;
+  challengeId?: string;
+}
+
 interface LiveMapContextProps {
   mapData: any;
-  activeMapElements: any[];
+  activeMapElements: MapElement[];
   loadingMap: boolean;
   filters: any;
   setFilters: React.Dispatch<React.SetStateAction<any>>;
   resetFilters: () => void;
-  events: any[];
-  notifications: any[];
+  events: Event[];
+  notifications: Notification[];
   clearNotification: (id: string) => void;
   notificationSettings: {
     newDrops: boolean;
@@ -143,7 +181,7 @@ export const LiveMapContext = createContext<LiveMapContextProps>({
 
 export const LiveMapProvider = ({ children }: { children: ReactNode }) => {
   const [mapData, setMapData] = useState<any>(null);
-  const [activeMapElements, setActiveMapElements] = useState<any[]>(mockMapElements);
+  const [activeMapElements, setActiveMapElements] = useState<MapElement[]>(mockMapElements);
   const [loadingMap, setLoadingMap] = useState(true);
   const [filters, setFilters] = useState(defaultFilters);
   const [events, setEvents] = useState(mockEvents);
@@ -156,25 +194,25 @@ export const LiveMapProvider = ({ children }: { children: ReactNode }) => {
   });
 
   useEffect(() => {
-    // Simulate loading map data
+    // Load map data
     const loadMapData = async () => {
       try {
-        // In a real implementation, you would fetch data from your backend/API
+        // In a real implementation, fetch data from Supabase
         setTimeout(() => {
           setMapData({
             center: [13.404954, 52.520008], // Berlin coordinates
             zoom: 13
           });
           setLoadingMap(false);
-        }, 1500);
+        }, 1000);
         
-        // TODO: When connected to Supabase, we would fetch real data:
+        // Fetch map elements from Supabase (commented out for now)
         // const { data, error } = await supabase
         //   .from('map_elements')
         //   .select('*');
         // 
         // if (error) throw error;
-        // setActiveMapElements(data);
+        // if (data) setActiveMapElements(data);
       } catch (error) {
         console.error('Error loading map data:', error);
         setLoadingMap(false);
@@ -183,6 +221,18 @@ export const LiveMapProvider = ({ children }: { children: ReactNode }) => {
 
     loadMapData();
   }, []);
+
+  // Filter map elements based on user filters
+  useEffect(() => {
+    if (filters) {
+      // Apply filters to map elements (simplified implementation)
+      const filteredElements = mockMapElements.filter(element => 
+        filters.mapElements.includes(element.type)
+      );
+      
+      setActiveMapElements(filteredElements);
+    }
+  }, [filters]);
 
   const resetFilters = () => {
     setFilters(defaultFilters);
