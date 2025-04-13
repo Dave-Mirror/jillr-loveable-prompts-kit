@@ -56,7 +56,7 @@ export const useCreatorData = (userId: string | undefined): UseCreatorDataResult
               start_date: item.start_date,
               end_date: item.end_date,
               hashtags: item.hashtags,
-              views: item.views || 0
+              views: 0 // Set a default value for views since it's not in the database
             });
           });
         }
@@ -103,14 +103,38 @@ export const useCreatorData = (userId: string | undefined): UseCreatorDataResult
         
         setProducts(mockProducts);
         
-        // Add default views value of 0 for challenges that don't have it
+        // Calculate total views from uploads table instead of challenges
+        const { data: uploadsData, error: uploadsError } = await supabase
+          .from('uploads')
+          .select('challenge_id, views')
+          .in('challenge_id', challenges.map(c => c.id));
+          
+        if (uploadsError) throw uploadsError;
+        
+        // Create a map to track views per challenge
+        const viewsByChallenge = new Map<string, number>();
+        
+        if (Array.isArray(uploadsData)) {
+          uploadsData.forEach(upload => {
+            const challengeId = upload.challenge_id;
+            const views = upload.views || 0;
+            
+            if (viewsByChallenge.has(challengeId)) {
+              viewsByChallenge.set(challengeId, viewsByChallenge.get(challengeId)! + views);
+            } else {
+              viewsByChallenge.set(challengeId, views);
+            }
+          });
+        }
+        
+        // Update challenges with view counts
         const challengesWithViews = challenges.map((challenge) => ({
           ...challenge,
-          views: challenge.views || 0
+          views: viewsByChallenge.get(challenge.id) || 0
         }));
         
         // Calculate totals
-        const totalViews = challengesWithViews.reduce((acc, challenge) => acc + (challenge.views || 0), 0);
+        const totalViews = Array.from(viewsByChallenge.values()).reduce((sum, views) => sum + views, 0);
         const totalLinkClicks = 250; // Mock data
         const totalSales = mockProducts.reduce((acc, product) => acc + product.sales, 0);
         const totalCommission = mockProducts.reduce((acc, product) => acc + (product.commission * product.sales), 0);
