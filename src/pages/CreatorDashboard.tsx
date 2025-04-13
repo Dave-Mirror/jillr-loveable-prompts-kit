@@ -85,8 +85,11 @@ const CreatorDashboard = () => {
         
         setProducts(mockProducts);
         
-        // Ensure challengesData is an array before processing
-        const challenges = Array.isArray(challengesData) ? (challengesData as Challenge[]) : [];
+        // Handle the challenges data with explicit typing
+        let challenges: Challenge[] = [];
+        if (challengesData && Array.isArray(challengesData)) {
+          challenges = challengesData as Challenge[];
+        }
         
         // Add default views value of 0 for challenges that don't have it
         const challengesWithViews = challenges.map(challenge => ({
