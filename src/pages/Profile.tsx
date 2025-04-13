@@ -8,6 +8,7 @@ import RewardsSection from '@/components/profile/RewardsSection';
 import CommunitySection from '@/components/profile/CommunitySection';
 import ProfileSettings from '@/components/profile/ProfileSettings';
 import StatsSection from '@/components/profile/StatsSection';
+import SocialMediaConnections from '@/components/profile/SocialMediaConnections';
 import { Loader2 } from 'lucide-react';
 
 const Profile = () => {
@@ -81,4 +82,3 @@ const Profile = () => {
 };
 
 export default Profile;
-
