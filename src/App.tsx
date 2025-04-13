@@ -17,6 +17,8 @@ import NotFound from "./pages/NotFound";
 import Wallet from "./pages/Wallet";
 import CreatorDashboard from "./pages/CreatorDashboard";
 import Shop from "./pages/Shop";
+import BrandDashboard from "./pages/BrandDashboard";
+import Leaderboard from "./pages/Leaderboard";
 
 const queryClient = new QueryClient();
 
@@ -49,6 +51,12 @@ const App = () => (
                     <CreatorDashboard />
                   </ProtectedRoute>
                 } />
+                <Route path="/brand-dashboard" element={
+                  <ProtectedRoute roleRequired="brand">
+                    <BrandDashboard />
+                  </ProtectedRoute>
+                } />
+                <Route path="/leaderboard" element={<Leaderboard />} />
                 <Route path="/shop" element={<Shop />} />
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/auth/callback" element={<AuthCallback />} />

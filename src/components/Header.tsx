@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Coins, Zap, Award, User, LogOut, Wallet, ShoppingBag, Video } from 'lucide-react';
+import { Coins, Zap, Award, User, LogOut, Wallet, ShoppingBag, Video, BarChart, Trophy } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
@@ -41,11 +41,21 @@ const Header = () => {
           <Link to="/shop" className="text-foreground hover:text-jillr-neonPurple transition-colors">
             Shop
           </Link>
+          <Link to="/leaderboard" className="text-foreground hover:text-jillr-neonPurple transition-colors">
+            Leaderboard
+          </Link>
           {user && (
             <>
-              <Link to="/creator-dashboard" className="text-foreground hover:text-jillr-neonPurple transition-colors">
-                Creator Dashboard
-              </Link>
+              {user.role === 'creator' && (
+                <Link to="/creator-dashboard" className="text-foreground hover:text-jillr-neonPurple transition-colors">
+                  Creator Dashboard
+                </Link>
+              )}
+              {user.role === 'brand' && (
+                <Link to="/brand-dashboard" className="text-foreground hover:text-jillr-neonPurple transition-colors">
+                  Brand Dashboard
+                </Link>
+              )}
               <Link to="/wallet" className="text-foreground hover:text-jillr-neonPurple transition-colors">
                 Wallet
               </Link>
@@ -79,8 +89,20 @@ const Header = () => {
                 <Wallet size={20} />
               </Link>
               
-              <Link to="/creator-dashboard" className="w-9 h-9 flex items-center justify-center rounded-full bg-jillr-darkBlue hover:bg-jillr-neonPurple/20 transition-colors">
-                <Video size={20} />
+              {user.role === 'creator' && (
+                <Link to="/creator-dashboard" className="w-9 h-9 flex items-center justify-center rounded-full bg-jillr-darkBlue hover:bg-jillr-neonPurple/20 transition-colors">
+                  <Video size={20} />
+                </Link>
+              )}
+              
+              {user.role === 'brand' && (
+                <Link to="/brand-dashboard" className="w-9 h-9 flex items-center justify-center rounded-full bg-jillr-darkBlue hover:bg-jillr-neonPurple/20 transition-colors">
+                  <BarChart size={20} />
+                </Link>
+              )}
+              
+              <Link to="/leaderboard" className="w-9 h-9 flex items-center justify-center rounded-full bg-jillr-darkBlue hover:bg-jillr-neonPurple/20 transition-colors">
+                <Trophy size={20} />
               </Link>
               
               <Link to="/shop" className="w-9 h-9 flex items-center justify-center rounded-full bg-jillr-darkBlue hover:bg-jillr-neonPurple/20 transition-colors">
