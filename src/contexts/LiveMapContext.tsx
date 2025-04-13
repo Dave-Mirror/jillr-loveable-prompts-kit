@@ -1,4 +1,3 @@
-
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -67,7 +66,6 @@ const defaultFilters = {
   rewardFilters: []
 };
 
-// Sample data for demonstration - with correctly typed values
 const mockMapElements: MapElement[] = [
   { 
     id: '1', 
@@ -75,7 +73,10 @@ const mockMapElements: MapElement[] = [
     title: 'Hidden Nike Logo', 
     description: 'Find the AR Nike logo to unlock a 15% discount code!',
     position: { x: 25, y: 30 },
-    reward: '15% discount code for Nike'
+    reward: '15% discount code for Nike',
+    coordinates: undefined,
+    expiresIn: undefined,
+    challengeId: undefined
   },
   { 
     id: '2', 
@@ -83,7 +84,10 @@ const mockMapElements: MapElement[] = [
     title: 'Adidas Limited Sneakers', 
     description: 'Limited edition Adidas sneakers available for the next 24 hours. Reserve now!',
     position: { x: 65, y: 40 },
-    expiresIn: '23 hours 45 minutes'
+    reward: 'Limited edition sneakers',
+    expiresIn: '23 hours 45 minutes',
+    coordinates: undefined,
+    challengeId: undefined
   },
   { 
     id: '3', 
@@ -92,7 +96,9 @@ const mockMapElements: MapElement[] = [
     description: 'Take a photo with 3 hidden Red Bull AR cans to win VIP concert tickets!',
     position: { x: 45, y: 60 },
     reward: 'VIP concert tickets',
-    challengeId: '1'
+    challengeId: '1',
+    coordinates: undefined,
+    expiresIn: undefined
   },
   { 
     id: '4', 
@@ -100,7 +106,10 @@ const mockMapElements: MapElement[] = [
     title: 'Community Clean-up', 
     description: 'Join forces with other players to complete this environmental challenge!',
     position: { x: 80, y: 70 },
-    reward: '500 XP and special team badge'
+    reward: '500 XP and special team badge',
+    coordinates: undefined,
+    expiresIn: undefined,
+    challengeId: undefined
   }
 ];
 
@@ -111,7 +120,8 @@ const mockEvents: Event[] = [
     description: 'Limited edition Air Max release',
     date: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(), // 2 days from now
     location: 'Nike Store Downtown',
-    type: 'drop'
+    type: 'drop',
+    challengeId: undefined
   },
   {
     id: 'event2',
@@ -119,7 +129,8 @@ const mockEvents: Event[] = [
     description: 'Find and photograph hidden AR objects',
     date: new Date().toISOString(), // Today
     challengeId: '2',
-    type: 'challenge'
+    type: 'challenge',
+    location: undefined
   },
   {
     id: 'event3',
@@ -194,10 +205,8 @@ export const LiveMapProvider = ({ children }: { children: ReactNode }) => {
   });
 
   useEffect(() => {
-    // Load map data
     const loadMapData = async () => {
       try {
-        // In a real implementation, fetch data from Supabase
         setTimeout(() => {
           setMapData({
             center: [13.404954, 52.520008], // Berlin coordinates
@@ -205,14 +214,6 @@ export const LiveMapProvider = ({ children }: { children: ReactNode }) => {
           });
           setLoadingMap(false);
         }, 1000);
-        
-        // Fetch map elements from Supabase (commented out for now)
-        // const { data, error } = await supabase
-        //   .from('map_elements')
-        //   .select('*');
-        // 
-        // if (error) throw error;
-        // if (data) setActiveMapElements(data);
       } catch (error) {
         console.error('Error loading map data:', error);
         setLoadingMap(false);
@@ -222,10 +223,8 @@ export const LiveMapProvider = ({ children }: { children: ReactNode }) => {
     loadMapData();
   }, []);
 
-  // Filter map elements based on user filters
   useEffect(() => {
     if (filters) {
-      // Apply filters to map elements (simplified implementation)
       const filteredElements = mockMapElements.filter(element => 
         filters.mapElements.includes(element.type)
       );
