@@ -1,6 +1,8 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 import ChallengeCard from '../components/ChallengeCard';
+import { toast } from '@/hooks/use-toast';
 
 // Challenge type icons
 const typeIcons: Record<string, string> = {
@@ -20,110 +22,59 @@ const typeIcons: Record<string, string> = {
   'Dance': '💃',
 };
 
-// Mock data - in a real app this would come from an API/database
-const mockChallenges = [
-  {
-    id: '1',
-    title: 'Summer Dance Challenge',
-    description: 'Show your best moves with this trending summer hit! Winners get exclusive badges.',
-    type: 'Dance',
-    hashtags: ['summerdance', 'vibes', 'moves'],
-    xpReward: 500,
-    endDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(), // 3 days from now
-    imageUrl: 'https://images.unsplash.com/photo-1541532713592-79a0317b6b77?q=80&w=500'
-  },
-  {
-    id: '2',
-    title: 'City Parkour',
-    description: 'Show your parkour skills in your city. Most creative jumps and flips win!',
-    type: 'Fitness',
-    hashtags: ['parkour', 'urban', 'jump', 'flip'],
-    xpReward: 750,
-    endDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(), // 5 days from now
-    imageUrl: 'https://images.unsplash.com/photo-1504609813442-a9ead3caee88?q=80&w=500'
-  },
-  {
-    id: '3',
-    title: 'Makeup Transformation',
-    description: 'Create an amazing before/after makeup transformation. Show your skills!',
-    type: 'Beauty',
-    hashtags: ['makeup', 'transformation', 'beauty', 'skills'],
-    xpReward: 600,
-    endDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(), // 2 days from now
-    imageUrl: 'https://images.unsplash.com/photo-1503236823255-94609f598e71?q=80&w=500'
-  },
-  {
-    id: '4',
-    title: 'Singing Challenge',
-    description: 'Cover this viral song and show off your vocal talent. Best covers get featured!',
-    type: 'Photo & Video',
-    hashtags: ['singing', 'cover', 'music', 'viral'],
-    xpReward: 550,
-    endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days from now
-    imageUrl: 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?q=80&w=500'
-  },
-  {
-    id: '5',
-    title: 'Street Fashion',
-    description: 'Show your unique street style. Most creative outfits win special badges!',
-    type: 'Fashion',
-    hashtags: ['streetstyle', 'fashion', 'outfit', 'trend'],
-    xpReward: 450,
-    endDate: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000).toISOString(), // 4 days from now
-    imageUrl: 'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?q=80&w=500'
-  },
-  {
-    id: '6',
-    title: 'Cooking Masterpiece',
-    description: 'Create a delicious dish and record the process. Best recipes win!',
-    type: 'Food',
-    hashtags: ['cooking', 'recipe', 'food', 'delicious'],
-    xpReward: 600,
-    endDate: new Date(Date.now() + 6 * 24 * 60 * 60 * 1000).toISOString(), // 6 days from now
-    imageUrl: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=500'
-  },
-  {
-    id: '7',
-    title: 'Hidden Gem Locations',
-    description: 'Find and share hidden locations in your city that tourists don\'t know about!',
-    type: 'Geofencing',
-    hashtags: ['hiddengem', 'travel', 'local', 'secret'],
-    xpReward: 800,
-    endDate: new Date(Date.now() + 8 * 24 * 60 * 60 * 1000).toISOString(),
-    imageUrl: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=500'
-  },
-  {
-    id: '8',
-    title: 'AR Treasure Hunt',
-    description: 'Use augmented reality to find digital treasures hidden around your neighborhood!',
-    type: 'AR',
-    hashtags: ['ar', 'augmentedreality', 'treasure', 'hunt'],
-    xpReward: 700,
-    endDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(),
-    imageUrl: 'https://images.unsplash.com/photo-1487088678257-3a541e6e3922?q=80&w=500'
-  },
-  {
-    id: '9',
-    title: 'Sustainable Living Week',
-    description: 'Document your week of sustainable living choices and inspire others!',
-    type: 'Sustainability',
-    hashtags: ['sustainable', 'ecofriendly', 'green', 'environment'],
-    xpReward: 900,
-    endDate: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toISOString(),
-    imageUrl: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=500'
-  }
-];
-
 const Explore = () => {
   const [filter, setFilter] = useState({
     type: 'all',
     sort: 'latest'
   });
+  const [challenges, setChallenges] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchChallenges = async () => {
+      try {
+        setIsLoading(true);
+        const { data, error } = await supabase
+          .from('challenges')
+          .select('*')
+          .eq('status', 'active');
+
+        if (error) throw error;
+
+        if (data) {
+          // Format the challenges to match the expected structure
+          const formattedChallenges = data.map(challenge => ({
+            id: challenge.id,
+            title: challenge.title,
+            description: challenge.description,
+            type: challenge.type,
+            hashtags: challenge.hashtags || [],
+            xpReward: challenge.xp_reward,
+            endDate: challenge.end_date,
+            // Using a placeholder image if none is provided
+            imageUrl: `https://images.unsplash.com/photo-${Math.floor(Math.random() * 1000000)}?q=80&w=500`
+          }));
+          setChallenges(formattedChallenges);
+        }
+      } catch (error) {
+        console.error("Error fetching challenges:", error);
+        toast({
+          title: "Error",
+          description: "Failed to load challenges",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchChallenges();
+  }, []);
 
   // Extract unique filter types from the challenges
-  const filterTypes = ['all', ...new Set(mockChallenges.map(challenge => challenge.type))];
+  const filterTypes = ['all', ...new Set(challenges.map(challenge => challenge.type))];
 
-  const filteredChallenges = mockChallenges.filter(challenge => 
+  const filteredChallenges = challenges.filter(challenge => 
     filter.type === 'all' || challenge.type === filter.type
   );
 
@@ -166,23 +117,38 @@ const Explore = () => {
         </div>
       </div>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {sortedChallenges.map(challenge => (
-          <ChallengeCard
-            key={challenge.id}
-            id={challenge.id}
-            title={challenge.title}
-            description={challenge.description}
-            type={challenge.type}
-            hashtags={challenge.hashtags}
-            xpReward={challenge.xpReward}
-            endDate={challenge.endDate}
-            imageUrl={challenge.imageUrl}
-          />
-        ))}
-      </div>
+      {isLoading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[1, 2, 3, 4, 5, 6].map((_, index) => (
+            <div key={index} className="neon-card animate-pulse">
+              <div className="neon-card-content p-6">
+                <div className="aspect-video bg-jillr-darkBlue/30 rounded-lg mb-3"></div>
+                <div className="h-6 bg-jillr-darkBlue/30 rounded-lg mb-2"></div>
+                <div className="h-4 bg-jillr-darkBlue/30 rounded-lg mb-2"></div>
+                <div className="h-4 bg-jillr-darkBlue/30 rounded-lg w-2/3"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {sortedChallenges.map(challenge => (
+            <ChallengeCard
+              key={challenge.id}
+              id={challenge.id}
+              title={challenge.title}
+              description={challenge.description}
+              type={challenge.type}
+              hashtags={challenge.hashtags}
+              xpReward={challenge.xpReward}
+              endDate={challenge.endDate}
+              imageUrl={challenge.imageUrl}
+            />
+          ))}
+        </div>
+      )}
       
-      {sortedChallenges.length === 0 && (
+      {!isLoading && sortedChallenges.length === 0 && (
         <div className="flex flex-col items-center justify-center py-12">
           <p className="text-lg text-muted-foreground mb-4">No challenges found with the selected filters</p>
           <button 
