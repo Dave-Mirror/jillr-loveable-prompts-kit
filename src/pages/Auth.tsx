@@ -17,7 +17,7 @@ const Auth = () => {
   };
 
   return (
-    <AuthContainer title={isSignUp ? 'Create Account' : 'Welcome Back'}>
+    <AuthContainer title={isSignUp ? 'Create Account' : 'Welcome to Jillr'}>
       <SocialLogin 
         onGoogleLogin={() => handleSocialSignIn('google')} 
         disabled={loading || sessionLoading}

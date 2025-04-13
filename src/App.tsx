@@ -7,7 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AuthProvider from "./providers/AuthProvider";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Header from "./components/Header";
-import Index from "./pages/Index";
+import Dashboard from "./pages/Dashboard";
 import Explore from "./pages/Explore";
 import ChallengeDetail from "./pages/ChallengeDetail";
 import Upload from "./pages/Upload";
@@ -20,6 +20,7 @@ import Shop from "./pages/Shop";
 import BrandDashboard from "./pages/BrandDashboard";
 import Leaderboard from "./pages/Leaderboard";
 import LiveMap from "./pages/LiveMap";
+import Index from "./pages/Index";
 
 const queryClient = new QueryClient();
 
@@ -34,7 +35,12 @@ const App = () => (
             <Header />
             <main className="flex-1">
               <Routes>
-                <Route path="/" element={<Explore />} />
+                <Route path="/" element={<Index />} />
+                <Route path="/dashboard" element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                } />
                 <Route path="/explore" element={<Explore />} />
                 <Route path="/challenge/:id" element={<ChallengeDetail />} />
                 <Route path="/upload/:id" element={
