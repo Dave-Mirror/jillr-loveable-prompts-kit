@@ -4,7 +4,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Filter, Search, MapPin, Bell, Scan } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import LiveMapFilters from '../filters/LiveMapFilters';
+import LiveMapFilters from '../LiveMapFilters';
 import NotificationCenter from '../notifications/NotificationCenter';
 
 interface MapLayoutProps {
