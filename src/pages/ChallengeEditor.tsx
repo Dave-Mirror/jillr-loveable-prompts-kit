@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, ArrowRight, Check, Eye, Save } from 'lucide-react';
+import { useForm, FormProvider } from 'react-hook-form';
 import ChallengeBasics from '@/components/challenge-editor/ChallengeBasics';
 import ContentRequirements from '@/components/challenge-editor/ContentRequirements';
 import KpiSettings from '@/components/challenge-editor/KpiSettings';
@@ -59,6 +60,9 @@ const ChallengeEditor = () => {
     pushNotification: false
   });
 
+  // Create a form instance for FormProvider
+  const methods = useForm();
+
   const handleDataChange = (section, data) => {
     setChallengeData(prev => ({
       ...prev,
@@ -101,103 +105,105 @@ const ChallengeEditor = () => {
           <CardTitle>Create Your Challenge</CardTitle>
         </CardHeader>
         <CardContent>
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid grid-cols-8 mb-8">
-              <TabsTrigger value="basics">1. Basics</TabsTrigger>
-              <TabsTrigger value="content">2. Content</TabsTrigger>
-              <TabsTrigger value="kpis">3. KPIs</TabsTrigger>
-              <TabsTrigger value="audience">4. Audience</TabsTrigger>
-              <TabsTrigger value="rewards">5. Rewards</TabsTrigger>
-              <TabsTrigger value="timing">6. Timing</TabsTrigger>
-              <TabsTrigger value="advanced">7. Advanced</TabsTrigger>
-              <TabsTrigger value="preview">8. Preview</TabsTrigger>
-            </TabsList>
+          <FormProvider {...methods}>
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+              <TabsList className="grid grid-cols-8 mb-8">
+                <TabsTrigger value="basics">1. Basics</TabsTrigger>
+                <TabsTrigger value="content">2. Content</TabsTrigger>
+                <TabsTrigger value="kpis">3. KPIs</TabsTrigger>
+                <TabsTrigger value="audience">4. Audience</TabsTrigger>
+                <TabsTrigger value="rewards">5. Rewards</TabsTrigger>
+                <TabsTrigger value="timing">6. Timing</TabsTrigger>
+                <TabsTrigger value="advanced">7. Advanced</TabsTrigger>
+                <TabsTrigger value="preview">8. Preview</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="basics">
+                <ChallengeBasics 
+                  data={challengeData} 
+                  onChange={(data) => handleDataChange('basics', data)} 
+                />
+              </TabsContent>
+              
+              <TabsContent value="content">
+                <ContentRequirements 
+                  data={challengeData} 
+                  onChange={(data) => handleDataChange('content', data)} 
+                />
+              </TabsContent>
+              
+              <TabsContent value="kpis">
+                <KpiSettings 
+                  data={challengeData} 
+                  onChange={(data) => handleDataChange('kpis', data)} 
+                />
+              </TabsContent>
+              
+              <TabsContent value="audience">
+                <TargetAudience 
+                  data={challengeData} 
+                  onChange={(data) => handleDataChange('audience', data)} 
+                />
+              </TabsContent>
+              
+              <TabsContent value="rewards">
+                <RewardsIncentives 
+                  data={challengeData} 
+                  onChange={(data) => handleDataChange('rewards', data)} 
+                />
+              </TabsContent>
+              
+              <TabsContent value="timing">
+                <TimingLimitations 
+                  data={challengeData} 
+                  onChange={(data) => handleDataChange('timing', data)} 
+                />
+              </TabsContent>
+              
+              <TabsContent value="advanced">
+                <AdvancedSettings 
+                  data={challengeData} 
+                  onChange={(data) => handleDataChange('advanced', data)} 
+                />
+              </TabsContent>
+              
+              <TabsContent value="preview">
+                <PreviewPublish 
+                  data={challengeData} 
+                  onChange={(data) => handleDataChange('preview', data)} 
+                />
+              </TabsContent>
+            </Tabs>
             
-            <TabsContent value="basics">
-              <ChallengeBasics 
-                data={challengeData} 
-                onChange={(data) => handleDataChange('basics', data)} 
-              />
-            </TabsContent>
-            
-            <TabsContent value="content">
-              <ContentRequirements 
-                data={challengeData} 
-                onChange={(data) => handleDataChange('content', data)} 
-              />
-            </TabsContent>
-            
-            <TabsContent value="kpis">
-              <KpiSettings 
-                data={challengeData} 
-                onChange={(data) => handleDataChange('kpis', data)} 
-              />
-            </TabsContent>
-            
-            <TabsContent value="audience">
-              <TargetAudience 
-                data={challengeData} 
-                onChange={(data) => handleDataChange('audience', data)} 
-              />
-            </TabsContent>
-            
-            <TabsContent value="rewards">
-              <RewardsIncentives 
-                data={challengeData} 
-                onChange={(data) => handleDataChange('rewards', data)} 
-              />
-            </TabsContent>
-            
-            <TabsContent value="timing">
-              <TimingLimitations 
-                data={challengeData} 
-                onChange={(data) => handleDataChange('timing', data)} 
-              />
-            </TabsContent>
-            
-            <TabsContent value="advanced">
-              <AdvancedSettings 
-                data={challengeData} 
-                onChange={(data) => handleDataChange('advanced', data)} 
-              />
-            </TabsContent>
-            
-            <TabsContent value="preview">
-              <PreviewPublish 
-                data={challengeData} 
-                onChange={(data) => handleDataChange('preview', data)} 
-              />
-            </TabsContent>
-          </Tabs>
-          
-          <div className="flex justify-between mt-8">
-            <Button 
-              variant="outline" 
-              onClick={() => navigateTab('prev')}
-              disabled={activeTab === 'basics'}
-            >
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Previous Step
-            </Button>
-            
-            {activeTab === 'preview' ? (
+            <div className="flex justify-between mt-8">
               <Button 
-                className="bg-jillr-neonPurple hover:bg-jillr-neonPurple/80"
-                onClick={() => console.log('Publishing challenge:', challengeData)}
+                variant="outline" 
+                onClick={() => navigateTab('prev')}
+                disabled={activeTab === 'basics'}
               >
-                <Check className="mr-2 h-4 w-4" />
-                Publish Challenge
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Previous Step
               </Button>
-            ) : (
-              <Button 
-                variant="default" 
-                onClick={() => navigateTab('next')}
-              >
-                Next Step
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            )}
-          </div>
+              
+              {activeTab === 'preview' ? (
+                <Button 
+                  className="bg-jillr-neonPurple hover:bg-jillr-neonPurple/80"
+                  onClick={() => console.log('Publishing challenge:', challengeData)}
+                >
+                  <Check className="mr-2 h-4 w-4" />
+                  Publish Challenge
+                </Button>
+              ) : (
+                <Button 
+                  variant="default" 
+                  onClick={() => navigateTab('next')}
+                >
+                  Next Step
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              )}
+            </div>
+          </FormProvider>
         </CardContent>
       </Card>
     </div>

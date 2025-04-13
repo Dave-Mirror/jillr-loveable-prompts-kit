@@ -1,6 +1,7 @@
 
 import React from 'react';
-import { FormField, FormItem, FormLabel, FormControl, FormDescription } from '@/components/ui/form';
+import { useFormContext } from 'react-hook-form';
+import { FormItem, FormLabel, FormControl, FormDescription } from '@/components/ui/form';
 import { Checkbox } from '@/components/ui/checkbox';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Input } from '@/components/ui/input';
@@ -33,6 +34,9 @@ const trendingSongs = [
 ];
 
 const ContentRequirements = ({ data, onChange }) => {
+  // Access the form context
+  const formMethods = useFormContext();
+
   const handleFormatChange = (formatId) => {
     const newFormats = data.contentFormats.includes(formatId)
       ? data.contentFormats.filter(id => id !== formatId)
@@ -140,26 +144,22 @@ const ContentRequirements = ({ data, onChange }) => {
       </div>
 
       <div className="grid gap-6">
-        <FormField
-          name="hashtags"
-          render={() => (
-            <FormItem>
-              <FormLabel>Required Hashtags & Mentions</FormLabel>
-              <FormControl>
-                <Input 
-                  placeholder="#SpringStyleRefresh #MySalonMunich @mysalonmunich" 
-                  value={data.hashtags.join(' ')}
-                  onChange={(e) => handleHashtagsChange(e.target.value)}
-                />
-              </FormControl>
-              <FormDescription>
-                Separate hashtags and mentions with spaces
-              </FormDescription>
-            </FormItem>
-          )}
-        />
+        <FormItem>
+          <FormLabel>Required Hashtags & Mentions</FormLabel>
+          <FormControl>
+            <Input 
+              placeholder="#SpringStyleRefresh #MySalonMunich @mysalonmunich" 
+              value={data.hashtags.join(' ')}
+              onChange={(e) => handleHashtagsChange(e.target.value)}
+              name="hashtags"
+            />
+          </FormControl>
+          <FormDescription>
+            Separate hashtags and mentions with spaces
+          </FormDescription>
+        </FormItem>
 
-        <FormItem className="space-y-3">
+        <div className="space-y-3">
           <FormLabel>Automatic Branding Integration</FormLabel>
           <FormDescription>
             Automatically add your brand logos to uploaded content
@@ -178,7 +178,7 @@ const ContentRequirements = ({ data, onChange }) => {
               <label htmlFor="branding-no" className="cursor-pointer">No</label>
             </div>
           </RadioGroup>
-        </FormItem>
+        </div>
 
         <FormItem>
           <FormLabel>Music Selection & Sound Recommendations</FormLabel>

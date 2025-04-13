@@ -1,6 +1,7 @@
 
 import React from 'react';
-import { FormField, FormItem, FormLabel, FormControl, FormDescription } from '@/components/ui/form';
+import { useFormContext } from 'react-hook-form';
+import { FormItem, FormLabel, FormControl, FormDescription } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -19,6 +20,9 @@ const challengeTypes = [
 ];
 
 const ChallengeBasics = ({ data, onChange }) => {
+  // Access the form context
+  const formMethods = useFormContext();
+
   const handleTypeChange = (typeId) => {
     const newTypes = data.type.includes(typeId)
       ? data.type.filter(id => id !== typeId)
@@ -63,44 +67,36 @@ const ChallengeBasics = ({ data, onChange }) => {
       </div>
 
       <div className="grid gap-4 py-4">
-        <FormField
-          name="title"
-          render={() => (
-            <FormItem>
-              <FormLabel>Challenge Title</FormLabel>
-              <FormControl>
-                <Input 
-                  placeholder="e.g., Spring Style Refresh" 
-                  value={data.title}
-                  onChange={(e) => onChange({ title: e.target.value })}
-                />
-              </FormControl>
-              <FormDescription>
-                Create a catchy, clear title that describes your challenge
-              </FormDescription>
-            </FormItem>
-          )}
-        />
+        <FormItem>
+          <FormLabel>Challenge Title</FormLabel>
+          <FormControl>
+            <Input 
+              placeholder="e.g., Spring Style Refresh" 
+              value={data.title}
+              onChange={(e) => onChange({ title: e.target.value })}
+              name="title"
+            />
+          </FormControl>
+          <FormDescription>
+            Create a catchy, clear title that describes your challenge
+          </FormDescription>
+        </FormItem>
 
-        <FormField
-          name="description"
-          render={() => (
-            <FormItem>
-              <FormLabel>Challenge Description</FormLabel>
-              <FormControl>
-                <Textarea 
-                  placeholder="e.g., Share your amazing hair transformation and secure a discount on your next visit." 
-                  className="min-h-[120px]"
-                  value={data.description}
-                  onChange={(e) => onChange({ description: e.target.value })}
-                />
-              </FormControl>
-              <FormDescription>
-                Clearly explain what participants need to do to complete the challenge
-              </FormDescription>
-            </FormItem>
-          )}
-        />
+        <FormItem>
+          <FormLabel>Challenge Description</FormLabel>
+          <FormControl>
+            <Textarea 
+              placeholder="e.g., Share your amazing hair transformation and secure a discount on your next visit." 
+              className="min-h-[120px]"
+              value={data.description}
+              onChange={(e) => onChange({ description: e.target.value })}
+              name="description"
+            />
+          </FormControl>
+          <FormDescription>
+            Clearly explain what participants need to do to complete the challenge
+          </FormDescription>
+        </FormItem>
 
         <div className="mt-2">
           <p className="text-sm font-medium mb-1">Challenge Preview URL</p>
