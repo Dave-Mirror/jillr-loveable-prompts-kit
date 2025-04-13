@@ -40,8 +40,8 @@ export const useCreatorData = (userId: string | undefined): UseCreatorDataResult
           
         if (challengesError) throw challengesError;
         
-        // Fix: Explicitly cast the data to Challenge[] to avoid deep type instantiation
-        const challengesData = (data || []) as Challenge[];
+        // Use type assertion to avoid deep type instantiation
+        const challengesData = data as Challenge[] || [];
         
         // Fetch wallet data for XP and coins
         const { data: walletData, error: walletError } = await supabase
