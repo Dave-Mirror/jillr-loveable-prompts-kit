@@ -35,10 +35,24 @@ export const useWalletData = () => {
 
         if (error) throw error;
         
-        setWalletData(data || { xp_total: 0, coins_total: 0, rewards_claimed: [] });
+        // Ensure rewards_claimed is always a string array
+        const rewardsClaimed = data?.rewards_claimed 
+          ? Array.isArray(data.rewards_claimed) 
+              ? data.rewards_claimed
+              : []
+          : [];
         
-        const xp = data?.xp_total || 0;
-        const claimedRewards = Array.isArray(data?.rewards_claimed) ? data?.rewards_claimed : [];
+        // Create a properly typed wallet data object
+        const typedWalletData: WalletData = {
+          xp_total: data?.xp_total || 0,
+          coins_total: data?.coins_total || 0,
+          rewards_claimed: rewardsClaimed
+        };
+        
+        setWalletData(typedWalletData);
+        
+        const xp = typedWalletData.xp_total;
+        const claimedRewards = typedWalletData.rewards_claimed;
         
         const availableRewards = [
           {
@@ -46,7 +60,7 @@ export const useWalletData = () => {
             name: 'Gutschein',
             description: '20% Rabatt auf deinen nächsten Einkauf',
             xpRequired: 2000,
-            isClaimed: Array.isArray(claimedRewards) && claimedRewards.includes('coupon'),
+            isClaimed: claimedRewards.includes('coupon'),
             isUnlocked: xp >= 2000
           },
           {
@@ -54,7 +68,7 @@ export const useWalletData = () => {
             name: 'Exklusiver Produkt-Drop',
             description: 'Zugang zum neuesten Produkt vor allen anderen',
             xpRequired: 5000,
-            isClaimed: Array.isArray(claimedRewards) && claimedRewards.includes('product'),
+            isClaimed: claimedRewards.includes('product'),
             isUnlocked: xp >= 5000
           },
           {
@@ -62,7 +76,7 @@ export const useWalletData = () => {
             name: 'VIP-Event-Zugang',
             description: 'Exklusiver Zugang zu unserem nächsten Event',
             xpRequired: 10000,
-            isClaimed: Array.isArray(claimedRewards) && claimedRewards.includes('vip'),
+            isClaimed: claimedRewards.includes('vip'),
             isUnlocked: xp >= 10000
           }
         ];

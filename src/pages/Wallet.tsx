@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
@@ -50,7 +49,9 @@ const Wallet = () => {
         return;
       }
       
-      setWalletData(result.updatedWalletData);
+      if (result.updatedWalletData) {
+        setWalletData(result.updatedWalletData);
+      }
       
       const updatedRewards = rewards.map(reward => 
         reward.id === rewardId 
