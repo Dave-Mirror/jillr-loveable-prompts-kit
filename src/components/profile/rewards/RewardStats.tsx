@@ -3,6 +3,7 @@ import React from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Coins, Zap, Award, Flame, ShoppingBag, ExternalLink } from 'lucide-react';
+import { useRewards } from './RewardsContext';
 
 interface StreakData {
   currentStreak: number;
@@ -14,11 +15,12 @@ interface StreakData {
 }
 
 interface RewardStatsProps {
-  userProfile: any;
   streakData: StreakData;
 }
 
-const RewardStats: React.FC<RewardStatsProps> = ({ userProfile, streakData }) => {
+const RewardStats: React.FC<RewardStatsProps> = ({ streakData }) => {
+  const { userProfile } = useRewards() as any;
+  
   return (
     <div className="space-y-6">
       <Card className="bg-gradient-to-br from-jillr-darkBlue to-jillr-neonGreen/10 border-jillr-neonGreen/20">

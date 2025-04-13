@@ -4,20 +4,19 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Award, Zap } from 'lucide-react';
+import { useRewards } from './RewardsContext';
 
-interface LevelProgressProps {
-  currentLevel: number;
-  currentXP: number;
-  progress: number;
-  nextLevelXP: number;
-}
+const LevelProgress: React.FC = () => {
+  // Get user profile from the parent RewardsSection component
+  const { userProfile } = useRewards() as any;
+  
+  // Calculate XP progress to next level
+  const currentLevel = userProfile?.level || 1;
+  const nextLevelXP = currentLevel * 1000;
+  const previousLevelXP = (currentLevel - 1) * 1000;
+  const currentXP = userProfile?.xp || 0;
+  const progress = Math.min(100, ((currentXP - previousLevelXP) / (nextLevelXP - previousLevelXP)) * 100);
 
-const LevelProgress: React.FC<LevelProgressProps> = ({
-  currentLevel,
-  currentXP,
-  progress,
-  nextLevelXP
-}) => {
   return (
     <Card>
       <CardHeader>

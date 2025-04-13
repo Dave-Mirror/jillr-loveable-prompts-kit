@@ -1,21 +1,20 @@
-
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { supabase } from '@/integrations/supabase/client';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useToast } from '@/hooks/use-toast';
-import { getUserRewards, getSampleRewards, UserReward } from '@/utils/challenge/userRewards';
-import { useNavigate } from 'react-router-dom';
-
-// Import components
-import WalletHeader from '@/components/wallet/WalletHeader';
-import LoadingState from '@/components/wallet/LoadingState';
-import EmptyState from '@/components/wallet/EmptyState';
-import RewardDialog from '@/components/wallet/RewardDialog';
+import { getUserRewards } from '@/utils/challenge/rewards/api';
+import { getSampleRewards } from '@/utils/challenge/rewards/samples';
+import { UserReward } from '@/utils/challenge/rewards/types';
+import { groupRewardsByType } from '@/utils/challenge/rewards/formatters';
+import { calculateLevel, calculateProgress } from '@/components/wallet/WalletUtils';
 import ChallengeRewardsTab from '@/components/wallet/ChallengeRewardsTab';
-import AvailableRewardsTab from '@/components/wallet/AvailableRewardsTab';
 import ClaimedRewardsTab from '@/components/wallet/ClaimedRewardsTab';
-import { calculateLevel, calculateProgress, groupRewardsByType } from '@/components/wallet/WalletUtils';
+import AvailableRewardsTab from '@/components/wallet/AvailableRewardsTab';
+import WalletHeader from '@/components/wallet/WalletHeader';
+import RewardDialog from '@/components/wallet/RewardDialog';
+import EmptyState from '@/components/wallet/EmptyState';
+import LoadingState from '@/components/wallet/LoadingState';
+import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 const Wallet = () => {
   const { user } = useAuth();
@@ -76,10 +75,8 @@ const Wallet = () => {
         
         setRewards(availableRewards);
 
-        // Fetch user challenge rewards
         const userChallengeRewards = await getUserRewards(user.id);
         
-        // If we have no rewards, add some sample ones (for development)
         if (userChallengeRewards.length === 0) {
           setUserRewards(getSampleRewards());
         } else {
@@ -160,7 +157,6 @@ const Wallet = () => {
     if (!user || reward.claimed) return;
 
     try {
-      // Mark reward as claimed
       const rewardKey = reward.challengeId ? `${reward.challengeId}-${reward.type}` : reward.id;
       
       const { data: wallet } = await supabase
@@ -179,7 +175,6 @@ const Wallet = () => {
         
       if (error) throw error;
       
-      // Update UI
       setUserRewards(userRewards.map(r => 
         r.id === reward.id ? { ...r, claimed: true } : r
       ));
@@ -189,7 +184,6 @@ const Wallet = () => {
         description: `Du hast erfolgreich "${reward.name}" beansprucht.`,
       });
       
-      // Close dialog
       setRewardDialogOpen(false);
       
     } catch (error) {
@@ -204,11 +198,9 @@ const Wallet = () => {
 
   const navigateToReward = (reward: UserReward) => {
     if (reward.claimUrl) {
-      // For external URLs
       if (reward.claimUrl.startsWith('http')) {
         window.open(reward.claimUrl, '_blank');
       } else {
-        // For internal routes
         navigate(reward.claimUrl);
       }
     }
@@ -227,7 +219,6 @@ const Wallet = () => {
   const progress = calculateProgress(walletData.xp_total);
   const nextLevelXP = level * 1000;
 
-  // Group rewards by type
   const groupedRewards = groupRewardsByType(userRewards);
 
   return (
@@ -271,7 +262,6 @@ const Wallet = () => {
         </TabsContent>
       </Tabs>
 
-      {/* Reward Detail Dialog */}
       <RewardDialog
         reward={selectedReward}
         open={rewardDialogOpen}

@@ -4,7 +4,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Check, Gift, BadgePercent, ShoppingBag, Ticket, Flame } from 'lucide-react';
-import { UserReward } from '@/utils/challenge/userRewards';
+import { UserReward } from '@/utils/challenge/rewards/types';
 import { useNavigate } from 'react-router-dom';
 
 interface ChallengeRewardsTabProps {

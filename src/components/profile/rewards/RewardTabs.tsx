@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { UserReward } from '@/utils/challenge/userRewards';
+import { UserReward } from '@/utils/challenge/rewards/types';
 import RewardChallengeTab from './RewardChallengeTab';
 import RewardAvailableTab from './RewardAvailableTab';
 import RewardClaimedTab from './RewardClaimedTab';

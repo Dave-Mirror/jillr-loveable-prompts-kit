@@ -9,7 +9,7 @@ import {
   Calendar, Copy, Check, ExternalLink, 
   BadgePercent, ShoppingBag, Ticket, Flame, Gift 
 } from 'lucide-react';
-import { UserReward } from '@/utils/challenge/userRewards';
+import { UserReward } from '@/utils/challenge/rewards/types';
 import { useToast } from '@/hooks/use-toast';
 
 interface RewardDialogProps {

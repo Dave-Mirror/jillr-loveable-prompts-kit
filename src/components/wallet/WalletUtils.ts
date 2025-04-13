@@ -1,5 +1,5 @@
 
-import { UserReward } from "@/utils/challenge/userRewards";
+import { UserReward } from "@/utils/challenge/rewards/types";
 
 // Calculate user level based on XP
 export const calculateLevel = (xp: number): number => {

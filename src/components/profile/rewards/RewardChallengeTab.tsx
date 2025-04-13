@@ -1,10 +1,9 @@
-
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Check, Gift, BadgePercent, ShoppingBag, Ticket, Flame } from 'lucide-react';
-import { UserReward } from '@/utils/challenge/userRewards';
+import { UserReward } from '@/utils/challenge/rewards/types';
 
 interface RewardChallengeTabProps {
   groupedRewards: Record<string, UserReward[]>;
