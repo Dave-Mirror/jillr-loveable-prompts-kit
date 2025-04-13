@@ -1,6 +1,5 @@
 
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useCreatorData } from '@/hooks/useCreatorData';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
@@ -10,15 +9,7 @@ import DashboardTabs from '@/components/dashboard/DashboardTabs';
 
 const CreatorDashboard = () => {
   const { user } = useAuth();
-  const navigate = useNavigate();
   const { myChallenges, products, dashboardStats, isLoading } = useCreatorData(user?.id);
-
-  // Redirect if not logged in
-  useEffect(() => {
-    if (!user) {
-      navigate('/auth', { state: { from: '/creator-dashboard' } });
-    }
-  }, [user, navigate]);
 
   if (isLoading) {
     return <DashboardLoading />;
