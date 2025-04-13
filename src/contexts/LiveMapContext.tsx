@@ -67,8 +67,8 @@ const defaultFilters = {
   rewardFilters: []
 };
 
-// Sample data for demonstration
-const mockMapElements = [
+// Sample data for demonstration - with correctly typed values
+const mockMapElements: MapElement[] = [
   { 
     id: '1', 
     type: 'easteregg', 
@@ -104,7 +104,7 @@ const mockMapElements = [
   }
 ];
 
-const mockEvents = [
+const mockEvents: Event[] = [
   {
     id: 'event1',
     title: 'Nike Sneaker Drop',
@@ -184,7 +184,7 @@ export const LiveMapProvider = ({ children }: { children: ReactNode }) => {
   const [activeMapElements, setActiveMapElements] = useState<MapElement[]>(mockMapElements);
   const [loadingMap, setLoadingMap] = useState(true);
   const [filters, setFilters] = useState(defaultFilters);
-  const [events, setEvents] = useState(mockEvents);
+  const [events, setEvents] = useState<Event[]>(mockEvents);
   const [notifications, setNotifications] = useState(mockNotifications);
   const [notificationSettings, setNotificationSettings] = useState({
     newDrops: true,
