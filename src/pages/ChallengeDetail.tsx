@@ -39,6 +39,7 @@ const ChallengeDetail = () => {
 
   useEffect(() => {
     if (id) {
+      console.log('Loading challenge details for ID:', id);
       fetchChallengeDetails(
         id, 
         setChallenge, 

@@ -4,6 +4,19 @@ import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { formatSubmissions } from './formatting';
 
+// Function to validate and format challenge IDs
+const validateChallengeId = (id: string): string => {
+  // Check if the ID is a simple number (like "1", "2", etc.)
+  if (/^\d+$/.test(id)) {
+    // Convert to the UUID format used in the database for simple numeric IDs
+    // Format: 00000000-0000-0000-0000-00000000000{id}
+    return `00000000-0000-0000-0000-${id.padStart(12, '0')}`;
+  }
+  
+  // If it's already a UUID or another format, return as is
+  return id;
+};
+
 /**
  * Fetch challenge details from the database
  */
@@ -21,11 +34,16 @@ export const fetchChallengeDetails = async (
   try {
     setIsLoading(true);
     
+    // Validate and format the challenge ID
+    const validatedId = validateChallengeId(challengeId);
+    
+    console.log('Fetching challenge with validated ID:', validatedId);
+    
     // Fetch challenge data
     const { data, error } = await supabase
       .from('challenges')
       .select('*')
-      .filter('id', 'eq', challengeId)
+      .filter('id', 'eq', validatedId)
       .maybeSingle();
       
     if (error) {
@@ -52,7 +70,7 @@ export const fetchChallengeDetails = async (
     const { data: submissionsData, error: submissionsError } = await supabase
       .from('uploads')
       .select('*')
-      .eq('challenge_id', challengeId);
+      .eq('challenge_id', validatedId);
       
     if (submissionsError) throw submissionsError;
     
