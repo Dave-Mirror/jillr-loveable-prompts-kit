@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
@@ -17,12 +16,10 @@ const Wallet = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [rewards, setRewards] = useState<any[]>([]);
 
-  // Calculate level based on XP
   const calculateLevel = (xp: number) => {
     return Math.floor(xp / 1000) + 1;
   };
 
-  // Calculate progress to next level
   const calculateProgress = (xp: number) => {
     const currentLevel = calculateLevel(xp);
     const previousLevelXP = (currentLevel - 1) * 1000;
@@ -30,7 +27,6 @@ const Wallet = () => {
     return Math.floor(((xp - previousLevelXP) / (nextLevelXP - previousLevelXP)) * 100);
   };
 
-  // Fetch wallet data
   useEffect(() => {
     const fetchWalletData = async () => {
       if (!user) return;
@@ -47,7 +43,6 @@ const Wallet = () => {
         
         setWalletData(data || { xp_total: 0, coins_total: 0, rewards_claimed: [] });
         
-        // Generate available rewards based on XP thresholds
         const xp = data?.xp_total || 0;
         const claimedRewards = Array.isArray(data?.rewards_claimed) ? data?.rewards_claimed : [];
         
@@ -94,7 +89,6 @@ const Wallet = () => {
     fetchWalletData();
   }, [user, toast]);
 
-  // Claim reward function
   const claimReward = async (rewardId: string, xpRequired: number) => {
     if (!user || !walletData) return;
     
@@ -108,7 +102,6 @@ const Wallet = () => {
         return;
       }
       
-      // Update rewards claimed in database
       const updatedRewardsClaimed = Array.isArray(walletData.rewards_claimed) 
         ? [...walletData.rewards_claimed, rewardId] 
         : [rewardId];
@@ -120,13 +113,11 @@ const Wallet = () => {
         
       if (error) throw error;
       
-      // Update local state
       setWalletData({
         ...walletData,
         rewards_claimed: updatedRewardsClaimed
       });
       
-      // Update rewards state
       setRewards(rewards.map(reward => 
         reward.id === rewardId 
           ? { ...reward, isClaimed: true } 
@@ -179,7 +170,6 @@ const Wallet = () => {
       <h1 className="text-3xl font-bold mb-8">Meine Wallet</h1>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        {/* XP Card */}
         <Card className="bg-gradient-to-br from-jillr-darkBlue to-jillr-neonPurple/20 border-jillr-neonPurple/20">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -196,7 +186,6 @@ const Wallet = () => {
           </CardContent>
         </Card>
         
-        {/* Coins Card */}
         <Card className="bg-gradient-to-br from-jillr-darkBlue to-jillr-neonGreen/20 border-jillr-neonGreen/20">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -211,7 +200,6 @@ const Wallet = () => {
           </CardContent>
         </Card>
         
-        {/* Rewards Card */}
         <Card className="bg-gradient-to-br from-jillr-darkBlue to-jillr-neonPink/20 border-jillr-neonPink/20">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -260,10 +248,9 @@ const Wallet = () => {
                   <Button 
                     onClick={() => claimReward(reward.id, reward.xpRequired)} 
                     disabled={!reward.isUnlocked || reward.isClaimed}
-                    className={reward.isUnlocked ? "bg-jillr-neonPurple hover:bg-jillr-neonPurple/80" : ""}
+                    className={`${reward.isUnlocked ? "bg-jillr-neonPurple hover:bg-jillr-neonPurple/80" : ""} w-full`}
                     variant={reward.isUnlocked ? "default" : "outline"}
                     size="sm"
-                    fullWidth
                   >
                     {reward.isUnlocked ? "Einlösen" : `${reward.xpRequired - walletData.xp_total} XP fehlen`}
                   </Button>
