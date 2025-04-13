@@ -8,6 +8,7 @@ import AuthProvider from "./providers/AuthProvider";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Header from "./components/Header";
 import Dashboard from "./pages/Dashboard";
+import Profile from "./pages/Profile";
 import Explore from "./pages/Explore";
 import ChallengeDetail from "./pages/ChallengeDetail";
 import Upload from "./pages/Upload";
@@ -37,8 +38,11 @@ const App = () => (
             <main className="flex-1">
               <Routes>
                 <Route path="/" element={<Index />} />
-                <Route path="/dashboard" element={
-                  <Dashboard />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/profile" element={
+                  <ProtectedRoute>
+                    <Profile />
+                  </ProtectedRoute>
                 } />
                 <Route path="/explore" element={<Explore />} />
                 <Route path="/challenge/:id" element={<ChallengeDetail />} />

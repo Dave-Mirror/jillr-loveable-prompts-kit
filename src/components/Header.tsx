@@ -11,18 +11,9 @@ import { useToast } from '@/hooks/use-toast';
 import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuTrigger, NavigationMenuContent } from '@/components/ui/navigation-menu';
 
 const Header = () => {
-  const { user, signOut } = useAuth();
+  const { user, signOut, userProfile } = useAuth();
   const { toast } = useToast();
   
-  // Placeholder data, in a real app this would come from database
-  const userData = {
-    name: 'User',
-    xp: 1250,
-    coins: 780,
-    level: 7,
-    badges: 3
-  };
-
   const handleSignOut = async () => {
     await signOut();
     toast({
@@ -70,17 +61,17 @@ const Header = () => {
             <>
               <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-jillr-darkBlue">
                 <Zap size={16} className="text-jillr-neonPurple" />
-                <span className="text-sm font-medium">{userData.xp} XP</span>
+                <span className="text-sm font-medium">{userProfile?.xp || 0} XP</span>
               </div>
               
               <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-jillr-darkBlue">
                 <Coins size={16} className="text-jillr-neonGreen" />
-                <span className="text-sm font-medium">{userData.coins}</span>
+                <span className="text-sm font-medium">{userProfile?.coins || 0}</span>
               </div>
               
               <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-jillr-darkBlue">
                 <Award size={16} className="text-jillr-neonPink" />
-                <span className="text-sm font-medium">Lvl {userData.level}</span>
+                <span className="text-sm font-medium">Lvl {userProfile?.level || 1}</span>
               </div>
               
               <Link to="/profile" className="w-9 h-9 flex items-center justify-center rounded-full bg-jillr-darkBlue hover:bg-jillr-neonPurple/20 transition-colors">
@@ -102,14 +93,6 @@ const Header = () => {
                   <BarChart size={20} />
                 </Link>
               )}
-              
-              <Link to="/leaderboard" className="w-9 h-9 flex items-center justify-center rounded-full bg-jillr-darkBlue hover:bg-jillr-neonPurple/20 transition-colors">
-                <Trophy size={20} />
-              </Link>
-              
-              <Link to="/shop" className="w-9 h-9 flex items-center justify-center rounded-full bg-jillr-darkBlue hover:bg-jillr-neonPurple/20 transition-colors">
-                <ShoppingBag size={20} />
-              </Link>
               
               <Button 
                 variant="ghost" 
