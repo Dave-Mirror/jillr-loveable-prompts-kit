@@ -3,6 +3,7 @@ import React from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { MapPin, Users, Zap } from 'lucide-react';
+import RankChangeIndicator from './RankChangeIndicator';
 
 type User = {
   id: string;
@@ -16,6 +17,7 @@ type User = {
   challengeType: string;
   level: number;
   badges: string[];
+  rankChange?: number;
 };
 
 interface UserRankListProps {
@@ -29,7 +31,12 @@ const UserRankList = ({ users, tabValue, startRank = 4 }: UserRankListProps) => 
     <div className="space-y-4">
       {users.map((user, index) => (
         <div key={user.id} className="flex items-center gap-4 p-3 rounded-lg border border-border">
-          <div className="text-xl font-bold w-6 text-center">{index + startRank}</div>
+          <div className="flex items-center gap-1 w-10">
+            <div className="text-xl font-bold text-center">{index + startRank}</div>
+            {user.rankChange !== undefined && (
+              <RankChangeIndicator change={user.rankChange} />
+            )}
+          </div>
           <Avatar className="h-10 w-10">
             <AvatarImage src={user.avatarUrl} />
             <AvatarFallback>{user.username.substring(0, 2).toUpperCase()}</AvatarFallback>

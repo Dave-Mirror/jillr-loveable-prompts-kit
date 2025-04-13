@@ -1,6 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import { calculateRankChange, determineBadgeTier, isInTopPercentage } from '@/components/wallet/WalletUtils';
 
 type User = {
   id: string;
@@ -14,6 +15,8 @@ type User = {
   challengeType: string;
   level: number;
   badges: string[];
+  previousRank?: number;
+  rankChange?: number;
 };
 
 type BadgeType = {
@@ -30,6 +33,11 @@ export const useLeaderboard = (mockUsers: User[], badgeSystem: BadgeType[]) => {
   const [sortBy, setSortBy] = useState('xp');
   const [users, setUsers] = useState<User[]>(mockUsers);
   const [isLoading, setIsLoading] = useState(false);
+  const [timeFrame, setTimeFrame] = useState('all-time'); // 'all-time', 'weekly', 'monthly'
+  const [badgeFilter, setBadgeFilter] = useState<string | null>(null);
+  const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
+  const [selectedCity, setSelectedCity] = useState<string | null>(null);
+  const [selectedChallengeType, setSelectedChallengeType] = useState<string | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -40,7 +48,13 @@ export const useLeaderboard = (mockUsers: User[], badgeSystem: BadgeType[]) => {
         // For now, we'll just simulate a delay and use our mock data
         await new Promise(resolve => setTimeout(resolve, 500));
         
-        let sortedUsers = [...mockUsers];
+        // Apply previous rank data for calculating change (in a real app, this would be stored)
+        const usersWithRankChanges = mockUsers.map((user, index) => ({
+          ...user,
+          previousRank: user.previousRank || index + Math.floor(Math.random() * 5) - 2, // Simulate previous ranks
+        }));
+        
+        let sortedUsers = [...usersWithRankChanges];
         if (sortBy === 'xp') {
           sortedUsers.sort((a, b) => b.xp - a.xp);
         } else if (sortBy === 'coins') {
@@ -49,18 +63,30 @@ export const useLeaderboard = (mockUsers: User[], badgeSystem: BadgeType[]) => {
           sortedUsers.sort((a, b) => b.challenges - a.challenges);
         }
         
-        if (activeTab === 'city') {
-          // Filter by city (simplified for demo, in a real app this would be dynamic)
-          sortedUsers = sortedUsers.filter(user => ['Berlin', 'New York', 'London'].includes(user.city));
-        } else if (activeTab === 'challenge-type') {
-          // Filter by challenge type (simplified for demo)
-          sortedUsers = sortedUsers.filter(user => ['Dance', 'Lifestyle', 'Comedy'].includes(user.challengeType));
-        } else if (activeTab === 'team') {
-          // Filter by team (simplified for demo)
-          sortedUsers = sortedUsers.filter(user => ['Dance Crew', 'Comedy Club', 'Fitness Heroes'].includes(user.team));
+        // Apply filters based on active tab
+        if (activeTab === 'city' && selectedCity) {
+          sortedUsers = sortedUsers.filter(user => user.city === selectedCity);
+        } else if (activeTab === 'challenge-type' && selectedChallengeType) {
+          sortedUsers = sortedUsers.filter(user => user.challengeType === selectedChallengeType);
+        } else if (activeTab === 'team' && selectedTeam) {
+          sortedUsers = sortedUsers.filter(user => user.team === selectedTeam);
         }
         
-        setUsers(sortedUsers);
+        // Apply badge filter if selected
+        if (badgeFilter) {
+          sortedUsers = sortedUsers.filter(user => user.badges.includes(badgeFilter));
+        }
+        
+        // Calculate rank changes for each user based on their current position
+        const finalUsers = sortedUsers.map((user, index) => {
+          const currentRank = index + 1;
+          return {
+            ...user,
+            rankChange: user.previousRank ? calculateRankChange(user.previousRank, currentRank) : 0
+          };
+        });
+        
+        setUsers(finalUsers);
       } catch (error) {
         console.error('Error fetching leaderboard data:', error);
         toast({
@@ -74,7 +100,15 @@ export const useLeaderboard = (mockUsers: User[], badgeSystem: BadgeType[]) => {
     };
     
     fetchLeaderboardData();
-  }, [activeTab, sortBy, toast, mockUsers]);
+  }, [activeTab, sortBy, badgeFilter, selectedTeam, selectedCity, selectedChallengeType, timeFrame, toast, mockUsers]);
+
+  // Get unique cities, challenge types and teams for filters
+  const cities = Array.from(new Set(mockUsers.map(user => user.city)));
+  const challengeTypes = Array.from(new Set(mockUsers.map(user => user.challengeType)));
+  const teams = Array.from(new Set(mockUsers.map(user => user.team)));
+  
+  // Get badge list for filtering
+  const badgeList = Array.from(new Set(mockUsers.flatMap(user => user.badges)));
 
   return {
     activeTab,
@@ -83,6 +117,23 @@ export const useLeaderboard = (mockUsers: User[], badgeSystem: BadgeType[]) => {
     setSortBy,
     users,
     isLoading,
-    badgeSystem
+    badgeSystem,
+    timeFrame,
+    setTimeFrame,
+    badgeFilter,
+    setBadgeFilter,
+    selectedTeam,
+    setSelectedTeam,
+    selectedCity,
+    setSelectedCity,
+    selectedChallengeType,
+    setSelectedChallengeType,
+    cities,
+    challengeTypes,
+    teams,
+    badgeList,
+    // Helper functions
+    determineBadgeTier,
+    isInTopPercentage,
   };
 };
