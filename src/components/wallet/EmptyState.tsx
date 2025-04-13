@@ -9,9 +9,9 @@ const EmptyState: React.FC = () => {
     <div className="container py-8 flex justify-center items-center min-h-[calc(100vh-80px)]">
       <div className="text-center max-w-md p-6 bg-card rounded-lg border shadow-md">
         <WalletIcon className="h-12 w-12 mx-auto mb-4 text-jillr-neonPurple" />
-        <h2 className="text-xl font-bold mb-4">Musteransicht der Wallet</h2>
+        <h2 className="text-xl font-bold mb-4">Wallet Vorschau</h2>
         <p className="text-muted-foreground mb-6">
-          Dies ist eine Vorschau der Wallet-Funktionalität. Für die vollständige Erfahrung mit eigenen Daten können Sie sich anmelden.
+          Dies ist eine Vorschau Ihrer Wallet. Melden Sie sich an, um Ihre persönlichen Belohnungen, XP und Münzen zu sehen.
         </p>
         
         <div className="flex flex-col gap-3">
