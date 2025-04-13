@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { toast as sonnerToast } from 'sonner';
 
 export function useAuthSubmit() {
   const [loading, setLoading] = useState(false);
@@ -91,9 +92,20 @@ export function useAuthSubmit() {
     }
   };
 
-  const handleSocialSignIn = async (provider: 'google') => {
+  const handleSocialSignIn = async (provider: 'google' | 'facebook' | 'instagram' | 'tiktok') => {
     try {
       setLoading(true);
+      
+      // TikTok and Instagram are not directly supported by Supabase, so we'll show a toast
+      if (provider === 'instagram' || provider === 'tiktok') {
+        sonnerToast("Coming soon", {
+          description: `${provider.charAt(0).toUpperCase() + provider.slice(1)} login will be available soon`,
+          duration: 3000,
+        });
+        setLoading(false);
+        return;
+      }
+      
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider,
         options: {
