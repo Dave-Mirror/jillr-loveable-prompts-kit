@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -61,14 +60,8 @@ const App = () => (
                     <CreatorDashboard />
                   </ProtectedRoute>
                 } />
-                <Route path="/brand-dashboard" element={
-                  <ProtectedRoute roleRequired="brand">
-                    <BrandDashboard />
-                  </ProtectedRoute>
-                } />
-                <Route path="/enterprise-dashboard" element={
-                  <EnterpriseDashboard />
-                } />
+                <Route path="/brand-dashboard" element={<BrandDashboard />} />
+                <Route path="/enterprise-dashboard" element={<EnterpriseDashboard />} />
                 <Route path="/leaderboard" element={<Leaderboard />} />
                 <Route path="/shop" element={<Shop />} />
                 <Route path="/livemap" element={<LiveMap />} />

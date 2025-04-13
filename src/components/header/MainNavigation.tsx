@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
-  Home, BarChart, Zap, Trophy, Map, ShoppingBag 
+  Home, BarChart, Zap, Trophy, Map, ShoppingBag, Briefcase
 } from 'lucide-react';
 import { 
   NavigationMenu, 
@@ -25,6 +25,7 @@ const MainNavigation: React.FC<MainNavigationProps> = ({ user }) => {
     { name: 'Live Map', icon: Map, path: '/livemap' },
     { name: 'Leaderboard', icon: Trophy, path: '/leaderboard' },
     { name: 'Shop', icon: ShoppingBag, path: '/shop' },
+    { name: 'Brand Portal', icon: Briefcase, path: '/brand-dashboard' },
   ];
 
   return (

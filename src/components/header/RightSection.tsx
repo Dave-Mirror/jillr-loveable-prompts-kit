@@ -8,7 +8,7 @@ import MobileMenu from './MobileMenu';
 import GuestMobileMenu from './GuestMobileMenu';
 import AuthButtons from './AuthButtons';
 import { 
-  Home, BarChart, Zap, Trophy, Map, ShoppingBag
+  Home, BarChart, Zap, Trophy, Map, ShoppingBag, Briefcase
 } from 'lucide-react';
 
 interface RightSectionProps {
@@ -26,6 +26,7 @@ const RightSection: React.FC<RightSectionProps> = ({ user, userProfile, signOut 
     { name: 'Live Map', icon: Map, path: '/livemap' },
     { name: 'Leaderboard', icon: Trophy, path: '/leaderboard' },
     { name: 'Shop', icon: ShoppingBag, path: '/shop' },
+    { name: 'Brand Portal', icon: Briefcase, path: '/brand-dashboard' },
   ];
 
   return (
