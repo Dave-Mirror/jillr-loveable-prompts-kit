@@ -1,27 +1,96 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Video, Eye } from 'lucide-react';
+import { Video, Eye, Filter } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Challenge } from '@/types/dashboard';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface ChallengesTabProps {
   challenges: Challenge[];
 }
 
+const challengeTypeIcons: Record<string, string> = {
+  'photo': '📸',
+  'video': '🎥',
+  'ar': '🥽',
+  'geofencing': '📍',
+  'fitness': '💪',
+  'sustainability': '♻️',
+  'gamification': '🎮',
+  'community': '👥',
+  'battle': '⚔️',
+  'review': '⭐',
+  'travel': '✈️',
+  'food': '🍔',
+  'fashion': '👕',
+  'beauty': '💄',
+  'dance': '💃',
+  'lifestyle': '🏡',
+  'comedy': '😂',
+  'transformation': '✨',
+  'tutorial': '📚',
+  'product': '🛍️',
+  'default': '🎯'
+};
+
+const getTypeIcon = (type: string | undefined): string => {
+  if (!type) return challengeTypeIcons['default'];
+  
+  const lowerType = type.toLowerCase();
+  for (const [key, value] of Object.entries(challengeTypeIcons)) {
+    if (lowerType.includes(key)) return value;
+  }
+  
+  return challengeTypeIcons['default'];
+};
+
 const ChallengesTab: React.FC<ChallengesTabProps> = ({ challenges }) => {
+  const [filterType, setFilterType] = useState<string>('all');
+  
+  const filteredChallenges = filterType === 'all' 
+    ? challenges 
+    : challenges.filter(challenge => 
+        challenge.type?.toLowerCase().includes(filterType.toLowerCase())
+      );
+  
+  // Extract unique challenge types
+  const uniqueTypes = ['all', ...new Set(challenges
+    .map(challenge => challenge.type || '')
+    .filter(type => type !== '')
+  )];
+  
   return (
     <div className="bg-card rounded-lg border p-4">
-      <h2 className="text-xl font-semibold mb-4">Meine Challenges</h2>
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
+        <h2 className="text-xl font-semibold">Meine Challenges</h2>
+        
+        <div className="flex items-center gap-2 mt-2 md:mt-0">
+          <Filter size={16} />
+          <Select value={filterType} onValueChange={setFilterType}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Filter by type" />
+            </SelectTrigger>
+            <SelectContent>
+              {uniqueTypes.map((type) => (
+                <SelectItem key={type} value={type}>
+                  {type === 'all' ? 'All Types' : `${getTypeIcon(type)} ${type}`}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
       
-      {challenges.length > 0 ? (
+      {filteredChallenges.length > 0 ? (
         <div className="overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>
                 <TableHead>Name</TableHead>
+                <TableHead>Type</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Views</TableHead>
                 <TableHead>Teilnehmer</TableHead>
@@ -29,9 +98,16 @@ const ChallengesTab: React.FC<ChallengesTabProps> = ({ challenges }) => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {challenges.map((challenge) => (
+              {filteredChallenges.map((challenge) => (
                 <TableRow key={challenge.id}>
                   <TableCell className="font-medium">{challenge.title}</TableCell>
+                  <TableCell>
+                    {challenge.type && (
+                      <Badge variant="outline" className="flex items-center gap-1">
+                        {getTypeIcon(challenge.type)} {challenge.type}
+                      </Badge>
+                    )}
+                  </TableCell>
                   <TableCell>
                     <Badge variant={challenge.status === 'active' ? 'default' : 'outline'}>
                       {challenge.status === 'active' ? 'Aktiv' : 'Beendet'}

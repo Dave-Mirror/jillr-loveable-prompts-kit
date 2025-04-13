@@ -54,12 +54,20 @@ const ChallengeBasicFields: React.FC<ChallengeBasicFieldsProps> = ({ form }) => 
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="dance">Dance Challenge</SelectItem>
-                  <SelectItem value="lifestyle">Lifestyle Challenge</SelectItem>
-                  <SelectItem value="comedy">Comedy Challenge</SelectItem>
-                  <SelectItem value="transformation">Transformation Challenge</SelectItem>
-                  <SelectItem value="tutorial">Tutorial Challenge</SelectItem>
-                  <SelectItem value="product">Product Challenge</SelectItem>
+                  <SelectItem value="Photo & Video">Photo & Video Challenge</SelectItem>
+                  <SelectItem value="AR">AR Challenge</SelectItem>
+                  <SelectItem value="Geofencing">Geofencing & Location Challenge</SelectItem>
+                  <SelectItem value="Fitness">Fitness & Wearable Challenge</SelectItem>
+                  <SelectItem value="Sustainability">Sustainability Challenge</SelectItem>
+                  <SelectItem value="Gamification">Gamification Challenge</SelectItem>
+                  <SelectItem value="Community">Community & Engagement Challenge</SelectItem>
+                  <SelectItem value="Battle">Battle & Competition Challenge</SelectItem>
+                  <SelectItem value="Review">Review & Rating Challenge</SelectItem>
+                  <SelectItem value="Travel">Travel Challenge</SelectItem>
+                  <SelectItem value="Food">Food Challenge</SelectItem>
+                  <SelectItem value="Fashion">Fashion Challenge</SelectItem>
+                  <SelectItem value="Beauty">Beauty Challenge</SelectItem>
+                  <SelectItem value="Dance">Dance Challenge</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />

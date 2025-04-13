@@ -1,8 +1,26 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Zap, Clock, Hash } from 'lucide-react';
+import { Zap, Hash } from 'lucide-react';
 import CountdownTimer from './CountdownTimer';
+
+// Challenge type icons
+const typeIcons: Record<string, string> = {
+  'Photo & Video': '📸',
+  'AR': '🥽',
+  'Geofencing': '📍',
+  'Fitness': '💪',
+  'Sustainability': '♻️',
+  'Gamification': '🎮',
+  'Community': '👥',
+  'Battle': '⚔️',
+  'Review': '⭐',
+  'Travel': '✈️',
+  'Food': '🍔',
+  'Fashion': '👕',
+  'Beauty': '💄',
+  'Dance': '💃',
+};
 
 interface ChallengeCardProps {
   id: string;
@@ -25,6 +43,8 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({
   endDate,
   imageUrl = '/placeholder.svg',
 }) => {
+  const typeIcon = typeIcons[type] || '🎯';
+  
   return (
     <Link to={`/challenge/${id}`} className="block">
       <div className="neon-card h-full animate-glow">
@@ -38,8 +58,8 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({
             <div className="absolute bottom-2 right-2">
               <CountdownTimer endDate={endDate} />
             </div>
-            <div className="absolute top-2 left-2 px-2 py-1 rounded bg-jillr-neonPurple/80 text-white text-xs font-medium">
-              {type}
+            <div className="absolute top-2 left-2 px-2 py-1 rounded bg-jillr-neonPurple/80 text-white text-xs font-medium flex items-center gap-1">
+              <span>{typeIcon}</span> {type}
             </div>
           </div>
           

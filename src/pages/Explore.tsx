@@ -2,6 +2,24 @@
 import React, { useState } from 'react';
 import ChallengeCard from '../components/ChallengeCard';
 
+// Challenge type icons
+const typeIcons: Record<string, string> = {
+  'Photo & Video': '📸',
+  'AR': '🥽',
+  'Geofencing': '📍',
+  'Fitness': '💪',
+  'Sustainability': '♻️',
+  'Gamification': '🎮',
+  'Community': '👥',
+  'Battle': '⚔️',
+  'Review': '⭐',
+  'Travel': '✈️',
+  'Food': '🍔',
+  'Fashion': '👕',
+  'Beauty': '💄',
+  'Dance': '💃',
+};
+
 // Mock data - in a real app this would come from an API/database
 const mockChallenges = [
   {
@@ -18,7 +36,7 @@ const mockChallenges = [
     id: '2',
     title: 'City Parkour',
     description: 'Show your parkour skills in your city. Most creative jumps and flips win!',
-    type: 'Sport',
+    type: 'Fitness',
     hashtags: ['parkour', 'urban', 'jump', 'flip'],
     xpReward: 750,
     endDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(), // 5 days from now
@@ -38,7 +56,7 @@ const mockChallenges = [
     id: '4',
     title: 'Singing Challenge',
     description: 'Cover this viral song and show off your vocal talent. Best covers get featured!',
-    type: 'Music',
+    type: 'Photo & Video',
     hashtags: ['singing', 'cover', 'music', 'viral'],
     xpReward: 550,
     endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days from now
@@ -63,6 +81,36 @@ const mockChallenges = [
     xpReward: 600,
     endDate: new Date(Date.now() + 6 * 24 * 60 * 60 * 1000).toISOString(), // 6 days from now
     imageUrl: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=500'
+  },
+  {
+    id: '7',
+    title: 'Hidden Gem Locations',
+    description: 'Find and share hidden locations in your city that tourists don\'t know about!',
+    type: 'Geofencing',
+    hashtags: ['hiddengem', 'travel', 'local', 'secret'],
+    xpReward: 800,
+    endDate: new Date(Date.now() + 8 * 24 * 60 * 60 * 1000).toISOString(),
+    imageUrl: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=500'
+  },
+  {
+    id: '8',
+    title: 'AR Treasure Hunt',
+    description: 'Use augmented reality to find digital treasures hidden around your neighborhood!',
+    type: 'AR',
+    hashtags: ['ar', 'augmentedreality', 'treasure', 'hunt'],
+    xpReward: 700,
+    endDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(),
+    imageUrl: 'https://images.unsplash.com/photo-1487088678257-3a541e6e3922?q=80&w=500'
+  },
+  {
+    id: '9',
+    title: 'Sustainable Living Week',
+    description: 'Document your week of sustainable living choices and inspire others!',
+    type: 'Sustainability',
+    hashtags: ['sustainable', 'ecofriendly', 'green', 'environment'],
+    xpReward: 900,
+    endDate: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toISOString(),
+    imageUrl: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=500'
   }
 ];
 
@@ -72,7 +120,8 @@ const Explore = () => {
     sort: 'latest'
   });
 
-  const filterTypes = ['all', 'Dance', 'Sport', 'Beauty', 'Music', 'Fashion', 'Food'];
+  // Extract unique filter types from the challenges
+  const filterTypes = ['all', ...new Set(mockChallenges.map(challenge => challenge.type))];
 
   const filteredChallenges = mockChallenges.filter(challenge => 
     filter.type === 'all' || challenge.type === filter.type
@@ -101,7 +150,7 @@ const Explore = () => {
           >
             {filterTypes.map(type => (
               <option key={type} value={type} className="bg-jillr-dark">
-                {type === 'all' ? 'All Types' : type}
+                {type === 'all' ? 'All Types' : `${typeIcons[type] || '🎯'} ${type}`}
               </option>
             ))}
           </select>
