@@ -1,55 +1,15 @@
-
 import React from 'react';
-import LeaderboardHeader from '@/components/leaderboard/LeaderboardHeader';
-import LeaderboardTabs from '@/components/leaderboard/LeaderboardTabs';
-import BadgeSystem from '@/components/leaderboard/BadgeSystem';
-import { useLeaderboardData } from '@/hooks/useLeaderboardData';
-import { mockUsers, badgeSystem } from '@/data/leaderboardMockData';
+import PageContainer from '@/components/navigation/PageContainer';
 
-const LeaderboardPage = () => {
-  const {
-    activeTab,
-    setActiveTab,
-    sortBy,
-    setSortBy,
-    users,
-    isLoading,
-    badgeSystem: badges
-  } = useLeaderboardData(mockUsers, badgeSystem);
-
-  // Ensure each badge has an id property
-  const formattedBadges = badges.map(badge => ({
-    ...badge,
-    id: badge.id || `badge-${badge.name.toLowerCase().replace(/\s+/g, '-')}`
-  }));
-
-  const cityFilters = ['Berlin', 'New York', 'London', 'Tokyo', 'Paris', '+ Add Your City'];
-  const challengeFilters = ['Dance', 'Comedy', 'Lifestyle', 'Fitness', 'Tutorial', 'Food'];
-  const teamFilters = ['Dance Crew', 'Comedy Club', 'Fitness Heroes', '+ Create Team'];
-
+const Leaderboard = () => {
   return (
-    <div className="container py-8">
-      <LeaderboardHeader sortBy={sortBy} setSortBy={setSortBy} />
-      
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-        <div className="md:col-span-3">
-          <LeaderboardTabs 
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-            users={users}
-            isLoading={isLoading}
-            cityFilters={cityFilters}
-            challengeFilters={challengeFilters}
-            teamFilters={teamFilters}
-          />
-        </div>
-        
-        <div className="md:col-span-1">
-          <BadgeSystem badges={formattedBadges} />
-        </div>
+    <PageContainer previousPage="/explore" nextPage="/wallet">
+      <div className="container mx-auto max-w-6xl">
+        <h1 className="text-3xl font-bold mb-6">Leaderboard</h1>
+        {/* Leaderboard content */}
       </div>
-    </div>
+    </PageContainer>
   );
 };
 
-export default LeaderboardPage;
+export default Leaderboard;

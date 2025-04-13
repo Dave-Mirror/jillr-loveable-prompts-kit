@@ -23,6 +23,8 @@ import EnterpriseDashboard from "./pages/EnterpriseDashboard";
 import Leaderboard from "./pages/Leaderboard";
 import LiveMap from "./pages/LiveMap";
 import Index from "./pages/Index";
+import BottomNavigation from "./components/navigation/BottomNavigation";
+import PageTransition from "./components/navigation/PageTransition";
 
 const queryClient = new QueryClient();
 
@@ -35,39 +37,42 @@ const App = () => (
         <BrowserRouter>
           <div className="min-h-screen flex flex-col">
             <Header />
-            <main className="flex-1 pt-16">
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/profile" element={
-                  <ProtectedRoute>
-                    <Profile />
-                  </ProtectedRoute>
-                } />
-                <Route path="/explore" element={<Explore />} />
-                <Route path="/challenge/:id" element={<ChallengeDetail />} />
-                <Route path="/upload/:id" element={
-                  <ProtectedRoute>
-                    <Upload />
-                  </ProtectedRoute>
-                } />
-                <Route path="/wallet" element={
-                  <ProtectedRoute>
-                    <Wallet />
-                  </ProtectedRoute>
-                } />
-                <Route path="/creator-dashboard" element={<CreatorDashboard />} />
-                <Route path="/brand-dashboard" element={<BrandDashboard />} />
-                <Route path="/enterprise-dashboard" element={<EnterpriseDashboard />} />
-                <Route path="/leaderboard" element={<Leaderboard />} />
-                <Route path="/shop" element={<Shop />} />
-                <Route path="/livemap" element={<LiveMap />} />
-                <Route path="/auth" element={<Auth />} />
-                <Route path="/auth/callback" element={<AuthCallback />} />
-                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
+            <main className="flex-1 pt-16 md:pb-0 pb-16">
+              <PageTransition>
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/dashboard" element={<Dashboard />} />
+                  <Route path="/profile" element={
+                    <ProtectedRoute>
+                      <Profile />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/explore" element={<Explore />} />
+                  <Route path="/challenge/:id" element={<ChallengeDetail />} />
+                  <Route path="/upload/:id" element={
+                    <ProtectedRoute>
+                      <Upload />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/wallet" element={
+                    <ProtectedRoute>
+                      <Wallet />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/creator-dashboard" element={<CreatorDashboard />} />
+                  <Route path="/brand-dashboard" element={<BrandDashboard />} />
+                  <Route path="/enterprise-dashboard" element={<EnterpriseDashboard />} />
+                  <Route path="/leaderboard" element={<Leaderboard />} />
+                  <Route path="/shop" element={<Shop />} />
+                  <Route path="/livemap" element={<LiveMap />} />
+                  <Route path="/auth" element={<Auth />} />
+                  <Route path="/auth/callback" element={<AuthCallback />} />
+                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </PageTransition>
             </main>
+            <BottomNavigation />
           </div>
         </BrowserRouter>
       </TooltipProvider>
