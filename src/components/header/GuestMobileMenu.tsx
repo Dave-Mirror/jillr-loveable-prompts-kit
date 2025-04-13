@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
-  Home, BarChart, Zap, Trophy, Map, ShoppingBag, Menu, Briefcase, Video, Edit
+  Home, Zap, Trophy, Map, ShoppingBag, Menu
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -17,6 +17,15 @@ interface GuestMobileMenuProps {
 
 const GuestMobileMenu: React.FC<GuestMobileMenuProps> = ({ mainNavItems }) => {
   const location = useLocation();
+  
+  // Simplified navigation for guests
+  const guestNavItems = [
+    { name: 'Home', icon: Home, path: '/' },
+    { name: 'Explore', icon: Zap, path: '/explore' },
+    { name: 'Live Map', icon: Map, path: '/livemap' },
+    { name: 'Leaderboard', icon: Trophy, path: '/leaderboard' },
+    { name: 'Shop', icon: ShoppingBag, path: '/shop' }
+  ];
 
   return (
     <Sheet>
@@ -33,7 +42,7 @@ const GuestMobileMenu: React.FC<GuestMobileMenuProps> = ({ mainNavItems }) => {
           
           {/* Mobile Navigation */}
           <nav className="space-y-1">
-            {mainNavItems.map((item) => (
+            {guestNavItems.map((item) => (
               <Link 
                 key={item.path} 
                 to={item.path} 
@@ -51,7 +60,7 @@ const GuestMobileMenu: React.FC<GuestMobileMenuProps> = ({ mainNavItems }) => {
           
           <div className="mt-auto">
             <Link to="/auth" className="w-full">
-              <Button className="neon-button w-full mt-6">
+              <Button className="w-full mt-6 bg-jillr-neonPurple hover:bg-jillr-neonPurple/80 text-white">
                 Login
               </Button>
             </Link>

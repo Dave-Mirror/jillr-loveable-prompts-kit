@@ -146,7 +146,7 @@ const Explore = () => {
 
   return (
     <PageContainer previousPage="/" nextPage="/leaderboard">
-      <div className="container mx-auto max-w-6xl">
+      <div className="container mx-auto max-w-6xl pb-20">
         <ExplorePromoBanner />
         <ExploreFilters 
           filter={filter}

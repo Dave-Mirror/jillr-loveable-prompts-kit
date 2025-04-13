@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Search, Trophy, Wallet, User } from 'lucide-react';
+import { Home, Search, Trophy, Wallet, User, Map, Star, Zap } from 'lucide-react';
 
 const BottomNavigation = () => {
   const location = useLocation();
@@ -9,6 +9,7 @@ const BottomNavigation = () => {
   const navItems = [
     { icon: Home, path: '/', label: 'Home' },
     { icon: Search, path: '/explore', label: 'Entdecken' },
+    { icon: Map, path: '/livemap', label: 'Live Map' },
     { icon: Trophy, path: '/leaderboard', label: 'Rangliste' },
     { icon: Wallet, path: '/wallet', label: 'Wallet' },
     { icon: User, path: '/profile', label: 'Profil' },
