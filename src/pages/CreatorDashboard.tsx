@@ -13,6 +13,20 @@ import ChallengesTab from '@/components/dashboard/ChallengesTab';
 import ShopTab from '@/components/dashboard/ShopTab';
 import StatsTab from '@/components/dashboard/StatsTab';
 
+interface ChallengeData {
+  id: string;
+  title: string;
+  status: string;
+  type?: string;
+  description?: string;
+  coin_reward?: number;
+  xp_reward?: number;
+  start_date?: string;
+  end_date?: string;
+  hashtags?: string[];
+  views?: number;
+}
+
 const CreatorDashboard = () => {
   const { user } = useAuth();
   const { toast } = useToast();
@@ -86,16 +100,16 @@ const CreatorDashboard = () => {
         setProducts(mockProducts);
         
         // Ensure challengesData is an array before processing
-        const challenges = Array.isArray(challengesData) ? challengesData : [];
+        const challenges: ChallengeData[] = Array.isArray(challengesData) ? challengesData : [];
         
         // Add default views value of 0 for challenges that don't have it
-        const challengesWithViews = challenges.map((challenge: any) => ({
+        const challengesWithViews = challenges.map((challenge) => ({
           ...challenge,
           views: challenge.views || 0
         }));
         
         // Calculate totals
-        const totalViews = challengesWithViews.reduce((acc: number, challenge: Challenge) => acc + (challenge.views || 0), 0);
+        const totalViews = challengesWithViews.reduce((acc, challenge) => acc + (challenge.views || 0), 0);
         const totalLinkClicks = 250; // Mock data
         const totalSales = mockProducts.reduce((acc, product) => acc + product.sales, 0);
         const totalCommission = mockProducts.reduce((acc, product) => acc + (product.commission * product.sales), 0);
