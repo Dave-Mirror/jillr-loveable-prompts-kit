@@ -11,6 +11,28 @@ import CountdownTimer from '@/components/CountdownTimer';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 
+// Thematische Bilder für jeden Challenge-Typ
+const challengeTypeImages = {
+  'Video': 'https://images.unsplash.com/photo-1536240478700-b869070f9279?q=80&w=800',
+  'Geofencing': 'https://images.unsplash.com/photo-1508919801845-fc2ae1bc2a28?q=80&w=800',
+  'Photo & Video': 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=800',
+  'Fashion': 'https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=800',
+  'Sport': 'https://images.unsplash.com/photo-1530549387789-4c1017266635?q=80&w=800',
+  'AR': 'https://images.unsplash.com/photo-1626379953822-baec19c3accd?q=80&w=800',
+  'Beauty': 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=800',
+  'Fitness': 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?q=80&w=800',
+  'Travel': 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=800',
+  'Food': 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=800',
+  'Dance': 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?q=80&w=800',
+  'Sustainability': 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=800',
+  'Gamification': 'https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=800',
+  'Community': 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?q=80&w=800',
+  'Battle': 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=800',
+  'Review': 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=800',
+  // Fallback für nicht definierte Typen
+  'default': 'https://images.unsplash.com/photo-1579547621869-0dbd72cf4caa?q=80&w=800'
+};
+
 type Submission = {
   id: string;
   user_id: string;
@@ -76,7 +98,13 @@ const ChallengeDetail = () => {
           return;
         }
         
-        setChallenge(data);
+        // Füge das passende Bild basierend auf dem Challenge-Typ hinzu
+        const challengeWithImage = {
+          ...data,
+          imageUrl: challengeTypeImages[data.type] || challengeTypeImages['default']
+        };
+        
+        setChallenge(challengeWithImage);
         
         // Fetch submissions for this challenge
         const { data: submissionsData, error: submissionsError } = await supabase
