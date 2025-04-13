@@ -53,7 +53,7 @@ const CreatorDashboard = () => {
         if (walletError && walletError.code !== 'PGRST116') throw walletError;
         
         // Mock data for products and affiliate stats (would be real API calls in production)
-        const mockProducts = [
+        const mockProducts: Product[] = [
           { 
             id: '1', 
             name: 'Creator T-Shirt', 
@@ -85,8 +85,11 @@ const CreatorDashboard = () => {
         
         setProducts(mockProducts);
         
+        // Ensure challengesData is an array before processing
+        const challenges = Array.isArray(challengesData) ? challengesData : [];
+        
         // Add default views value of 0 for challenges that don't have it
-        const challengesWithViews = (challengesData || []).map((challenge: any) => ({
+        const challengesWithViews = challenges.map((challenge: any) => ({
           ...challenge,
           views: challenge.views || 0
         }));
