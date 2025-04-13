@@ -47,21 +47,55 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const fetchUserProfile = async (userId: string) => {
     try {
+      // Instead of querying the profiles table directly, we'll query wallets table
+      // and create a synthetic profile from wallet data, since we don't have 
+      // a profiles table in the type definitions
       const { data, error } = await supabase
-        .from('profiles')
+        .from('wallets')
         .select('*')
-        .eq('id', userId)
+        .eq('user_id', userId)
         .single();
       
       if (error) {
-        console.error('Error fetching user profile:', error);
+        console.error('Error fetching user wallet:', error);
+        // Create a default profile with just the user ID
+        setUserProfile({
+          id: userId,
+          active_challenges: 0,
+          level: 1,
+          xp: 0,
+          coins: 0
+        });
         return;
       }
       
-      setUserProfile(data);
+      // Create a profile object from the wallet data
+      const profileData = {
+        id: userId,
+        active_challenges: 0, // This would normally come from a count of user_challenges
+        level: calculateLevel(data.xp_total || 0),
+        xp: data.xp_total || 0,
+        coins: data.coins_total || 0
+      };
+      
+      setUserProfile(profileData);
     } catch (error) {
       console.error('Error in fetchUserProfile:', error);
+      // Fallback profile
+      setUserProfile({
+        id: userId,
+        active_challenges: 0,
+        level: 1,
+        xp: 0,
+        coins: 0
+      });
     }
+  };
+
+  // Simple level calculation function
+  const calculateLevel = (xp: number): number => {
+    // Example: Every 1000 XP is a new level, starting from level 1
+    return Math.max(1, Math.floor(xp / 1000) + 1);
   };
 
   const signOut = async () => {
