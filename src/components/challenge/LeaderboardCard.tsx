@@ -2,10 +2,7 @@
 import React from 'react';
 import { Trophy, Star, ThumbsUp } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-
-type LeaderboardCardProps = {
-  topUsers: any[];
-}
+import { LeaderboardCardProps } from './types';
 
 export const LeaderboardCard: React.FC<LeaderboardCardProps> = ({ topUsers }) => {
   return (

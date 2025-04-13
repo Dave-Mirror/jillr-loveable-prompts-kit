@@ -2,10 +2,7 @@
 import React from 'react';
 import { Clock, MapPin, Award, Video } from 'lucide-react';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
-
-type ChallengeDetailsProps = {
-  challenge: any;
-}
+import { ChallengeDetailsProps } from './types';
 
 export const ChallengeDetails: React.FC<ChallengeDetailsProps> = ({ challenge }) => {
   return (

@@ -2,11 +2,7 @@
 import React from 'react';
 import { Award, Coins, Zap, Trophy, Smartphone } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { Reward } from '@/types/dashboard';
-
-type RewardsCardProps = {
-  challengeRewards: Reward[];
-}
+import { RewardsCardProps } from './types';
 
 export const RewardsCard: React.FC<RewardsCardProps> = ({ challengeRewards }) => {
   return (

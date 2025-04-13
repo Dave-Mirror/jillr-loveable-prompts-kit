@@ -3,11 +3,7 @@ import React from 'react';
 import { Users, ThumbsUp, Star } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-
-type CommunitySubmissionsProps = {
-  verifiedSubmissions: any[];
-  inviteFriends: () => void;
-}
+import { CommunitySubmissionsProps } from './types';
 
 export const CommunitySubmissions: React.FC<CommunitySubmissionsProps> = ({ 
   verifiedSubmissions, 

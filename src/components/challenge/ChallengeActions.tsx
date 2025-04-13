@@ -3,15 +3,7 @@ import React from 'react';
 import { Upload, MessageCircle, Share2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-
-type ChallengeActionsProps = {
-  handleJoinClick: () => void;
-  requestCoachTip: () => void;
-  shareChallenge: () => void;
-  coachTip: string;
-  isLoadingTip: boolean;
-  challenge: any;
-}
+import { ChallengeActionsProps } from './types';
 
 export const ChallengeActions: React.FC<ChallengeActionsProps> = ({ 
   handleJoinClick, 

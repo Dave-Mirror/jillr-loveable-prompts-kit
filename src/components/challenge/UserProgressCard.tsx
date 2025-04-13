@@ -4,12 +4,7 @@ import { Link } from 'react-router-dom';
 import { Zap, Coins } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-
-type UserProgressCardProps = {
-  user: any;
-  challenge: any;
-  submissions: any[];
-}
+import { UserProgressCardProps } from './types';
 
 export const UserProgressCard: React.FC<UserProgressCardProps> = ({ 
   user, 
