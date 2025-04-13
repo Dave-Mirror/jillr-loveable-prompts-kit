@@ -21,13 +21,17 @@ const ChallengeDetail = () => {
       if (!id) return;
       
       try {
+        // Using the format where we don't use .eq() which was causing the UUID format error
         const { data, error } = await supabase
           .from('challenges')
           .select('*')
-          .eq('id', id)
-          .single();
+          .filter('id', 'eq', id)
+          .maybeSingle();
           
-        if (error) throw error;
+        if (error) {
+          console.error('Error fetching challenge:', error);
+          throw error;
+        }
         
         if (data) {
           setChallenge(data);
@@ -72,6 +76,11 @@ const ChallengeDetail = () => {
         <div className="glassmorphism p-8">
           <h1 className="text-2xl font-bold mb-6">Challenge not found</h1>
           <p>The challenge you're looking for does not exist or has been removed.</p>
+          <Link to="/explore" className="mt-4 inline-block">
+            <Button>
+              Return to Explore
+            </Button>
+          </Link>
         </div>
       </div>
     );

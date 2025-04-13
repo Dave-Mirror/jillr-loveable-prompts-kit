@@ -36,26 +36,30 @@ export const useCreatorData = (userId: string | undefined): UseCreatorDataResult
         const { data: challengesData, error: challengesError } = await supabase
           .from('challenges')
           .select('*')
-          .eq('user_id', userId);
+          .filter('user_id', 'eq', userId);
           
         if (challengesError) throw challengesError;
         
-        // Create a properly typed challenges array to avoid deep type instantiation
-        const typedChallenges: Challenge[] = Array.isArray(challengesData) 
-          ? challengesData.map(challenge => ({
-              id: challenge.id || '',
-              title: challenge.title || '',
-              status: challenge.status || 'active',
-              type: challenge.type || undefined,
-              description: challenge.description || undefined,
-              coin_reward: challenge.coin_reward || undefined,
-              xp_reward: challenge.xp_reward || undefined,
-              start_date: challenge.start_date || undefined,
-              end_date: challenge.end_date || undefined,
-              hashtags: challenge.hashtags || undefined,
-              views: challenge.views || 0
-            }))
-          : [];
+        // Convert to properly typed challenges array
+        const challenges: Challenge[] = [];
+        
+        if (Array.isArray(challengesData)) {
+          challengesData.forEach(item => {
+            challenges.push({
+              id: item.id,
+              title: item.title,
+              status: item.status || 'active',
+              type: item.type,
+              description: item.description,
+              coin_reward: item.coin_reward,
+              xp_reward: item.xp_reward,
+              start_date: item.start_date,
+              end_date: item.end_date,
+              hashtags: item.hashtags,
+              views: item.views || 0
+            });
+          });
+        }
         
         // Fetch wallet data for XP and coins
         const { data: walletData, error: walletError } = await supabase
@@ -100,7 +104,7 @@ export const useCreatorData = (userId: string | undefined): UseCreatorDataResult
         setProducts(mockProducts);
         
         // Add default views value of 0 for challenges that don't have it
-        const challengesWithViews = typedChallenges.map((challenge) => ({
+        const challengesWithViews = challenges.map((challenge) => ({
           ...challenge,
           views: challenge.views || 0
         }));
