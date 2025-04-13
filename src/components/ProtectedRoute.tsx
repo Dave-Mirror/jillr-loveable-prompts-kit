@@ -9,7 +9,7 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, roleRequired }) => {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, session } = useAuth();
   const location = useLocation();
 
   if (isLoading) {
@@ -23,7 +23,9 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, roleRequired 
     );
   }
 
-  if (!user) {
+  // Check for valid session and user
+  if (!session || !user) {
+    // Save the current location for redirect after login
     return <Navigate to="/auth" state={{ from: location }} replace />;
   }
 
