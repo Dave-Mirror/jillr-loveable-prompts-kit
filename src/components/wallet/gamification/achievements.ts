@@ -1,13 +1,12 @@
 
-import { Trophy, Gift, Zap, Crown } from 'lucide-react';
+import { Trophy, Gift, Zap, Crown, LucideIcon } from 'lucide-react';
 import { UserReward } from '@/utils/challenge/rewards/types';
-import { ReactNode } from 'react';
 
 export interface Achievement {
   name: string;
   description: string;
   completed: boolean;
-  icon: ReactNode;
+  icon: LucideIcon;
 }
 
 export const getAchievements = (userRewards: UserReward[], xp: number, level: number): Achievement[] => [

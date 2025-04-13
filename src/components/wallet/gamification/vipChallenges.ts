@@ -1,13 +1,12 @@
 
-import { ReactNode } from 'react';
-import { Zap, Rocket, Star, Crown } from 'lucide-react';
+import { Zap, Rocket, Star, Crown, LucideIcon } from 'lucide-react';
 
 export interface VipChallenge {
   name: string;
   description: string;
   requiredLevel: number;
   reward: string;
-  icon: ReactNode;
+  icon: LucideIcon;
 }
 
 export const getVipChallenges = (): VipChallenge[] => [
