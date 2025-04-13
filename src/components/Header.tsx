@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Coins, Zap, Award, User, LogOut } from 'lucide-react';
+import { Coins, Zap, Award, User, LogOut, Wallet } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
@@ -44,6 +44,11 @@ const Header = () => {
           <Link to="/rewards" className="text-foreground hover:text-jillr-neonPurple transition-colors">
             Rewards
           </Link>
+          {user && (
+            <Link to="/wallet" className="text-foreground hover:text-jillr-neonPurple transition-colors">
+              Wallet
+            </Link>
+          )}
         </nav>
         
         <div className="flex items-center gap-4">
@@ -66,6 +71,10 @@ const Header = () => {
               
               <Link to="/profile" className="w-9 h-9 flex items-center justify-center rounded-full bg-jillr-darkBlue hover:bg-jillr-neonPurple/20 transition-colors">
                 <User size={20} />
+              </Link>
+              
+              <Link to="/wallet" className="w-9 h-9 flex items-center justify-center rounded-full bg-jillr-darkBlue hover:bg-jillr-neonPurple/20 transition-colors">
+                <Wallet size={20} />
               </Link>
               
               <Button 

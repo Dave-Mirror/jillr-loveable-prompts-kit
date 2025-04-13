@@ -14,6 +14,7 @@ import Upload from "./pages/Upload";
 import Auth from "./pages/Auth";
 import AuthCallback from "./pages/AuthCallback";
 import NotFound from "./pages/NotFound";
+import Wallet from "./pages/Wallet";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +35,11 @@ const App = () => (
                 <Route path="/upload/:id" element={
                   <ProtectedRoute>
                     <Upload />
+                  </ProtectedRoute>
+                } />
+                <Route path="/wallet" element={
+                  <ProtectedRoute>
+                    <Wallet />
                   </ProtectedRoute>
                 } />
                 <Route path="/auth" element={<Auth />} />
