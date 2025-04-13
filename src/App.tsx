@@ -15,6 +15,8 @@ import Auth from "./pages/Auth";
 import AuthCallback from "./pages/AuthCallback";
 import NotFound from "./pages/NotFound";
 import Wallet from "./pages/Wallet";
+import CreatorDashboard from "./pages/CreatorDashboard";
+import Shop from "./pages/Shop";
 
 const queryClient = new QueryClient();
 
@@ -42,6 +44,12 @@ const App = () => (
                     <Wallet />
                   </ProtectedRoute>
                 } />
+                <Route path="/creator-dashboard" element={
+                  <ProtectedRoute>
+                    <CreatorDashboard />
+                  </ProtectedRoute>
+                } />
+                <Route path="/shop" element={<Shop />} />
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/auth/callback" element={<AuthCallback />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

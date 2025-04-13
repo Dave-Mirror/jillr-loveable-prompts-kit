@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Coins, Zap, Award, User, LogOut, Wallet } from 'lucide-react';
+import { Coins, Zap, Award, User, LogOut, Wallet, ShoppingBag, Video } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
@@ -38,16 +38,18 @@ const Header = () => {
           <Link to="/explore" className="text-foreground hover:text-jillr-neonPurple transition-colors">
             Explore
           </Link>
-          <Link to="/leaderboard" className="text-foreground hover:text-jillr-neonPurple transition-colors">
-            Leaderboard
-          </Link>
-          <Link to="/rewards" className="text-foreground hover:text-jillr-neonPurple transition-colors">
-            Rewards
+          <Link to="/shop" className="text-foreground hover:text-jillr-neonPurple transition-colors">
+            Shop
           </Link>
           {user && (
-            <Link to="/wallet" className="text-foreground hover:text-jillr-neonPurple transition-colors">
-              Wallet
-            </Link>
+            <>
+              <Link to="/creator-dashboard" className="text-foreground hover:text-jillr-neonPurple transition-colors">
+                Creator Dashboard
+              </Link>
+              <Link to="/wallet" className="text-foreground hover:text-jillr-neonPurple transition-colors">
+                Wallet
+              </Link>
+            </>
           )}
         </nav>
         
@@ -77,6 +79,14 @@ const Header = () => {
                 <Wallet size={20} />
               </Link>
               
+              <Link to="/creator-dashboard" className="w-9 h-9 flex items-center justify-center rounded-full bg-jillr-darkBlue hover:bg-jillr-neonPurple/20 transition-colors">
+                <Video size={20} />
+              </Link>
+              
+              <Link to="/shop" className="w-9 h-9 flex items-center justify-center rounded-full bg-jillr-darkBlue hover:bg-jillr-neonPurple/20 transition-colors">
+                <ShoppingBag size={20} />
+              </Link>
+              
               <Button 
                 variant="ghost" 
                 size="icon" 
@@ -87,11 +97,17 @@ const Header = () => {
               </Button>
             </>
           ) : (
-            <Link to="/auth">
-              <Button className="neon-button">
-                Login
-              </Button>
-            </Link>
+            <>
+              <Link to="/shop" className="w-9 h-9 md:hidden flex items-center justify-center rounded-full bg-jillr-darkBlue hover:bg-jillr-neonPurple/20 transition-colors">
+                <ShoppingBag size={20} />
+              </Link>
+              
+              <Link to="/auth">
+                <Button className="neon-button">
+                  Login
+                </Button>
+              </Link>
+            </>
           )}
         </div>
       </div>
