@@ -1,4 +1,3 @@
-
 // Mock data for leaderboard users
 export const mockUsers = [
   {
@@ -133,22 +132,22 @@ export const mockUsers = [
   },
 ];
 
-// Mock badge data
+// Updated mock badge data with 'id' property for each badge
 export const badgeSystem = [
-  { name: 'Top 3%', xp_required: 10000, icon_url: '🏆' },
-  { name: 'Top 10%', xp_required: 8000, icon_url: '🥇' },
-  { name: 'Top 20%', xp_required: 6000, icon_url: '🥈' },
-  { name: 'Top 30%', xp_required: 4000, icon_url: '🥉' },
-  { name: 'Top 40%', xp_required: 2000, icon_url: '🎖️' },
-  { name: 'Challenge Master', xp_required: 0, challenges_required: 40, icon_url: '⭐' },
-  { name: 'Style Icon', xp_required: 0, challenge_type: 'Lifestyle', challenges_required: 20, icon_url: '👔' },
-  { name: 'Laugh Master', xp_required: 0, challenge_type: 'Comedy', challenges_required: 20, icon_url: '😂' },
-  { name: 'Workout King', xp_required: 0, challenge_type: 'Fitness', challenges_required: 20, icon_url: '💪' },
-  { name: 'Explorer', xp_required: 0, challenge_type: 'Travel', challenges_required: 15, icon_url: '🧭' },
-  { name: 'Melody Master', xp_required: 0, challenge_type: 'Music', challenges_required: 15, icon_url: '🎵' },
-  { name: 'Chef Star', xp_required: 0, challenge_type: 'Food', challenges_required: 15, icon_url: '👨‍🍳' },
-  { name: 'Code Master', xp_required: 0, challenge_type: 'Tutorial', challenges_required: 15, icon_url: '💻' },
-  { name: 'Creative Mind', xp_required: 0, challenge_type: 'Art', challenges_required: 15, icon_url: '🎨' },
-  { name: 'Animal Friend', xp_required: 0, challenge_type: 'Pets', challenges_required: 15, icon_url: '🐾' },
-  { name: 'Early Adopter', xp_required: 0, special: 'early_user', icon_url: '🔥' },
+  { id: 'top-3', name: 'Top 3%', xp_required: 10000, icon_url: '🏆' },
+  { id: 'top-10', name: 'Top 10%', xp_required: 8000, icon_url: '🥇' },
+  { id: 'top-20', name: 'Top 20%', xp_required: 6000, icon_url: '🥈' },
+  { id: 'top-30', name: 'Top 30%', xp_required: 4000, icon_url: '🥉' },
+  { id: 'top-40', name: 'Top 40%', xp_required: 2000, icon_url: '🎖️' },
+  { id: 'challenge-master', name: 'Challenge Master', xp_required: 0, challenges_required: 40, icon_url: '⭐' },
+  { id: 'style-icon', name: 'Style Icon', xp_required: 0, challenge_type: 'Lifestyle', challenges_required: 20, icon_url: '👔' },
+  { id: 'laugh-master', name: 'Laugh Master', xp_required: 0, challenge_type: 'Comedy', challenges_required: 20, icon_url: '😂' },
+  { id: 'workout-king', name: 'Workout King', xp_required: 0, challenge_type: 'Fitness', challenges_required: 20, icon_url: '💪' },
+  { id: 'explorer', name: 'Explorer', xp_required: 0, challenge_type: 'Travel', challenges_required: 15, icon_url: '🧭' },
+  { id: 'melody-master', name: 'Melody Master', xp_required: 0, challenge_type: 'Music', challenges_required: 15, icon_url: '🎵' },
+  { id: 'chef-star', name: 'Chef Star', xp_required: 0, challenge_type: 'Food', challenges_required: 15, icon_url: '👨‍🍳' },
+  { id: 'code-master', name: 'Code Master', xp_required: 0, challenge_type: 'Tutorial', challenges_required: 15, icon_url: '💻' },
+  { id: 'creative-mind', name: 'Creative Mind', xp_required: 0, challenge_type: 'Art', challenges_required: 15, icon_url: '🎨' },
+  { id: 'animal-friend', name: 'Animal Friend', xp_required: 0, challenge_type: 'Pets', challenges_required: 15, icon_url: '🐾' },
+  { id: 'early-adopter', name: 'Early Adopter', xp_required: 0, special: 'early_user', icon_url: '🔥' },
 ];
