@@ -1,4 +1,3 @@
-
 import { supabase } from '@/integrations/supabase/client';
 import { rewardsData } from '../challengeData';
 import { Challenge, ChallengeType } from '@/components/challenge/types';
@@ -186,7 +185,8 @@ export const getUserRewards = async (userId: string): Promise<UserReward[]> => {
           // Create a compliant Challenge object with correct type
           const typedChallenge: Challenge = {
             ...challenge,
-            type: (challenge.type || 'default') as ChallengeType
+            type: (challenge.type || 'default') as ChallengeType,
+            status: (challenge.status || 'active') as 'active' | 'completed' | 'draft'
           };
           
           // Add this reward to the list
