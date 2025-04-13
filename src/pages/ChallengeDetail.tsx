@@ -5,7 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Zap, Clock, Upload, ExternalLink } from 'lucide-react';
 import CountdownTimer from '@/components/CountdownTimer';
-import { useAuth } from '@/providers/AuthProvider';
+import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 
 const ChallengeDetail = () => {
