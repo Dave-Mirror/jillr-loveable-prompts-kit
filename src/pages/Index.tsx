@@ -9,8 +9,16 @@ const Index = () => {
 
   useEffect(() => {
     if (!isLoading) {
+      // Send users to appropriate dashboards based on role, or to explore if not logged in
       if (user) {
-        navigate("/dashboard");
+        // Temporary hardcoded roles until role system is fully implemented
+        if (user.email?.includes('brand') || user.email?.includes('enterprise')) {
+          navigate("/enterprise-dashboard");
+        } else if (user.email?.includes('creator')) {
+          navigate("/creator-dashboard");
+        } else {
+          navigate("/dashboard");
+        }
       } else {
         navigate("/explore");
       }

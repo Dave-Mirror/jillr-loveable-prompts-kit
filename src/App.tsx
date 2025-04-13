@@ -18,6 +18,7 @@ import Wallet from "./pages/Wallet";
 import CreatorDashboard from "./pages/CreatorDashboard";
 import Shop from "./pages/Shop";
 import BrandDashboard from "./pages/BrandDashboard";
+import EnterpriseDashboard from "./pages/EnterpriseDashboard";
 import Leaderboard from "./pages/Leaderboard";
 import LiveMap from "./pages/LiveMap";
 import Index from "./pages/Index";
@@ -37,9 +38,7 @@ const App = () => (
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/dashboard" element={
-                  <ProtectedRoute>
-                    <Dashboard />
-                  </ProtectedRoute>
+                  <Dashboard />
                 } />
                 <Route path="/explore" element={<Explore />} />
                 <Route path="/challenge/:id" element={<ChallengeDetail />} />
@@ -62,6 +61,9 @@ const App = () => (
                   <ProtectedRoute roleRequired="brand">
                     <BrandDashboard />
                   </ProtectedRoute>
+                } />
+                <Route path="/enterprise-dashboard" element={
+                  <EnterpriseDashboard />
                 } />
                 <Route path="/leaderboard" element={<Leaderboard />} />
                 <Route path="/shop" element={<Shop />} />

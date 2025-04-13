@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { 
@@ -32,7 +33,7 @@ const Header = () => {
 
   const mainNavItems = [
     { name: 'Home', icon: Home, path: '/' },
-    { name: 'Dashboard', icon: BarChart, path: '/dashboard' },
+    { name: 'Dashboard', icon: BarChart, path: user?.email?.includes('brand') || user?.email?.includes('enterprise') ? '/enterprise-dashboard' : '/dashboard' },
     { name: 'Explore', icon: Zap, path: '/explore' },
     { name: 'Challenges', icon: Challenge, path: '/challenges' },
     { name: 'Live Map', icon: Map, path: '/livemap' },
@@ -90,14 +91,14 @@ const Header = () => {
                 <Wallet size={20} />
               </Link>
               
-              {user.role === 'creator' && (
+              {user.email?.includes('creator') && (
                 <Link to="/creator-dashboard" className="w-9 h-9 flex items-center justify-center rounded-full bg-jillr-darkBlue hover:bg-jillr-neonPurple/20 transition-colors">
                   <Video size={20} />
                 </Link>
               )}
               
-              {user.role === 'brand' && (
-                <Link to="/brand-dashboard" className="w-9 h-9 flex items-center justify-center rounded-full bg-jillr-darkBlue hover:bg-jillr-neonPurple/20 transition-colors">
+              {(user.email?.includes('brand') || user.email?.includes('enterprise')) && (
+                <Link to="/enterprise-dashboard" className="w-9 h-9 flex items-center justify-center rounded-full bg-jillr-darkBlue hover:bg-jillr-neonPurple/20 transition-colors">
                   <BarChart size={20} />
                 </Link>
               )}

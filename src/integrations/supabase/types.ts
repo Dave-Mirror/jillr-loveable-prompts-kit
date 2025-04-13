@@ -51,6 +51,148 @@ export type Database = {
         }
         Relationships: []
       }
+      enterprise_campaigns: {
+        Row: {
+          analytics: Json | null
+          campaign_type: string
+          created_at: string
+          description: string | null
+          end_date: string | null
+          enterprise_id: string
+          hashtags: string[] | null
+          id: string
+          location_based: boolean | null
+          locations: Json | null
+          rewards: Json | null
+          settings: Json | null
+          start_date: string | null
+          status: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          analytics?: Json | null
+          campaign_type: string
+          created_at?: string
+          description?: string | null
+          end_date?: string | null
+          enterprise_id: string
+          hashtags?: string[] | null
+          id?: string
+          location_based?: boolean | null
+          locations?: Json | null
+          rewards?: Json | null
+          settings?: Json | null
+          start_date?: string | null
+          status?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          analytics?: Json | null
+          campaign_type?: string
+          created_at?: string
+          description?: string | null
+          end_date?: string | null
+          enterprise_id?: string
+          hashtags?: string[] | null
+          id?: string
+          location_based?: boolean | null
+          locations?: Json | null
+          rewards?: Json | null
+          settings?: Json | null
+          start_date?: string | null
+          status?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "enterprise_campaigns_enterprise_id_fkey"
+            columns: ["enterprise_id"]
+            isOneToOne: false
+            referencedRelation: "enterprise_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      enterprise_profiles: {
+        Row: {
+          branding_colors: Json | null
+          company_name: string
+          created_at: string
+          hashtags: string[] | null
+          id: string
+          industry: string[] | null
+          logo_url: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          branding_colors?: Json | null
+          company_name: string
+          created_at?: string
+          hashtags?: string[] | null
+          id?: string
+          industry?: string[] | null
+          logo_url?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          branding_colors?: Json | null
+          company_name?: string
+          created_at?: string
+          hashtags?: string[] | null
+          id?: string
+          industry?: string[] | null
+          logo_url?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      influencer_collaborations: {
+        Row: {
+          campaign_id: string
+          created_at: string
+          id: string
+          influencer_id: string
+          payment_amount: number | null
+          payment_status: string | null
+          status: string | null
+          updated_at: string
+        }
+        Insert: {
+          campaign_id: string
+          created_at?: string
+          id?: string
+          influencer_id: string
+          payment_amount?: number | null
+          payment_status?: string | null
+          status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          campaign_id?: string
+          created_at?: string
+          id?: string
+          influencer_id?: string
+          payment_amount?: number | null
+          payment_status?: string | null
+          status?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "influencer_collaborations_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "enterprise_campaigns"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       uploads: {
         Row: {
           capcut_template: string | null
