@@ -1,23 +1,38 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Coins, Award, Gift, Check, Zap, Calendar, ShoppingBag, ExternalLink, Flame } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { 
+  Coins, Award, Gift, Check, Zap, Calendar, ShoppingBag, 
+  ExternalLink, Flame, Ticket, BadgePercent, Copy 
+} from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { getUserRewards, UserReward } from '@/utils/challenge/userRewards';
+import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 interface RewardsSectionProps {
   userProfile: any;
 }
 
 const RewardsSection: React.FC<RewardsSectionProps> = ({ userProfile }) => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
   // Calculate XP progress to next level
   const currentLevel = userProfile?.level || 1;
   const nextLevelXP = currentLevel * 1000;
   const previousLevelXP = (currentLevel - 1) * 1000;
   const currentXP = userProfile?.xp || 0;
   const progress = Math.min(100, ((currentXP - previousLevelXP) / (nextLevelXP - previousLevelXP)) * 100);
+
+  const [userRewards, setUserRewards] = useState<UserReward[]>([]);
+  const [selectedReward, setSelectedReward] = useState<UserReward | null>(null);
+  const [rewardDialogOpen, setRewardDialogOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Mock data for rewards - would come from database in real app
   const availableRewards = [
@@ -71,6 +86,104 @@ const RewardsSection: React.FC<RewardsSectionProps> = ({ userProfile }) => {
       reward: '50 Coins'
     }
   };
+
+  useEffect(() => {
+    const fetchUserRewards = async () => {
+      if (!userProfile?.id) return;
+      
+      try {
+        setIsLoading(true);
+        const rewards = await getUserRewards(userProfile.id);
+        setUserRewards(rewards);
+      } catch (error) {
+        console.error('Error fetching user rewards:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUserRewards();
+  }, [userProfile?.id]);
+
+  const openRewardDetails = (reward: UserReward) => {
+    setSelectedReward(reward);
+    setRewardDialogOpen(true);
+  };
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    toast({
+      title: "Code kopiert!",
+      description: "Der Code wurde in die Zwischenablage kopiert.",
+    });
+  };
+
+  const claimChallengeReward = async (reward: UserReward) => {
+    if (!userProfile?.id || reward.claimed) return;
+
+    try {
+      // Mark reward as claimed
+      const rewardKey = reward.challengeId ? `${reward.challengeId}-${reward.type}` : reward.id;
+      
+      const { data: wallet } = await supabase
+        .from('wallets')
+        .select('rewards_claimed')
+        .eq('user_id', userProfile.id)
+        .single();
+      
+      const currentClaimed = Array.isArray(wallet?.rewards_claimed) ? wallet.rewards_claimed : [];
+      const updatedClaimed = [...currentClaimed, rewardKey];
+      
+      const { error } = await supabase
+        .from('wallets')
+        .update({ rewards_claimed: updatedClaimed })
+        .eq('user_id', userProfile.id);
+        
+      if (error) throw error;
+      
+      // Update UI
+      setUserRewards(userRewards.map(r => 
+        r.id === reward.id ? { ...r, claimed: true } : r
+      ));
+      
+      toast({
+        title: "Belohnung beansprucht!",
+        description: `Du hast erfolgreich "${reward.name}" beansprucht.`,
+      });
+      
+      // Close dialog
+      setRewardDialogOpen(false);
+      
+    } catch (error) {
+      console.error('Error claiming challenge reward:', error);
+      toast({
+        title: "Fehler",
+        description: "Die Belohnung konnte nicht beansprucht werden.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const navigateToReward = (reward: UserReward) => {
+    if (reward.claimUrl) {
+      // For external URLs
+      if (reward.claimUrl.startsWith('http')) {
+        window.open(reward.claimUrl, '_blank');
+      } else {
+        // For internal routes
+        navigate(reward.claimUrl);
+      }
+    }
+    setRewardDialogOpen(false);
+  };
+
+  // Group rewards by type for display
+  const groupedRewards = userRewards.reduce((acc, reward) => {
+    const type = reward.type;
+    if (!acc[type]) acc[type] = [];
+    acc[type].push(reward);
+    return acc;
+  }, {} as Record<string, UserReward[]>);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -132,11 +245,86 @@ const RewardsSection: React.FC<RewardsSectionProps> = ({ userProfile }) => {
           </CardContent>
         </Card>
         
-        <Tabs defaultValue="available">
-          <TabsList className="grid grid-cols-2 w-full">
+        <Tabs defaultValue="challenge-rewards">
+          <TabsList className="grid grid-cols-3 w-full">
+            <TabsTrigger value="challenge-rewards">Challenge Rewards</TabsTrigger>
             <TabsTrigger value="available">Available Rewards</TabsTrigger>
             <TabsTrigger value="claimed">Claimed Rewards</TabsTrigger>
           </TabsList>
+          
+          <TabsContent value="challenge-rewards" className="mt-4">
+            {isLoading ? (
+              <div className="text-center p-6">
+                <div className="w-6 h-6 border-4 border-t-jillr-neonPurple rounded-full animate-spin mx-auto mb-4"></div>
+                <p>Loading your rewards...</p>
+              </div>
+            ) : Object.keys(groupedRewards).length > 0 ? (
+              <div className="space-y-6">
+                {Object.entries(groupedRewards).map(([type, typeRewards]) => (
+                  <div key={type}>
+                    <h3 className="text-lg font-bold mb-3 flex items-center gap-2">
+                      {type === 'coupon' && <BadgePercent className="text-yellow-500" />}
+                      {type === 'product' && <ShoppingBag className="text-jillr-neonBlue" />}
+                      {type === 'ticket' && <Ticket className="text-jillr-neonPink" />}
+                      {type === 'access' && <Flame className="text-orange-500" />}
+                      {type === 'voucher' && <Gift className="text-jillr-neonGreen" />}
+                      {type.charAt(0).toUpperCase() + type.slice(1)}s
+                    </h3>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {typeRewards.map(reward => (
+                        <Card key={reward.id} className="overflow-hidden h-full flex flex-col">
+                          <div className="relative h-40">
+                            <img 
+                              src={reward.image} 
+                              alt={reward.name} 
+                              className="w-full h-full object-cover"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-jillr-darkBlue/80 to-transparent"></div>
+                            <div className="absolute bottom-3 left-3">
+                              <Badge className={`${reward.claimed ? 'bg-green-500' : 'bg-jillr-neonPurple'}`}>
+                                {reward.claimed ? (
+                                  <span className="flex items-center gap-1">
+                                    <Check size={10} />
+                                    Eingelöst
+                                  </span>
+                                ) : 'Verfügbar'}
+                              </Badge>
+                            </div>
+                          </div>
+                          
+                          <CardHeader className="pb-2">
+                            <CardTitle className="text-base line-clamp-1">{reward.name}</CardTitle>
+                            <CardDescription className="line-clamp-2">{reward.description}</CardDescription>
+                          </CardHeader>
+                          
+                          <CardFooter className="pt-0 mt-auto">
+                            <Button 
+                              onClick={() => openRewardDetails(reward)}
+                              size="sm"
+                              className="w-full"
+                              variant={reward.claimed ? "outline" : "default"}
+                            >
+                              {reward.claimed ? 'Details' : 'Einlösen'}
+                            </Button>
+                          </CardFooter>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center p-6 bg-card rounded-lg border">
+                <Gift className="h-10 w-10 mx-auto mb-3 text-muted-foreground" />
+                <h3 className="text-lg font-medium mb-2">No Challenge Rewards Yet</h3>
+                <p className="text-muted-foreground mb-4">
+                  Complete challenges to earn exclusive rewards!
+                </p>
+                <Button onClick={() => navigate('/explore')} size="sm">Explore Challenges</Button>
+              </div>
+            )}
+          </TabsContent>
           
           <TabsContent value="available" className="mt-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -163,6 +351,7 @@ const RewardsSection: React.FC<RewardsSectionProps> = ({ userProfile }) => {
                       className="w-full" 
                       disabled={!reward.isUnlocked}
                       variant={reward.isUnlocked ? "default" : "outline"}
+                      size="sm"
                     >
                       {reward.isUnlocked ? "Claim Reward" : `Unlock at Level ${reward.requiredLevel}`}
                     </Button>
@@ -200,7 +389,7 @@ const RewardsSection: React.FC<RewardsSectionProps> = ({ userProfile }) => {
                       </p>
                     </CardContent>
                     <CardFooter className="pt-0">
-                      <Button variant="outline" className="w-full">Use Reward</Button>
+                      <Button variant="outline" className="w-full" size="sm">Use Reward</Button>
                     </CardFooter>
                   </Card>
                 ))
@@ -216,6 +405,43 @@ const RewardsSection: React.FC<RewardsSectionProps> = ({ userProfile }) => {
                   </CardContent>
                 </Card>
               )}
+              
+              {/* Add claimed challenge rewards */}
+              {userRewards.filter(r => r.claimed).map(reward => (
+                <Card key={reward.id} className="overflow-hidden flex flex-col">
+                  <div className="relative h-32">
+                    <img 
+                      src={reward.image} 
+                      alt={reward.name} 
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-jillr-darkBlue/80 to-transparent"></div>
+                    <div className="absolute bottom-2 left-2">
+                      <Badge className="bg-green-500">
+                        <span className="flex items-center gap-1">
+                          <Check size={10} />
+                          Claimed
+                        </span>
+                      </Badge>
+                    </div>
+                  </div>
+                  
+                  <CardHeader className="pb-2 pt-3">
+                    <CardTitle className="text-sm">{reward.name}</CardTitle>
+                  </CardHeader>
+                  
+                  <CardFooter className="pt-0">
+                    <Button 
+                      onClick={() => openRewardDetails(reward)}
+                      variant="outline"
+                      size="sm"
+                      className="w-full"
+                    >
+                      Details
+                    </Button>
+                  </CardFooter>
+                </Card>
+              ))}
             </div>
           </TabsContent>
         </Tabs>
@@ -315,6 +541,88 @@ const RewardsSection: React.FC<RewardsSectionProps> = ({ userProfile }) => {
           </CardContent>
         </Card>
       </div>
+
+      {/* Reward Detail Dialog */}
+      {selectedReward && (
+        <Dialog open={rewardDialogOpen} onOpenChange={setRewardDialogOpen}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                {selectedReward.type === 'coupon' && <BadgePercent className="text-yellow-500" />}
+                {selectedReward.type === 'product' && <ShoppingBag className="text-jillr-neonBlue" />}
+                {selectedReward.type === 'ticket' && <Ticket className="text-jillr-neonPink" />}
+                {selectedReward.type === 'access' && <Flame className="text-orange-500" />}
+                {selectedReward.type === 'voucher' && <Gift className="text-jillr-neonGreen" />}
+                {selectedReward.name}
+              </DialogTitle>
+            </DialogHeader>
+            
+            <div className="relative aspect-video rounded-md overflow-hidden mb-4">
+              <img 
+                src={selectedReward.image} 
+                alt={selectedReward.name} 
+                className="w-full h-full object-cover"
+              />
+            </div>
+            
+            <div className="space-y-4">
+              <p>{selectedReward.description}</p>
+              
+              {selectedReward.challengeName && (
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="text-muted-foreground">Challenge:</span>
+                  <Badge variant="outline">{selectedReward.challengeName}</Badge>
+                </div>
+              )}
+              
+              {selectedReward.code && (
+                <div className="bg-muted p-3 rounded-md flex items-center justify-between">
+                  <code className="font-mono text-base">{selectedReward.code}</code>
+                  <Button 
+                    size="sm" 
+                    variant="ghost" 
+                    onClick={() => copyToClipboard(selectedReward.code!)}
+                  >
+                    <Copy size={16} />
+                  </Button>
+                </div>
+              )}
+              
+              {selectedReward.expireDate && (
+                <div className="flex items-center gap-2 text-sm">
+                  <Calendar size={14} className="text-muted-foreground" />
+                  <span>Gültig bis {new Date(selectedReward.expireDate).toLocaleDateString()}</span>
+                </div>
+              )}
+            </div>
+            
+            <DialogFooter className="flex sm:justify-between">
+              <Button 
+                variant="outline" 
+                onClick={() => setRewardDialogOpen(false)}
+              >
+                Schließen
+              </Button>
+              
+              {!selectedReward.claimed ? (
+                <Button 
+                  className="bg-jillr-neonGreen hover:bg-jillr-neonGreen/80"
+                  onClick={() => claimChallengeReward(selectedReward)}
+                >
+                  <Check size={16} className="mr-2" /> Belohnung beanspruchen
+                </Button>
+              ) : (
+                <Button
+                  className="bg-jillr-neonBlue hover:bg-jillr-neonBlue/80"
+                  onClick={() => navigateToReward(selectedReward)}
+                >
+                  <ExternalLink size={16} className="mr-2" /> Belohnung einlösen
+                </Button>
+              )}
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 };
