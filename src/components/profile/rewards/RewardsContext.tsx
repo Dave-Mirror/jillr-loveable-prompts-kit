@@ -13,6 +13,7 @@ interface RewardsContextType {
   selectedReward: UserReward | null;
   rewardDialogOpen: boolean;
   isLoading: boolean;
+  userProfile: any;
   openRewardDetails: (reward: UserReward) => void;
   closeRewardDialog: () => void;
   claimChallengeReward: (reward: UserReward) => Promise<void>;
@@ -128,6 +129,7 @@ export const RewardsProvider: React.FC<{ userProfile: any; children: React.React
     selectedReward,
     rewardDialogOpen,
     isLoading,
+    userProfile, // Make sure userProfile is included in the context value
     openRewardDetails,
     closeRewardDialog,
     claimChallengeReward,

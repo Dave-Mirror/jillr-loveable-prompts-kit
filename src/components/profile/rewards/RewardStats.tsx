@@ -21,6 +21,9 @@ interface RewardStatsProps {
 const RewardStats: React.FC<RewardStatsProps> = ({ streakData }) => {
   const { userProfile } = useRewards() as any;
   
+  // Add a fallback if userProfile is undefined
+  const coins = userProfile?.coins || 0;
+  
   return (
     <div className="space-y-6">
       <Card className="bg-gradient-to-br from-jillr-darkBlue to-jillr-neonGreen/10 border-jillr-neonGreen/20">
@@ -35,7 +38,7 @@ const RewardStats: React.FC<RewardStatsProps> = ({ streakData }) => {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="text-center">
-            <div className="text-4xl font-bold">{userProfile.coins || 0}</div>
+            <div className="text-4xl font-bold">{coins}</div>
             <p className="text-sm text-muted-foreground">Available Coins</p>
           </div>
           
