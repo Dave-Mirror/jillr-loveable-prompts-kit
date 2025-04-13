@@ -19,6 +19,7 @@ import CreatorDashboard from "./pages/CreatorDashboard";
 import Shop from "./pages/Shop";
 import BrandDashboard from "./pages/BrandDashboard";
 import Leaderboard from "./pages/Leaderboard";
+import LiveMap from "./pages/LiveMap";
 
 const queryClient = new QueryClient();
 
@@ -58,6 +59,7 @@ const App = () => (
                 } />
                 <Route path="/leaderboard" element={<Leaderboard />} />
                 <Route path="/shop" element={<Shop />} />
+                <Route path="/livemap" element={<LiveMap />} />
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/auth/callback" element={<AuthCallback />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
