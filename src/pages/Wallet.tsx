@@ -49,7 +49,7 @@ const Wallet = () => {
         
         // Generate available rewards based on XP thresholds
         const xp = data?.xp_total || 0;
-        const claimedRewards = data?.rewards_claimed || [];
+        const claimedRewards = Array.isArray(data?.rewards_claimed) ? data?.rewards_claimed : [];
         
         const availableRewards = [
           {
@@ -57,7 +57,7 @@ const Wallet = () => {
             name: 'Gutschein',
             description: '20% Rabatt auf deinen nächsten Einkauf',
             xpRequired: 2000,
-            isClaimed: claimedRewards.includes('coupon'),
+            isClaimed: Array.isArray(claimedRewards) && claimedRewards.includes('coupon'),
             isUnlocked: xp >= 2000
           },
           {
@@ -65,7 +65,7 @@ const Wallet = () => {
             name: 'Exklusiver Produkt-Drop',
             description: 'Zugang zum neuesten Produkt vor allen anderen',
             xpRequired: 5000,
-            isClaimed: claimedRewards.includes('product'),
+            isClaimed: Array.isArray(claimedRewards) && claimedRewards.includes('product'),
             isUnlocked: xp >= 5000
           },
           {
@@ -73,7 +73,7 @@ const Wallet = () => {
             name: 'VIP-Event-Zugang',
             description: 'Exklusiver Zugang zu unserem nächsten Event',
             xpRequired: 10000,
-            isClaimed: claimedRewards.includes('vip'),
+            isClaimed: Array.isArray(claimedRewards) && claimedRewards.includes('vip'),
             isUnlocked: xp >= 10000
           }
         ];
@@ -109,7 +109,9 @@ const Wallet = () => {
       }
       
       // Update rewards claimed in database
-      const updatedRewardsClaimed = [...(walletData.rewards_claimed || []), rewardId];
+      const updatedRewardsClaimed = Array.isArray(walletData.rewards_claimed) 
+        ? [...walletData.rewards_claimed, rewardId] 
+        : [rewardId];
       
       const { error } = await supabase
         .from('wallets')
@@ -261,7 +263,7 @@ const Wallet = () => {
                     className={reward.isUnlocked ? "bg-jillr-neonPurple hover:bg-jillr-neonPurple/80" : ""}
                     variant={reward.isUnlocked ? "default" : "outline"}
                     size="sm"
-                    className="w-full"
+                    fullWidth
                   >
                     {reward.isUnlocked ? "Einlösen" : `${reward.xpRequired - walletData.xp_total} XP fehlen`}
                   </Button>
