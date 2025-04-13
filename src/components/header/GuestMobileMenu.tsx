@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
-  Home, BarChart, Zap, Trophy, Map, ShoppingBag, Menu
+  Home, BarChart, Zap, Trophy, Map, ShoppingBag, Menu, Briefcase, Video
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
