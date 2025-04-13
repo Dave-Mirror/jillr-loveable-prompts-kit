@@ -1,12 +1,11 @@
 
 import { Challenge } from '@/components/challenge/types';
+import { Video, MapPin, Camera } from 'lucide-react';
 
 /**
  * Get challenge type icon
  */
 export const getChallengeTypeIcon = (type: string | null | undefined): JSX.Element => {
-  const { Video, MapPin, Camera } = require('lucide-react');
-  
   switch(type?.toLowerCase()) {
     case 'video': return <Video size={24} />;
     case 'geofencing': return <MapPin size={24} />;
