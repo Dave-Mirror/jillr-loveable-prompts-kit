@@ -10,6 +10,7 @@ import { Zap, Clock, Upload, ExternalLink, Share2, Users, Award, MapPin, Video, 
 import CountdownTimer from '@/components/CountdownTimer';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
+import { Reward } from '@/types/dashboard';
 
 // Thematische Bilder für jeden Challenge-Typ
 const challengeTypeImages = {
@@ -122,7 +123,7 @@ const coachTips = {
 };
 
 // Belohnungsideen basierend auf Challenge-Typen
-const rewardsData = {
+const rewardsData: Record<string, Reward[]> = {
   'Video': [
     { type: 'coins', description: '250 Coins für verifizierte Teilnahme', immediate: false },
     { type: 'xp', description: '500 XP nach Upload', immediate: true },

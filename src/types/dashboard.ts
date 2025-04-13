@@ -32,3 +32,12 @@ export type DashboardStats = {
   totalSales: number;
   totalCommission: number;
 };
+
+export type Reward = {
+  type: 'coins' | 'xp' | 'product' | 'voucher' | 'ticket';
+  description: string;
+  image?: string;
+  level?: number;
+  immediate: boolean;
+  viral_bonus?: boolean;
+};
