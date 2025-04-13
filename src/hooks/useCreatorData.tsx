@@ -33,15 +33,29 @@ export const useCreatorData = (userId: string | undefined): UseCreatorDataResult
         setIsLoading(true);
         
         // Fetch user's challenges
-        const { data, error: challengesError } = await supabase
+        const { data: challengesData, error: challengesError } = await supabase
           .from('challenges')
           .select('*')
           .eq('user_id', userId);
           
         if (challengesError) throw challengesError;
         
-        // Use type assertion to avoid deep type instantiation
-        const challengesData = data as Challenge[] || [];
+        // Create a properly typed challenges array to avoid deep type instantiation
+        const typedChallenges: Challenge[] = Array.isArray(challengesData) 
+          ? challengesData.map(challenge => ({
+              id: challenge.id || '',
+              title: challenge.title || '',
+              status: challenge.status || 'active',
+              type: challenge.type || undefined,
+              description: challenge.description || undefined,
+              coin_reward: challenge.coin_reward || undefined,
+              xp_reward: challenge.xp_reward || undefined,
+              start_date: challenge.start_date || undefined,
+              end_date: challenge.end_date || undefined,
+              hashtags: challenge.hashtags || undefined,
+              views: challenge.views || 0
+            }))
+          : [];
         
         // Fetch wallet data for XP and coins
         const { data: walletData, error: walletError } = await supabase
@@ -86,7 +100,7 @@ export const useCreatorData = (userId: string | undefined): UseCreatorDataResult
         setProducts(mockProducts);
         
         // Add default views value of 0 for challenges that don't have it
-        const challengesWithViews = challengesData.map((challenge: Challenge) => ({
+        const challengesWithViews = typedChallenges.map((challenge) => ({
           ...challenge,
           views: challenge.views || 0
         }));
