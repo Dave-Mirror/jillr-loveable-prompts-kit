@@ -14,12 +14,5 @@ export const calculateProgress = (xp: number): number => {
   return Math.floor(((xp - previousLevelXP) / (nextLevelXP - previousLevelXP)) * 100);
 };
 
-// Group rewards by type
-export const groupRewardsByType = (rewards: UserReward[]): Record<string, UserReward[]> => {
-  return rewards.reduce((acc, reward) => {
-    const type = reward.type;
-    if (!acc[type]) acc[type] = [];
-    acc[type].push(reward);
-    return acc;
-  }, {} as Record<string, UserReward[]>);
-};
+// This function has been moved to formatters.ts to avoid duplication
+// Removed groupRewardsByType function from here since it already exists in formatters.ts
