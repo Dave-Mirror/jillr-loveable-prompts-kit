@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
@@ -47,7 +48,7 @@ const CreatorDashboard = () => {
           .from('wallets')
           .select('*')
           .eq('user_id', user.id)
-          .single();
+          .maybeSingle();
           
         if (walletError && walletError.code !== 'PGRST116') throw walletError;
         
@@ -85,7 +86,7 @@ const CreatorDashboard = () => {
         setProducts(mockProducts);
         
         // Ensure challengesData is an array before processing
-        const challenges: Challenge[] = Array.isArray(challengesData) ? challengesData : [];
+        const challenges = Array.isArray(challengesData) ? (challengesData as Challenge[]) : [];
         
         // Add default views value of 0 for challenges that don't have it
         const challengesWithViews = challenges.map(challenge => ({
