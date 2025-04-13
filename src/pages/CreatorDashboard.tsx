@@ -9,7 +9,7 @@ import DashboardTabs from '@/components/dashboard/DashboardTabs';
 
 const CreatorDashboard = () => {
   const { user } = useAuth();
-  const { myChallenges, products, dashboardStats, isLoading } = useCreatorData(user?.id);
+  const { myChallenges, products, dashboardStats, isLoading } = useCreatorData(user?.id || 'demo-user');
 
   if (isLoading) {
     return <DashboardLoading />;
