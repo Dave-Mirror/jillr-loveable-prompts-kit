@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
-import { Google, Mail } from 'lucide-react';
+import { Mail } from 'lucide-react';
 
 const Auth = () => {
   const [email, setEmail] = useState('');
@@ -119,7 +119,7 @@ const Auth = () => {
     }
   };
 
-  const handleSocialSignIn = async (provider: 'google' | 'tiktok') => {
+  const handleSocialSignIn = async (provider: 'google') => {
     try {
       setLoading(true);
       const { data, error } = await supabase.auth.signInWithOAuth({
@@ -156,7 +156,11 @@ const Auth = () => {
                 onClick={() => handleSocialSignIn('google')}
                 disabled={loading}
               >
-                <Google className="mr-2 h-4 w-4" />
+                <svg className="mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <path d="M8 12 h8"></path>
+                  <path d="M12 8 v8"></path>
+                </svg>
                 Continue with Google
               </Button>
               
