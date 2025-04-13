@@ -1,26 +1,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import ChallengeCard from '../components/ChallengeCard';
 import { toast } from '@/hooks/use-toast';
-
-// Challenge type icons
-const typeIcons: Record<string, string> = {
-  'Photo & Video': '📸',
-  'AR': '🥽',
-  'Geofencing': '📍',
-  'Fitness': '💪',
-  'Sustainability': '♻️',
-  'Gamification': '🎮',
-  'Community': '👥',
-  'Battle': '⚔️',
-  'Review': '⭐',
-  'Travel': '✈️',
-  'Food': '🍔',
-  'Fashion': '👕',
-  'Beauty': '💄',
-  'Dance': '💃',
-};
+import ExploreFilters, { typeIcons } from '../components/explore/ExploreFilters';
+import ChallengeGrid from '../components/explore/ChallengeGrid';
+import LoadingSkeleton from '../components/explore/LoadingSkeleton';
+import EmptyState from '../components/explore/EmptyState';
 
 const Explore = () => {
   const [filter, setFilter] = useState({
@@ -74,6 +59,7 @@ const Explore = () => {
   // Extract unique filter types from the challenges
   const filterTypes = ['all', ...new Set(challenges.map(challenge => challenge.type))];
 
+  // Filter challenges based on the selected filter
   const filteredChallenges = challenges.filter(challenge => 
     filter.type === 'all' || challenge.type === filter.type
   );
@@ -88,76 +74,29 @@ const Explore = () => {
     return 0;
   });
 
+  const resetFilters = () => {
+    setFilter({ type: 'all', sort: 'latest' });
+  };
+
   return (
     <div className="container py-8">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <h1 className="text-3xl font-bold neon-text">Explore Challenges</h1>
-        
-        <div className="flex flex-wrap gap-2">
-          <select
-            className="glassmorphism px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-jillr-neonPurple"
-            value={filter.type}
-            onChange={(e) => setFilter(prev => ({ ...prev, type: e.target.value }))}
-          >
-            {filterTypes.map(type => (
-              <option key={type} value={type} className="bg-jillr-dark">
-                {type === 'all' ? 'All Types' : `${typeIcons[type] || '🎯'} ${type}`}
-              </option>
-            ))}
-          </select>
-          
-          <select
-            className="glassmorphism px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-jillr-neonPurple"
-            value={filter.sort}
-            onChange={(e) => setFilter(prev => ({ ...prev, sort: e.target.value }))}
-          >
-            <option value="latest" className="bg-jillr-dark">Latest</option>
-            <option value="rewards" className="bg-jillr-dark">Highest Rewards</option>
-          </select>
-        </div>
+        <ExploreFilters 
+          filter={filter} 
+          filterTypes={filterTypes} 
+          setFilter={setFilter} 
+        />
       </div>
       
       {isLoading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[1, 2, 3, 4, 5, 6].map((_, index) => (
-            <div key={index} className="neon-card animate-pulse">
-              <div className="neon-card-content p-6">
-                <div className="aspect-video bg-jillr-darkBlue/30 rounded-lg mb-3"></div>
-                <div className="h-6 bg-jillr-darkBlue/30 rounded-lg mb-2"></div>
-                <div className="h-4 bg-jillr-darkBlue/30 rounded-lg mb-2"></div>
-                <div className="h-4 bg-jillr-darkBlue/30 rounded-lg w-2/3"></div>
-              </div>
-            </div>
-          ))}
-        </div>
+        <LoadingSkeleton />
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {sortedChallenges.map(challenge => (
-            <ChallengeCard
-              key={challenge.id}
-              id={challenge.id}
-              title={challenge.title}
-              description={challenge.description}
-              type={challenge.type}
-              hashtags={challenge.hashtags}
-              xpReward={challenge.xpReward}
-              endDate={challenge.endDate}
-              imageUrl={challenge.imageUrl}
-            />
-          ))}
-        </div>
-      )}
-      
-      {!isLoading && sortedChallenges.length === 0 && (
-        <div className="flex flex-col items-center justify-center py-12">
-          <p className="text-lg text-muted-foreground mb-4">No challenges found with the selected filters</p>
-          <button 
-            className="neon-button"
-            onClick={() => setFilter({ type: 'all', sort: 'latest' })}
-          >
-            Reset Filters
-          </button>
-        </div>
+        sortedChallenges.length > 0 ? (
+          <ChallengeGrid challenges={sortedChallenges} />
+        ) : (
+          <EmptyState resetFilters={resetFilters} />
+        )
       )}
     </div>
   );
