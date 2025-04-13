@@ -24,11 +24,38 @@ import {
   Heart
 } from 'lucide-react';
 
+// Define a type for challenges to fix the infinite type instantiation
+type Challenge = {
+  id: string;
+  title: string;
+  status: string;
+  views?: number; // Make views optional as it might not exist in all challenges
+  // Add other needed properties from the Database type
+  type?: string;
+  description?: string;
+  coin_reward?: number;
+  xp_reward?: number;
+  start_date?: string;
+  end_date?: string;
+  hashtags?: string[];
+};
+
+// Define other types we need
+type Product = {
+  id: string;
+  name: string;
+  price: number;
+  image: string;
+  sales: number;
+  commission: number;
+  trackingLink: string;
+};
+
 const CreatorDashboard = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(true);
-  const [myChallenges, setMyChallenges] = useState<any[]>([]);
+  const [myChallenges, setMyChallenges] = useState<Challenge[]>([]);
   const [dashboardStats, setDashboardStats] = useState({
     totalViews: 0,
     totalXp: 0,
@@ -37,7 +64,7 @@ const CreatorDashboard = () => {
     totalSales: 0,
     totalCommission: 0
   });
-  const [products, setProducts] = useState<any[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
     const fetchCreatorData = async () => {
@@ -72,7 +99,7 @@ const CreatorDashboard = () => {
             image: 'https://placehold.co/300x300/333/white?text=T-Shirt',
             sales: 12,
             commission: 5.99,
-            trackingLink: 'https://rebrand.ly/creator-tshirt'
+            trackingLink: 'https://rebrandly.com/creator-tshirt'
           },
           { 
             id: '2', 
@@ -81,7 +108,7 @@ const CreatorDashboard = () => {
             image: 'https://placehold.co/300x300/333/white?text=Hoodie',
             sales: 8,
             commission: 11.99,
-            trackingLink: 'https://rebrand.ly/creator-hoodie'
+            trackingLink: 'https://rebrandly.com/creator-hoodie'
           },
           { 
             id: '3', 
@@ -90,19 +117,25 @@ const CreatorDashboard = () => {
             image: 'https://placehold.co/300x300/333/white?text=Cap',
             sales: 15,
             commission: 4.99,
-            trackingLink: 'https://rebrand.ly/creator-cap'
+            trackingLink: 'https://rebrandly.com/creator-cap'
           }
         ];
         
         setProducts(mockProducts);
         
+        // Add default views value of 0 for challenges that don't have it
+        const challengesWithViews = (challengesData || []).map((challenge: Challenge) => ({
+          ...challenge,
+          views: challenge.views || 0
+        }));
+        
         // Calculate totals
-        const totalViews = challengesData?.reduce((acc, challenge) => acc + (challenge.views || 0), 0) || 0;
+        const totalViews = challengesWithViews.reduce((acc, challenge) => acc + (challenge.views || 0), 0);
         const totalLinkClicks = 250; // Mock data
         const totalSales = mockProducts.reduce((acc, product) => acc + product.sales, 0);
         const totalCommission = mockProducts.reduce((acc, product) => acc + (product.commission * product.sales), 0);
         
-        setMyChallenges(challengesData || []);
+        setMyChallenges(challengesWithViews);
         setDashboardStats({
           totalViews,
           totalXp: walletData?.xp_total || 0,

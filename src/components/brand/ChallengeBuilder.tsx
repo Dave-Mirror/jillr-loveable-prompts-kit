@@ -110,8 +110,11 @@ const ChallengeBuilder = () => {
     setIsSubmitting(true);
     
     try {
+      // Convert Date objects to ISO strings for Supabase compatibility
       const challengeData = {
         ...data,
+        start_date: data.start_date.toISOString(),
+        end_date: data.end_date.toISOString(),
         hashtags,
         status: 'active',
         user_id: user.id,
