@@ -8,7 +8,12 @@ import LoadingState from '@/components/wallet/LoadingState';
 import WalletContainer from '@/components/wallet/WalletContainer';
 
 const Wallet = () => {
-  const { user, session } = useAuth();
+  const { user, session, isLoading: authLoading } = useAuth();
+  
+  // If user is not authenticated, show the empty state with login option
+  if (!session || !user) {
+    return <EmptyState />;
+  }
   
   const { 
     walletData, 
@@ -36,13 +41,7 @@ const Wallet = () => {
     setWalletData
   );
 
-  // If there's no session, we shouldn't even reach this component
-  // This is just an extra safety check
-  if (!session || !user) {
-    return <EmptyState />;
-  }
-
-  if (isLoading) {
+  if (authLoading || isLoading) {
     return <LoadingState />;
   }
 

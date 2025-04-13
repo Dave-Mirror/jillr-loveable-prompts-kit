@@ -54,11 +54,7 @@ const App = () => (
                       <Upload />
                     </ProtectedRoute>
                   } />
-                  <Route path="/wallet" element={
-                    <ProtectedRoute>
-                      <Wallet />
-                    </ProtectedRoute>
-                  } />
+                  <Route path="/wallet" element={<Wallet />} />
                   <Route path="/creator-dashboard" element={<CreatorDashboard />} />
                   <Route path="/brand-dashboard" element={<BrandDashboard />} />
                   <Route path="/enterprise-dashboard" element={<EnterpriseDashboard />} />

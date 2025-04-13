@@ -14,6 +14,13 @@ export interface WalletData {
   rewards_claimed: string[];
 }
 
+// Sample wallet data for non-authenticated users
+const sampleWalletData: WalletData = {
+  xp_total: 2500,
+  coins_total: 350,
+  rewards_claimed: ['coupon']
+};
+
 export const useWalletData = () => {
   const { user } = useAuth();
   const { toast } = useToast();
@@ -25,10 +32,82 @@ export const useWalletData = () => {
 
   useEffect(() => {
     const fetchWalletData = async () => {
-      if (!user) return;
-      
       try {
         setIsLoading(true);
+        
+        // If not authenticated, use sample data
+        if (!user) {
+          setWalletData(sampleWalletData);
+          
+          // Set sample rewards based on the sample wallet data
+          const xp = sampleWalletData.xp_total;
+          const claimedRewards = sampleWalletData.rewards_claimed;
+          
+          const availableRewards = [
+            {
+              id: 'coupon',
+              name: 'Gutschein',
+              description: '20% Rabatt auf deinen nächsten Einkauf',
+              xpRequired: 2000,
+              isClaimed: claimedRewards.includes('coupon'),
+              isUnlocked: xp >= 2000
+            },
+            {
+              id: 'product',
+              name: 'Exklusiver Produkt-Drop',
+              description: 'Zugang zum neuesten Produkt vor allen anderen',
+              xpRequired: 5000,
+              isClaimed: claimedRewards.includes('product'),
+              isUnlocked: xp >= 5000
+            },
+            {
+              id: 'vip',
+              name: 'VIP-Event-Zugang',
+              description: 'Exklusiver Zugang zu unserem nächsten Event',
+              xpRequired: 10000,
+              isClaimed: claimedRewards.includes('vip'),
+              isUnlocked: xp >= 10000
+            },
+            {
+              id: 'premium',
+              name: 'Premium-Mitgliedschaft',
+              description: '1 Monat Premium-Status mit allen Vorteilen',
+              xpRequired: 15000,
+              isClaimed: claimedRewards.includes('premium'),
+              isUnlocked: xp >= 15000
+            },
+            {
+              id: 'exclusive',
+              name: 'Limitierte Edition Box',
+              description: 'Eine Box mit exklusiven Produkten unserer Marke',
+              xpRequired: 20000,
+              isClaimed: claimedRewards.includes('exclusive'),
+              isUnlocked: xp >= 20000
+            }
+          ];
+          
+          setRewards(availableRewards);
+          
+          // Set sample boosted challenges
+          setBoostedChallenges([
+            {
+              id: "boost1",
+              title: "Instagram Challenge",
+              xpMultiplier: 2
+            },
+            {
+              id: "boost2",
+              title: "TikTok Viral Challenge",
+              xpMultiplier: 3
+            }
+          ]);
+          
+          setUserRewards(getSampleRewards());
+          setIsLoading(false);
+          return;
+        }
+        
+        // If authenticated, fetch real data
         const { data, error } = await supabase
           .from('wallets')
           .select('*')
@@ -129,6 +208,10 @@ export const useWalletData = () => {
           description: "Deine Wallet-Daten konnten nicht geladen werden.",
           variant: "destructive"
         });
+        
+        // Set sample data as fallback
+        setWalletData(sampleWalletData);
+        setUserRewards(getSampleRewards());
       } finally {
         setIsLoading(false);
       }

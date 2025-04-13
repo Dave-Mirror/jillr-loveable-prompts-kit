@@ -12,6 +12,11 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, roleRequired 
   const { user, isLoading, session } = useAuth();
   const location = useLocation();
 
+  // Special case for wallet page - allow access without authentication
+  if (location.pathname === '/wallet') {
+    return <>{children}</>;
+  }
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
