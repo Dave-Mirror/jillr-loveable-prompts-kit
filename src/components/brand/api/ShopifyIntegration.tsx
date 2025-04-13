@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Check, ExternalLink, Link, ShoppingBag, RefreshCw } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from '@/hooks/use-toast';
-import shopifyClient, { getProducts } from '@/utils/shopify';
+import shopifyClient, { getProducts, updateShopifyClient } from '@/utils/shopify';
 
 const ShopifyIntegration = () => {
   const { toast } = useToast();
@@ -47,9 +47,14 @@ const ShopifyIntegration = () => {
       setLoading(true);
       const products = await getProducts();
       setProductCount(products.length);
+      setLoading(false);
     } catch (error) {
       console.error('Error fetching products:', error);
-    } finally {
+      toast({
+        title: "Error",
+        description: "Failed to fetch products from Shopify.",
+        variant: "destructive"
+      });
       setLoading(false);
     }
   };
@@ -64,31 +69,46 @@ const ShopifyIntegration = () => {
       return;
     }
     
-    // Store credentials in localStorage (in a real app, these would be stored securely)
-    const shopifyCredentials = {
-      apiKey: shopifyApiKey,
-      secretKey: shopifySecretKey,
-      storeUrl: shopifyStoreUrl,
-      storefrontToken: shopifyStorefrontToken
-    };
-    
-    localStorage.setItem('shopifyCredentials', JSON.stringify(shopifyCredentials));
-    
-    // In a real implementation, we would set up the client with the new credentials
-    setShopifyConnected(true);
-    toast({
-      title: "Shopify Connected",
-      description: "Your Shopify store has been successfully connected",
-    });
-    
-    // Fetch product count
-    fetchProductCount();
+    try {
+      // Update the Shopify client with new credentials
+      updateShopifyClient(shopifyStoreUrl, shopifyStorefrontToken);
+      
+      // Store credentials in localStorage
+      const shopifyCredentials = {
+        apiKey: shopifyApiKey,
+        secretKey: shopifySecretKey,
+        storeUrl: shopifyStoreUrl,
+        storefrontToken: shopifyStorefrontToken
+      };
+      
+      localStorage.setItem('shopifyCredentials', JSON.stringify(shopifyCredentials));
+      
+      setShopifyConnected(true);
+      toast({
+        title: "Shopify Connected",
+        description: "Your Shopify store has been successfully connected",
+      });
+      
+      // Fetch product count
+      fetchProductCount();
+    } catch (error) {
+      console.error('Error connecting to Shopify:', error);
+      toast({
+        title: "Connection Error",
+        description: "Failed to connect to Shopify. Please check your credentials.",
+        variant: "destructive"
+      });
+    }
   };
 
   const disconnectShopify = () => {
     localStorage.removeItem('shopifyCredentials');
     setShopifyConnected(false);
     setProductCount(0);
+    setShopifyApiKey('');
+    setShopifySecretKey('');
+    setShopifyStoreUrl('');
+    setShopifyStorefrontToken('');
     toast({
       title: "Shopify Disconnected",
       description: "Your Shopify store has been disconnected",

@@ -1,11 +1,54 @@
 
 import Client from 'shopify-buy';
 
-// Initialize the client with your Shopify storefront access token and domain
-const shopifyClient = Client.buildClient({
-  domain: 'your-store-name.myshopify.com', // Replace with your store's domain
-  storefrontAccessToken: 'your-storefront-access-token', // Replace with your storefront access token
-});
+// Initialize the client with Shopify storefront credentials from environment variables
+// or fallback to values in localStorage if they exist
+const getShopifyCredentials = () => {
+  // Check if running in browser and localStorage is available
+  if (typeof window !== 'undefined' && window.localStorage) {
+    try {
+      const storedCredentials = localStorage.getItem('shopifyCredentials');
+      if (storedCredentials) {
+        const parsedCredentials = JSON.parse(storedCredentials);
+        return {
+          domain: parsedCredentials.storeUrl || 'your-store-name.myshopify.com',
+          storefrontAccessToken: parsedCredentials.storefrontToken || 'your-storefront-access-token',
+        };
+      }
+    } catch (error) {
+      console.error('Error reading Shopify credentials from localStorage:', error);
+    }
+  }
+  
+  // Fallback to environment variables or default values
+  return {
+    domain: import.meta.env.VITE_SHOPIFY_DOMAIN || 'your-store-name.myshopify.com',
+    storefrontAccessToken: import.meta.env.VITE_SHOPIFY_STOREFRONT_TOKEN || 'your-storefront-access-token',
+  };
+};
+
+// Create a function to initialize the client
+const createShopifyClient = () => {
+  const { domain, storefrontAccessToken } = getShopifyCredentials();
+  
+  return Client.buildClient({
+    domain,
+    storefrontAccessToken,
+  });
+};
+
+// Initialize the client
+let shopifyClient = createShopifyClient();
+
+// Function to reinitialize the client with new credentials
+export const updateShopifyClient = (storeUrl: string, storefrontToken: string) => {
+  shopifyClient = Client.buildClient({
+    domain: storeUrl,
+    storefrontAccessToken: storefrontToken,
+  });
+  
+  return shopifyClient;
+};
 
 // Products
 export const getProducts = async () => {
