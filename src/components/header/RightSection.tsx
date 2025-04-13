@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import SearchButton from './SearchButton';
@@ -32,26 +33,24 @@ const RightSection: React.FC<RightSectionProps> = ({ user, userProfile, signOut 
     <div className="flex items-center gap-3">
       <SearchButton />
       
-      {/* Updated Wallet and Profile Quick Access Icons */}
-      <Link 
-        to="/wallet" 
-        className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors group"
-      >
-        <div className="flex items-center gap-1">
-          <Wallet size={18} />
+      {/* Consistent Wallet and Profile Quick Access Icons */}
+      <div className="flex items-center gap-2 group">
+        <Link 
+          to="/wallet" 
+          className="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-white/10 transition-colors"
+        >
+          <Wallet size={16} />
           <span className="text-xs hidden md:inline">Wallet</span>
-        </div>
-      </Link>
-      
-      <Link 
-        to="/profile" 
-        className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors group"
-      >
-        <div className="flex items-center gap-1">
-          <User size={18} />
+        </Link>
+        
+        <Link 
+          to="/profile" 
+          className="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-white/10 transition-colors"
+        >
+          <User size={16} />
           <span className="text-xs hidden md:inline">Pril</span>
-        </div>
-      </Link>
+        </Link>
+      </div>
       
       {user ? (
         <>
@@ -71,3 +70,4 @@ const RightSection: React.FC<RightSectionProps> = ({ user, userProfile, signOut 
 };
 
 export default RightSection;
+
