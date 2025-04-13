@@ -1,9 +1,11 @@
+
 import React, { useState } from 'react';
 import { Upload, MessageCircle, Share2, Facebook, Twitter, Linkedin, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { ChallengeActionsProps } from './types';
 import { shareOnPlatform } from '@/utils/challenge/sharing';
+import { Link } from 'react-router-dom';
 
 export const ChallengeActions: React.FC<ChallengeActionsProps> = ({ 
   handleJoinClick, 
@@ -28,9 +30,12 @@ export const ChallengeActions: React.FC<ChallengeActionsProps> = ({
       <Button 
         className="neon-button w-full py-6 text-lg"
         onClick={handleJoinClick}
+        asChild
       >
-        <Upload size={20} className="mr-2" />
-        Jetzt an der Challenge teilnehmen
+        <Link to="/content-editor">
+          <Upload size={20} className="mr-2" />
+          Jetzt an der Challenge teilnehmen
+        </Link>
       </Button>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
-  Home, BarChart, Zap, Trophy, Map, ShoppingBag, Briefcase, Video, Edit
+  Home, BarChart, Zap, Trophy, Map, ShoppingBag, Briefcase, Video, Edit, PenLine
 } from 'lucide-react';
 import { 
   NavigationMenu, 
@@ -31,12 +31,15 @@ const MainNavigation: React.FC<MainNavigationProps> = ({ user }) => {
   const specialNavItems = [
     ...(user?.email?.includes('brand') || user?.email?.includes('enterprise') ? [
       { name: 'Brand Portal', icon: Briefcase, path: '/brand-dashboard' },
+      { name: 'Challenge Builder', icon: PenLine, path: '/challenge-builder' },
+    ] : []),
+    ...(user ? [
+      { name: 'Content Editor', icon: Edit, path: '/content-editor' },
     ] : []),
     ...(user?.email?.includes('creator') ? [
       { name: 'Creator Studio', icon: Video, path: '/creator-dashboard' },
     ] : []),
     ...(user?.email?.includes('admin') ? [
-      { name: 'Content Editor', icon: Edit, path: '/content-editor' },
       { name: 'Challenge Editor', icon: Edit, path: '/challenge-editor' },
     ] : []),
   ];
