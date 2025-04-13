@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Link } from 'react-router-dom';
-import { Video, Map, Trophy, Wallet, Zap, ShoppingBag, ChevronRight, Fire, TrendingUp, Clock, Award, User, Coins } from 'lucide-react';
+import { Video, Map, Trophy, Wallet, Zap, ShoppingBag, ChevronRight, Flame, TrendingUp, Clock, Award, User, Coins } from 'lucide-react';
 
 const Dashboard = () => {
   const { userProfile } = useAuth();
@@ -67,7 +67,7 @@ const Dashboard = () => {
           <div className="flex items-center gap-2 mb-3">
             <span className="bg-jillr-neonPurple/80 text-white text-xs px-2 py-1 rounded">FEATURED</span>
             <span className="bg-white/20 text-white text-xs px-2 py-1 rounded flex items-center">
-              <Fire className="h-3 w-3 mr-1 text-jillr-neonPink" /> TRENDING
+              <Flame className="h-3 w-3 mr-1 text-jillr-neonPink" /> TRENDING
             </span>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold mb-2">{featuredChallenge.title}</h1>

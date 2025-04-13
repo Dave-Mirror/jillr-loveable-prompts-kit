@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -40,6 +39,7 @@ const Explore = () => {
   const [challenges, setChallenges] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [categories, setCategories] = useState<string[]>([]);
+  const { toast } = useToast();
 
   useEffect(() => {
     const fetchChallenges = async () => {
@@ -73,7 +73,7 @@ const Explore = () => {
         }
       } catch (error) {
         console.error("Error fetching challenges:", error);
-        useToast({
+        toast({
           title: "Error",
           description: "Failed to load challenges",
           variant: "destructive",
@@ -84,7 +84,7 @@ const Explore = () => {
     };
 
     fetchChallenges();
-  }, []);
+  }, [toast]);
 
   // Extract unique filter types from the challenges
   const filterTypes = ['all', ...new Set(challenges.map(challenge => challenge.type))];
