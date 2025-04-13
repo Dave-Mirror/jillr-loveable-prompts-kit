@@ -3,7 +3,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   Home, BarChart, Zap, Trophy, Map, ShoppingBag, 
-  Wallet, Video, LogOut, Menu, Coins, Award
+  Wallet, Video, LogOut, Menu, Coins, Award, Edit
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -25,6 +25,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ user, userProfile, onSignOut })
     { name: 'Live Map', icon: Map, path: '/livemap' },
     { name: 'Leaderboard', icon: Trophy, path: '/leaderboard' },
     { name: 'Shop', icon: ShoppingBag, path: '/shop' },
+    { name: 'Content Editor', icon: Edit, path: '/content-editor' },
   ];
 
   return (

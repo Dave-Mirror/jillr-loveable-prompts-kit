@@ -1,9 +1,9 @@
-
 import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { BarChart2, ChevronDown, Settings, Video, Wrench } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import ChallengeBuilder from '@/components/brand/ChallengeBuilder';
 import KpiDashboard from '@/components/brand/KpiDashboard';
 import NotificationCenter from '@/components/brand/NotificationCenter';
@@ -25,10 +25,12 @@ const BrandDashboard = () => {
             Settings
             <ChevronDown className="h-4 w-4 ml-1" />
           </Button>
-          <Button className="bg-jillr-neonPurple hover:bg-jillr-neonPurple/80 flex items-center gap-2">
-            <Video className="h-4 w-4" />
-            Create Challenge
-          </Button>
+          <Link to="/content-editor">
+            <Button className="bg-jillr-neonPurple hover:bg-jillr-neonPurple/80 flex items-center gap-2">
+              <Video className="h-4 w-4" />
+              Create Challenge
+            </Button>
+          </Link>
         </div>
       </div>
       
