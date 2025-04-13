@@ -1,4 +1,6 @@
+
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; // Add this import
 import { useAuth } from '@/hooks/useAuth';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getUserRewards } from '@/utils/challenge/rewards/api';
