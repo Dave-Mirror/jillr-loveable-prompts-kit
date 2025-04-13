@@ -1,4 +1,3 @@
-
 import { Challenge } from '@/components/challenge/types';
 import { toast } from '@/hooks/use-toast';
 
@@ -6,25 +5,46 @@ import { toast } from '@/hooks/use-toast';
  * Share a challenge on social media or copy link to clipboard
  */
 export const shareChallenge = (challenge: Challenge): void => {
-  if (navigator.share) {
-    navigator.share({
-      title: challenge?.title,
-      text: `Check out this challenge: ${challenge?.title}`,
-      url: window.location.href,
-    })
-    .then(() => {
-      toast({
-        title: "Geteilt!",
-        description: "Du erhältst 50 XP für das Teilen!",
+  try {
+    if (navigator.share) {
+      navigator.share({
+        title: challenge?.title || 'Jillr Challenge',
+        text: `Check out this challenge: ${challenge?.title || 'Jillr Challenge'}`,
+        url: window.location.href,
+      })
+      .then(() => {
+        toast({
+          title: "Geteilt!",
+          description: "Du erhältst 50 XP für das Teilen!",
+        });
+      })
+      .catch((error) => {
+        console.error("Sharing failed:", error);
+        fallbackShare(challenge);
       });
-    })
-    .catch(console.error);
-  } else {
-    // Fallback for browsers that don't support the Web Share API
+    } else {
+      fallbackShare(challenge);
+    }
+  } catch (error) {
+    console.error("Error in shareChallenge:", error);
+    fallbackShare(challenge);
+  }
+};
+
+// Fallback function when Web Share API is not available
+const fallbackShare = (challenge: Challenge): void => {
+  try {
     navigator.clipboard.writeText(window.location.href);
     toast({
       title: "Link kopiert!",
       description: "Der Challenge-Link wurde in die Zwischenablage kopiert.",
+    });
+  } catch (error) {
+    console.error("Clipboard write failed:", error);
+    toast({
+      title: "Teilen fehlgeschlagen",
+      description: "Versuche, den Link manuell zu kopieren.",
+      variant: "destructive"
     });
   }
 };
@@ -34,8 +54,8 @@ export const shareChallenge = (challenge: Challenge): void => {
  */
 export const shareOnPlatform = (challenge: Challenge, platform: 'facebook' | 'twitter' | 'linkedin' | 'whatsapp'): void => {
   const url = encodeURIComponent(window.location.href);
-  const title = encodeURIComponent(challenge?.title || '');
-  const text = encodeURIComponent(`Check out this challenge: ${challenge?.title}`);
+  const title = encodeURIComponent(challenge?.title || 'Jillr Challenge');
+  const text = encodeURIComponent(`Check out this challenge: ${challenge?.title || 'Jillr Challenge'}`);
   
   let shareUrl = '';
   
@@ -55,12 +75,21 @@ export const shareOnPlatform = (challenge: Challenge, platform: 'facebook' | 'tw
   }
   
   if (shareUrl) {
-    window.open(shareUrl, '_blank', 'width=600,height=400');
-    
-    toast({
-      title: "Geteilt!",
-      description: `Du hast die Challenge auf ${platform} geteilt und erhältst 50 XP!`,
-    });
+    try {
+      window.open(shareUrl, '_blank', 'width=600,height=400');
+      
+      toast({
+        title: "Geteilt!",
+        description: `Du hast die Challenge auf ${platform} geteilt und erhältst 50 XP!`,
+      });
+    } catch (error) {
+      console.error("Error opening share window:", error);
+      toast({
+        title: "Teilen fehlgeschlagen",
+        description: "Bitte versuche es erneut oder verwende eine andere Methode.",
+        variant: "destructive"
+      });
+    }
   }
 };
 
@@ -99,7 +128,6 @@ export const joinChallenge = (
       description: "Bitte melde dich an, um an dieser Challenge teilzunehmen",
       variant: "destructive"
     });
-    // Fix here: pass a single path string to navigate
     navigate(`/auth`);
     return;
   }
