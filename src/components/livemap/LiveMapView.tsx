@@ -22,6 +22,9 @@ const defaultCenter = {
   lng: 13.404954
 };
 
+// Use Vite's environment variables instead of process.env
+const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || 'YOUR_FALLBACK_API_KEY';
+
 const LiveMapView = () => {
   const { mapData, activeMapElements, loadingMap } = useLiveMap();
   const [selectedItem, setSelectedItem] = useState<any>(null);
@@ -35,7 +38,7 @@ const LiveMapView = () => {
   // Load Google Maps API
   const { isLoaded, loadError } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY || 'YOUR_FALLBACK_API_KEY' // Replace with your API key
+    googleMapsApiKey: GOOGLE_MAPS_API_KEY // Use variable instead of process.env
   });
 
   const onMapLoad = useCallback((map: google.maps.Map) => {
