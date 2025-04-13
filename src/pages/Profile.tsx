@@ -7,6 +7,7 @@ import ChallengeActivity from '@/components/profile/ChallengeActivity';
 import RewardsSection from '@/components/profile/RewardsSection';
 import CommunitySection from '@/components/profile/CommunitySection';
 import ProfileSettings from '@/components/profile/ProfileSettings';
+import StatsSection from '@/components/profile/StatsSection';
 import { Loader2 } from 'lucide-react';
 
 const Profile = () => {
@@ -40,11 +41,12 @@ const Profile = () => {
       <ProfileHeader userProfile={userProfile} />
       
       <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-8">
-        <TabsList className="grid grid-cols-5 w-full">
+        <TabsList className="grid grid-cols-6 w-full">
           <TabsTrigger value="activity">Challenge Activity</TabsTrigger>
           <TabsTrigger value="rewards">Rewards & XP</TabsTrigger>
           <TabsTrigger value="community">Community</TabsTrigger>
           <TabsTrigger value="statistics">Statistics</TabsTrigger>
+          <TabsTrigger value="social">Social Media</TabsTrigger>
           <TabsTrigger value="settings">Settings</TabsTrigger>
         </TabsList>
         
@@ -61,11 +63,12 @@ const Profile = () => {
         </TabsContent>
         
         <TabsContent value="statistics" className="mt-6">
+          <StatsSection userProfile={userProfile} />
+        </TabsContent>
+        
+        <TabsContent value="social" className="mt-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="col-span-full">
-              <h2 className="text-2xl font-bold mb-4">Content Performance</h2>
-              <p className="text-muted-foreground">Detailed statistics about your content will appear here.</p>
-            </div>
+            <SocialMediaConnections userProfile={userProfile} />
           </div>
         </TabsContent>
         
@@ -78,3 +81,4 @@ const Profile = () => {
 };
 
 export default Profile;
+
