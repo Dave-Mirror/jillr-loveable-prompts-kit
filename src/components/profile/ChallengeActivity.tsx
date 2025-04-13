@@ -1,5 +1,5 @@
-
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -11,9 +11,9 @@ interface ChallengeActivityProps {
 }
 
 const ChallengeActivity: React.FC<ChallengeActivityProps> = ({ userProfile }) => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('active');
   
-  // Mock data - would come from database in real app
   const activeChallenges = [
     {
       id: '1',
@@ -85,6 +85,10 @@ const ChallengeActivity: React.FC<ChallengeActivityProps> = ({ userProfile }) =>
     }
   ];
 
+  const handleUploadContent = () => {
+    navigate('/content-editor');
+  };
+
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -128,7 +132,7 @@ const ChallengeActivity: React.FC<ChallengeActivityProps> = ({ userProfile }) =>
                           </div>
                         </div>
                         
-                        <Button size="sm" className="flex gap-2 items-center">
+                        <Button size="sm" className="flex gap-2 items-center" onClick={handleUploadContent}>
                           <Upload size={14} />
                           Upload Content
                         </Button>
