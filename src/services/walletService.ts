@@ -23,9 +23,7 @@ export const claimReward = async (
     return { success: false, reason: 'not_enough_xp' };
   }
   
-  const updatedRewardsClaimed = Array.isArray(currentWalletData.rewards_claimed) 
-    ? [...currentWalletData.rewards_claimed, rewardId] 
-    : [rewardId];
+  const updatedRewardsClaimed = [...currentWalletData.rewards_claimed, rewardId];
   
   try {
     const { error } = await supabase
@@ -63,7 +61,11 @@ export const claimChallengeReward = async (
       .eq('user_id', userId)
       .single();
     
-    const currentClaimed = Array.isArray(wallet?.rewards_claimed) ? wallet.rewards_claimed : [];
+    // Ensure rewards_claimed is an array and convert all items to strings
+    const currentClaimed = Array.isArray(wallet?.rewards_claimed) 
+      ? wallet.rewards_claimed.map(item => String(item))
+      : [];
+      
     const updatedClaimed = [...currentClaimed, rewardKey];
     
     const { error } = await supabase

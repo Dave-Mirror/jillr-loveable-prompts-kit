@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
@@ -6,6 +5,7 @@ import { getUserRewards } from '@/utils/challenge/rewards/api';
 import { getSampleRewards } from '@/utils/challenge/rewards/samples';
 import { UserReward } from '@/utils/challenge/rewards/types';
 import { useToast } from '@/hooks/use-toast';
+import { Json } from '@/integrations/supabase/types';
 
 export interface WalletData {
   xp_total: number;
@@ -35,11 +35,9 @@ export const useWalletData = () => {
 
         if (error) throw error;
         
-        // Ensure rewards_claimed is always a string array
-        const rewardsClaimed = data?.rewards_claimed 
-          ? Array.isArray(data.rewards_claimed) 
-              ? data.rewards_claimed
-              : []
+        // Convert rewards_claimed to string array, ensuring proper type conversion
+        const rewardsClaimed: string[] = Array.isArray(data?.rewards_claimed) 
+          ? data.rewards_claimed.map(item => String(item)) // Convert all items to strings
           : [];
         
         // Create a properly typed wallet data object
