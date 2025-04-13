@@ -1,8 +1,7 @@
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useLiveMap } from '@/hooks/useLiveMap';
 import { GoogleMap, useJsApiLoader, Marker, InfoWindow } from '@react-google-maps/api';
-import { useToast } from '@/hooks/use-toast';
 import { useMapInteractions } from '@/hooks/useMapInteractions';
 import MapLoadError from './MapLoadError';
 import ItemDetailsDialog from './ItemDetailsDialog';
@@ -20,8 +19,7 @@ const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '';
 
 const LiveMapView = () => {
   const { activeMapElements, loadingMap } = useLiveMap();
-  const [isApiKeyMissing, setIsApiKeyMissing] = useState(!GOOGLE_MAPS_API_KEY);
-  const { toast } = useToast();
+  const [isApiKeyMissing, setIsApiKeyMissing] = React.useState(!GOOGLE_MAPS_API_KEY);
   
   const {
     selectedItem,
@@ -41,17 +39,6 @@ const LiveMapView = () => {
     id: 'google-map-script',
     googleMapsApiKey: GOOGLE_MAPS_API_KEY
   });
-
-  // Show a toast if API key is missing
-  useEffect(() => {
-    if (isApiKeyMissing) {
-      toast({
-        title: "Google Maps API Key Missing",
-        description: "Please add your Google Maps API key in the .env file",
-        variant: "destructive",
-      });
-    }
-  }, [isApiKeyMissing, toast]);
 
   if (loadError || isApiKeyMissing) {
     return <MapLoadError isApiKeyMissing={isApiKeyMissing} loadError={loadError} />;

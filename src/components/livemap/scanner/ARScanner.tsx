@@ -2,7 +2,7 @@
 import React, { useState, useRef } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Camera, CheckCircle, XCircle } from 'lucide-react';
+import { Camera, CheckCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface ARScannerProps {

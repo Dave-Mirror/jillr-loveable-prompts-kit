@@ -1,21 +1,16 @@
 
 import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import LiveMapView from '@/components/livemap/LiveMapView';
-import EventCalendar from '@/components/livemap/EventCalendar';
-import { Filter, Search, MapPin, Bell, Calendar, Scan, LampDesk } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import LiveMapFilters from '@/components/livemap/LiveMapFilters';
 import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/hooks/useAuth';
-import NotificationCenter from '@/components/livemap/NotificationCenter';
+
 import { LiveMapProvider } from '@/contexts/LiveMapContext';
-import ARScanner from '@/components/livemap/ARScanner';
+import MapLayout from '@/components/livemap/layout/MapLayout';
+import LiveMapView from '@/components/livemap/map/LiveMapView';
+import EventCalendar from '@/components/livemap/calendar/EventCalendar';
+import ARScanner from '@/components/livemap/scanner/ARScanner';
 
 const LiveMap = () => {
   const { toast } = useToast();
-  const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [showScanner, setShowScanner] = useState(false);
   const [activeTab, setActiveTab] = useState('map');
@@ -79,65 +74,22 @@ const LiveMap = () => {
             </Tabs>
           </div>
           
-          <div className="glassmorphism p-3 rounded-lg flex items-center space-x-2">
-            <form onSubmit={handleSearch} className="flex-grow flex items-center space-x-2">
-              <Search className="h-5 w-5 text-muted-foreground flex-shrink-0" />
-              <input
-                type="text"
-                placeholder="Search challenges, brands, or locations..."
-                className="flex-grow bg-transparent border-none focus:outline-none placeholder:text-muted-foreground"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-              <Button type="submit" variant="secondary" size="sm">Search</Button>
-            </form>
-            
-            <div className="flex items-center space-x-2">
-              <Button 
-                variant="outline" 
-                size="icon" 
-                onClick={() => setShowScanner(true)}
-                title="Scan AR/QR"
-              >
-                <Scan className="h-5 w-5" />
-              </Button>
-              
-              <Sheet>
-                <SheetTrigger asChild>
-                  <Button variant="outline" size="icon" title="Filter Map">
-                    <Filter className="h-5 w-5" />
-                  </Button>
-                </SheetTrigger>
-                <SheetContent>
-                  <LiveMapFilters />
-                </SheetContent>
-              </Sheet>
-              
-              <Button variant="outline" size="icon" onClick={handleLocationClick} title="My Location">
-                <MapPin className="h-5 w-5" />
-              </Button>
-              
-              <Sheet>
-                <SheetTrigger asChild>
-                  <Button variant="outline" size="icon" title="Notifications">
-                    <Bell className="h-5 w-5" />
-                  </Button>
-                </SheetTrigger>
-                <SheetContent>
-                  <NotificationCenter />
-                </SheetContent>
-              </Sheet>
-            </div>
-          </div>
-          
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsContent value="map" className="mt-0">
-              <LiveMapView />
-            </TabsContent>
-            <TabsContent value="calendar" className="mt-0">
-              <EventCalendar />
-            </TabsContent>
-          </Tabs>
+          <MapLayout
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            handleSearch={handleSearch}
+            handleLocationClick={handleLocationClick}
+            handleScanClick={() => setShowScanner(true)}
+          >
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+              <TabsContent value="map" className="mt-0">
+                <LiveMapView />
+              </TabsContent>
+              <TabsContent value="calendar" className="mt-0">
+                <EventCalendar />
+              </TabsContent>
+            </Tabs>
+          </MapLayout>
         </div>
         
         <ARScanner 
