@@ -64,7 +64,8 @@ export const joinChallenge = (
       description: "Bitte melde dich an, um an dieser Challenge teilzunehmen",
       variant: "destructive"
     });
-    navigate('/auth', { state: { from: { pathname: `/challenge/${challengeId}` } } });
+    // Fix here: pass a single path string to navigate
+    navigate(`/auth`);
     return;
   }
   

@@ -1,5 +1,5 @@
 
-import { Challenge, Submission } from '@/components/challenge/types';
+import { Challenge, Submission, ChallengeType } from '@/components/challenge/types';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { formatSubmissions } from './formatting';
@@ -38,10 +38,11 @@ export const fetchChallengeDetails = async (
       return;
     }
     
-    // Add the appropriate image based on the challenge type
-    const challengeWithImage = {
+    // Add the appropriate image based on the challenge type and cast type to ChallengeType
+    const challengeWithImage: Challenge = {
       ...data,
-      imageUrl: challengeTypeImages[data.type] || challengeTypeImages['default']
+      imageUrl: challengeTypeImages[data.type] || challengeTypeImages['default'],
+      type: (data.type as ChallengeType) || undefined
     };
     
     setChallenge(challengeWithImage);
