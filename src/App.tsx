@@ -23,6 +23,7 @@ import EnterpriseDashboard from "./pages/EnterpriseDashboard";
 import Leaderboard from "./pages/Leaderboard";
 import LiveMap from "./pages/LiveMap";
 import Index from "./pages/Index";
+import ContentEditor from "./pages/ContentEditor";
 import BottomNavigation from "./components/navigation/BottomNavigation";
 import PageTransition from "./components/navigation/PageTransition";
 
@@ -61,6 +62,7 @@ const App = () => (
                   <Route path="/leaderboard" element={<Leaderboard />} />
                   <Route path="/shop" element={<Shop />} />
                   <Route path="/livemap" element={<LiveMap />} />
+                  <Route path="/challenge-builder" element={<ContentEditor />} />
                   <Route path="/auth" element={<Auth />} />
                   <Route path="/auth/callback" element={<AuthCallback />} />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
