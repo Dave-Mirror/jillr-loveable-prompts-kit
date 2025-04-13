@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import SearchButton from './SearchButton';
 import NotificationBell from './NotificationBell';
 import UserProfile from './UserProfile';
@@ -8,7 +9,7 @@ import MobileMenu from './MobileMenu';
 import GuestMobileMenu from './GuestMobileMenu';
 import AuthButtons from './AuthButtons';
 import { 
-  Home, BarChart, Zap, Trophy, Map, ShoppingBag
+  Home, BarChart, Zap, Trophy, Map, ShoppingBag, Wallet, User
 } from 'lucide-react';
 
 interface RightSectionProps {
@@ -32,6 +33,21 @@ const RightSection: React.FC<RightSectionProps> = ({ user, userProfile, signOut 
     <div className="flex items-center gap-3">
       <SearchButton />
       
+      {/* Add Wallet and Profile Quick Access Icons */}
+      <Link 
+        to="/wallet" 
+        className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors"
+      >
+        <Wallet size={18} />
+      </Link>
+      
+      <Link 
+        to="/profile" 
+        className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors"
+      >
+        <User size={18} />
+      </Link>
+      
       {user ? (
         <>
           <UserStats userProfile={userProfile} />
@@ -50,3 +66,4 @@ const RightSection: React.FC<RightSectionProps> = ({ user, userProfile, signOut 
 };
 
 export default RightSection;
+
