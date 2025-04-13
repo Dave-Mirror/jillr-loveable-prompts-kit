@@ -9,7 +9,150 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      challenges: {
+        Row: {
+          coin_reward: number | null
+          description: string | null
+          end_date: string | null
+          hashtags: string[] | null
+          id: string
+          reward_ids: Json | null
+          start_date: string | null
+          status: string | null
+          title: string
+          type: string | null
+          xp_reward: number | null
+        }
+        Insert: {
+          coin_reward?: number | null
+          description?: string | null
+          end_date?: string | null
+          hashtags?: string[] | null
+          id?: string
+          reward_ids?: Json | null
+          start_date?: string | null
+          status?: string | null
+          title: string
+          type?: string | null
+          xp_reward?: number | null
+        }
+        Update: {
+          coin_reward?: number | null
+          description?: string | null
+          end_date?: string | null
+          hashtags?: string[] | null
+          id?: string
+          reward_ids?: Json | null
+          start_date?: string | null
+          status?: string | null
+          title?: string
+          type?: string | null
+          xp_reward?: number | null
+        }
+        Relationships: []
+      }
+      uploads: {
+        Row: {
+          capcut_template: string | null
+          challenge_id: string
+          id: string
+          likes: number | null
+          status: string | null
+          submitted_at: string | null
+          tiktok_link: string | null
+          user_id: string
+          verified: boolean | null
+          video_url: string | null
+          views: number | null
+        }
+        Insert: {
+          capcut_template?: string | null
+          challenge_id: string
+          id?: string
+          likes?: number | null
+          status?: string | null
+          submitted_at?: string | null
+          tiktok_link?: string | null
+          user_id: string
+          verified?: boolean | null
+          video_url?: string | null
+          views?: number | null
+        }
+        Update: {
+          capcut_template?: string | null
+          challenge_id?: string
+          id?: string
+          likes?: number | null
+          status?: string | null
+          submitted_at?: string | null
+          tiktok_link?: string | null
+          user_id?: string
+          verified?: boolean | null
+          video_url?: string | null
+          views?: number | null
+        }
+        Relationships: []
+      }
+      user_challenges: {
+        Row: {
+          challenge_id: string
+          completed_at: string | null
+          id: string
+          joined_at: string | null
+          status: string | null
+          user_id: string
+        }
+        Insert: {
+          challenge_id: string
+          completed_at?: string | null
+          id?: string
+          joined_at?: string | null
+          status?: string | null
+          user_id: string
+        }
+        Update: {
+          challenge_id?: string
+          completed_at?: string | null
+          id?: string
+          joined_at?: string | null
+          status?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      wallets: {
+        Row: {
+          coins_total: number | null
+          created_at: string | null
+          id: string
+          nft_collected: Json | null
+          rewards_claimed: Json | null
+          updated_at: string | null
+          user_id: string
+          xp_total: number | null
+        }
+        Insert: {
+          coins_total?: number | null
+          created_at?: string | null
+          id?: string
+          nft_collected?: Json | null
+          rewards_claimed?: Json | null
+          updated_at?: string | null
+          user_id: string
+          xp_total?: number | null
+        }
+        Update: {
+          coins_total?: number | null
+          created_at?: string | null
+          id?: string
+          nft_collected?: Json | null
+          rewards_claimed?: Json | null
+          updated_at?: string | null
+          user_id?: string
+          xp_total?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

@@ -8,6 +8,7 @@ import Header from "./components/Header";
 import Index from "./pages/Index";
 import Explore from "./pages/Explore";
 import ChallengeDetail from "./pages/ChallengeDetail";
+import Upload from "./pages/Upload";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -25,6 +26,7 @@ const App = () => (
               <Route path="/" element={<Explore />} />
               <Route path="/explore" element={<Explore />} />
               <Route path="/challenge/:id" element={<ChallengeDetail />} />
+              <Route path="/upload/:id" element={<Upload />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
