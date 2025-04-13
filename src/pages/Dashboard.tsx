@@ -1,10 +1,11 @@
+
 import React from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Link } from 'react-router-dom';
-import { Video, Map, Trophy, Wallet, Lightning, ShoppingBag } from 'lucide-react';
+import { Video, Map, Trophy, Wallet, Zap, ShoppingBag } from 'lucide-react';
 
 const Dashboard = () => {
   const { userProfile } = useAuth();
@@ -19,7 +20,7 @@ const Dashboard = () => {
         <div className="mt-4 md:mt-0 flex gap-2">
           <Button asChild variant="outline">
             <Link to="/explore">
-              <Lightning className="mr-2 h-4 w-4" />
+              <Zap className="mr-2 h-4 w-4" />
               Explore Challenges
             </Link>
           </Button>
