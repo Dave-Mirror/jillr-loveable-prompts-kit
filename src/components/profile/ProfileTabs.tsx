@@ -1,12 +1,13 @@
 
 import React from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsContent } from '@/components/ui/tabs';
 import ActivityTab from './tabs/ActivityTab';
 import RewardsTab from './tabs/RewardsTab';
 import CommunityTab from './tabs/CommunityTab';
 import StatsTab from './tabs/StatsTab';
 import SocialTab from './tabs/SocialTab';
 import SettingsTab from './tabs/SettingsTab';
+import ProfileTabsHeader from './ProfileTabsHeader';
 
 interface ProfileTabsProps {
   userProfile: any;
@@ -20,15 +21,8 @@ const ProfileTabs: React.FC<ProfileTabsProps> = ({
   setActiveTab 
 }) => {
   return (
-    <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-8">
-      <TabsList className="grid grid-cols-6 w-full">
-        <TabsTrigger value="activity">Challenge Activity</TabsTrigger>
-        <TabsTrigger value="rewards">Rewards & XP</TabsTrigger>
-        <TabsTrigger value="community">Community</TabsTrigger>
-        <TabsTrigger value="statistics">Statistics</TabsTrigger>
-        <TabsTrigger value="social">Social Media</TabsTrigger>
-        <TabsTrigger value="settings">Settings</TabsTrigger>
-      </TabsList>
+    <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-6">
+      <ProfileTabsHeader activeTab={activeTab} setActiveTab={setActiveTab} />
       
       <TabsContent value="activity" className="mt-6">
         <ActivityTab userProfile={userProfile} />

@@ -26,13 +26,15 @@ const Profile = () => {
   }
 
   return (
-    <div className="container py-8">
+    <div className="pb-8">
       <ProfileHeader userProfile={profileData} />
-      <ProfileTabs 
-        userProfile={profileData} 
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-      />
+      <div className="container">
+        <ProfileTabs 
+          userProfile={profileData} 
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+        />
+      </div>
     </div>
   );
 };
