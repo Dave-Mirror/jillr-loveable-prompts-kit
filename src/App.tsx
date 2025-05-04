@@ -28,6 +28,7 @@ import ChallengeEditor from "./pages/ChallengeEditor";
 import BottomNavigation from "./components/navigation/BottomNavigation";
 import PageTransition from "./components/navigation/PageTransition";
 import ChallengeBuilder from "./pages/ChallengeBuilder";
+import CreatorMarketplace from "./pages/CreatorMarketplace";
 
 const queryClient = new QueryClient();
 
@@ -67,6 +68,7 @@ const App = () => (
                   <Route path="/content-editor" element={<ContentEditor />} />
                   <Route path="/challenge-editor" element={<ChallengeEditor />} />
                   <Route path="/challenge-builder" element={<ChallengeBuilder />} />
+                  <Route path="/creator-marketplace" element={<CreatorMarketplace />} />
                   <Route path="/auth" element={<Auth />} />
                   <Route path="/auth/callback" element={<AuthCallback />} />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
