@@ -25,6 +25,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ user, userProfile, onSignOut })
     { name: 'Leaderboard', icon: Trophy, path: '/leaderboard' },
     { name: 'Shop', icon: ShoppingBag, path: '/shop' },
     { name: 'Wallet', icon: Wallet, path: '/wallet' },
+    { name: 'Profile', icon: BarChart, path: '/profile' },
     { name: 'Dashboard', icon: BarChart, path: user?.email?.includes('brand') || user?.email?.includes('enterprise') ? '/enterprise-dashboard' : '/dashboard' },
   ];
 
@@ -53,13 +54,13 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ user, userProfile, onSignOut })
         </Button>
       </SheetTrigger>
       <SheetContent side="right" className="bg-jillr-darkBlue/95 backdrop-blur-xl border-jillr-neonPurple/20">
-        <div className="flex flex-col h-full">
-          <div className="flex items-center justify-between mb-8">
-            <span className="text-xl font-bold neon-text">jillr</span>
+        <div className="flex flex-col h-full overflow-y-auto pb-safe">
+          <div className="flex items-center justify-between mb-6">
+            <Link to="/" className="text-xl font-bold neon-text">jillr</Link>
           </div>
           
           {/* User Stats - Mobile */}
-          <div className="flex justify-between gap-2 mb-8">
+          <div className="flex justify-between gap-2 mb-6">
             <div className="flex-1 items-center gap-1 px-2 py-3 rounded-lg bg-jillr-dark/70 flex flex-col">
               <Zap size={20} className="text-jillr-neonPurple" />
               <span className="text-sm font-medium">{userProfile?.xp || 0} XP</span>

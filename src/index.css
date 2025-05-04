@@ -78,4 +78,52 @@
   .spotify-hover {
     @apply transition-colors duration-200 hover:bg-[rgba(40,40,40,0.9)];
   }
+
+  /* Safe area insets for mobile devices */
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top, 0);
+  }
+
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  .safe-area-left {
+    padding-left: env(safe-area-inset-left, 0);
+  }
+
+  .safe-area-right {
+    padding-right: env(safe-area-inset-right, 0);
+  }
+
+  /* Animation utilities */
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  .animate-glow {
+    animation: glow 2s infinite alternate;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes glow {
+    from { box-shadow: 0 0 5px rgba(136, 58, 234, 0.3); }
+    to { box-shadow: 0 0 15px rgba(136, 58, 234, 0.7); }
+  }
+
+  .neon-card {
+    @apply bg-jillr-darkBlue/50 rounded-lg border border-jillr-neonPurple/30 p-0.5 relative overflow-hidden transition-all duration-300;
+  }
+
+  .neon-card-content {
+    @apply bg-jillr-dark/90 rounded-md p-3 h-full;
+  }
+
+  .neon-text {
+    @apply text-transparent bg-clip-text bg-gradient-to-r from-jillr-neonPurple to-jillr-neonBlue;
+  }
 }

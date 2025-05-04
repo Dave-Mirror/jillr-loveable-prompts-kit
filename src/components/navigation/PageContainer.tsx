@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { useSwiper } from 'swiper/react';
 import 'swiper/css';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface PageContainerProps {
   children: React.ReactNode;
@@ -22,6 +23,7 @@ const PageContainer: React.FC<PageContainerProps> = ({
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const isMobile = useIsMobile();
   const [slideInitialized, setSlideInitialized] = useState(false);
 
   const currentIndex = routeOrder.indexOf(location.pathname);
@@ -44,16 +46,16 @@ const PageContainer: React.FC<PageContainerProps> = ({
     }
   };
 
-  if (!enableSwipe) {
+  if (!enableSwipe || !isMobile) {
     return (
-      <div className="page-container animate-fade-in pt-2 pb-20 md:pb-2 px-4 md:px-6">
+      <div className="page-container animate-fade-in pt-2 pb-20 md:pb-2 px-4 md:px-6 safe-area-left safe-area-right">
         {children}
       </div>
     );
   }
 
   return (
-    <div className="page-container overflow-hidden">
+    <div className="page-container overflow-hidden safe-area-left safe-area-right">
       <Swiper
         spaceBetween={0}
         slidesPerView={1}

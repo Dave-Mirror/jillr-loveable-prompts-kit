@@ -46,7 +46,7 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({
   const typeIcon = typeIcons[type] || '🎯';
   
   return (
-    <Link to={`/challenge/${id}`} className="block">
+    <Link to={`/challenge/${id}`} className="block w-full transition-transform hover:scale-[1.02] focus:scale-[1.02]">
       <div className="neon-card h-full animate-glow">
         <div className="neon-card-content flex flex-col h-full">
           <div className="relative aspect-video rounded-lg overflow-hidden mb-3">
@@ -54,6 +54,7 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({
               src={imageUrl} 
               alt={title} 
               className="w-full h-full object-cover" 
+              loading="lazy"
             />
             <div className="absolute bottom-2 right-2">
               <CountdownTimer endDate={endDate} />

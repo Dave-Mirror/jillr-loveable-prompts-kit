@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface HeaderContainerProps {
   children: React.ReactNode;
@@ -9,6 +10,7 @@ interface HeaderContainerProps {
 const HeaderContainer: React.FC<HeaderContainerProps> = ({ children }) => {
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
+  const isMobile = useIsMobile();
   
   // Handle scroll effect for transparent header
   useEffect(() => {
@@ -30,7 +32,7 @@ const HeaderContainer: React.FC<HeaderContainerProps> = ({ children }) => {
         scrolled || location.pathname !== '/explore' 
           ? 'bg-jillr-dark/90 backdrop-blur-lg shadow-lg' 
           : 'bg-gradient-to-b from-jillr-dark/80 to-transparent'
-      } py-3`}
+      } ${isMobile ? 'py-2' : 'py-3'} safe-area-top`}
     >
       <div className="container flex items-center justify-between">
         {children}
