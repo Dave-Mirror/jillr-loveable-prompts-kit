@@ -23,7 +23,7 @@ const MobileProfileNavigation: React.FC<MobileProfileNavigationProps> = ({
 
   return (
     <div className="md:hidden mb-4">
-      <ScrollArea className="w-full whitespace-nowrap">
+      <ScrollArea className="w-full whitespace-nowrap" orientation="horizontal">
         <div className="flex space-x-1 p-1">
           {tabs.map((tab) => (
             <button

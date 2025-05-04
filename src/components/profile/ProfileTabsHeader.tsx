@@ -45,30 +45,28 @@ const ProfileTabsHeader: React.FC<ProfileTabsHeaderProps> = ({ activeTab, setAct
             <span>{currentTab.label}</span>
           </div>
           
-          <div className="hidden md:flex">
-            <Select value={activeTab} onValueChange={setActiveTab}>
-              <SelectTrigger className="w-[180px] bg-jillr-darkBlue/10 border-jillr-neonPurple/20">
-                <SelectValue placeholder="Select view" />
-              </SelectTrigger>
-              <SelectContent className="bg-jillr-darkBlue border-jillr-neonPurple/20 text-white z-50">
-                {tabOptions.map(tab => {
-                  const TabIcon = tab.icon;
-                  return (
-                    <SelectItem 
-                      key={tab.value} 
-                      value={tab.value}
-                      className="focus:bg-jillr-neonPurple/20 focus:text-white"
-                    >
-                      <div className="flex items-center gap-2">
-                        <TabIcon size={16} />
-                        <span>{tab.label}</span>
-                      </div>
-                    </SelectItem>
-                  );
-                })}
-              </SelectContent>
-            </Select>
-          </div>
+          <Select value={activeTab} onValueChange={setActiveTab} className="hidden md:flex">
+            <SelectTrigger className="w-[180px] bg-jillr-darkBlue/10 border-jillr-neonPurple/20">
+              <SelectValue placeholder="Select view" />
+            </SelectTrigger>
+            <SelectContent className="bg-jillr-darkBlue border-jillr-neonPurple/20 text-white z-50">
+              {tabOptions.map(tab => {
+                const TabIcon = tab.icon;
+                return (
+                  <SelectItem 
+                    key={tab.value} 
+                    value={tab.value}
+                    className="focus:bg-jillr-neonPurple/20 focus:text-white"
+                  >
+                    <div className="flex items-center gap-2">
+                      <TabIcon size={16} />
+                      <span>{tab.label}</span>
+                    </div>
+                  </SelectItem>
+                );
+              })}
+            </SelectContent>
+          </Select>
         </div>
         
         <MobileProfileNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
