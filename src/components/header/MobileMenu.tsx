@@ -3,7 +3,8 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   Home, BarChart, Zap, Trophy, Map, ShoppingBag, 
-  Wallet, Video, LogOut, Menu, Coins, Award, Edit, PenLine
+  Wallet, Video, LogOut, Menu, Coins, Award, Edit, PenLine,
+  User, Settings, Bell, Heart, Star
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -17,16 +18,22 @@ interface MobileMenuProps {
 const MobileMenu: React.FC<MobileMenuProps> = ({ user, userProfile, onSignOut }) => {
   const location = useLocation();
   
-  // Simplified main navigation - consistent with desktop nav
+  // Main navigation items - grouped by category
   const mainNavItems = [
-    { name: 'Home', icon: Home, path: '/' },
-    { name: 'Explore', icon: Zap, path: '/explore' },
-    { name: 'Live Map', icon: Map, path: '/livemap' },
-    { name: 'Leaderboard', icon: Trophy, path: '/leaderboard' },
-    { name: 'Shop', icon: ShoppingBag, path: '/shop' },
-    { name: 'Wallet', icon: Wallet, path: '/wallet' },
-    { name: 'Profile', icon: BarChart, path: '/profile' },
-    { name: 'Dashboard', icon: BarChart, path: user?.email?.includes('brand') || user?.email?.includes('enterprise') ? '/enterprise-dashboard' : '/dashboard' },
+    { category: 'Hauptnavigation', items: [
+      { name: 'Home', icon: Home, path: '/' },
+      { name: 'Explore', icon: Zap, path: '/explore' },
+      { name: 'Live Map', icon: Map, path: '/livemap' },
+      { name: 'Shop', icon: ShoppingBag, path: '/shop' },
+      { name: 'Leaderboard', icon: Trophy, path: '/leaderboard' }
+    ]},
+    { category: 'Persönlich', items: [
+      { name: 'Wallet', icon: Wallet, path: '/wallet' },
+      { name: 'Profil', icon: User, path: '/profile' },
+      { name: 'Dashboard', icon: BarChart, path: '/dashboard' },
+      { name: 'Einstellungen', icon: Settings, path: '/settings' },
+      { name: 'Favoriten', icon: Heart, path: '/favorites' }
+    ]}
   ];
 
   // Special items based on user type
@@ -77,26 +84,28 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ user, userProfile, onSignOut })
             </div>
           </div>
           
-          {/* Mobile Navigation - Main Items */}
-          <div className="space-y-2">
-            <p className="text-xs uppercase text-white/50 mx-1 mt-2">Hauptnavigation</p>
-            <nav className="space-y-1">
-              {mainNavItems.map((item) => (
-                <Link 
-                  key={item.path} 
-                  to={item.path} 
-                  className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-                    location.pathname === item.path 
-                      ? 'bg-jillr-dark text-jillr-neonPurple' 
-                      : 'hover:bg-jillr-dark/50'
-                  }`}
-                >
-                  <item.icon size={20} />
-                  <span>{item.name}</span>
-                </Link>
-              ))}
-            </nav>
-          </div>
+          {/* Mobile Navigation - Grouped by category */}
+          {mainNavItems.map((group) => (
+            <div className="space-y-2 mb-6" key={group.category}>
+              <p className="text-xs uppercase text-white/50 mx-1 mt-2">{group.category}</p>
+              <nav className="space-y-1">
+                {group.items.map((item) => (
+                  <Link 
+                    key={item.path} 
+                    to={item.path} 
+                    className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                      location.pathname === item.path 
+                        ? 'bg-jillr-dark text-jillr-neonPurple' 
+                        : 'hover:bg-jillr-dark/50'
+                    }`}
+                  >
+                    <item.icon size={20} />
+                    <span>{item.name}</span>
+                  </Link>
+                ))}
+              </nav>
+            </div>
+          ))}
           
           {/* Special Navigation Items */}
           {specialNavItems.length > 0 && (

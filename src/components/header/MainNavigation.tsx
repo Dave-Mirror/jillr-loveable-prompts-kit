@@ -1,8 +1,9 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
-  Home, BarChart, Zap, Trophy, Map, ShoppingBag, Briefcase, Video, Edit, PenLine
+  Home, BarChart, Zap, Trophy, Map, ShoppingBag, Briefcase, Video, Edit, PenLine, 
+  ChevronDown, Wallet, User, MoreHorizontal
 } from 'lucide-react';
 import { 
   NavigationMenu, 
@@ -10,6 +11,14 @@ import {
   NavigationMenuItem
 } from '@/components/ui/navigation-menu';
 import { useIsMobile } from '@/hooks/use-mobile';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuLabel
+} from '@/components/ui/dropdown-menu';
 
 interface MainNavigationProps {
   user: any;
@@ -19,21 +28,23 @@ const MainNavigation: React.FC<MainNavigationProps> = ({ user }) => {
   const location = useLocation();
   const isMobile = useIsMobile();
   
-  // Main navigation items - focused only on main app features
-  const mainNavItems = [
+  // Primary navigation items - always visible
+  const primaryNavItems = [
     { name: 'Home', icon: Home, path: '/' },
     { name: 'Explore', icon: Zap, path: '/explore' },
     { name: 'Live Map', icon: Map, path: '/livemap' },
-    { name: 'Leaderboard', icon: Trophy, path: '/leaderboard' },
+    { name: 'Shop', icon: ShoppingBag, path: '/shop' },
   ];
   
-  // Secondary items that may not fit on smaller screens
+  // Secondary navigation items - visible on larger screens or in dropdown
   const secondaryNavItems = [
-    { name: 'Shop', icon: ShoppingBag, path: '/shop' },
+    { name: 'Leaderboard', icon: Trophy, path: '/leaderboard' },
+    { name: 'Wallet', icon: Wallet, path: '/wallet' },
+    { name: 'Profile', icon: User, path: '/profile' },
     { name: 'Dashboard', icon: BarChart, path: user?.email?.includes('brand') || user?.email?.includes('enterprise') ? '/enterprise-dashboard' : '/dashboard' },
   ];
 
-  // Special items based on user type - shown conditionally
+  // Special items based on user type - shown in dropdown
   const specialNavItems = [
     ...(user?.email?.includes('brand') || user?.email?.includes('enterprise') ? [
       { name: 'Brand Portal', icon: Briefcase, path: '/brand-dashboard' },
@@ -50,7 +61,6 @@ const MainNavigation: React.FC<MainNavigationProps> = ({ user }) => {
     ] : []),
   ];
 
-  // For mobile, we only show icons, no text labels
   const renderNavItem = (item: { name: string; icon: React.ElementType; path: string }) => (
     <NavigationMenuItem key={item.path}>
       <Link 
@@ -68,22 +78,71 @@ const MainNavigation: React.FC<MainNavigationProps> = ({ user }) => {
   return (
     <NavigationMenu className="hidden md:flex ml-4">
       <NavigationMenuList className="flex flex-wrap gap-1">
-        {/* Primary navigation items */}
-        {mainNavItems.map(renderNavItem)}
+        {/* Primary navigation items - always visible */}
+        {primaryNavItems.map(renderNavItem)}
         
-        {/* Secondary navigation items (may be hidden on smaller screens) */}
-        <div className="hidden lg:flex">
+        {/* Secondary navigation items - visible on larger screens */}
+        <div className="hidden xl:flex">
           {secondaryNavItems.map(renderNavItem)}
         </div>
 
-        {/* Special role-based navigation items */}
+        {/* More dropdown for secondary and special items on medium screens */}
+        <NavigationMenuItem className="hidden md:block xl:hidden">
+          <DropdownMenu>
+            <DropdownMenuTrigger className="flex items-center gap-2 px-3 py-2 rounded-md transition-colors hover:bg-white/10">
+              <MoreHorizontal size={16} />
+              <span className="text-sm">More</span>
+              <ChevronDown size={14} />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="bg-jillr-darkBlue border-jillr-neonPurple/20">
+              <DropdownMenuLabel>Navigation</DropdownMenuLabel>
+              {secondaryNavItems.map((item) => (
+                <DropdownMenuItem key={item.path} asChild>
+                  <Link to={item.path} className="flex items-center gap-2">
+                    <item.icon size={16} />
+                    <span>{item.name}</span>
+                  </Link>
+                </DropdownMenuItem>
+              ))}
+              
+              {specialNavItems.length > 0 && (
+                <>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuLabel>Special Features</DropdownMenuLabel>
+                  {specialNavItems.map((item) => (
+                    <DropdownMenuItem key={item.path} asChild>
+                      <Link to={item.path} className="flex items-center gap-2">
+                        <item.icon size={16} />
+                        <span>{item.name}</span>
+                      </Link>
+                    </DropdownMenuItem>
+                  ))}
+                </>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </NavigationMenuItem>
+
+        {/* Special items dropdown - only visible when there are special items */}
         {specialNavItems.length > 0 && (
-          <>
-            <div className="h-6 border-l border-white/10 mx-1"></div>
-            <div className={isMobile ? "overflow-x-auto flex" : ""}>
-              {specialNavItems.map(renderNavItem)}
-            </div>
-          </>
+          <NavigationMenuItem className="hidden xl:block">
+            <DropdownMenu>
+              <DropdownMenuTrigger className="flex items-center gap-2 px-3 py-2 rounded-md transition-colors hover:bg-white/10">
+                <span className="text-sm">Special</span>
+                <ChevronDown size={14} />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="bg-jillr-darkBlue border-jillr-neonPurple/20">
+                {specialNavItems.map((item) => (
+                  <DropdownMenuItem key={item.path} asChild>
+                    <Link to={item.path} className="flex items-center gap-2">
+                      <item.icon size={16} />
+                      <span>{item.name}</span>
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </NavigationMenuItem>
         )}
       </NavigationMenuList>
     </NavigationMenu>
