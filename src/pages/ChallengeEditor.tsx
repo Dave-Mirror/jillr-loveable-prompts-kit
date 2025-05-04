@@ -1,6 +1,5 @@
 
 import React, { useState } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, ArrowRight, Check, Eye, Save } from 'lucide-react';
@@ -13,6 +12,8 @@ import RewardsIncentives from '@/components/challenge-editor/RewardsIncentives';
 import TimingLimitations from '@/components/challenge-editor/TimingLimitations';
 import AdvancedSettings from '@/components/challenge-editor/AdvancedSettings';
 import PreviewPublish from '@/components/challenge-editor/PreviewPublish';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const ChallengeEditor = () => {
   const [activeTab, setActiveTab] = useState('basics');
@@ -84,6 +85,18 @@ const ChallengeEditor = () => {
     // Here you would typically save to localStorage or your database
   };
 
+  // Map of tabs with their display names and indices
+  const tabsConfig = [
+    { id: 'basics', name: '1. Basics' },
+    { id: 'content', name: '2. Content' },
+    { id: 'kpis', name: '3. KPIs' },
+    { id: 'audience', name: '4. Audience' },
+    { id: 'rewards', name: '5. Rewards' },
+    { id: 'timing', name: '6. Timing' },
+    { id: 'advanced', name: '7. Advanced' },
+    { id: 'preview', name: '8. Preview' }
+  ];
+
   return (
     <div className="container py-8 max-w-5xl">
       <div className="flex justify-between items-center mb-8">
@@ -106,74 +119,101 @@ const ChallengeEditor = () => {
         </CardHeader>
         <CardContent>
           <FormProvider {...methods}>
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="grid grid-cols-8 mb-8">
-                <TabsTrigger value="basics">1. Basics</TabsTrigger>
-                <TabsTrigger value="content">2. Content</TabsTrigger>
-                <TabsTrigger value="kpis">3. KPIs</TabsTrigger>
-                <TabsTrigger value="audience">4. Audience</TabsTrigger>
-                <TabsTrigger value="rewards">5. Rewards</TabsTrigger>
-                <TabsTrigger value="timing">6. Timing</TabsTrigger>
-                <TabsTrigger value="advanced">7. Advanced</TabsTrigger>
-                <TabsTrigger value="preview">8. Preview</TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="basics">
+            {/* Desktop dropdown selector */}
+            <div className="hidden md:flex items-center mb-6 gap-2">
+              <span className="font-medium">Step:</span>
+              <Select value={activeTab} onValueChange={setActiveTab}>
+                <SelectTrigger className="w-[200px] bg-jillr-darkBlue/10 border-jillr-neonPurple/20">
+                  <SelectValue placeholder="Select step" />
+                </SelectTrigger>
+                <SelectContent className="bg-jillr-darkBlue border-jillr-neonPurple/20 text-white">
+                  {tabsConfig.map(tab => (
+                    <SelectItem key={tab.id} value={tab.id}>
+                      {tab.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            
+            {/* Mobile horizontal scrollable tabs */}
+            <div className="md:hidden mb-6">
+              <ScrollArea className="w-full whitespace-nowrap">
+                <div className="flex space-x-1 p-1">
+                  {tabsConfig.map(tab => (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveTab(tab.id)}
+                      className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                        activeTab === tab.id
+                          ? 'bg-jillr-neonPurple text-white'
+                          : 'bg-jillr-darkBlue/60 text-white/80 hover:bg-jillr-darkBlue/80'
+                      }`}
+                    >
+                      {tab.name}
+                    </button>
+                  ))}
+                </div>
+              </ScrollArea>
+            </div>
+            
+            <div className="mt-6">
+              {activeTab === 'basics' && (
                 <ChallengeBasics 
                   data={challengeData} 
                   onChange={(data) => handleDataChange('basics', data)} 
                 />
-              </TabsContent>
+              )}
               
-              <TabsContent value="content">
+              {activeTab === 'content' && (
                 <ContentRequirements 
                   data={challengeData} 
                   onChange={(data) => handleDataChange('content', data)} 
                 />
-              </TabsContent>
+              )}
               
-              <TabsContent value="kpis">
+              {activeTab === 'kpis' && (
                 <KpiSettings 
                   data={challengeData} 
                   onChange={(data) => handleDataChange('kpis', data)} 
                 />
-              </TabsContent>
+              )}
               
-              <TabsContent value="audience">
+              {activeTab === 'audience' && (
                 <TargetAudience 
                   data={challengeData} 
                   onChange={(data) => handleDataChange('audience', data)} 
                 />
-              </TabsContent>
+              )}
               
-              <TabsContent value="rewards">
+              {activeTab === 'rewards' && (
                 <RewardsIncentives 
                   data={challengeData} 
                   onChange={(data) => handleDataChange('rewards', data)} 
                 />
-              </TabsContent>
+              )}
               
-              <TabsContent value="timing">
+              {activeTab === 'timing' && (
                 <TimingLimitations 
                   data={challengeData} 
                   onChange={(data) => handleDataChange('timing', data)} 
                 />
-              </TabsContent>
+              )}
               
-              <TabsContent value="advanced">
+              {activeTab === 'advanced' && (
                 <AdvancedSettings 
                   data={challengeData} 
                   onChange={(data) => handleDataChange('advanced', data)} 
                 />
-              </TabsContent>
+              )}
               
-              <TabsContent value="preview">
+              {activeTab === 'preview' && (
                 <PreviewPublish 
                   data={challengeData} 
                   onChange={(data) => handleDataChange('preview', data)} 
                 />
-              </TabsContent>
-            </Tabs>
+              )}
+            </div>
             
             <div className="flex justify-between mt-8">
               <Button 
