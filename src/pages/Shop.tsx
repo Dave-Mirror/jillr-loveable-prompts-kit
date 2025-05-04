@@ -16,8 +16,24 @@ import {
   User,
   ArrowUpDown,
   ChevronDown,
-  Filter
+  Filter,
+  SlidersHorizontal
 } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const Shop = () => {
   const { user } = useAuth();
@@ -28,6 +44,7 @@ const Shop = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterCategory, setFilterCategory] = useState('all');
   const [sortBy, setSortBy] = useState('popular');
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
   // Mock categories for filter
   const categories = [
@@ -239,136 +256,122 @@ const Shop = () => {
         )}
       </div>
       
-      <div className="flex flex-col lg:flex-row gap-6 mb-8">
-        <div className="w-full lg:w-64 space-y-4">
-          <div className="bg-card rounded-lg border p-4">
-            <h3 className="font-medium mb-3">Kategorien</h3>
-            <div className="space-y-2">
-              {categories.map(category => (
-                <Button
-                  key={category.id}
-                  variant={filterCategory === category.id ? "default" : "ghost"}
-                  className={`w-full justify-start ${filterCategory === category.id ? 'bg-jillr-neonPurple hover:bg-jillr-neonPurple/80' : ''}`}
-                  onClick={() => setFilterCategory(category.id)}
-                >
-                  {category.name}
-                </Button>
-              ))}
-            </div>
+      <div className="mb-6">
+        <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
+          <div className="relative flex-grow">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
+            <Input
+              type="text"
+              placeholder="Nach Produkten oder Creators suchen..."
+              className="pl-10"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
           </div>
           
-          <div className="bg-card rounded-lg border p-4">
-            <h3 className="font-medium mb-3">Sortieren nach</h3>
-            <div className="space-y-2">
-              <Button
-                variant={sortBy === 'popular' ? "default" : "ghost"}
-                className={`w-full justify-start ${sortBy === 'popular' ? 'bg-jillr-neonPurple hover:bg-jillr-neonPurple/80' : ''}`}
-                onClick={() => setSortBy('popular')}
-              >
-                Beliebtheit
-              </Button>
-              <Button
-                variant={sortBy === 'recent' ? "default" : "ghost"}
-                className={`w-full justify-start ${sortBy === 'recent' ? 'bg-jillr-neonPurple hover:bg-jillr-neonPurple/80' : ''}`}
-                onClick={() => setSortBy('recent')}
-              >
-                Neueste
-              </Button>
-              <Button
-                variant={sortBy === 'price-low' ? "default" : "ghost"}
-                className={`w-full justify-start ${sortBy === 'price-low' ? 'bg-jillr-neonPurple hover:bg-jillr-neonPurple/80' : ''}`}
-                onClick={() => setSortBy('price-low')}
-              >
-                Preis: Niedrig zu Hoch
-              </Button>
-              <Button
-                variant={sortBy === 'price-high' ? "default" : "ghost"}
-                className={`w-full justify-start ${sortBy === 'price-high' ? 'bg-jillr-neonPurple hover:bg-jillr-neonPurple/80' : ''}`}
-                onClick={() => setSortBy('price-high')}
-              >
-                Preis: Hoch zu Niedrig
-              </Button>
-            </div>
+          {/* Category filter dropdown */}
+          <div className="flex gap-2 w-full md:w-auto">
+            <Select 
+              value={filterCategory} 
+              onValueChange={setFilterCategory}
+            >
+              <SelectTrigger className="w-full md:w-[180px] bg-card border border-border">
+                <SelectValue placeholder="Kategorie" />
+              </SelectTrigger>
+              <SelectContent className="bg-popover border border-border z-50">
+                {categories.map(category => (
+                  <SelectItem key={category.id} value={category.id}>
+                    {category.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            {/* Sort dropdown */}
+            <Select 
+              value={sortBy} 
+              onValueChange={setSortBy}
+            >
+              <SelectTrigger className="w-full md:w-[180px] bg-card border border-border">
+                <SelectValue placeholder="Sortieren" />
+              </SelectTrigger>
+              <SelectContent className="bg-popover border border-border z-50">
+                <SelectItem value="popular">Beliebtheit</SelectItem>
+                <SelectItem value="recent">Neueste</SelectItem>
+                <SelectItem value="price-low">Preis: Niedrig zu Hoch</SelectItem>
+                <SelectItem value="price-high">Preis: Hoch zu Niedrig</SelectItem>
+              </SelectContent>
+            </Select>
+            
+            {/* Mobile filter button */}
+            <Button variant="outline" size="icon" className="md:hidden">
+              <SlidersHorizontal size={18} />
+            </Button>
           </div>
-        </div>
-        
-        <div className="flex-1">
-          <div className="mb-6">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
-              <Input
-                type="text"
-                placeholder="Nach Produkten oder Creators suchen..."
-                className="pl-10"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-          </div>
-          
-          {filteredProducts.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredProducts.map((product) => (
-                <Card key={product.id} className="overflow-hidden flex flex-col">
-                  <div className="aspect-square relative overflow-hidden">
-                    <img src={product.image} alt={product.name} className="object-cover w-full h-full transition-transform hover:scale-105" />
-                    <Badge className="absolute top-2 right-2 bg-jillr-neonGreen text-background">
-                      ${product.price}
-                    </Badge>
-                    
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      className="absolute top-2 left-2 bg-background/80 hover:bg-background"
-                      onClick={() => toggleLike(product.id)}
-                    >
-                      <Heart className={`h-5 w-5 ${product.isLiked ? 'fill-red-500 text-red-500' : ''}`} />
-                    </Button>
-                  </div>
-                  
-                  <CardHeader className="pb-2">
-                    <CardTitle>{product.name}</CardTitle>
-                    <CardDescription className="flex items-center">
-                      <img src={product.creatorAvatar} alt={product.creator} className="w-5 h-5 rounded-full mr-1" />
-                      {product.creator}
-                    </CardDescription>
-                  </CardHeader>
-                  
-                  <CardContent className="pb-2">
-                    <div className="flex justify-between text-sm">
-                      <span className="flex items-center">
-                        <Tag size={14} className="mr-1" />
-                        {product.category.charAt(0).toUpperCase() + product.category.slice(1)}
-                      </span>
-                      <span className="flex items-center">
-                        <Heart size={14} className="mr-1" />
-                        {product.likes}
-                      </span>
-                    </div>
-                  </CardContent>
-                  
-                  <CardFooter className="mt-auto">
-                    <Button className="w-full bg-jillr-neonPurple hover:bg-jillr-neonPurple/80">
-                      <ShoppingBag className="mr-2 h-4 w-4" /> Kaufen
-                    </Button>
-                  </CardFooter>
-                </Card>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center p-12 bg-muted/20 rounded-lg">
-              <Search className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium mb-2">Keine Produkte gefunden</h3>
-              <p className="text-muted-foreground mb-4">Versuche es mit einem anderen Suchbegriff oder Filter.</p>
-              <Button onClick={() => {
-                setSearchQuery('');
-                setFilterCategory('all');
-                setSortBy('popular');
-              }}>Filter zurücksetzen</Button>
-            </div>
-          )}
         </div>
       </div>
+      
+      {filteredProducts.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredProducts.map((product) => (
+            <Card key={product.id} className="overflow-hidden flex flex-col">
+              <div className="aspect-square relative overflow-hidden">
+                <img src={product.image} alt={product.name} className="object-cover w-full h-full transition-transform hover:scale-105" />
+                <Badge className="absolute top-2 right-2 bg-jillr-neonGreen text-background">
+                  ${product.price}
+                </Badge>
+                
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="absolute top-2 left-2 bg-background/80 hover:bg-background"
+                  onClick={() => toggleLike(product.id)}
+                >
+                  <Heart className={`h-5 w-5 ${product.isLiked ? 'fill-red-500 text-red-500' : ''}`} />
+                </Button>
+              </div>
+              
+              <CardHeader className="pb-2">
+                <CardTitle>{product.name}</CardTitle>
+                <CardDescription className="flex items-center">
+                  <img src={product.creatorAvatar} alt={product.creator} className="w-5 h-5 rounded-full mr-1" />
+                  {product.creator}
+                </CardDescription>
+              </CardHeader>
+              
+              <CardContent className="pb-2">
+                <div className="flex justify-between text-sm">
+                  <span className="flex items-center">
+                    <Tag size={14} className="mr-1" />
+                    {product.category.charAt(0).toUpperCase() + product.category.slice(1)}
+                  </span>
+                  <span className="flex items-center">
+                    <Heart size={14} className="mr-1" />
+                    {product.likes}
+                  </span>
+                </div>
+              </CardContent>
+              
+              <CardFooter className="mt-auto">
+                <Button className="w-full bg-jillr-neonPurple hover:bg-jillr-neonPurple/80">
+                  <ShoppingBag className="mr-2 h-4 w-4" /> Kaufen
+                </Button>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
+      ) : (
+        <div className="text-center p-12 bg-muted/20 rounded-lg">
+          <Search className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
+          <h3 className="text-lg font-medium mb-2">Keine Produkte gefunden</h3>
+          <p className="text-muted-foreground mb-4">Versuche es mit einem anderen Suchbegriff oder Filter.</p>
+          <Button onClick={() => {
+            setSearchQuery('');
+            setFilterCategory('all');
+            setSortBy('popular');
+          }}>Filter zurücksetzen</Button>
+        </div>
+      )}
     </div>
   );
 };
