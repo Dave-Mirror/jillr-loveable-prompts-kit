@@ -45,12 +45,8 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({
 }) => {
   const typeIcon = typeIcons[type] || '🎯';
   
-  // Ensure we're using the UUID format from the API for the challenge IDs
-  // This ensures we use the correct ID format in the URL
-  const formattedId = id.includes('-') ? id : `00000000-0000-0000-0000-${id.padStart(12, '0')}`;
-  
   return (
-    <Link to={`/challenge/${formattedId}`} className="block">
+    <Link to={`/challenge/${id}`} className="block">
       <div className="neon-card h-full animate-glow">
         <div className="neon-card-content flex flex-col h-full">
           <div className="relative aspect-video rounded-lg overflow-hidden mb-3">

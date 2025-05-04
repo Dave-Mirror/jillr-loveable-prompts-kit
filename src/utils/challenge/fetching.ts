@@ -39,7 +39,36 @@ export const fetchChallengeDetails = async (
     
     console.log('Fetching challenge with validated ID:', validatedId);
     
-    // Fetch challenge data
+    // For demo purposes, fetch from sample data when using numeric IDs
+    if (/^\d+$/.test(challengeId)) {
+      // Mock data for demo purposes
+      setTimeout(() => {
+        const mockChallenge: Challenge = {
+          id: validatedId,
+          title: `Challenge ${challengeId}`,
+          description: 'Dies ist eine Demo-Challenge für Test-Zwecke.',
+          type: 'Community',
+          start_date: new Date().toISOString(),
+          end_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+          imageUrl: challengeTypeImages['Community'] || challengeTypeImages['default'],
+          coin_reward: 100,
+          xp_reward: 500,
+          hashtags: ['demo', 'test', 'challenge'],
+          brand_name: 'Demo Brand',
+          status: 'active'
+        };
+        
+        setChallenge(mockChallenge);
+        setSubmissions([]);
+        setTopUsers([]);
+        setVerifiedSubmissions([]);
+        setIsLoading(false);
+      }, 1000);
+      
+      return;
+    }
+    
+    // Fetch challenge data from database
     const { data, error } = await supabase
       .from('challenges')
       .select('*')
