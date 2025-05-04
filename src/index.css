@@ -105,6 +105,10 @@
     animation: glow 2s infinite alternate;
   }
 
+  .animate-float {
+    animation: float 4s ease-in-out infinite;
+  }
+
   @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -113,6 +117,12 @@
   @keyframes glow {
     from { box-shadow: 0 0 5px rgba(136, 58, 234, 0.3); }
     to { box-shadow: 0 0 15px rgba(136, 58, 234, 0.7); }
+  }
+
+  @keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
   }
 
   .neon-card {
@@ -125,5 +135,9 @@
 
   .neon-text {
     @apply text-transparent bg-clip-text bg-gradient-to-r from-jillr-neonPurple to-jillr-neonBlue;
+  }
+
+  .onboarding-gradient {
+    @apply bg-gradient-to-br from-jillr-neonPurple/10 to-jillr-neonBlue/10;
   }
 }

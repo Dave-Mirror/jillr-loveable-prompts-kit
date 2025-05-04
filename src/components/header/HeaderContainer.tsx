@@ -26,10 +26,13 @@ const HeaderContainer: React.FC<HeaderContainerProps> = ({ children }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Check if we're on the home page or explore page to apply transparent header
+  const shouldBeTransparent = location.pathname === '/' || location.pathname === '/explore';
+
   return (
     <header 
       className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ${
-        scrolled || location.pathname !== '/explore' 
+        scrolled || !shouldBeTransparent 
           ? 'bg-jillr-dark/90 backdrop-blur-lg shadow-lg' 
           : 'bg-gradient-to-b from-jillr-dark/80 to-transparent'
       } ${isMobile ? 'py-2' : 'py-3'} safe-area-top`}
