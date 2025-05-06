@@ -21,10 +21,7 @@ const LevelProgressBar: React.FC<LevelProgressBarProps> = ({
         <span className="text-xs">Level {currentLevel}</span>
         <span className="text-xs">Level {currentLevel + 1}</span>
       </div>
-      <Progress 
-        value={progress} 
-        className="h-2 [&>div]:bg-gradient-to-r [&>div]:from-jillr-neonPurple [&>div]:to-jillr-neonPink" 
-      />
+      <Progress value={progress} className="h-2" indicatorClassName="bg-gradient-to-r from-jillr-neonPurple to-jillr-neonPink" />
       <p className="text-xs text-muted-foreground text-center">
         {nextLevelXP - currentXP} XP needed for next level
       </p>

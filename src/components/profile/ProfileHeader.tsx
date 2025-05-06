@@ -1,9 +1,9 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
-import { Award, MapPin, Calendar, Pencil, Instagram, Youtube, Twitch, Twitter } from 'lucide-react';
-import { TiktokIcon } from '@/components/ui/icons/TiktokIcon';
+import { Award, MapPin, Calendar, Pencil, TiktokIcon, Instagram, Youtube, Twitch, Twitter } from 'lucide-react';
 import ProfileEditModal from './ProfileEditModal';
 import TopAchievements from './header/TopAchievements';
 import SocialLinks from './header/SocialLinks';

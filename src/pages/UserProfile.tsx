@@ -8,35 +8,12 @@ import ProfileTabs from '@/components/profile/ProfileTabs';
 import ProfileLoading from '@/components/profile/ProfileLoading';
 import { fetchUserProfile } from '@/utils/profile/fetchUserProfile';
 
-// Define a type for the profile data
-interface UserProfileData {
-  id: string;
-  username?: string;
-  level: number;
-  xp: number;
-  avatar?: string;
-  coins: number;
-  active_challenges: number;
-  completed_challenges?: number;
-  location?: string;
-  joinDate?: string;
-  socialLinks?: {
-    tiktok?: string;
-    instagram?: string;
-    youtube?: string;
-    twitch?: string;
-    twitter?: string;
-  };
-  badges?: string[];
-  followers?: number;
-}
-
 const UserProfile = () => {
   const { username } = useParams<{ username: string }>();
   const { user, userProfile: authUserProfile } = useAuth();
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('activity');
-  const [profileData, setProfileData] = useState<UserProfileData | null>(null);
+  const [profileData, setProfileData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isOwnProfile, setIsOwnProfile] = useState(false);
 
@@ -46,16 +23,12 @@ const UserProfile = () => {
       try {
         // If no username provided, or username matches logged in user, show own profile
         if (!username && authUserProfile) {
-          setProfileData(authUserProfile as UserProfileData);
+          setProfileData(authUserProfile);
           setIsOwnProfile(true);
         } else {
           const profile = await fetchUserProfile(username || '');
-          setProfileData(profile as UserProfileData);
-          
-          // Check if this is the user's own profile - safely check for user id
-          const userId = user ? (user as any).id : undefined;
-          const profileId = profile ? (profile as UserProfileData)?.id : undefined;
-          setIsOwnProfile(userId !== undefined && profileId !== undefined && userId === profileId);
+          setProfileData(profile);
+          setIsOwnProfile(user?.id === profile?.id);
         }
       } catch (error) {
         console.error('Error loading profile:', error);
