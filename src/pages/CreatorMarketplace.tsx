@@ -6,6 +6,9 @@ import CreatorFilters from '@/components/marketplace/CreatorFilters';
 import CreatorDetail from '@/components/marketplace/CreatorDetail';
 import { useCreatorSearch } from '@/hooks/marketplace/useCreatorSearch';
 import { useActiveChallenge } from '@/hooks/marketplace/useActiveChallenge';
+import { Card, CardContent } from '@/components/ui/card';
+import { AlertCircle, Info } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 const CreatorMarketplace: React.FC = () => {
   const { toast } = useToast();
@@ -18,7 +21,7 @@ const CreatorMarketplace: React.FC = () => {
   });
 
   const { creators, isLoading, error } = useCreatorSearch(filters);
-  const { activeChallenge } = useActiveChallenge();
+  const { activeChallenge, isLoading: isChallengeLoading } = useActiveChallenge();
 
   useEffect(() => {
     if (error) {
@@ -39,17 +42,19 @@ const CreatorMarketplace: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto py-6 px-4 md:px-6">
+    <div className="container mx-auto py-6 px-4 md:px-6 max-w-7xl">
       <div className="flex flex-col space-y-6">
         <h1 className="text-3xl font-bold">Creator-Marktplatz</h1>
         
         {activeChallenge && (
-          <div className="p-4 rounded-lg bg-jillr-darkBlue border border-jillr-neonPurple/30">
-            <h2 className="text-lg font-semibold mb-2">Aktive Challenge: {activeChallenge.title}</h2>
-            <p className="text-sm text-gray-300">
-              Creator-Empfehlungen basieren auf dieser Challenge
-            </p>
-          </div>
+          <Alert className="border-jillr-neonPurple/50 bg-gradient-to-r from-jillr-darkBlue to-jillr-darkBlue/70">
+            <Info className="h-4 w-4 text-jillr-neonPurple" />
+            <AlertTitle>Aktive Challenge: {activeChallenge.title}</AlertTitle>
+            <AlertDescription className="text-sm text-gray-300">
+              Das KI-System empfiehlt Creator, die am besten zu deiner Challenge "{activeChallenge.title}" passen. 
+              Die Empfehlungen werden basierend auf Kategorie ({activeChallenge.category}) und Zielgruppe optimiert.
+            </AlertDescription>
+          </Alert>
         )}
         
         <CreatorFilters 
@@ -71,12 +76,15 @@ const CreatorMarketplace: React.FC = () => {
             {selectedCreator ? (
               <CreatorDetail creator={selectedCreator} />
             ) : (
-              <div className="h-full bg-jillr-darkBlue/50 rounded-lg border border-jillr-neonPurple/30 p-6 flex flex-col items-center justify-center text-center">
-                <h3 className="text-xl font-medium mb-2">Creator-Details</h3>
-                <p className="text-gray-400 mb-4">
-                  Wähle einen Creator aus, um mehr Informationen zu sehen
-                </p>
-              </div>
+              <Card className="h-full bg-jillr-darkBlue/30 border-jillr-neonPurple/30">
+                <CardContent className="h-full flex flex-col items-center justify-center text-center p-6">
+                  <AlertCircle className="h-12 w-12 text-jillr-neonPurple/50 mb-4" />
+                  <h3 className="text-xl font-medium mb-2">Creator-Details</h3>
+                  <p className="text-gray-400 mb-4">
+                    Wähle einen Creator aus, um mehr Informationen zu sehen
+                  </p>
+                </CardContent>
+              </Card>
             )}
           </div>
         </div>

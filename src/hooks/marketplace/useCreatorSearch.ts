@@ -1,6 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { mockCreators } from '@/data/mockCreators';
+import { useActiveChallenge } from './useActiveChallenge';
 
 interface Creator {
   id: string;
@@ -31,6 +32,7 @@ export function useCreatorSearch(filters: Filters) {
   const [creators, setCreators] = useState<Creator[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
+  const { activeChallenge } = useActiveChallenge();
 
   useEffect(() => {
     const fetchCreators = async () => {
@@ -77,8 +79,46 @@ export function useCreatorSearch(filters: Filters) {
                 creator.name.toLowerCase().includes(searchLower) ||
                 creator.niche.toLowerCase().includes(searchLower) ||
                 creator.region.toLowerCase().includes(searchLower) ||
-                (creator.bio && creator.bio.toLowerCase().includes(searchLower))
+                (creator.bio && creator.bio.toLowerCase().includes(searchLower)) ||
+                creator.badges.some(badge => badge.toLowerCase().includes(searchLower))
             );
+          }
+          
+          // Apply AI matchmaking logic based on active challenge
+          if (activeChallenge) {
+            filteredCreators = filteredCreators.map(creator => {
+              let bonusScore = 0;
+              
+              // Boost if creator's niche matches challenge category
+              if (activeChallenge.category && creator.niche === activeChallenge.category) {
+                bonusScore += 20;
+              } else if (activeChallenge.category && creator.niche.includes(activeChallenge.category)) {
+                bonusScore += 10;
+              }
+              
+              // Boost if target audience gender is female and creator has high female audience
+              if (activeChallenge.targetAudience?.gender === 'female' && 
+                  creator.badges.some(badge => badge.includes('Female Audience'))) {
+                bonusScore += 15;
+              }
+              
+              // Boost if creator is in the target region
+              if (activeChallenge.targetAudience?.region && 
+                  creator.region === activeChallenge.targetAudience.region) {
+                bonusScore += 10;
+              }
+              
+              // Apply bonus to match score (capped at 100)
+              const newMatchScore = Math.min(100, creator.matchScore + bonusScore);
+              
+              return {
+                ...creator,
+                matchScore: newMatchScore,
+                badges: creator.badges.concat(
+                  bonusScore > 0 ? [`+${bonusScore}% Challenge Match`] : []
+                )
+              };
+            });
           }
           
           // Sort by match score (highest first)
@@ -95,7 +135,7 @@ export function useCreatorSearch(filters: Filters) {
     };
     
     fetchCreators();
-  }, [filters]);
+  }, [filters, activeChallenge]);
 
   return { creators, isLoading, error };
 }

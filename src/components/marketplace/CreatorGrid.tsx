@@ -2,6 +2,8 @@
 import React from 'react';
 import CreatorCard from './CreatorCard';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Info } from 'lucide-react';
 
 interface Creator {
   id: string;
@@ -67,16 +69,67 @@ const CreatorGrid: React.FC<CreatorGridProps> = ({
     );
   }
 
+  // Group creators by their match score quality
+  const topMatches = creators.filter(c => c.matchScore >= 80);
+  const goodMatches = creators.filter(c => c.matchScore >= 60 && c.matchScore < 80);
+  const otherMatches = creators.filter(c => c.matchScore < 60);
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      {creators.map((creator) => (
-        <CreatorCard
-          key={creator.id}
-          creator={creator}
-          isSelected={creator.id === selectedCreatorId}
-          onClick={() => onSelectCreator(creator)}
-        />
-      ))}
+    <div className="space-y-6">
+      {topMatches.length > 0 && (
+        <div className="space-y-3">
+          <Alert className="bg-gradient-to-r from-jillr-neonPurple/20 to-jillr-darkBlue/20 border-jillr-neonPurple">
+            <Info className="h-4 w-4 text-jillr-neonPurple" />
+            <AlertTitle>Top Matches für deine Kampagne</AlertTitle>
+            <AlertDescription>
+              Diese Creator passen besonders gut zu deiner aktiven Challenge.
+            </AlertDescription>
+          </Alert>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {topMatches.map((creator) => (
+              <CreatorCard
+                key={creator.id}
+                creator={creator}
+                isSelected={creator.id === selectedCreatorId}
+                onClick={() => onSelectCreator(creator)}
+                isPriority={true}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {goodMatches.length > 0 && (
+        <div className="space-y-3">
+          <h3 className="text-lg font-medium text-gray-200">Gute Übereinstimmungen</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {goodMatches.map((creator) => (
+              <CreatorCard
+                key={creator.id}
+                creator={creator}
+                isSelected={creator.id === selectedCreatorId}
+                onClick={() => onSelectCreator(creator)}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {otherMatches.length > 0 && (
+        <div className="space-y-3">
+          <h3 className="text-lg font-medium text-gray-300">Weitere Creator</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {otherMatches.map((creator) => (
+              <CreatorCard
+                key={creator.id}
+                creator={creator}
+                isSelected={creator.id === selectedCreatorId}
+                onClick={() => onSelectCreator(creator)}
+              />
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -10,6 +10,7 @@ interface Challenge {
     gender: string;
     ageMin: number;
     ageMax: number;
+    region?: string;
   };
 }
 
@@ -33,7 +34,8 @@ export function useActiveChallenge() {
           targetAudience: {
             gender: "female",
             ageMin: 18,
-            ageMax: 34
+            ageMax: 34,
+            region: "Deutschland"
           }
         });
         setIsLoading(false);

@@ -3,6 +3,7 @@ import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { formatNumber } from '@/utils/formatters';
+import { Sparkles } from 'lucide-react';
 
 interface Creator {
   id: string;
@@ -21,17 +22,20 @@ interface CreatorCardProps {
   creator: Creator;
   isSelected: boolean;
   onClick: () => void;
+  isPriority?: boolean;
 }
 
 const CreatorCard: React.FC<CreatorCardProps> = ({
   creator,
   isSelected,
-  onClick
+  onClick,
+  isPriority = false
 }) => {
   return (
     <Card 
       className={`cursor-pointer transition-all duration-200 hover:border-jillr-neonPurple
-        ${isSelected ? 'border-jillr-neonPurple border-2' : 'border-jillr-neonPurple/30'}`}
+        ${isSelected ? 'border-jillr-neonPurple border-2' : isPriority ? 'border-jillr-neonPurple/60' : 'border-jillr-neonPurple/30'}
+        ${isPriority ? 'bg-gradient-to-br from-jillr-darkBlue to-jillr-neonPurple/5' : ''}`}
       onClick={onClick}
     >
       <CardContent className="p-4">
@@ -40,10 +44,12 @@ const CreatorCard: React.FC<CreatorCardProps> = ({
             <img 
               src={creator.avatar} 
               alt={creator.name}
-              className="h-16 w-16 rounded-full object-cover border-2 border-jillr-neonPurple/50"
+              className={`h-16 w-16 rounded-full object-cover border-2 ${isPriority ? 'border-jillr-neonPurple' : 'border-jillr-neonPurple/50'}`}
             />
             <div 
-              className="absolute -bottom-1 -right-1 h-6 w-6 rounded-full flex items-center justify-center bg-jillr-darkBlue border border-jillr-neonPurple text-xs font-bold"
+              className={`absolute -bottom-1 -right-1 h-6 w-6 rounded-full flex items-center justify-center 
+                ${isPriority ? 'bg-jillr-neonPurple text-white' : 'bg-jillr-darkBlue border border-jillr-neonPurple text-white'} 
+                text-xs font-bold`}
               title="KI-Match Score"
             >
               {creator.matchScore}%
@@ -52,7 +58,12 @@ const CreatorCard: React.FC<CreatorCardProps> = ({
           
           <div className="flex-1">
             <div className="flex justify-between items-start">
-              <h3 className="text-lg font-semibold">{creator.name}</h3>
+              <div className="flex items-center gap-1">
+                <h3 className="text-lg font-semibold">{creator.name}</h3>
+                {isPriority && (
+                  <Sparkles size={14} className="text-jillr-neonPurple" />
+                )}
+              </div>
               <span className="text-sm text-gray-400">{creator.region}</span>
             </div>
             
@@ -75,7 +86,7 @@ const CreatorCard: React.FC<CreatorCardProps> = ({
         {creator.badges && creator.badges.length > 0 && (
           <div className="mt-3 flex flex-wrap gap-1">
             {creator.badges.map((badge, idx) => (
-              <Badge key={idx} variant="outline" className="bg-jillr-darkBlue text-xs">
+              <Badge key={idx} variant="outline" className={`${isPriority ? 'bg-jillr-neonPurple/10' : 'bg-jillr-darkBlue'} text-xs`}>
                 {badge}
               </Badge>
             ))}

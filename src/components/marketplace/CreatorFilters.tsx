@@ -1,17 +1,24 @@
 
 import React, { useState } from 'react';
-import { Search, Filter } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Slider } from '@/components/ui/slider';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Slider } from '@/components/ui/slider';
+import { Button } from '@/components/ui/button';
+import { Check, ChevronDown, Filter, Search, X } from 'lucide-react';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from '@/components/ui/command';
+import { Input } from '@/components/ui/input';
 
 interface FiltersProps {
   filters: {
@@ -19,226 +26,402 @@ interface FiltersProps {
     region: string[];
     engagement: number[];
     matchScore: number;
+    searchTerm?: string;
   };
-  onFilterChange: (newFilters: any) => void;
+  onFilterChange: (filters: any) => void;
 }
 
-// Niche categories available for filtering
-const NICHES = [
-  "Beauty", "Fashion", "Fitness", "Gaming", "Lifestyle", 
-  "Tech", "Travel", "Food", "Business", "Education"
+// Predefined options
+const niches = [
+  'Beauty', 'Fashion', 'Gaming', 'Fitness', 'Food',
+  'Travel', 'Lifestyle', 'Tech', 'DIY', 'Comedy'
 ];
 
-// Regions available for filtering
-const REGIONS = [
-  "Europa", "Nordamerika", "Südamerika", "Asien", 
-  "Afrika", "Australien", "Deutschland", "Österreich", "Schweiz"
+const regions = [
+  'Deutschland', 'Österreich', 'Schweiz', 'DACH', 
+  'Europa', 'Nordamerika', 'Global'
 ];
 
 const CreatorFilters: React.FC<FiltersProps> = ({ filters, onFilterChange }) => {
-  const [searchTerm, setSearchTerm] = useState("");
-  
-  const handleNicheToggle = (niche: string) => {
-    const updated = filters.niche.includes(niche)
-      ? filters.niche.filter(n => n !== niche)
-      : [...filters.niche, niche];
-    
-    onFilterChange({ niche: updated });
+  const [isOpen, setIsOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState(filters.searchTerm || '');
+
+  // Handle search input
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    onFilterChange({ searchTerm });
   };
-  
-  const handleRegionToggle = (region: string) => {
-    const updated = filters.region.includes(region)
-      ? filters.region.filter(r => r !== region)
-      : [...filters.region, region];
-    
-    onFilterChange({ region: updated });
-  };
-  
-  const handleEngagementChange = (value: number[]) => {
-    onFilterChange({ engagement: value });
-  };
-  
+
+  // Handle match score slider change
   const handleMatchScoreChange = (value: number[]) => {
     onFilterChange({ matchScore: value[0] });
   };
-  
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Pass search term to parent
-    onFilterChange({ searchTerm });
+
+  // Handle engagement range slider change
+  const handleEngagementChange = (value: number[]) => {
+    onFilterChange({ engagement: value });
   };
-  
-  const handleClearFilters = () => {
+
+  // Toggle niche selection
+  const toggleNiche = (niche: string) => {
+    const updatedNiches = filters.niche.includes(niche)
+      ? filters.niche.filter(n => n !== niche)
+      : [...filters.niche, niche];
+    
+    onFilterChange({ niche: updatedNiches });
+  };
+
+  // Toggle region selection
+  const toggleRegion = (region: string) => {
+    const updatedRegions = filters.region.includes(region)
+      ? filters.region.filter(r => r !== region)
+      : [...filters.region, region];
+    
+    onFilterChange({ region: updatedRegions });
+  };
+
+  // Clear all filters
+  const clearAllFilters = () => {
     onFilterChange({
       niche: [],
       region: [],
       engagement: [0, 100],
       matchScore: 50,
-      searchTerm: ""
+      searchTerm: ''
     });
-    setSearchTerm("");
+    setSearchTerm('');
   };
 
   return (
     <div className="space-y-4">
-      <form onSubmit={handleSearch} className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <input
-          type="text"
-          placeholder="Nach Creator-Namen oder Keywords suchen..."
-          className="w-full rounded-md pl-10 pr-4 py-2 bg-background border border-input focus:outline-none focus:ring-1 focus:ring-jillr-neonPurple"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </form>
-      
-      <div className="flex flex-wrap gap-2">
-        {/* Niche Filter */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm" className="h-9">
-              <Filter className="mr-2 h-4 w-4" />
-              Nische
-              {filters.niche.length > 0 && (
-                <Badge className="ml-2 bg-jillr-neonPurple text-white" variant="secondary">
-                  {filters.niche.length}
-                </Badge>
-              )}
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56">
-            <DropdownMenuLabel>Nische auswählen</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            {NICHES.map((niche) => (
-              <DropdownMenuItem 
-                key={niche}
-                onClick={() => handleNicheToggle(niche)}
-                className="flex items-center gap-2"
+      <div className="flex flex-col md:flex-row gap-4">
+        {/* Search Bar */}
+        <div className="flex-1">
+          <form onSubmit={handleSearch} className="relative">
+            <Input
+              type="text"
+              placeholder="Creator suchen..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-9 bg-jillr-darkBlue/30 border-jillr-neonPurple/30 focus:border-jillr-neonPurple"
+            />
+            <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
+            {searchTerm && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchTerm('');
+                  onFilterChange({ searchTerm: '' });
+                }}
+                className="absolute right-3 top-2.5 text-gray-400 hover:text-white"
               >
-                <input
-                  type="checkbox"
-                  checked={filters.niche.includes(niche)}
-                  onChange={() => {}}
-                  className="h-4 w-4"
-                />
-                {niche}
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+                <X className="h-4 w-4" />
+              </button>
+            )}
+          </form>
+        </div>
         
-        {/* Region Filter */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm" className="h-9">
-              <Filter className="mr-2 h-4 w-4" />
-              Region
-              {filters.region.length > 0 && (
-                <Badge className="ml-2 bg-jillr-neonPurple text-white" variant="secondary">
-                  {filters.region.length}
-                </Badge>
-              )}
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56">
-            <DropdownMenuLabel>Region auswählen</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            {REGIONS.map((region) => (
-              <DropdownMenuItem 
-                key={region}
-                onClick={() => handleRegionToggle(region)}
-                className="flex items-center gap-2"
-              >
-                <input
-                  type="checkbox"
-                  checked={filters.region.includes(region)}
-                  onChange={() => {}}
-                  className="h-4 w-4"
-                />
-                {region}
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
-        
-        {/* Engagement Rate Filter */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm" className="h-9">
-              <Filter className="mr-2 h-4 w-4" />
-              Engagement
-              {(filters.engagement[0] > 0 || filters.engagement[1] < 100) && (
-                <Badge className="ml-2 bg-jillr-neonPurple text-white" variant="secondary">
-                  {filters.engagement[0]}%-{filters.engagement[1]}%
-                </Badge>
-              )}
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56 p-4">
-            <DropdownMenuLabel className="mb-4">Engagement Rate</DropdownMenuLabel>
-            <div className="px-1">
-              <Slider
-                defaultValue={filters.engagement}
-                min={0}
-                max={100}
-                step={1}
-                onValueChange={handleEngagementChange}
-                className="my-6"
-              />
-              <div className="flex justify-between text-xs text-muted-foreground">
-                <span>{filters.engagement[0]}%</span>
-                <span>{filters.engagement[1]}%</span>
-              </div>
-            </div>
-          </DropdownMenuContent>
-        </DropdownMenu>
-        
-        {/* Match Score Filter */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm" className="h-9">
-              <Filter className="mr-2 h-4 w-4" />
-              KI Match
-              {filters.matchScore !== 50 && (
-                <Badge className="ml-2 bg-jillr-neonPurple text-white" variant="secondary">
-                  {filters.matchScore}%+
-                </Badge>
-              )}
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56 p-4">
-            <DropdownMenuLabel className="mb-4">KI Match Score</DropdownMenuLabel>
-            <div className="px-1">
-              <Slider
-                defaultValue={[filters.matchScore]}
-                min={0}
-                max={100}
-                step={5}
-                onValueChange={handleMatchScoreChange}
-                className="my-6"
-              />
-              <div className="flex justify-between text-xs text-muted-foreground">
-                <span>Minimum: {filters.matchScore}%</span>
-              </div>
-            </div>
-          </DropdownMenuContent>
-        </DropdownMenu>
-        
-        {/* Clear Filters */}
-        {(filters.niche.length > 0 || 
-          filters.region.length > 0 || 
-          filters.engagement[0] > 0 || 
-          filters.engagement[1] < 100 ||
-          filters.matchScore !== 50 ||
-          searchTerm) && (
+        {/* Mobile Filter Button */}
+        <div className="md:hidden">
           <Button 
-            variant="ghost" 
-            size="sm" 
-            onClick={handleClearFilters}
-            className="h-9"
+            variant="outline" 
+            onClick={() => setIsOpen(!isOpen)}
+            className="w-full border-jillr-neonPurple/30 bg-jillr-darkBlue/30"
           >
-            Filter zurücksetzen
+            <Filter className="mr-2 h-4 w-4" />
+            Filter
+            <ChevronDown className={`ml-2 h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
           </Button>
+        </div>
+        
+        {/* Desktop Filter Pills */}
+        <div className="hidden md:flex gap-2">
+          {/* Niche Selector */}
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" className="border-jillr-neonPurple/30 bg-jillr-darkBlue/30">
+                Nische
+                <ChevronDown className="ml-2 h-4 w-4" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-56 p-0 bg-jillr-darkBlue border-jillr-neonPurple/30">
+              <Command>
+                <CommandInput placeholder="Nische suchen..." />
+                <CommandEmpty>Keine passende Nische gefunden</CommandEmpty>
+                <CommandGroup>
+                  <ScrollArea className="h-60">
+                    {niches.map((niche) => (
+                      <CommandItem
+                        key={niche}
+                        onSelect={() => toggleNiche(niche)}
+                      >
+                        <div className="flex items-center gap-2 w-full">
+                          <div className={`h-4 w-4 rounded-sm border flex items-center justify-center ${
+                            filters.niche.includes(niche) ? 'bg-jillr-neonPurple border-jillr-neonPurple' : 'border-white/20'
+                          }`}>
+                            {filters.niche.includes(niche) && <Check className="h-3 w-3 text-white" />}
+                          </div>
+                          <span>{niche}</span>
+                        </div>
+                      </CommandItem>
+                    ))}
+                  </ScrollArea>
+                </CommandGroup>
+              </Command>
+            </PopoverContent>
+          </Popover>
+          
+          {/* Region Selector */}
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" className="border-jillr-neonPurple/30 bg-jillr-darkBlue/30">
+                Region
+                <ChevronDown className="ml-2 h-4 w-4" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-56 p-0 bg-jillr-darkBlue border-jillr-neonPurple/30">
+              <Command>
+                <CommandInput placeholder="Region suchen..." />
+                <CommandEmpty>Keine passende Region gefunden</CommandEmpty>
+                <CommandGroup>
+                  <ScrollArea className="h-60">
+                    {regions.map((region) => (
+                      <CommandItem
+                        key={region}
+                        onSelect={() => toggleRegion(region)}
+                      >
+                        <div className="flex items-center gap-2 w-full">
+                          <div className={`h-4 w-4 rounded-sm border flex items-center justify-center ${
+                            filters.region.includes(region) ? 'bg-jillr-neonPurple border-jillr-neonPurple' : 'border-white/20'
+                          }`}>
+                            {filters.region.includes(region) && <Check className="h-3 w-3 text-white" />}
+                          </div>
+                          <span>{region}</span>
+                        </div>
+                      </CommandItem>
+                    ))}
+                  </ScrollArea>
+                </CommandGroup>
+              </Command>
+            </PopoverContent>
+          </Popover>
+          
+          {/* Match Score */}
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" className="border-jillr-neonPurple/30 bg-jillr-darkBlue/30">
+                Match Score
+                <ChevronDown className="ml-2 h-4 w-4" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-64 p-4 bg-jillr-darkBlue border-jillr-neonPurple/30">
+              <div className="space-y-4">
+                <h4 className="text-sm font-medium">Mindest-Match-Score (%)</h4>
+                <Slider 
+                  defaultValue={[filters.matchScore]} 
+                  max={100} 
+                  step={5}
+                  value={[filters.matchScore]}
+                  onValueChange={handleMatchScoreChange}
+                  className="mb-1" 
+                />
+                <div className="flex justify-between text-xs text-gray-400">
+                  <span>{filters.matchScore}%</span>
+                  <span>100%</span>
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
+          
+          {/* Engagement Rate */}
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" className="border-jillr-neonPurple/30 bg-jillr-darkBlue/30">
+                Engagement
+                <ChevronDown className="ml-2 h-4 w-4" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-64 p-4 bg-jillr-darkBlue border-jillr-neonPurple/30">
+              <div className="space-y-4">
+                <h4 className="text-sm font-medium">Engagement-Rate (%)</h4>
+                <Slider 
+                  defaultValue={filters.engagement} 
+                  max={100} 
+                  step={1}
+                  value={filters.engagement}
+                  onValueChange={handleEngagementChange}
+                  className="mb-1" 
+                />
+                <div className="flex justify-between text-xs text-gray-400">
+                  <span>{filters.engagement[0]}%</span>
+                  <span>{filters.engagement[1]}%</span>
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
+          
+          {/* Reset Button - only show if we have active filters */}
+          {(filters.niche.length > 0 || 
+            filters.region.length > 0 || 
+            filters.engagement[0] > 0 || 
+            filters.engagement[1] < 100 ||
+            filters.matchScore > 50 ||
+            filters.searchTerm) && (
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={clearAllFilters}
+              className="text-gray-400 hover:text-white"
+            >
+              <X className="mr-1 h-4 w-4" />
+              Filter zurücksetzen
+            </Button>
+          )}
+        </div>
+      </div>
+      
+      {/* Mobile Filter Panel */}
+      {isOpen && (
+        <Card className="p-4 md:hidden border-jillr-neonPurple/30 bg-jillr-darkBlue/30">
+          <div className="space-y-4">
+            {/* Niche Tags */}
+            <div>
+              <h4 className="text-sm font-medium mb-2">Nischen</h4>
+              <ScrollArea className="whitespace-nowrap pb-2">
+                <div className="flex gap-2">
+                  {niches.map(niche => (
+                    <Badge
+                      key={niche}
+                      variant={filters.niche.includes(niche) ? "default" : "outline"}
+                      className={`cursor-pointer ${
+                        filters.niche.includes(niche) 
+                          ? 'bg-jillr-neonPurple' 
+                          : 'bg-transparent border-jillr-neonPurple/30'
+                      }`}
+                      onClick={() => toggleNiche(niche)}
+                    >
+                      {niche}
+                    </Badge>
+                  ))}
+                </div>
+              </ScrollArea>
+            </div>
+            
+            {/* Region Tags */}
+            <div>
+              <h4 className="text-sm font-medium mb-2">Region</h4>
+              <ScrollArea className="whitespace-nowrap pb-2">
+                <div className="flex gap-2">
+                  {regions.map(region => (
+                    <Badge
+                      key={region}
+                      variant={filters.region.includes(region) ? "default" : "outline"}
+                      className={`cursor-pointer ${
+                        filters.region.includes(region) 
+                          ? 'bg-jillr-neonPurple' 
+                          : 'bg-transparent border-jillr-neonPurple/30'
+                      }`}
+                      onClick={() => toggleRegion(region)}
+                    >
+                      {region}
+                    </Badge>
+                  ))}
+                </div>
+              </ScrollArea>
+            </div>
+            
+            {/* Match Score Slider */}
+            <div>
+              <h4 className="text-sm font-medium mb-2">Match Score: {filters.matchScore}%+</h4>
+              <Slider 
+                defaultValue={[filters.matchScore]} 
+                max={100} 
+                step={5}
+                value={[filters.matchScore]}
+                onValueChange={handleMatchScoreChange}
+              />
+            </div>
+            
+            {/* Engagement Rate Slider */}
+            <div>
+              <h4 className="text-sm font-medium mb-2">
+                Engagement Rate: {filters.engagement[0]}% - {filters.engagement[1]}%
+              </h4>
+              <Slider 
+                defaultValue={filters.engagement} 
+                max={100} 
+                step={1}
+                value={filters.engagement}
+                onValueChange={handleEngagementChange}
+              />
+            </div>
+            
+            {/* Apply Button */}
+            <div className="pt-2 flex justify-end gap-2">
+              <Button variant="outline" onClick={clearAllFilters}>
+                Zurücksetzen
+              </Button>
+              <Button onClick={() => setIsOpen(false)}>
+                Anwenden
+              </Button>
+            </div>
+          </div>
+        </Card>
+      )}
+      
+      {/* Active Filter Pills */}
+      <div className="flex flex-wrap gap-2">
+        {filters.niche.map(niche => (
+          <Badge key={niche} variant="secondary" className="bg-jillr-neonPurple/20 text-white">
+            {niche}
+            <X 
+              className="ml-1 h-3 w-3 cursor-pointer" 
+              onClick={() => toggleNiche(niche)} 
+            />
+          </Badge>
+        ))}
+        
+        {filters.region.map(region => (
+          <Badge key={region} variant="secondary" className="bg-jillr-neonPurple/20 text-white">
+            {region}
+            <X 
+              className="ml-1 h-3 w-3 cursor-pointer" 
+              onClick={() => toggleRegion(region)} 
+            />
+          </Badge>
+        ))}
+        
+        {(filters.matchScore > 50) && (
+          <Badge variant="secondary" className="bg-jillr-neonPurple/20 text-white">
+            Match Score: {filters.matchScore}%+
+            <X 
+              className="ml-1 h-3 w-3 cursor-pointer" 
+              onClick={() => onFilterChange({ matchScore: 50 })} 
+            />
+          </Badge>
+        )}
+        
+        {(filters.engagement[0] > 0 || filters.engagement[1] < 100) && (
+          <Badge variant="secondary" className="bg-jillr-neonPurple/20 text-white">
+            Engagement: {filters.engagement[0]}%-{filters.engagement[1]}%
+            <X 
+              className="ml-1 h-3 w-3 cursor-pointer" 
+              onClick={() => onFilterChange({ engagement: [0, 100] })} 
+            />
+          </Badge>
+        )}
+        
+        {searchTerm && (
+          <Badge variant="secondary" className="bg-jillr-neonPurple/20 text-white">
+            Suche: {searchTerm}
+            <X 
+              className="ml-1 h-3 w-3 cursor-pointer" 
+              onClick={() => {
+                setSearchTerm('');
+                onFilterChange({ searchTerm: '' });
+              }} 
+            />
+          </Badge>
         )}
       </div>
     </div>
