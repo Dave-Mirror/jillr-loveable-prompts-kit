@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { formatNumber } from '@/utils/formatters';
@@ -8,6 +9,7 @@ import { Sparkles } from 'lucide-react';
 interface Creator {
   id: string;
   name: string;
+  username?: string; // Add username for profile links
   avatar: string;
   niche: string;
   reach: number;
@@ -41,11 +43,16 @@ const CreatorCard: React.FC<CreatorCardProps> = ({
       <CardContent className="p-4">
         <div className="flex items-start gap-4">
           <div className="relative">
-            <img 
-              src={creator.avatar} 
-              alt={creator.name}
-              className={`h-16 w-16 rounded-full object-cover border-2 ${isPriority ? 'border-jillr-neonPurple' : 'border-jillr-neonPurple/50'}`}
-            />
+            <Link 
+              to={`/user/${creator.username || creator.name.toLowerCase().replace(' ', '')}`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <img 
+                src={creator.avatar} 
+                alt={creator.name}
+                className={`h-16 w-16 rounded-full object-cover border-2 ${isPriority ? 'border-jillr-neonPurple' : 'border-jillr-neonPurple/50'}`}
+              />
+            </Link>
             <div 
               className={`absolute -bottom-1 -right-1 h-6 w-6 rounded-full flex items-center justify-center 
                 ${isPriority ? 'bg-jillr-neonPurple text-white' : 'bg-jillr-darkBlue border border-jillr-neonPurple text-white'} 
@@ -59,7 +66,13 @@ const CreatorCard: React.FC<CreatorCardProps> = ({
           <div className="flex-1">
             <div className="flex justify-between items-start">
               <div className="flex items-center gap-1">
-                <h3 className="text-lg font-semibold">{creator.name}</h3>
+                <Link 
+                  to={`/user/${creator.username || creator.name.toLowerCase().replace(' ', '')}`}
+                  onClick={(e) => e.stopPropagation()}
+                  className="hover:text-jillr-neonPurple transition-colors"
+                >
+                  <h3 className="text-lg font-semibold">{creator.name}</h3>
+                </Link>
                 {isPriority && (
                   <Sparkles size={14} className="text-jillr-neonPurple" />
                 )}

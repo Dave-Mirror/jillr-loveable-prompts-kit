@@ -1,35 +1,47 @@
 
 import React from 'react';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import ActivityTab from './tabs/ActivityTab';
+import ChallengesTab from './tabs/ChallengesTab';
 import RewardsTab from './tabs/RewardsTab';
 import CommunityTab from './tabs/CommunityTab';
 import StatsTab from './tabs/StatsTab';
-import SocialTab from './tabs/SocialTab';
 import SettingsTab from './tabs/SettingsTab';
 import ProfileTabsHeader from './ProfileTabsHeader';
+import MobileProfileNavigation from './MobileProfileNavigation';
 
 interface ProfileTabsProps {
   userProfile: any;
   activeTab: string;
   setActiveTab: (value: string) => void;
+  isOwnProfile: boolean;
 }
 
 const ProfileTabs: React.FC<ProfileTabsProps> = ({ 
   userProfile, 
   activeTab, 
-  setActiveTab 
+  setActiveTab,
+  isOwnProfile
 }) => {
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-6">
-      <ProfileTabsHeader activeTab={activeTab} setActiveTab={setActiveTab} />
+      <MobileProfileNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
+      
+      <div className="hidden md:block">
+        <ProfileTabsHeader activeTab={activeTab} setActiveTab={setActiveTab} />
+      </div>
       
       <TabsContent value="activity" className="mt-6">
         <ActivityTab userProfile={userProfile} />
       </TabsContent>
       
+      <TabsContent value="challenges" className="mt-6">
+        <ChallengesTab userProfile={userProfile} isOwnProfile={isOwnProfile} />
+      </TabsContent>
+      
       <TabsContent value="rewards" className="mt-6">
-        <RewardsTab userProfile={userProfile} />
+        <RewardsTab userProfile={userProfile} isOwnProfile={isOwnProfile} />
       </TabsContent>
       
       <TabsContent value="community" className="mt-6">
@@ -40,13 +52,11 @@ const ProfileTabs: React.FC<ProfileTabsProps> = ({
         <StatsTab userProfile={userProfile} />
       </TabsContent>
       
-      <TabsContent value="social" className="mt-6">
-        <SocialTab userProfile={userProfile} />
-      </TabsContent>
-      
-      <TabsContent value="settings" className="mt-6">
-        <SettingsTab userProfile={userProfile} />
-      </TabsContent>
+      {isOwnProfile && (
+        <TabsContent value="settings" className="mt-6">
+          <SettingsTab userProfile={userProfile} />
+        </TabsContent>
+      )}
     </Tabs>
   );
 };
