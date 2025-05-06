@@ -30,8 +30,8 @@ const UserProfile = () => {
           setProfileData(profile);
           
           // Check if this is the user's own profile - safely check for user id
-          const userId = user?.id;
-          const profileId = profile?.id;
+          const userId = user ? (user as any).id : undefined;
+          const profileId = profile ? profile.id : undefined;
           setIsOwnProfile(userId !== undefined && profileId !== undefined && userId === profileId);
         }
       } catch (error) {
