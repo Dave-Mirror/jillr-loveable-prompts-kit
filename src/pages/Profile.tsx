@@ -20,6 +20,9 @@ const Profile = () => {
 
   // Use mock profile if user is not authenticated
   const profileData = userProfile || mockUserProfile;
+  
+  // This is user's own profile
+  const isOwnProfile = true;
 
   if (isLoading) {
     return <ProfileLoading />;
@@ -27,12 +30,16 @@ const Profile = () => {
 
   return (
     <div className="pb-8">
-      <ProfileHeader userProfile={profileData} />
+      <ProfileHeader 
+        userProfile={profileData} 
+        isOwnProfile={isOwnProfile} 
+      />
       <div className="container">
         <ProfileTabs 
           userProfile={profileData} 
           activeTab={activeTab}
           setActiveTab={setActiveTab}
+          isOwnProfile={isOwnProfile}
         />
       </div>
     </div>

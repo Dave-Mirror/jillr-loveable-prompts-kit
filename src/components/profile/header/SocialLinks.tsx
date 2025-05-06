@@ -1,6 +1,7 @@
 
 import React from 'react';
-import { TiktokIcon, Instagram, Youtube, Twitch, Twitter } from 'lucide-react';
+import { Instagram, Youtube, Twitch, Twitter } from 'lucide-react';
+import { TiktokIcon } from '@/components/ui/icons/TiktokIcon';
 
 interface SocialLinksProps {
   socialLinks?: {

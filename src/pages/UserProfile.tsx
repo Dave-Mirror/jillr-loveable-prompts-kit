@@ -28,7 +28,11 @@ const UserProfile = () => {
         } else {
           const profile = await fetchUserProfile(username || '');
           setProfileData(profile);
-          setIsOwnProfile(user?.id === profile?.id);
+          
+          // Check if this is the user's own profile - safely check for user id
+          const userId = user?.id;
+          const profileId = profile?.id;
+          setIsOwnProfile(userId !== undefined && profileId !== undefined && userId === profileId);
         }
       } catch (error) {
         console.error('Error loading profile:', error);
