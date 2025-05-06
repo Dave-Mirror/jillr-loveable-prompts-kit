@@ -1,25 +1,17 @@
 
 import { useState, useEffect } from 'react';
 
-export interface TargetAudience {
-  gender: string;
-  ageMin: number;
-  ageMax: number;
-  region?: string;
-}
-
-export interface Challenge {
+interface Challenge {
   id: string;
   title: string;
   description: string;
   category: string;
-  targetAudience: TargetAudience;
-  brandId?: string;
-  brandName?: string;
-  createdAt?: string;
-  deadline?: string;
-  xpReward?: number;
-  coinReward?: number;
+  targetAudience: {
+    gender: string;
+    ageMin: number;
+    ageMax: number;
+    region?: string;
+  };
 }
 
 export function useActiveChallenge() {
@@ -44,13 +36,7 @@ export function useActiveChallenge() {
             ageMin: 18,
             ageMax: 34,
             region: "Deutschland"
-          },
-          brandId: "brand-123",
-          brandName: "GlamCo",
-          createdAt: "2023-05-15",
-          deadline: "2023-06-15",
-          xpReward: 350,
-          coinReward: 200
+          }
         });
         setIsLoading(false);
       }, 500);
