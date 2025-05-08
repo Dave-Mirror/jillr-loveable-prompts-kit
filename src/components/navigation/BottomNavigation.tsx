@@ -1,6 +1,10 @@
+
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Search, Trophy, Wallet, User, Map, Zap, ShoppingBag, MoreHorizontal } from 'lucide-react';
+import { 
+  Home, Search, Trophy, Wallet, User, Map, Zap, ShoppingBag, MoreHorizontal,
+  BarChart, Video, PenLine, Settings, Bell, Heart, Star, Edit
+} from 'lucide-react';
 import { 
   Sheet,
   SheetContent, 
@@ -20,11 +24,23 @@ const BottomNavigation = () => {
   ];
   
   // Additional items that will be shown in the "More" menu
+  // Hinzufügen aller verfügbaren Seiten mit passenden Icons
   const moreItems = [
     { icon: Trophy, path: '/leaderboard', label: 'Rangliste' },
     { icon: Wallet, path: '/wallet', label: 'Wallet' },
     { icon: User, path: '/profile', label: 'Profil' },
-    { icon: Search, path: '/search', label: 'Suche' }
+    { icon: Search, path: '/search', label: 'Suche' },
+    { icon: BarChart, path: '/dashboard', label: 'Dashboard' },
+    { icon: BarChart, path: '/brand-dashboard', label: 'Brand Portal' },
+    { icon: BarChart, path: '/enterprise-dashboard', label: 'Enterprise' },
+    { icon: Video, path: '/creator-dashboard', label: 'Creator Studio' },
+    { icon: PenLine, path: '/challenge-builder', label: 'Challenge Builder' },
+    { icon: Edit, path: '/challenge-editor', label: 'Challenge Editor' },
+    { icon: Edit, path: '/content-editor', label: 'Content Editor' },
+    { icon: Video, path: '/creator-marketplace', label: 'Creator Market' },
+    { icon: Settings, path: '/settings', label: 'Einstellungen' },
+    { icon: Bell, path: '/notifications', label: 'Benachrichtigungen' },
+    { icon: Heart, path: '/favorites', label: 'Favoriten' }
   ];
   
   return (
