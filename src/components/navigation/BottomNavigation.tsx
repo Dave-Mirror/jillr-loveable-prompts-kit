@@ -1,9 +1,8 @@
-
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   Home, Search, Trophy, Wallet, User, Map, Zap, ShoppingBag, MoreHorizontal,
-  BarChart, Video, PenLine, Settings, Bell, Heart, Star, Edit
+  BarChart, Video, Settings, Bell, Heart, Star, Edit
 } from 'lucide-react';
 import { 
   Sheet,
@@ -32,9 +31,8 @@ const BottomNavigation = () => {
     { icon: Search, path: '/search', label: 'Suche' },
     { icon: BarChart, path: '/dashboard', label: 'Dashboard' },
     { icon: BarChart, path: '/brand-dashboard', label: 'Brand Portal' },
-    { icon: BarChart, path: '/enterprise-dashboard', label: 'Enterprise Dashboard' }, // Fixed the label here
+    { icon: BarChart, path: '/enterprise-dashboard', label: 'Enterprise Dashboard' },
     { icon: Video, path: '/creator-dashboard', label: 'Creator Studio' },
-    { icon: PenLine, path: '/challenge-builder', label: 'Challenge Builder' },
     { icon: Edit, path: '/challenge-editor', label: 'Challenge Editor' },
     { icon: Edit, path: '/content-editor', label: 'Content Editor' },
     { icon: Video, path: '/creator-marketplace', label: 'Creator Market' },
