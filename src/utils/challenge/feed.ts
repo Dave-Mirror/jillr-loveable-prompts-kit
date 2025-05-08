@@ -67,23 +67,17 @@ export const likeContent = async (id: string, liked: boolean): Promise<boolean> 
 export const shareContent = async (id: string): Promise<number> => {
   // In a real app, this would call a sharing API
   
-  // Show sharing options toast
+  // Show sharing options toast - without JSX
   toast({
     title: "Share Options",
     description: "Choose a platform to share this content.",
-    action: (
-      <div className="flex gap-2 mt-2">
-        <button className="bg-blue-500 p-2 rounded-full text-white text-xs">
-          Facebook
-        </button>
-        <button className="bg-pink-500 p-2 rounded-full text-white text-xs">
-          Instagram
-        </button>
-        <button className="bg-gray-700 p-2 rounded-full text-white text-xs">
-          Copy Link
-        </button>
-      </div>
-    ),
+    action: {
+      altText: "Share platform options",
+      children: (
+        // This string will be processed by the toast provider
+        "Please choose a sharing platform from your device options"
+      ),
+    },
   });
   
   // Simulate API response with new share count
