@@ -4,7 +4,8 @@ import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import ChallengeBuilder from '@/components/brand/ChallengeBuilder';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 
 // Imported components
 import EnterpriseHeader from '@/components/enterprise/EnterpriseHeader';
@@ -140,7 +141,17 @@ const EnterpriseDashboard = () => {
         </TabsContent>
 
         <TabsContent value="newCampaign">
-          <ChallengeBuilder />
+          <div className="p-8 text-center bg-card rounded-lg shadow-sm">
+            <h3 className="text-xl font-semibold mb-4">Create New Campaign</h3>
+            <p className="text-muted-foreground mb-6">
+              Use our challenge editor to create a new marketing campaign for your audience.
+            </p>
+            <Link to="/challenge-editor">
+              <Button className="bg-jillr-neonPurple hover:bg-jillr-neonPurple/80">
+                Go to Challenge Editor
+              </Button>
+            </Link>
+          </div>
         </TabsContent>
 
         <TabsContent value="settings">

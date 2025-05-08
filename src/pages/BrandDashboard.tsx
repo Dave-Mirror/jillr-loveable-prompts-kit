@@ -5,7 +5,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { BarChart2, ChevronDown, Settings, Video, Wrench } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import ChallengeBuilder from '@/components/brand/ChallengeBuilder';
 import KpiDashboard from '@/components/brand/KpiDashboard';
 import NotificationCenter from '@/components/brand/NotificationCenter';
 import ApiConnections from '@/components/brand/ApiConnections';
@@ -92,7 +91,17 @@ const BrandDashboard = () => {
         </TabsContent>
         
         <TabsContent value="create">
-          <ChallengeBuilder />
+          <div className="p-8 text-center">
+            <h3 className="text-xl font-semibold mb-4">Create New Challenge</h3>
+            <p className="text-muted-foreground mb-6">
+              Use our challenge editor to create a new marketing challenge for your audience.
+            </p>
+            <Link to="/challenge-editor">
+              <Button className="bg-jillr-neonPurple hover:bg-jillr-neonPurple/80">
+                Go to Challenge Editor
+              </Button>
+            </Link>
+          </div>
         </TabsContent>
         
         <TabsContent value="integrations">
