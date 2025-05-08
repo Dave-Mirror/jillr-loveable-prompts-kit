@@ -70,12 +70,6 @@ export const shareContent = async (id: string): Promise<number> => {
   toast({
     title: "Share Options",
     description: "Choose a platform to share this content.",
-    action: {
-      children: (
-        // This string will be processed by the toast provider
-        "Please choose a sharing platform from your device options"
-      ),
-    },
   });
   
   // Simulate API response with new share count
