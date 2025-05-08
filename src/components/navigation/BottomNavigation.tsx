@@ -32,7 +32,7 @@ const BottomNavigation = () => {
     { icon: Search, path: '/search', label: 'Suche' },
     { icon: BarChart, path: '/dashboard', label: 'Dashboard' },
     { icon: BarChart, path: '/brand-dashboard', label: 'Brand Portal' },
-    { icon: BarChart, path: '/enterprise-dashboard', label: 'Enterprise' },
+    { icon: BarChart, path: '/enterprise-dashboard', label: 'Enterprise Dashboard' }, // Fixed the label here
     { icon: Video, path: '/creator-dashboard', label: 'Creator Studio' },
     { icon: PenLine, path: '/challenge-builder', label: 'Challenge Builder' },
     { icon: Edit, path: '/challenge-editor', label: 'Challenge Editor' },
