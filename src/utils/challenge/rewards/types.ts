@@ -7,13 +7,15 @@ export interface UserReward {
   challengeId?: string;
   challengeName?: string;
   claimed?: boolean;
+  unlocked?: boolean; // Added unlocked property
   claimUrl?: string;
-  claimCode?: string; // Instead of code
-  imageUrl?: string; // Instead of image
+  claimCode?: string;
+  imageUrl?: string;
   details?: string;
-  expiryDate?: string; // Correct property name (not expireDate)
-  code?: string; // For backward compatibility
-  image?: string; // For backward compatibility
+  expiryDate?: string;
+  // For backward compatibility
+  code?: string;
+  image?: string;
 }
 
 export interface RewardAPIResponse {
