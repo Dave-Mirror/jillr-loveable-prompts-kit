@@ -1,16 +1,10 @@
 
 import React from 'react';
-import { 
-  Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle 
-} from '@/components/ui/dialog';
-import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { 
-  Calendar, Copy, Check, ExternalLink, 
-  BadgePercent, ShoppingBag, Ticket, Flame, Gift 
-} from 'lucide-react';
 import { UserReward } from '@/utils/challenge/rewards/types';
-import { useToast } from '@/hooks/use-toast';
+import { Award, Gift, Ticket, Clipboard, Check, ChevronRight, QrCode } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 interface RewardDialogProps {
   selectedReward: UserReward | null;
@@ -27,95 +21,130 @@ const RewardDialog: React.FC<RewardDialogProps> = ({
   onClaimReward,
   onNavigateToReward
 }) => {
-  const { toast } = useToast();
-
   if (!selectedReward) return null;
 
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text);
-    toast({
-      title: "Code kopiert!",
-      description: "Der Code wurde in die Zwischenablage kopiert.",
-    });
+  // Get icon based on reward type
+  const getRewardIcon = () => {
+    switch (selectedReward.type) {
+      case 'voucher':
+        return <Gift className="h-6 w-6 text-jillr-neonPink" />;
+      case 'ticket':
+        return <Ticket className="h-6 w-6 text-jillr-neonBlue" />;
+      case 'badge':
+        return <Award className="h-6 w-6 text-jillr-neonGreen" />;
+      default:
+        return <Award className="h-6 w-6 text-jillr-neonPurple" />;
+    }
+  };
+
+  // Get color class based on reward type
+  const getRewardColorClass = () => {
+    switch (selectedReward.type) {
+      case 'voucher':
+        return 'from-jillr-neonPink/20 to-jillr-neonPurple/20 border-jillr-neonPink/30';
+      case 'ticket':
+        return 'from-jillr-neonBlue/20 to-jillr-neonGreen/20 border-jillr-neonBlue/30';
+      case 'badge':
+        return 'from-jillr-neonGreen/20 to-jillr-neonBlue/20 border-jillr-neonGreen/30';
+      default:
+        return 'from-jillr-neonPurple/20 to-jillr-darkBlue/40 border-jillr-neonPurple/30';
+    }
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            {selectedReward.type === 'coupon' && <BadgePercent className="text-yellow-500" />}
-            {selectedReward.type === 'product' && <ShoppingBag className="text-jillr-neonBlue" />}
-            {selectedReward.type === 'ticket' && <Ticket className="text-jillr-neonPink" />}
-            {selectedReward.type === 'access' && <Flame className="text-orange-500" />}
-            {selectedReward.type === 'voucher' && <Gift className="text-jillr-neonGreen" />}
-            {selectedReward.name}
-          </DialogTitle>
-        </DialogHeader>
-        
-        <div className="relative aspect-video rounded-md overflow-hidden mb-4">
-          <img 
-            src={selectedReward.image} 
-            alt={selectedReward.name} 
-            className="w-full h-full object-cover"
-          />
+      <DialogContent className="sm:max-w-md border-0 p-0 overflow-hidden">
+        <div className={`bg-gradient-to-br ${getRewardColorClass()} border rounded-lg p-0.5`}>
+          <div className="bg-black/90 rounded-md p-5 space-y-5">
+            <DialogHeader className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Badge 
+                  variant="outline" 
+                  className="uppercase text-xs border-jillr-neonPurple/30 bg-jillr-neonPurple/10"
+                >
+                  {selectedReward.type}
+                </Badge>
+                {selectedReward.claimed && (
+                  <Badge className="bg-green-500/80">
+                    <Check className="h-3 w-3 mr-1" />
+                    Claimed
+                  </Badge>
+                )}
+              </div>
+              
+              <div className="flex items-center gap-3">
+                <div className="p-3 bg-jillr-darkBlue/50 rounded-full animate-glow">
+                  {getRewardIcon()}
+                </div>
+                <DialogTitle className="text-xl">{selectedReward.name}</DialogTitle>
+              </div>
+              
+              <DialogDescription className="text-base text-white/80">
+                {selectedReward.description}
+              </DialogDescription>
+            </DialogHeader>
+
+            {selectedReward.imageUrl && (
+              <div className="w-full h-40 rounded-lg overflow-hidden border border-white/10">
+                <img 
+                  src={selectedReward.imageUrl} 
+                  alt={selectedReward.name} 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            )}
+
+            {selectedReward.details && (
+              <div className="p-3 bg-white/5 rounded-lg border border-white/10">
+                <p className="text-sm text-white/70">{selectedReward.details}</p>
+              </div>
+            )}
+
+            <DialogFooter className="flex flex-col sm:flex-row gap-2 sm:justify-between">
+              {!selectedReward.claimed ? (
+                <Button 
+                  onClick={() => onClaimReward(selectedReward)}
+                  className="w-full sm:w-auto bg-gradient-to-r from-jillr-neonPurple to-jillr-neonBlue hover:opacity-90"
+                >
+                  <Gift className="mr-2 h-4 w-4" />
+                  Belohnung beanspruchen
+                </Button>
+              ) : selectedReward.claimUrl ? (
+                <Button 
+                  onClick={() => onNavigateToReward(selectedReward)}
+                  variant="outline" 
+                  className="w-full sm:w-auto border-jillr-neonPurple/30 hover:bg-jillr-neonPurple/20"
+                >
+                  <ChevronRight className="mr-2 h-4 w-4" />
+                  Zum Einlösen
+                </Button>
+              ) : (
+                <Button 
+                  variant="outline" 
+                  className="w-full sm:w-auto border-jillr-neonPurple/30 hover:bg-jillr-neonPurple/20"
+                  onClick={() => onOpenChange(false)}
+                >
+                  <QrCode className="mr-2 h-4 w-4" />
+                  QR-Code anzeigen
+                </Button>
+              )}
+              
+              {selectedReward.claimCode && (
+                <div className="flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-md">
+                  <code className="text-jillr-neonGreen text-sm">{selectedReward.claimCode}</code>
+                  <Button 
+                    size="icon" 
+                    variant="ghost" 
+                    className="h-6 w-6"
+                    onClick={() => navigator.clipboard.writeText(selectedReward.claimCode || '')}
+                  >
+                    <Clipboard className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
+              )}
+            </DialogFooter>
+          </div>
         </div>
-        
-        <div className="space-y-4">
-          <p>{selectedReward.description}</p>
-          
-          {selectedReward.challengeName && (
-            <div className="flex items-center gap-2 text-sm">
-              <span className="text-muted-foreground">Challenge:</span>
-              <Badge variant="outline">{selectedReward.challengeName}</Badge>
-            </div>
-          )}
-          
-          {selectedReward.code && (
-            <div className="bg-muted p-3 rounded-md flex items-center justify-between">
-              <code className="font-mono text-base">{selectedReward.code}</code>
-              <Button 
-                size="sm" 
-                variant="ghost" 
-                onClick={() => copyToClipboard(selectedReward.code!)}
-              >
-                <Copy size={16} />
-              </Button>
-            </div>
-          )}
-          
-          {selectedReward.expireDate && (
-            <div className="flex items-center gap-2 text-sm">
-              <Calendar size={14} className="text-muted-foreground" />
-              <span>Gültig bis {new Date(selectedReward.expireDate).toLocaleDateString()}</span>
-            </div>
-          )}
-        </div>
-        
-        <DialogFooter className="flex sm:justify-between">
-          <Button 
-            variant="outline" 
-            onClick={() => onOpenChange(false)}
-          >
-            Schließen
-          </Button>
-          
-          {!selectedReward.claimed ? (
-            <Button 
-              className="bg-jillr-neonGreen hover:bg-jillr-neonGreen/80"
-              onClick={() => onClaimReward(selectedReward)}
-            >
-              <Check size={16} className="mr-2" /> Belohnung beanspruchen
-            </Button>
-          ) : (
-            <Button
-              className="bg-jillr-neonBlue hover:bg-jillr-neonBlue/80"
-              onClick={() => onNavigateToReward(selectedReward)}
-            >
-              <ExternalLink size={16} className="mr-2" /> Belohnung einlösen
-            </Button>
-          )}
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

@@ -1,53 +1,95 @@
 
-// Mock data for available rewards - would come from database in real app
+import { UserReward } from '@/utils/challenge/rewards/types';
+
 export const availableRewards = [
   {
-    id: '1',
-    name: '20% Off Coupon',
-    description: 'Get 20% off your next purchase at Nike',
-    requiredLevel: 2,
-    isUnlocked: false, // This will be calculated based on user level
+    id: 'reward-1',
+    name: 'Summer Fashion Drop',
+    description: 'Exklusiver Zugang zum ASOS Summer Fashion Drop mit 30% Rabatt',
+    requiredLevel: 5,
+    isUnlocked: true,
     isClaimed: false,
     type: 'coupon'
   },
   {
-    id: '2',
-    name: 'Early Product Access',
-    description: 'Get early access to the latest product releases',
-    requiredLevel: 5,
+    id: 'reward-2',
+    name: 'VIP Club Access',
+    description: 'Freier Eintritt für dich und einen Freund in Top Clubs deiner Stadt',
+    requiredLevel: 10,
     isUnlocked: false,
     isClaimed: false,
     type: 'access'
   },
   {
-    id: '3',
-    name: 'VIP Event Ticket',
-    description: 'Exclusive access to our next in-store event',
-    requiredLevel: 10,
+    id: 'reward-3',
+    name: 'Festival Ticket',
+    description: 'Ein Ticket für das Urban Music Festival im Sommer',
+    requiredLevel: 15,
     isUnlocked: false,
     isClaimed: false,
     type: 'ticket'
+  },
+  {
+    id: 'reward-4',
+    name: 'Creator Workshop',
+    description: 'Exklusiver Zugang zum Content Creator Workshop',
+    requiredLevel: 8,
+    isUnlocked: false,
+    isClaimed: false,
+    type: 'ticket'
+  },
+  {
+    id: 'reward-5',
+    name: '50% Beauty Rabatt',
+    description: 'Einmaliger 50% Rabatt auf alle Beauty-Produkte bei Sephora',
+    requiredLevel: 3,
+    isUnlocked: true,
+    isClaimed: false,
+    type: 'coupon'
+  },
+  {
+    id: 'reward-6',
+    name: 'Mystery Box',
+    description: 'Eine exklusive Mystery Box mit Fashion und Beauty Produkten',
+    requiredLevel: 12,
+    isUnlocked: false,
+    isClaimed: false,
+    type: 'coupon'
   }
 ];
 
 export const claimedRewards = [
   {
-    id: '4',
-    name: 'Free Shipping Coupon',
-    description: 'Free shipping on your next order',
-    claimedDate: '2023-08-15',
-    expireDate: '2023-12-31',
-    code: 'FREESHIP2023',
-    type: 'coupon'
+    id: 'claimed-1',
+    name: 'Content Creator Badge',
+    description: 'Offizielles Jillr Content Creator Badge für dein Profil',
+    type: 'badge',
+    date: '01.05.2023'
+  },
+  {
+    id: 'claimed-2',
+    name: 'Sneaker Rabatt 20%',
+    description: '20% Rabatt auf deine nächste Sneaker-Bestellung',
+    type: 'voucher',
+    date: '15.04.2023'
   }
 ];
 
-// Mock data for streaks
 export const streakData = {
   currentStreak: 5,
-  bestStreak: 12,
-  nextReward: {
-    days: 7,
-    reward: '50 Coins'
-  }
+  maxStreak: 12,
+  days: [
+    { date: 'Mo', completed: true },
+    { date: 'Di', completed: true },
+    { date: 'Mi', completed: true },
+    { date: 'Do', completed: true },
+    { date: 'Fr', completed: true },
+    { date: 'Sa', completed: false },
+    { date: 'So', completed: false }
+  ]
 };
+
+// Types required for the rewards system
+export interface ChallengeReward extends UserReward {
+  challengeName: string;
+}

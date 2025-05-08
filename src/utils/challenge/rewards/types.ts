@@ -1,17 +1,29 @@
 
-import { Challenge, ChallengeType } from '@/components/challenge/types';
-
 export interface UserReward {
   id: string;
   name: string;
   description: string;
-  type: 'coupon' | 'product' | 'ticket' | 'access' | 'voucher';
-  image: string;
-  code?: string;
-  expireDate?: string;
+  type: string; // badge, voucher, ticket, product, etc.
   challengeId?: string;
   challengeName?: string;
-  unlocked: boolean;
-  claimed: boolean;
+  claimed?: boolean;
   claimUrl?: string;
+  claimCode?: string;
+  imageUrl?: string;
+  details?: string;
+  expiryDate?: string;
+}
+
+export interface RewardAPIResponse {
+  rewards: UserReward[];
+}
+
+export interface ClaimRewardParams {
+  userId: string;
+  rewardId: string;
+}
+
+export interface ClaimRewardResponse {
+  success: boolean;
+  reward: UserReward;
 }

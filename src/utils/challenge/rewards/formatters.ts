@@ -1,39 +1,51 @@
 
-import { Challenge } from '@/components/challenge/types';
 import { UserReward } from './types';
-import { getRewardImage, getClaimUrl } from './assetUtils';
 
-// Format reward data from challenges
-export const formatChallengeReward = (
-  challenge: Challenge, 
-  reward: any, 
-  claimed: boolean = false
-): UserReward => {
-  const type = reward.type as UserReward['type'];
-  const rewardId = `${challenge.id}-${type}-${Math.floor(Math.random() * 10000)}`;
+// Function to group rewards by challenge name
+export const groupRewardsByType = (rewards: UserReward[]): Record<string, UserReward[]> => {
+  const grouped: Record<string, UserReward[]> = {};
   
-  return {
-    id: rewardId,
-    name: `${challenge.title} - ${type.charAt(0).toUpperCase() + type.slice(1)}`,
-    description: reward.description,
-    type,
-    image: getRewardImage(challenge.type || 'default', type),
-    code: `${type.substr(0, 3).toUpperCase()}${Math.floor(10000 + Math.random() * 90000)}`,
-    challengeId: challenge.id,
-    challengeName: challenge.title,
-    unlocked: true,
-    claimed,
-    claimUrl: getClaimUrl(type),
-    expireDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] // 90 days from now
-  };
+  rewards.forEach(reward => {
+    const challengeName = reward.challengeName || 'Other Rewards';
+    
+    if (!grouped[challengeName]) {
+      grouped[challengeName] = [];
+    }
+    
+    grouped[challengeName].push(reward);
+  });
+  
+  return grouped;
 };
 
-// Group rewards by type
-export const groupRewardsByType = (rewards: UserReward[]): Record<string, UserReward[]> => {
-  return rewards.reduce((acc, reward) => {
-    const type = reward.type;
-    if (!acc[type]) acc[type] = [];
-    acc[type].push(reward);
-    return acc;
-  }, {} as Record<string, UserReward[]>);
+// Format reward type for display
+export const formatRewardType = (type: string): string => {
+  switch (type) {
+    case 'voucher':
+      return 'Gutschein';
+    case 'ticket':
+      return 'Ticket';
+    case 'badge':
+      return 'Abzeichen';
+    case 'product':
+      return 'Produkt';
+    default:
+      return type;
+  }
+};
+
+// Get color for reward type
+export const getRewardTypeColor = (type: string): string => {
+  switch (type) {
+    case 'voucher':
+      return 'text-jillr-neonPink';
+    case 'ticket':
+      return 'text-jillr-neonBlue';
+    case 'badge':
+      return 'text-jillr-neonGreen';
+    case 'product':
+      return 'text-yellow-500';
+    default:
+      return 'text-jillr-neonPurple';
+  }
 };

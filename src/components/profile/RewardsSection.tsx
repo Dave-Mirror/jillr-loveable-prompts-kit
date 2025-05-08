@@ -1,13 +1,12 @@
 
 import React from 'react';
-import { RewardsProvider } from './rewards/RewardsContext';
+import { useNavigate } from 'react-router-dom';
 import LevelProgress from './rewards/LevelProgress';
 import RewardTabs from './rewards/RewardTabs';
 import RewardStats from './rewards/RewardStats';
 import RewardDialog from './rewards/RewardDialog';
 import { availableRewards, claimedRewards, streakData } from './rewards/mockRewardData';
 import { useRewards } from './rewards/RewardsContext';
-import { useNavigate } from 'react-router-dom';
 
 // Inner component that uses the RewardsContext
 const RewardsSectionContent: React.FC = () => {
@@ -53,17 +52,14 @@ const RewardsSectionContent: React.FC = () => {
   );
 };
 
-// Main wrapper component that provides the RewardsContext
+// Main wrapper component that doesn't require RewardsContext anymore
+// as the context is now provided in the RewardsTab component
 interface RewardsSectionProps {
   userProfile: any;
 }
 
 const RewardsSection: React.FC<RewardsSectionProps> = ({ userProfile }) => {
-  return (
-    <RewardsProvider userProfile={userProfile}>
-      <RewardsSectionContent />
-    </RewardsProvider>
-  );
+  return <RewardsSectionContent />;
 };
 
 export default RewardsSection;
