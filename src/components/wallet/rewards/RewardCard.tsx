@@ -16,7 +16,7 @@ const RewardCard: React.FC<RewardCardProps> = ({ reward, onOpenRewardDetails }) 
     <Card key={reward.id} className="overflow-hidden h-full flex flex-col">
       <div className="relative aspect-video">
         <img 
-          src={reward.image} 
+          src={reward.imageUrl || reward.image} 
           alt={reward.name} 
           className="w-full h-full object-cover"
         />

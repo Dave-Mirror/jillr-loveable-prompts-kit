@@ -87,7 +87,7 @@ const RewardDialog: React.FC<RewardDialogProps> = ({
               Diesen QR-Code im Geschäft scannen lassen, um deine Belohnung einzulösen.
             </p>
             <p className="text-sm font-medium text-center mb-4">
-              Code: {reward.code}
+              Code: {reward.claimCode || reward.code}
             </p>
             <Button 
               variant="outline" 
@@ -101,7 +101,7 @@ const RewardDialog: React.FC<RewardDialogProps> = ({
           <>
             <div className="relative aspect-video rounded-md overflow-hidden mb-4">
               <img 
-                src={reward.image} 
+                src={reward.imageUrl || reward.image} 
                 alt={reward.name} 
                 className="w-full h-full object-cover"
               />
@@ -117,23 +117,23 @@ const RewardDialog: React.FC<RewardDialogProps> = ({
                 </div>
               )}
               
-              {reward.code && (
+              {(reward.claimCode || reward.code) && (
                 <div className="bg-muted p-3 rounded-md flex items-center justify-between">
-                  <code className="font-mono text-base">{reward.code}</code>
+                  <code className="font-mono text-base">{reward.claimCode || reward.code}</code>
                   <Button 
                     size="sm" 
                     variant="ghost" 
-                    onClick={() => copyToClipboard(reward.code!)}
+                    onClick={() => copyToClipboard(reward.claimCode || reward.code || '')}
                   >
                     <Copy size={16} />
                   </Button>
                 </div>
               )}
               
-              {reward.expireDate && (
+              {reward.expiryDate && (
                 <div className="flex items-center gap-2 text-sm">
                   <Calendar size={14} className="text-muted-foreground" />
-                  <span>Gültig bis {new Date(reward.expireDate).toLocaleDateString('de-DE')}</span>
+                  <span>Gültig bis {new Date(reward.expiryDate).toLocaleDateString('de-DE')}</span>
                 </div>
               )}
               

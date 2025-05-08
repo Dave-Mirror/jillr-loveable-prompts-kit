@@ -8,10 +8,12 @@ export interface UserReward {
   challengeName?: string;
   claimed?: boolean;
   claimUrl?: string;
-  claimCode?: string;
-  imageUrl?: string;
+  claimCode?: string; // Instead of code
+  imageUrl?: string; // Instead of image
   details?: string;
-  expiryDate?: string;
+  expiryDate?: string; // Correct property name (not expireDate)
+  code?: string; // For backward compatibility
+  image?: string; // For backward compatibility
 }
 
 export interface RewardAPIResponse {
