@@ -7,6 +7,7 @@ import ChallengeFilter from '@/components/explore/ChallengeFilter';
 import { getChallenges } from '@/utils/challenge/rewards/api';
 import { Challenge, IndustryType, ChallengeType } from '@/utils/challenge/rewards/types';
 import { useToast } from '@/hooks/use-toast';
+import { Sparkles, Filter, Compass } from 'lucide-react';
 
 const Explore = () => {
   // State für Filter und Challenges
@@ -15,6 +16,7 @@ const Explore = () => {
   const [sortBy, setSortBy] = useState<'latest' | 'rewards' | 'endDate'>('latest');
   const [challenges, setChallenges] = useState<Challenge[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [showFilters, setShowFilters] = useState(false);
   const { toast } = useToast();
 
   // Laden der Challenges beim ersten Rendering und bei Filter-Änderungen
@@ -73,25 +75,64 @@ const Explore = () => {
       <div className="container mx-auto max-w-6xl pb-20">
         <ExplorePromoBanner />
         
-        <div className="mt-6">
-          <h1 className="text-2xl font-bold mb-4">Entdecke Challenges</h1>
+        <div className="mt-6 space-y-6">
+          <div className="flex items-center justify-between">
+            <h1 className="flex items-center gap-2 text-2xl md:text-3xl font-bold mb-0">
+              <Compass className="h-7 w-7 text-jillr-neonPurple" /> 
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">
+                Entdecke Challenges
+              </span>
+            </h1>
+
+            <button 
+              onClick={() => setShowFilters(!showFilters)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-jillr-border bg-jillr-darkAccent hover:bg-jillr-darkLight text-sm font-medium transition-all"
+            >
+              <Filter className="h-4 w-4" />
+              Filter {showFilters ? 'ausblenden' : 'anzeigen'}
+            </button>
+          </div>
           
-          <ChallengeFilter
-            industry={industry}
-            challengeType={challengeType}
-            sortBy={sortBy}
-            setIndustry={setIndustry}
-            setChallengeType={setChallengeType}
-            setSortBy={setSortBy}
-          />
+          {showFilters && (
+            <ChallengeFilter
+              industry={industry}
+              challengeType={challengeType}
+              sortBy={sortBy}
+              setIndustry={setIndustry}
+              setChallengeType={setChallengeType}
+              setSortBy={setSortBy}
+            />
+          )}
           
           {isLoading ? (
-            <div className="text-center py-12">
-              <div className="w-12 h-12 border-4 border-jillr-neonPurple border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-              <p className="text-muted-foreground">Challenges werden geladen...</p>
+            <div className="text-center py-16">
+              <div className="w-16 h-16 border-4 border-jillr-neonPurple border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+              <p className="text-gray-400 text-lg">Challenges werden geladen...</p>
             </div>
           ) : (
-            <ChallengeGrid challenges={formattedChallenges} />
+            <>
+              {formattedChallenges.length > 0 ? (
+                <ChallengeGrid challenges={formattedChallenges} />
+              ) : (
+                <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
+                  <Sparkles className="h-16 w-16 text-jillr-neonPurple mb-4 opacity-50" />
+                  <h3 className="text-xl md:text-2xl font-bold mb-2">Keine Challenges gefunden</h3>
+                  <p className="text-gray-400 mb-6 max-w-lg">
+                    Mit deinen aktuellen Filtereinstellungen wurden keine Challenges gefunden. Versuche andere Filter oder schau später wieder vorbei.
+                  </p>
+                  <button 
+                    onClick={() => {
+                      setIndustry('all');
+                      setChallengeType('all');
+                      setSortBy('latest');
+                    }}
+                    className="px-4 py-2 bg-jillr-neonPurple/20 hover:bg-jillr-neonPurple/30 text-jillr-neonPurple border border-jillr-neonPurple/30 rounded-lg transition-all"
+                  >
+                    Filter zurücksetzen
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>

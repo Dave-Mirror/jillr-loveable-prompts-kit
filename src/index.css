@@ -1,39 +1,41 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 0%; /* Pure Black */
+    --background: 230 22% 13%; /* Dunkles Blauschwarz */
     --foreground: 210 40% 98%;
 
-    --card: 0 0% 0%;
+    --card: 225 24% 18%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 0 0% 0%;
+    --popover: 225 24% 15%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 250 80% 74%;
+    --primary: 250 80% 74%; /* Neon Lila */
     --primary-foreground: 0 0% 0%;
 
-    --secondary: 210 40% 10%;
+    --secondary: 228 19% 23%; /* Dunklerer Blauton */
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 217.2 32.6% 7.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 228 20% 20%;
+    --muted-foreground: 215 20% 75%;
 
-    --accent: 217.2 32.6% 7.5%;
+    --accent: 195 100% 50%; /* Neon Blau */
     --accent-foreground: 210 40% 98%;
 
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 62.8% 50.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 10%;
-    --input: 217.2 32.6% 10%;
-    --ring: 224.3 76.3% 48%;
+    --border: 228 16% 24%;
+    --input: 228 16% 24%;
+    --ring: 250 80% 74%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
   }
 }
 
@@ -43,13 +45,34 @@
   }
 
   body {
-    @apply bg-black text-white;
+    @apply bg-jillr-dark text-white font-sans;
+    background-image: 
+      radial-gradient(circle at 20% 20%, rgba(155, 135, 245, 0.03) 0%, transparent 20%),
+      radial-gradient(circle at 80% 80%, rgba(10, 239, 255, 0.03) 0%, transparent 20%),
+      radial-gradient(circle at 50% 50%, rgba(57, 255, 20, 0.01) 0%, transparent 50%);
+    background-attachment: fixed;
   }
 
-  /* Scrollbar for dark theme */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading font-bold;
+  }
+
+  h1 {
+    @apply text-3xl md:text-4xl lg:text-5xl;
+  }
+
+  h2 {
+    @apply text-2xl md:text-3xl;
+  }
+
+  h3 {
+    @apply text-xl md:text-2xl;
+  }
+
+  /* Scrollbar für Dark Theme */
   * {
     scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+    scrollbar-color: rgba(155, 135, 245, 0.4) rgba(26, 31, 44, 0.8);
   }
 
   *::-webkit-scrollbar {
@@ -57,29 +80,85 @@
   }
 
   *::-webkit-scrollbar-track {
-    background: transparent;
+    @apply bg-jillr-darkBlue/50;
   }
 
   *::-webkit-scrollbar-thumb {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 20px;
+    @apply bg-jillr-neonPurple/40 rounded-full hover:bg-jillr-neonPurple/60 transition-colors;
+  }
+
+  input, textarea, select {
+    @apply bg-jillr-darkAccent border-jillr-border focus:border-jillr-neonPurple focus:ring-1 focus:ring-jillr-neonPurple/50 transition-all;
+  }
+
+  button {
+    @apply transition-all duration-300;
+  }
+}
+
+@layer components {
+  .glassmorphism {
+    @apply bg-jillr-glass backdrop-blur-md border border-jillr-border rounded-lg;
+  }
+  
+  .neon-card {
+    @apply bg-jillr-darkBlue/50 rounded-lg border border-jillr-neonPurple/30 p-0.5 relative overflow-hidden transition-all duration-300 hover:border-jillr-neonPurple/50 hover:shadow-neon;
+  }
+
+  .neon-card-content {
+    @apply bg-jillr-dark/90 rounded-md p-4 h-full;
+  }
+
+  .neon-text {
+    @apply text-transparent bg-clip-text bg-gradient-to-r from-jillr-neonPurple to-jillr-neonBlue;
+  }
+
+  .game-card {
+    @apply rounded-xl border border-jillr-border bg-jillr-darkAccent hover:border-jillr-neonBlue/50 hover:shadow-neonBlue transition-all duration-300;
+  }
+
+  .badge-xp {
+    @apply bg-gradient-to-r from-jillr-neonPurple to-jillr-neonPurpleDark text-white px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1;
+  }
+  
+  .badge-coin {
+    @apply bg-gradient-to-r from-jillr-neonGreen to-jillr-neonGreenDark text-black px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1;
+  }
+
+  .badge-reward {
+    @apply bg-gradient-to-r from-jillr-neonBlue to-jillr-neonBlueDark text-white px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1;
+  }
+  
+  .badge-level {
+    @apply bg-gradient-to-r from-jillr-neonPink to-jillr-neonPinkDark text-white px-2 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-neonPink;
+  }
+
+  .level-progress {
+    @apply h-2 rounded-full bg-jillr-darkAccent overflow-hidden;
+  }
+  
+  .level-progress-bar {
+    @apply h-full bg-gradient-to-r from-jillr-neonPurple via-jillr-neonBlue to-jillr-neonPink rounded-full transition-all duration-300;
+  }
+
+  .challenge-card {
+    @apply bg-challenge-card border border-jillr-border hover:border-jillr-neonPurple/50 rounded-lg overflow-hidden shadow-lg transition-all duration-300 hover:shadow-neon;
+  }
+  
+  .tab-button {
+    @apply px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300;
+  }
+  
+  .tab-button-active {
+    @apply bg-jillr-neonPurple/20 text-jillr-neonPurple border border-jillr-neonPurple/30;
+  }
+  
+  .tab-button-inactive {
+    @apply text-gray-400 hover:bg-jillr-darkAccent hover:text-white;
   }
 }
 
 @layer utilities {
-  .spotify-black-bg {
-    @apply bg-black text-white;
-  }
-
-  .spotify-card {
-    @apply bg-[rgba(30,30,30,0.8)] rounded-lg backdrop-blur-md;
-  }
-
-  .spotify-hover {
-    @apply transition-colors duration-200 hover:bg-[rgba(40,40,40,0.9)];
-  }
-
-  /* Safe area insets for mobile devices */
   .safe-area-top {
     padding-top: env(safe-area-inset-top, 0);
   }
@@ -96,7 +175,6 @@
     padding-right: env(safe-area-inset-right, 0);
   }
 
-  /* Animation utilities */
   .animate-fade-in {
     animation: fadeIn 0.3s ease-in-out;
   }
@@ -125,19 +203,19 @@
     100% { transform: translateY(0px); }
   }
 
-  .neon-card {
-    @apply bg-jillr-darkBlue/50 rounded-lg border border-jillr-neonPurple/30 p-0.5 relative overflow-hidden transition-all duration-300;
-  }
-
-  .neon-card-content {
-    @apply bg-jillr-dark/90 rounded-md p-3 h-full;
-  }
-
-  .neon-text {
-    @apply text-transparent bg-clip-text bg-gradient-to-r from-jillr-neonPurple to-jillr-neonBlue;
-  }
-
   .onboarding-gradient {
     @apply bg-gradient-to-br from-jillr-neonPurple/10 to-jillr-neonBlue/10;
+  }
+
+  .text-shadow {
+    text-shadow: 0 0 10px rgba(155, 135, 245, 0.7);
+  }
+
+  .text-shadow-sm {
+    text-shadow: 0 0 5px rgba(155, 135, 245, 0.5);
+  }
+
+  .mask-fade-bottom {
+    mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
   }
 }
