@@ -1,4 +1,3 @@
-
 import { toast } from '@/hooks/use-toast';
 
 // Types
@@ -72,7 +71,6 @@ export const shareContent = async (id: string): Promise<number> => {
     title: "Share Options",
     description: "Choose a platform to share this content.",
     action: {
-      altText: "Share platform options",
       children: (
         // This string will be processed by the toast provider
         "Please choose a sharing platform from your device options"
