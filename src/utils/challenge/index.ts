@@ -5,3 +5,4 @@ export * from './formatting';
 export * from './rewards';
 export * from './coachTips';
 export * from './fetching';
+export * from './feed';

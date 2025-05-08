@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
-  Home, BarChart, Zap, Trophy, Map, ShoppingBag, 
+  Home, Compass, Zap, Trophy, Map, ShoppingBag, 
   Wallet, Video, LogOut, Menu, Coins, Award, Edit, PenLine,
   User, Settings, Bell, Heart, Star
 } from 'lucide-react';
@@ -23,6 +23,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ user, userProfile, onSignOut })
     { category: 'Hauptnavigation', items: [
       { name: 'Home', icon: Home, path: '/' },
       { name: 'Explore', icon: Zap, path: '/explore' },
+      { name: 'Feed', icon: Compass, path: '/challenge-feed' },
       { name: 'Live Map', icon: Map, path: '/livemap' },
       { name: 'Shop', icon: ShoppingBag, path: '/shop' },
       { name: 'Leaderboard', icon: Trophy, path: '/leaderboard' }
@@ -30,7 +31,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ user, userProfile, onSignOut })
     { category: 'Persönlich', items: [
       { name: 'Wallet', icon: Wallet, path: '/wallet' },
       { name: 'Profil', icon: User, path: '/profile' },
-      { name: 'Dashboard', icon: BarChart, path: '/dashboard' },
+      { name: 'Challenge Explorer', icon: Compass, path: '/dashboard' },
       { name: 'Einstellungen', icon: Settings, path: '/settings' },
       { name: 'Favoriten', icon: Heart, path: '/favorites' }
     ]}
@@ -38,9 +39,8 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ user, userProfile, onSignOut })
 
   // Special items based on user type
   const specialNavItems = [
-    ...(user?.email?.includes('brand') || user?.email?.includes('enterprise') ? [
-      { name: 'Brand Portal', icon: BarChart, path: '/brand-dashboard' },
-      { name: 'Challenge Builder', icon: PenLine, path: '/challenge-builder' },
+    ...(user?.email?.includes('brand') ? [
+      { name: 'Brand Portal', icon: Compass, path: '/brand-dashboard' },
     ] : []),
     ...(user ? [
       { name: 'Content Editor', icon: Edit, path: '/content-editor' },

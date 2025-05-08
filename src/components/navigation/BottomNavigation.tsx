@@ -1,8 +1,9 @@
+
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   Home, Search, Trophy, Wallet, User, Map, Zap, ShoppingBag, MoreHorizontal,
-  BarChart, Video, Settings, Bell, Heart, Star, Edit
+  BarChart, Video, Settings, Bell, Heart, Star, Edit, Compass
 } from 'lucide-react';
 import { 
   Sheet,
@@ -17,7 +18,7 @@ const BottomNavigation = () => {
   const mainNavItems = [
     { icon: Home, path: '/', label: 'Home' },
     { icon: Zap, path: '/explore', label: 'Entdecken' },
-    { icon: ShoppingBag, path: '/shop', label: 'Shop' },
+    { icon: Compass, path: '/challenge-feed', label: 'Feed' },
     { icon: Map, path: '/livemap', label: 'Map' },
     { icon: MoreHorizontal, path: '#more', label: 'Mehr', isMore: true }
   ];
@@ -29,13 +30,13 @@ const BottomNavigation = () => {
     { icon: Wallet, path: '/wallet', label: 'Wallet' },
     { icon: User, path: '/profile', label: 'Profil' },
     { icon: Search, path: '/search', label: 'Suche' },
-    { icon: BarChart, path: '/dashboard', label: 'Dashboard' },
+    { icon: Compass, path: '/dashboard', label: 'Challenge Explorer' },
     { icon: BarChart, path: '/brand-dashboard', label: 'Brand Portal' },
-    { icon: BarChart, path: '/enterprise-dashboard', label: 'Enterprise Dashboard' },
     { icon: Video, path: '/creator-dashboard', label: 'Creator Studio' },
     { icon: Edit, path: '/challenge-editor', label: 'Challenge Editor' },
     { icon: Edit, path: '/content-editor', label: 'Content Editor' },
     { icon: Video, path: '/creator-marketplace', label: 'Creator Market' },
+    { icon: ShoppingBag, path: '/shop', label: 'Shop' },
     { icon: Settings, path: '/settings', label: 'Einstellungen' },
     { icon: Bell, path: '/notifications', label: 'Benachrichtigungen' },
     { icon: Heart, path: '/favorites', label: 'Favoriten' }

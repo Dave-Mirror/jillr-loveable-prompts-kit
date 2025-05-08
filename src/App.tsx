@@ -19,7 +19,6 @@ import Wallet from "./pages/Wallet";
 import CreatorDashboard from "./pages/CreatorDashboard";
 import Shop from "./pages/Shop";
 import BrandDashboard from "./pages/BrandDashboard";
-import EnterpriseDashboard from "./pages/EnterpriseDashboard";
 import Leaderboard from "./pages/Leaderboard";
 import LiveMap from "./pages/LiveMap";
 import Index from "./pages/Index";
@@ -28,6 +27,7 @@ import ChallengeEditor from "./pages/ChallengeEditor";
 import BottomNavigation from "./components/navigation/BottomNavigation";
 import PageTransition from "./components/navigation/PageTransition";
 import CreatorMarketplace from "./pages/CreatorMarketplace";
+import ChallengeFeed from "./pages/ChallengeFeed";
 
 const queryClient = new QueryClient();
 
@@ -60,13 +60,13 @@ const App = () => (
                   <Route path="/wallet" element={<Wallet />} />
                   <Route path="/creator-dashboard" element={<CreatorDashboard />} />
                   <Route path="/brand-dashboard" element={<BrandDashboard />} />
-                  <Route path="/enterprise-dashboard" element={<EnterpriseDashboard />} />
                   <Route path="/leaderboard" element={<Leaderboard />} />
                   <Route path="/shop" element={<Shop />} />
                   <Route path="/livemap" element={<LiveMap />} />
                   <Route path="/content-editor" element={<ContentEditor />} />
                   <Route path="/challenge-editor" element={<ChallengeEditor />} />
                   <Route path="/creator-marketplace" element={<CreatorMarketplace />} />
+                  <Route path="/challenge-feed" element={<ChallengeFeed />} />
                   <Route path="/auth" element={<Auth />} />
                   <Route path="/auth/callback" element={<AuthCallback />} />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
