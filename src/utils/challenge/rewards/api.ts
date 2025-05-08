@@ -1,5 +1,6 @@
 
-import { UserReward } from './types';
+import { UserReward, Challenge, Company, IndustryType } from './types';
+import { mockChallenges, mockCompanies, getAllMockRewards, getChallengesByIndustry, getCompaniesByIndustry } from './mockData';
 
 // Mock function to simulate API call for user rewards
 export const getUserRewards = async (userId: string): Promise<UserReward[]> => {
@@ -70,7 +71,9 @@ export const getUserRewards = async (userId: string): Promise<UserReward[]> => {
       imageUrl: 'https://placehold.co/600x400/9b87f5/FFFFFF/png?text=Photography+Workshop',
       details: 'Dieser Workshop wird von professionellen Fotografen geleitet und findet am 15. Juni statt.',
       claimUrl: '/events/photo-workshop'
-    }
+    },
+    // Füge weitere Rewards aus unseren Mock-Daten hinzu
+    ...getAllMockRewards()
   ];
 };
 
@@ -81,4 +84,39 @@ export const claimReward = async (userId: string, rewardId: string): Promise<boo
   
   // Simulate success (in a real app, this would verify eligibility, etc.)
   return true;
+};
+
+// Neue Funktionen für Challenges und Unternehmen
+
+// Funktion zum Abrufen aller Challenges
+export const getChallenges = async (industry: IndustryType | 'all' = 'all'): Promise<Challenge[]> => {
+  await new Promise(resolve => setTimeout(resolve, 700));
+  return getChallengesByIndustry(industry);
+};
+
+// Funktion zum Abrufen einer einzelnen Challenge
+export const getChallenge = async (id: string): Promise<Challenge | null> => {
+  await new Promise(resolve => setTimeout(resolve, 500));
+  const challenge = mockChallenges.find(c => c.id === id);
+  return challenge || null;
+};
+
+// Funktion zum Abrufen aller Unternehmen/Marken
+export const getCompanies = async (industry: IndustryType | 'all' = 'all'): Promise<Company[]> => {
+  await new Promise(resolve => setTimeout(resolve, 700));
+  return getCompaniesByIndustry(industry);
+};
+
+// Funktion zum Abrufen eines einzelnen Unternehmens
+export const getCompany = async (id: string): Promise<Company | null> => {
+  await new Promise(resolve => setTimeout(resolve, 500));
+  const company = mockCompanies.find(c => c.id === id);
+  return company || null;
+};
+
+// Funktion zum Abrufen der Rewards eines Unternehmens
+export const getCompanyRewards = async (companyId: string): Promise<UserReward[]> => {
+  await new Promise(resolve => setTimeout(resolve, 600));
+  const allRewards = getAllMockRewards();
+  return allRewards.filter(reward => reward.companyId === companyId);
 };
