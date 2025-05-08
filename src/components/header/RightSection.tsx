@@ -7,6 +7,9 @@ import UserStats from './UserStats';
 import MobileMenu from './MobileMenu';
 import GuestMobileMenu from './GuestMobileMenu';
 import AuthButtons from './AuthButtons';
+import { 
+  Home, Zap, Map, Trophy, ShoppingBag, BarChart
+} from 'lucide-react';
 
 interface RightSectionProps {
   user: any;
@@ -17,12 +20,12 @@ interface RightSectionProps {
 const RightSection: React.FC<RightSectionProps> = ({ user, userProfile, signOut }) => {
   // Simplified main nav items for consistency but we won't show them in the UI anymore
   const mainNavItems = [
-    { name: 'Home', path: '/' },
-    { name: 'Explore', path: '/explore' },
-    { name: 'Live Map', path: '/livemap' },
-    { name: 'Leaderboard', path: '/leaderboard' },
-    { name: 'Shop', path: '/shop' },
-    { name: 'Dashboard', path: user?.email?.includes('brand') || user?.email?.includes('enterprise') ? '/enterprise-dashboard' : '/dashboard' }
+    { name: 'Home', icon: Home, path: '/' },
+    { name: 'Explore', icon: Zap, path: '/explore' },
+    { name: 'Live Map', icon: Map, path: '/livemap' },
+    { name: 'Leaderboard', icon: Trophy, path: '/leaderboard' },
+    { name: 'Shop', icon: ShoppingBag, path: '/shop' },
+    { name: 'Dashboard', icon: BarChart, path: user?.email?.includes('brand') || user?.email?.includes('enterprise') ? '/enterprise-dashboard' : '/dashboard' }
   ];
 
   return (
