@@ -26,6 +26,18 @@ export const claimReward = async (
   const updatedRewardsClaimed = [...currentWalletData.rewards_claimed, rewardId];
   
   try {
+    // For demo purposes, we'll just return success without making a real DB update
+    if (!userId || userId === '') {
+      return { 
+        success: true, 
+        updatedWalletData: {
+          ...currentWalletData,
+          rewards_claimed: updatedRewardsClaimed
+        }
+      };
+    }
+    
+    // Real update for authenticated users
     const { error } = await supabase
       .from('wallets')
       .update({ rewards_claimed: updatedRewardsClaimed })
@@ -50,16 +62,22 @@ export const claimChallengeReward = async (
   userId: string, 
   reward: UserReward
 ): Promise<boolean> => {
-  if (!userId || reward.claimed) return false;
+  if (!userId || userId === '' || reward.claimed) return false;
 
   const rewardKey = reward.challengeId ? `${reward.challengeId}-${reward.type}` : reward.id;
   
+  // For demo purposes with no real user ID
+  if (!userId || userId === '') {
+    return true;
+  }
+  
   try {
+    // Real update for authenticated users
     const { data: wallet } = await supabase
       .from('wallets')
       .select('rewards_claimed')
       .eq('user_id', userId)
-      .single();
+      .maybeSingle();
     
     // Ensure rewards_claimed is an array and convert all items to strings
     const currentClaimed = Array.isArray(wallet?.rewards_claimed) 

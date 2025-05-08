@@ -21,22 +21,25 @@ const AuthCallback = () => {
         // Check if wallet exists for the user, if not create one
         const { data: { session } } = await supabase.auth.getSession();
         if (session?.user) {
-          const { data: walletData } = await supabase
-            .from('wallets')
-            .select('*')
-            .eq('user_id', session.user.id)
-            .single();
-            
-          if (!walletData) {
-            // Create wallet for the user
-            await supabase
+          try {
+            // Check if wallet already exists
+            const { data: walletData } = await supabase
               .from('wallets')
-              .insert([
-                { user_id: session.user.id }
-              ]);
+              .select('id')
+              .eq('user_id', session.user.id)
+              .maybeSingle();
+              
+            if (!walletData) {
+              // Create wallet for the user
+              await supabase
+                .from('wallets')
+                .insert([{ user_id: session.user.id }]);
+            }
+            
+            toast.success("Du hast dich erfolgreich angemeldet!");
+          } catch (error) {
+            console.error('Error checking/creating wallet:', error);
           }
-          
-          toast.success("Du hast dich erfolgreich angemeldet!");
         }
         
         // Get the redirect path from the location state or default to "/"

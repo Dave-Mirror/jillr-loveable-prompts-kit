@@ -59,15 +59,27 @@ export function useAuthSubmit() {
       // Handle successful auth
       if (result.data.session) {
         // Create a wallet for the user if they're signing up
-        if (isSignUp) {
-          const { error: walletError } = await supabase
-            .from('wallets')
-            .insert([
-              { user_id: result.data.user?.id }
-            ]);
-          
-          if (walletError) {
-            console.error('Error creating wallet:', walletError);
+        if (isSignUp && result.data.user?.id) {
+          try {
+            // Check if wallet already exists
+            const { data: existingWallet } = await supabase
+              .from('wallets')
+              .select('id')
+              .eq('user_id', result.data.user.id)
+              .maybeSingle();
+            
+            // Only create wallet if it doesn't exist
+            if (!existingWallet) {
+              const { error: walletError } = await supabase
+                .from('wallets')
+                .insert([{ user_id: result.data.user.id }]);
+              
+              if (walletError) {
+                console.error('Error creating wallet:', walletError);
+              }
+            }
+          } catch (err) {
+            console.error('Error checking/creating wallet:', err);
           }
         }
         

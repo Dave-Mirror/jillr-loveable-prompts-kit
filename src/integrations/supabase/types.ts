@@ -9,7 +9,122 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      challenges: {
+        Row: {
+          coin_reward: number | null
+          created_at: string | null
+          description: string | null
+          end_date: string | null
+          hashtags: string[] | null
+          id: string
+          start_date: string | null
+          status: string | null
+          title: string
+          type: string | null
+          updated_at: string | null
+          user_id: string | null
+          xp_reward: number | null
+        }
+        Insert: {
+          coin_reward?: number | null
+          created_at?: string | null
+          description?: string | null
+          end_date?: string | null
+          hashtags?: string[] | null
+          id?: string
+          start_date?: string | null
+          status?: string | null
+          title: string
+          type?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          xp_reward?: number | null
+        }
+        Update: {
+          coin_reward?: number | null
+          created_at?: string | null
+          description?: string | null
+          end_date?: string | null
+          hashtags?: string[] | null
+          id?: string
+          start_date?: string | null
+          status?: string | null
+          title?: string
+          type?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          xp_reward?: number | null
+        }
+        Relationships: []
+      }
+      uploads: {
+        Row: {
+          challenge_id: string | null
+          created_at: string | null
+          id: string
+          likes: number | null
+          updated_at: string | null
+          user_id: string | null
+          views: number | null
+        }
+        Insert: {
+          challenge_id?: string | null
+          created_at?: string | null
+          id?: string
+          likes?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+          views?: number | null
+        }
+        Update: {
+          challenge_id?: string | null
+          created_at?: string | null
+          id?: string
+          likes?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+          views?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "uploads_challenge_id_fkey"
+            columns: ["challenge_id"]
+            isOneToOne: false
+            referencedRelation: "challenges"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      wallets: {
+        Row: {
+          coins_total: number | null
+          created_at: string | null
+          id: string
+          rewards_claimed: string[] | null
+          updated_at: string | null
+          user_id: string
+          xp_total: number | null
+        }
+        Insert: {
+          coins_total?: number | null
+          created_at?: string | null
+          id?: string
+          rewards_claimed?: string[] | null
+          updated_at?: string | null
+          user_id: string
+          xp_total?: number | null
+        }
+        Update: {
+          coins_total?: number | null
+          created_at?: string | null
+          id?: string
+          rewards_claimed?: string[] | null
+          updated_at?: string | null
+          user_id?: string
+          xp_total?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

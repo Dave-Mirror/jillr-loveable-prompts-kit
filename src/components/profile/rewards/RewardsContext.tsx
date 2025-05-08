@@ -6,6 +6,7 @@ import { getUserRewards } from '@/utils/challenge/rewards/api';
 import { groupRewardsByType } from '@/utils/challenge/rewards/formatters';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { Wallet } from '@/utils/challenge/database-types';
 
 interface RewardsContextType {
   userRewards: UserReward[];
@@ -68,12 +69,16 @@ export const RewardsProvider: React.FC<{ userProfile: any; children: React.React
       // Mark reward as claimed
       const rewardKey = reward.challengeId ? `${reward.challengeId}-${reward.type}` : reward.id;
       
-      const { data: wallet } = await supabase
+      // We'll use maybeSingle instead of single to handle null values better
+      const { data: wallet, error: fetchError } = await supabase
         .from('wallets')
         .select('rewards_claimed')
         .eq('user_id', userProfile.id)
-        .single();
+        .maybeSingle();
       
+      if (fetchError) throw fetchError;
+      
+      // Use safe type checking for wallet data
       const currentClaimed = Array.isArray(wallet?.rewards_claimed) ? wallet.rewards_claimed : [];
       const updatedClaimed = [...currentClaimed, rewardKey];
       
