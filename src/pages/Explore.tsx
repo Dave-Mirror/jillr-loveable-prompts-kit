@@ -28,19 +28,29 @@ const Explore = () => {
         
         // Generieren zusätzlicher Demo-Challenges für eine umfangreichere Anzeige
         const demoExtraCount = 15; // Zusätzliche Demo-Challenges
-        const demoChallenges = Array.from({ length: demoExtraCount }, (_, i) => {
+        const demoChallenges: Challenge[] = Array.from({ length: demoExtraCount }, (_, i) => {
           const challengeId = `challenge-${allChallenges.length + i + 1}`;
+          const industryType = ['Fashion', 'Beauty', 'Sport', 'Tech', 'Food'][i % 5] as IndustryType;
+          const challengeType = ['Video', 'Photo & Video', 'Geofencing', 'AR', 'Fashion', 'Sport', 'Beauty'][i % 7] as ChallengeType;
+          
           return {
             id: challengeId,
             title: `jillr Challenge ${i + 1}`,
             description: `Demo Challenge ${i + 1} für die jillr Plattform. Mach mit und gewinne Preise!`,
-            type: ['Video', 'Photo & Video', 'Geofencing', 'AR', 'Fashion', 'Sport', 'Beauty'][i % 7] as ChallengeType,
+            type: challengeType,
             startDate: new Date().toISOString(),
             endDate: new Date(Date.now() + (i % 5 + 1) * 7 * 24 * 60 * 60 * 1000).toISOString(),
             xpReward: (i % 5 + 1) * 100,
             imageUrl: `/placeholder.svg`,
             hashtags: [`jillr`, `challenge${i+1}`, `fun`],
-            industry: ['Fashion', 'Beauty', 'Sport', 'Tech', 'Food'][i % 5] as IndustryType
+            industry: industryType,
+            // Adding the missing properties to match Challenge type
+            brandId: `demo-brand-${i % 5 + 1}`,
+            brandName: `Demo Brand ${i % 5 + 1}`,
+            locationBased: i % 3 === 0, // Every third challenge is location-based
+            status: 'active',
+            rewards: [],
+            coinReward: (i % 3 + 1) * 50
           };
         });
         
