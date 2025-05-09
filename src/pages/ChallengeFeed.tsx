@@ -15,7 +15,13 @@ const ChallengeFeed = () => {
   const { feedItems, setFeedItems, loading } = useFeed();
   const { activeIndex, feedRef } = useVideoPlayback();
   const { showAchievement, toggleAchievement } = useAchievementManager();
-  const { filterType, setFilterType, sortBy, setSortBy, filteredItems } = useFilteredFeed(feedItems);
+  const { 
+    filterType, 
+    sortBy, 
+    filteredItems, 
+    handleFilterChange, 
+    handleSortChange 
+  } = useFilteredFeed(feedItems);
   
   const {
     handleLike,
@@ -24,15 +30,6 @@ const ChallengeFeed = () => {
     handleSupportCause,
     handleJoinChallenge,
   } = useFeedInteractions(feedItems, setFeedItems);
-
-  // Type-safe handlers for filter bar
-  const handleFilterChange = (type: string) => {
-    setFilterType(type);
-  };
-  
-  const handleSortChange = (sort: string) => {
-    setSortBy(sort);
-  };
 
   if (loading) {
     return <LoadingSpinner />;

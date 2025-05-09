@@ -24,6 +24,12 @@ import { getCoachTip } from '@/utils/challenge/coachTips';
 import { ChallengeType, Submission } from '@/components/challenge/types';
 import { shareChallenge } from '@/utils/challenge';
 
+interface ChallengeReward {
+  type: string;
+  amount: number;
+  icon: string;
+}
+
 const ChallengeDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { challenge, isLoading } = useChallengeData(id);
@@ -31,7 +37,7 @@ const ChallengeDetail: React.FC = () => {
   const [verifiedSubmissions, setVerifiedSubmissions] = useState<Submission[]>([]);
   const [coachTip, setCoachTip] = useState<string>('');
   const [isLoadingTip, setIsLoadingTip] = useState<boolean>(false);
-  const { isDialogOpen, setIsDialogOpen } = useDataPermissionPrompt(id || '', challenge?.title || '');
+  const { isDialogOpen, setIsDialogOpen, handleConfirmPermission, xpReward } = useDataPermissionPrompt(id || '', challenge?.title || '');
   const [showDataPermissionPrompt, setShowDataPermissionPrompt] = useState(false);
   
   useEffect(() => {
@@ -216,8 +222,8 @@ const ChallengeDetail: React.FC = () => {
           
           <RewardsCard 
             challengeRewards={[
-              { type: 'xp', amount: challenge.xp_reward || 100, icon: '⭐' },
-              { type: 'coins', amount: challenge.coin_reward || 50, icon: '🪙' },
+              { type: 'xp', value: challenge.xp_reward || 100, icon: '⭐' },
+              { type: 'coins', value: challenge.coin_reward || 50, icon: '🪙' },
               // More rewards...
             ]} 
           />
@@ -246,11 +252,10 @@ const ChallengeDetail: React.FC = () => {
       <DataPermissionPrompt 
         open={showDataPermissionPrompt} 
         onOpenChange={setShowDataPermissionPrompt}
-        challengeId={id || ''}
         dataType="location"
         xpReward={100}
         campaignName={challenge.title}
-        onConfirm={async () => true}
+        onConfirm={async () => handleConfirmPermission(false)}
       />
     </div>
   );

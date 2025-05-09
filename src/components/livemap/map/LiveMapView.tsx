@@ -100,7 +100,7 @@ const LiveMapView = () => {
       <ItemDetailsDialog 
         selectedItem={selectedItem} 
         onClose={handleCloseDialog}
-        onAction={handleJoinChallenge}
+        onAction={selectedItem?.challengeId ? () => handleJoinChallenge(selectedItem.challengeId!) : () => {}}
       />
     </div>
   );

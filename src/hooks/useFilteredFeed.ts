@@ -2,9 +2,12 @@
 import { useState, useMemo } from 'react';
 import { FeedItem } from '@/utils/challenge/feed';
 
+export type FilterType = 'all' | 'video' | 'photo' | 'ar' | 'geofencing';
+export type SortType = 'latest' | 'popular' | 'trending';
+
 export const useFilteredFeed = (feedItems: FeedItem[]) => {
-  const [filterType, setFilterType] = useState('all');
-  const [sortBy, setSortBy] = useState('latest');
+  const [filterType, setFilterType] = useState<FilterType>('all');
+  const [sortBy, setSortBy] = useState<SortType>('latest');
 
   // Apply filters and sorting to feed items
   const filteredItems = useMemo(() => {
@@ -41,11 +44,22 @@ export const useFilteredFeed = (feedItems: FeedItem[]) => {
     });
   }, [feedItems, filterType, sortBy]);
 
+  // Type-safe handler functions
+  const handleFilterChange = (type: string) => {
+    setFilterType(type as FilterType);
+  };
+  
+  const handleSortChange = (sort: string) => {
+    setSortBy(sort as SortType);
+  };
+
   return {
     filterType,
     setFilterType,
     sortBy,
     setSortBy,
     filteredItems,
+    handleFilterChange,
+    handleSortChange
   };
 };

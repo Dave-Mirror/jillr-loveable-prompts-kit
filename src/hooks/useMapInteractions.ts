@@ -7,7 +7,7 @@ export function useMapInteractions() {
   const [selectedMarker, setSelectedMarker] = useState<LiveMapMarker | null>(null);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<MapElement | null>(null);
-  const [infoWindow, setInfoWindow] = useState<{ position: google.maps.LatLng, title: string, description: string } | null>(null);
+  const [infoWindow, setInfoWindow] = useState<{ position: google.maps.LatLng, title: string, description: string, id: string, type: string } | null>(null);
   const mapRef = useRef<google.maps.Map | null>(null);
   const mapCenter = { lat: 52.520008, lng: 13.404954 }; // Berlin center
 
@@ -24,7 +24,9 @@ export function useMapInteractions() {
     setInfoWindow({
       position: new google.maps.LatLng(marker.position.lat, marker.position.lng),
       title: marker.title,
-      description: marker.description
+      description: marker.description,
+      id: marker.id,
+      type: marker.type
     });
   }, []);
 
@@ -32,11 +34,24 @@ export function useMapInteractions() {
     setInfoWindow(null);
   }, []);
 
-  const handleItemClick = useCallback((item: MapElement) => {
-    setSelectedItem(item);
-    setIsDetailsOpen(true);
-    if (infoWindow) {
-      setInfoWindow(null);
+  const handleItemClick = useCallback((item: any) => {
+    // Ensure item has all required properties for a MapElement
+    if (item && item.title && item.description) {
+      const mapElement: MapElement = {
+        id: item.id || `info-${Date.now()}`,
+        type: item.type || 'challenge',
+        title: item.title,
+        description: item.description,
+        position: {
+          x: 0, // Default values
+          y: 0
+        }
+      };
+      setSelectedItem(mapElement);
+      setIsDetailsOpen(true);
+      if (infoWindow) {
+        setInfoWindow(null);
+      }
     }
   }, [infoWindow]);
 

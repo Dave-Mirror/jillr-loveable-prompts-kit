@@ -52,9 +52,17 @@ export interface MapFilters {
   rewardFilters: string[];
 }
 
-// Add LiveMapMarker interface
-export interface LiveMapMarker extends MapElement {
-  position: Coordinates;
+// Updated LiveMapMarker interface that is compatible with MapElement
+export interface LiveMapMarker {
+  id: string;
+  type: 'easteregg' | 'drop' | 'challenge' | 'teamevent';
+  title: string;
+  description: string;
+  position: Coordinates; // Using Coordinates instead of {x,y}
+  coordinates?: Coordinates;
+  reward?: string;
+  expiresIn?: string;
+  challengeId?: string;
 }
 
 export interface LiveMapContextProps {
