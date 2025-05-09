@@ -11,6 +11,7 @@ interface PageContainerProps {
   enableSwipe?: boolean;
   previousPage?: string;
   nextPage?: string;
+  className?: string; // Added className prop
 }
 
 const routeOrder = ['/', '/explore', '/leaderboard', '/wallet', '/profile'];
@@ -19,7 +20,8 @@ const PageContainer: React.FC<PageContainerProps> = ({
   children, 
   enableSwipe = true,
   previousPage,
-  nextPage
+  nextPage,
+  className = '' // Add default value
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -48,14 +50,14 @@ const PageContainer: React.FC<PageContainerProps> = ({
 
   if (!enableSwipe || !isMobile) {
     return (
-      <div className="page-container animate-fade-in pt-2 pb-20 md:pb-2 px-4 md:px-6 safe-area-left safe-area-right">
+      <div className={`page-container animate-fade-in pt-2 pb-20 md:pb-2 px-4 md:px-6 safe-area-left safe-area-right ${className}`}>
         {children}
       </div>
     );
   }
 
   return (
-    <div className="page-container overflow-hidden safe-area-left safe-area-right">
+    <div className={`page-container overflow-hidden safe-area-left safe-area-right ${className}`}>
       <Swiper
         spaceBetween={0}
         slidesPerView={1}
