@@ -25,6 +25,15 @@ const ChallengeFeed = () => {
     handleJoinChallenge,
   } = useFeedInteractions(feedItems, setFeedItems);
 
+  // Type-safe handlers for filter bar
+  const handleFilterChange = (type: string) => {
+    setFilterType(type);
+  };
+  
+  const handleSortChange = (sort: string) => {
+    setSortBy(sort);
+  };
+
   if (loading) {
     return <LoadingSpinner />;
   }
@@ -33,9 +42,9 @@ const ChallengeFeed = () => {
     <div className="flex flex-col h-full">
       <FeedFilterBar 
         filterType={filterType}
-        setFilterType={setFilterType}
+        setFilterType={handleFilterChange}
         sortBy={sortBy}
-        setSortBy={setSortBy}
+        setSortBy={handleSortChange}
       />
       
       <div ref={feedRef} className="pb-20 scroll-smooth flex-1">

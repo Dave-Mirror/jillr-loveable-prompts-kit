@@ -52,6 +52,11 @@ export interface MapFilters {
   rewardFilters: string[];
 }
 
+// Add LiveMapMarker interface
+export interface LiveMapMarker extends MapElement {
+  position: Coordinates;
+}
+
 export interface LiveMapContextProps {
   mapData: any;
   activeMapElements: MapElement[];

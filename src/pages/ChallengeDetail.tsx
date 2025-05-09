@@ -13,8 +13,8 @@ import { LeaderboardCard } from '@/components/challenge/LeaderboardCard';
 import { RewardsCard } from '@/components/challenge/RewardsCard';
 import { CommunitySubmissions } from '@/components/challenge/CommunitySubmissions';
 import { UserProgressCard } from '@/components/challenge/UserProgressCard';
-import { LiveMapPromotion } from '@/components/challenge/LiveMapPromotion';
-import { DataPermissionPrompt } from '@/components/challenge/DataPermissionPrompt';
+import LiveMapPromotion from '@/components/challenge/LiveMapPromotion';
+import DataPermissionPrompt from '@/components/challenge/DataPermissionPrompt';
 import { SecurityInfo } from '@/components/challenge/SecurityInfo';
 import useChallengeData from '@/hooks/useChallengeData';
 import { useDataPermissionPrompt } from '@/hooks/useDataPermissionPrompt';
@@ -31,7 +31,8 @@ const ChallengeDetail: React.FC = () => {
   const [verifiedSubmissions, setVerifiedSubmissions] = useState<Submission[]>([]);
   const [coachTip, setCoachTip] = useState<string>('');
   const [isLoadingTip, setIsLoadingTip] = useState<boolean>(false);
-  const { showDataPermissionPrompt, setShowDataPermissionPrompt } = useDataPermissionPrompt();
+  const { isDialogOpen, setIsDialogOpen } = useDataPermissionPrompt(id || '', challenge?.title || '');
+  const [showDataPermissionPrompt, setShowDataPermissionPrompt] = useState(false);
   
   useEffect(() => {
     const loadSubmissions = async () => {
@@ -215,8 +216,8 @@ const ChallengeDetail: React.FC = () => {
           
           <RewardsCard 
             challengeRewards={[
-              { id: '1', type: 'xp', amount: challenge.xp_reward || 100, icon: '⭐' },
-              { id: '2', type: 'coin', amount: challenge.coin_reward || 50, icon: '🪙' },
+              { type: 'xp', amount: challenge.xp_reward || 100, icon: '⭐' },
+              { type: 'coins', amount: challenge.coin_reward || 50, icon: '🪙' },
               // More rewards...
             ]} 
           />
@@ -246,6 +247,10 @@ const ChallengeDetail: React.FC = () => {
         open={showDataPermissionPrompt} 
         onOpenChange={setShowDataPermissionPrompt}
         challengeId={id || ''}
+        dataType="location"
+        xpReward={100}
+        campaignName={challenge.title}
+        onConfirm={async () => true}
       />
     </div>
   );

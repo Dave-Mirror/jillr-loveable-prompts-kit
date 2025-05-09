@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Slider } from '@/components/ui/slider';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SlidersHorizontal, X } from 'lucide-react';
@@ -10,32 +9,20 @@ import MapElementsFilter from './filters/MapElementsFilter';
 import RewardsFilter from './filters/RewardsFilter';
 import EasterEggTypesFilter from './filters/EasterEggTypesFilter';
 import LocationFilter from './filters/LocationFilter';
-
-// Define basic filter props to be extended by specific filters
-interface BaseFilterProps {
-  selectedFilters: string[];
-  toggleFilter: (id: string) => void;
-}
-
-// Create props for LocationFilter
-interface LocationFilterProps {
-  filters: {
-    radius: number;
-    location: string;
-  };
-  onChange: (key: string, value: string) => void;
-  onRadiusChange: (value: number) => void;
-}
+import { MapFilters } from '@/types/livemap';
 
 const LiveMapFilters = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('elements');
   const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
   
-  // Location filter state
-  const [locationFilters, setLocationFilters] = useState({
+  // Create full filters state
+  const [filters, setFilters] = useState<MapFilters>({
+    mapElements: ['easteregg', 'drop', 'challenge', 'teamevent'],
+    easterEggTypes: [],
     radius: 5,
-    location: '',
+    locationFilters: ['nearby'],
+    rewardFilters: []
   });
 
   const toggleFilter = (filterId: string) => {
@@ -48,24 +35,41 @@ const LiveMapFilters = () => {
 
   const clearAllFilters = () => {
     setSelectedFilters([]);
-    setLocationFilters({
+    setFilters({
+      mapElements: ['easteregg', 'drop', 'challenge', 'teamevent'],
+      easterEggTypes: [],
       radius: 5,
-      location: '',
+      locationFilters: ['nearby'],
+      rewardFilters: []
     });
   };
 
-  const handleLocationChange = (key: string, value: string) => {
-    setLocationFilters(prev => ({
-      ...prev,
-      [key]: value,
-    }));
+  const handleFilterChange = (category: string, value: string) => {
+    setFilters(prev => {
+      const currentValues = prev[category as keyof MapFilters] as string[];
+      
+      // Toggle the value in the array
+      const newValues = currentValues.includes(value)
+        ? currentValues.filter(item => item !== value)
+        : [...currentValues, value];
+      
+      return {
+        ...prev,
+        [category]: newValues
+      };
+    });
+    
+    // Update selected filters for badge display
+    toggleFilter(value);
   };
 
-  const handleRadiusChange = (value: number) => {
-    setLocationFilters(prev => ({
-      ...prev,
-      radius: value,
-    }));
+  const handleRadiusChange = (value: number[]) => {
+    if (value.length > 0) {
+      setFilters(prev => ({
+        ...prev,
+        radius: value[0]
+      }));
+    }
   };
 
   return (
@@ -116,29 +120,29 @@ const LiveMapFilters = () => {
               
               <TabsContent value="elements">
                 <MapElementsFilter 
-                  selectedFilters={selectedFilters}
-                  toggleFilter={toggleFilter}
+                  filters={filters}
+                  onChange={handleFilterChange}
                 />
               </TabsContent>
               
               <TabsContent value="rewards">
                 <RewardsFilter
-                  selectedFilters={selectedFilters}
-                  toggleFilter={toggleFilter}
+                  filters={filters}
+                  onChange={handleFilterChange}
                 />
               </TabsContent>
               
               <TabsContent value="easter-eggs">
                 <EasterEggTypesFilter 
-                  selectedFilters={selectedFilters}
-                  toggleFilter={toggleFilter}
+                  filters={filters}
+                  onChange={handleFilterChange}
                 />
               </TabsContent>
               
               <TabsContent value="location">
                 <LocationFilter 
-                  filters={locationFilters}
-                  onChange={handleLocationChange}
+                  filters={filters}
+                  onChange={handleFilterChange}
                   onRadiusChange={handleRadiusChange}
                 />
               </TabsContent>

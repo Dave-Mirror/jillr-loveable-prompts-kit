@@ -2,12 +2,9 @@
 import { useState, useMemo } from 'react';
 import { FeedItem } from '@/utils/challenge/feed';
 
-type FilterType = 'all' | 'photo' | 'video' | 'community' | 'sustainability' | 'fitness';
-type SortType = 'latest' | 'popular' | 'trending';
-
 export const useFilteredFeed = (feedItems: FeedItem[]) => {
-  const [filterType, setFilterType] = useState<FilterType>('all');
-  const [sortBy, setSortBy] = useState<SortType>('latest');
+  const [filterType, setFilterType] = useState('all');
+  const [sortBy, setSortBy] = useState('latest');
 
   // Apply filters and sorting to feed items
   const filteredItems = useMemo(() => {
