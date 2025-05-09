@@ -1,63 +1,64 @@
 
 import React from 'react';
-import { Award, Coins, Zap, Trophy, Smartphone } from 'lucide-react';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Gift, Award } from 'lucide-react';
 import { RewardsCardProps } from './types';
 
 export const RewardsCard: React.FC<RewardsCardProps> = ({ challengeRewards }) => {
+  const getRewardIcon = (type: string) => {
+    switch (type) {
+      case 'xp':
+        return <Award className="h-5 w-5 text-yellow-400" />;
+      case 'coins':
+        return <Gift className="h-5 w-5 text-amber-500" />;
+      default:
+        return <Gift className="h-5 w-5 text-blue-400" />;
+    }
+  };
+
+  const getRewardDescription = (type: string, value: number) => {
+    switch (type) {
+      case 'xp':
+        return `${value} XP für deinen Account`;
+      case 'coins':
+        return `${value} Coins für deinen Wallet`;
+      default:
+        return `${value} ${type}`;
+    }
+  };
+
   return (
-    <Card className="mb-6">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Award size={20} className="text-yellow-500" />
-          Belohnungen
+    <Card>
+      <CardHeader className="pb-2">
+        <CardTitle className="text-lg flex items-center gap-2">
+          <Gift className="h-5 w-5 text-jillr-neonPurple" />
+          Rewards
         </CardTitle>
-        <CardDescription>
-          Das kannst du in dieser Challenge gewinnen
-        </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="space-y-4">
-          {challengeRewards.map((reward, index) => {
-            const isReachable = reward.immediate || (reward.level && reward.level <= 1000);
-            
-            return (
-              <div 
-                key={index} 
-                className={`flex items-center p-3 rounded-lg border ${
-                  isReachable 
-                    ? 'border-green-500/30 bg-green-500/5' 
-                    : 'glassmorphism'
-                }`}
-              >
-                <div className="mr-4">
-                  {reward.type === 'coins' && <Coins size={24} className="text-yellow-500" />}
-                  {reward.type === 'xp' && <Zap size={24} className="text-jillr-neonPurple" />}
-                  {reward.type === 'product' && <Trophy size={24} className="text-amber-500" />}
-                  {reward.type === 'ticket' && <Smartphone size={24} className="text-jillr-neonBlue" />}
-                  {reward.type === 'voucher' && <Award size={24} className="text-jillr-neonPink" />}
+        <div className="space-y-2">
+          {challengeRewards.map((reward, index) => (
+            <div
+              key={index}
+              className="flex items-center justify-between p-2 rounded-lg bg-muted/30"
+            >
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-full bg-jillr-darkBlue">
+                  {getRewardIcon(reward.type)}
                 </div>
-                <div className="flex-1">
-                  <div className="font-medium">{reward.description}</div>
-                  <div className="text-xs text-muted-foreground">
-                    {reward.immediate 
-                      ? 'Sofort nach Upload' 
-                      : reward.level 
-                        ? `Ab ${reward.level} Views` 
-                        : 'Nach Verifikation'
-                    }
-                  </div>
+                <div>
+                  <p className="font-medium">{reward.value} {reward.type}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {getRewardDescription(reward.type, reward.value)}
+                  </p>
                 </div>
-                {isReachable && (
-                  <span className="text-xs font-medium text-green-500 bg-green-500/10 px-2 py-1 rounded">
-                    Erreichbar
-                  </span>
-                )}
               </div>
-            );
-          })}
+            </div>
+          ))}
         </div>
       </CardContent>
     </Card>
   );
 };
+
+export default RewardsCard;

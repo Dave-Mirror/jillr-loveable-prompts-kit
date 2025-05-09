@@ -84,7 +84,12 @@ const LiveMapView = () => {
                   <p className="text-sm text-gray-700">{infoWindow.description}</p>
                   <button 
                     className="mt-2 text-sm font-medium text-blue-600 hover:text-blue-800"
-                    onClick={() => handleItemClick(infoWindow)}
+                    onClick={() => handleItemClick({
+                      id: infoWindow.id,
+                      type: infoWindow.type,
+                      title: infoWindow.title,
+                      description: infoWindow.description
+                    })}
                   >
                     View Details
                   </button>
@@ -100,7 +105,7 @@ const LiveMapView = () => {
       <ItemDetailsDialog 
         selectedItem={selectedItem} 
         onClose={handleCloseDialog}
-        onAction={selectedItem?.challengeId ? () => handleJoinChallenge(selectedItem.challengeId!) : () => {}}
+        onAction={selectedItem?.challengeId ? () => handleJoinChallenge(selectedItem.challengeId) : () => {}}
       />
     </div>
   );
