@@ -99,6 +99,25 @@ export const supportCause = async (id: string): Promise<number> => {
   });
 };
 
+// Join challenge function
+export const joinChallenge = async (challengeId: string): Promise<void> => {
+  // In a real app, this would call an API to join the challenge
+  
+  // Show confirmation toast
+  toast({
+    title: "Challenge beigetreten!",
+    description: "Du nimmst jetzt an dieser Challenge teil. Viel Erfolg!",
+    className: "bg-jillr-neonPurple/20",
+  });
+  
+  // Simulate API response
+  return await new Promise(resolve => {
+    setTimeout(() => {
+      resolve();
+    }, 500);
+  });
+};
+
 // Mock data
 const mockFeedItems: FeedItem[] = [
   {

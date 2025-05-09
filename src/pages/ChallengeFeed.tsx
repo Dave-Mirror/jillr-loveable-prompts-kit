@@ -1,49 +1,23 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Heart, MessageSquare, Share, Award, Star, Flame, Info, ChevronDown, ChevronUp } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { 
+  Heart, MessageSquare, Share, Award, Star, Flame, 
+  Info, ChevronDown, ChevronUp, Flag 
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { motion, AnimatePresence } from 'framer-motion';
-
-// Types for feed items
-interface FeedItem {
-  id: string;
-  user: {
-    id: string;
-    name: string;
-    username: string;
-    avatar: string;
-  };
-  challenge: {
-    id: string;
-    title: string;
-    brand?: string;
-    brandLogo?: string;
-  };
-  content: {
-    type: 'video' | 'image';
-    url: string;
-    aspectRatio: number; // For proper sizing
-  };
-  caption: string;
-  likes: number;
-  comments: number;
-  shares: number;
-  // Unique feature: Impact Points - shows how much positive impact this UGC has made
-  impactPoints: number;
-  liked: boolean;
-  // Tags for the content
-  tags: string[];
-  // Achievements unlocked by this content
-  achievements?: { 
-    id: string; 
-    name: string; 
-    icon: string;
-    points: number;
-  }[];
-}
+import { 
+  fetchFeedData, 
+  likeContent, 
+  shareContent, 
+  supportCause, 
+  joinChallenge,
+  FeedItem 
+} from '@/utils/challenge/feed';
 
 const ChallengeFeed = () => {
   const [feedItems, setFeedItems] = useState<FeedItem[]>([]);
@@ -51,130 +25,28 @@ const ChallengeFeed = () => {
   const [loading, setLoading] = useState(true);
   const [showAchievement, setShowAchievement] = useState<string | null>(null);
   const feedRef = useRef<HTMLDivElement>(null);
-
-  // Mock data for feed
-  const mockFeedItems: FeedItem[] = [
-    {
-      id: '1',
-      user: {
-        id: 'u1',
-        name: 'Sarah Meyer',
-        username: 'sarahcreates',
-        avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=256&h=256'
-      },
-      challenge: {
-        id: 'c1',
-        title: 'Summer Beach Cleanups',
-        brand: 'OceanGuard',
-        brandLogo: 'https://via.placeholder.com/40'
-      },
-      content: {
-        type: 'video',
-        url: 'https://assets.mixkit.co/videos/preview/mixkit-woman-dancing-happily-1228-large.mp4',
-        aspectRatio: 9/16
-      },
-      caption: 'Just finished my beach cleanup challenge! Collected over 5kg of plastic! 🌊 #OceanGuard #SaveTheOcean',
-      likes: 1243,
-      comments: 89,
-      shares: 32,
-      impactPoints: 120,
-      liked: false,
-      tags: ['beachcleanup', 'environment', 'sustainability'],
-      achievements: [
-        { 
-          id: 'a1', 
-          name: 'Beach Hero', 
-          icon: '🏆',
-          points: 50
-        },
-        { 
-          id: 'a2', 
-          name: 'Influencer', 
-          icon: '⭐',
-          points: 25
-        }
-      ]
-    },
-    {
-      id: '2',
-      user: {
-        id: 'u2',
-        name: 'Marco Wirtz',
-        username: 'marcowirtz',
-        avatar: 'https://images.unsplash.com/photo-1463453091185-61582044d556?w=256&h=256'
-      },
-      challenge: {
-        id: 'c2',
-        title: 'Urban Photography',
-        brand: 'CityLens',
-        brandLogo: 'https://via.placeholder.com/40'
-      },
-      content: {
-        type: 'video',
-        url: 'https://assets.mixkit.co/videos/preview/mixkit-urban-trendy-people-dancing-near-a-house-4814-large.mp4',
-        aspectRatio: 9/16
-      },
-      caption: 'Exploring the hidden corners of Berlin with my new CityLens camera! #UrbanExploration',
-      likes: 876,
-      comments: 45,
-      shares: 21,
-      impactPoints: 75,
-      liked: false,
-      tags: ['photography', 'urban', 'berlin'],
-      achievements: [
-        { 
-          id: 'a3', 
-          name: 'Urban Explorer', 
-          icon: '🏙️',
-          points: 35
-        }
-      ]
-    },
-    {
-      id: '3',
-      user: {
-        id: 'u3',
-        name: 'Leila Khan',
-        username: 'leilakfitness',
-        avatar: 'https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?w=256&h=256'
-      },
-      challenge: {
-        id: 'c3',
-        title: 'Green Smoothie Week',
-        brand: 'GreenBlend',
-        brandLogo: 'https://via.placeholder.com/40'
-      },
-      content: {
-        type: 'video',
-        url: 'https://assets.mixkit.co/videos/preview/mixkit-young-woman-taking-a-selfie-with-her-smartphone-standing-47069-large.mp4',
-        aspectRatio: 9/16
-      },
-      caption: 'Day 5 of the @GreenBlend challenge! This kale and mango smoothie is 🔥 #SmoothieWeek',
-      likes: 1012,
-      comments: 67,
-      shares: 15,
-      impactPoints: 90,
-      liked: false,
-      tags: ['fitness', 'health', 'smoothie'],
-      achievements: [
-        { 
-          id: 'a4', 
-          name: 'Health Guru', 
-          icon: '🥑',
-          points: 40
-        }
-      ]
-    }
-  ];
+  const navigate = useNavigate();
 
   // Load feed items
   useEffect(() => {
-    // Simulate API fetch
-    setLoading(true);
-    setTimeout(() => {
-      setFeedItems(mockFeedItems);
-      setLoading(false);
-    }, 1500);
+    const loadFeed = async () => {
+      setLoading(true);
+      try {
+        const data = await fetchFeedData();
+        setFeedItems(data);
+      } catch (error) {
+        console.error('Failed to fetch feed:', error);
+        toast({
+          title: "Fehler beim Laden",
+          description: "Feed konnte nicht geladen werden.",
+          variant: "destructive"
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    loadFeed();
   }, []);
 
   // Handle scroll to play/pause videos
@@ -265,6 +137,22 @@ const ChallengeFeed = () => {
           : item
       )
     );
+  };
+
+  // Handle join challenge action
+  const handleJoinChallenge = async (challengeId: string, challengeTitle: string) => {
+    try {
+      await joinChallenge(challengeId);
+      // Optional: Navigate to challenge page or upload page
+      // navigate(`/challenge/${challengeId}`);
+    } catch (error) {
+      console.error('Failed to join challenge:', error);
+      toast({
+        title: "Fehler",
+        description: "Beitritt zur Challenge fehlgeschlagen.",
+        variant: "destructive"
+      });
+    }
   };
 
   if (loading) {
@@ -386,6 +274,19 @@ const ChallengeFeed = () => {
               <span className="text-jillr-neonGreen text-xs mt-1">{item.impactPoints} IP</span>
             </div>
             
+            {/* Challenge Join Button - New addition */}
+            <div className="flex flex-col items-center">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="rounded-full bg-jillr-neonPurple/30 backdrop-blur-md text-white"
+                onClick={() => handleJoinChallenge(item.challenge.id, item.challenge.title)}
+              >
+                <Flag className="h-7 w-7" />
+              </Button>
+              <span className="text-white text-xs mt-1">Teilnehmen</span>
+            </div>
+            
             {/* Achievement showcase */}
             {item.achievements && item.achievements.length > 0 && (
               <div className="flex flex-col items-center">
@@ -458,6 +359,17 @@ const ChallengeFeed = () => {
               })}
             >
               <Info className="h-4 w-4 text-white" />
+            </Button>
+          </div>
+
+          {/* Challenge Participation Button - Floating action button */}
+          <div className="absolute bottom-32 left-1/2 transform -translate-x-1/2">
+            <Button 
+              onClick={() => handleJoinChallenge(item.challenge.id, item.challenge.title)}
+              className="bg-gradient-to-r from-jillr-neonPurple to-jillr-neonPink px-6 py-2 rounded-full text-white font-medium flex items-center gap-2 shadow-lg hover:shadow-xl transition-all"
+            >
+              <Flag className="h-5 w-5" />
+              Challenge teilnehmen
             </Button>
           </div>
         </div>
