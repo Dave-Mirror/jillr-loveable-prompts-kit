@@ -26,10 +26,31 @@ const Explore = () => {
       try {
         const allChallenges = await getChallenges(industry);
         
+        // Generieren zusätzlicher Demo-Challenges für eine umfangreichere Anzeige
+        const demoExtraCount = 15; // Zusätzliche Demo-Challenges
+        const demoChallenges = Array.from({ length: demoExtraCount }, (_, i) => {
+          const challengeId = `challenge-${allChallenges.length + i + 1}`;
+          return {
+            id: challengeId,
+            title: `jillr Challenge ${i + 1}`,
+            description: `Demo Challenge ${i + 1} für die jillr Plattform. Mach mit und gewinne Preise!`,
+            type: ['Video', 'Photo & Video', 'Geofencing', 'AR', 'Fashion', 'Sport', 'Beauty'][i % 7] as ChallengeType,
+            startDate: new Date().toISOString(),
+            endDate: new Date(Date.now() + (i % 5 + 1) * 7 * 24 * 60 * 60 * 1000).toISOString(),
+            xpReward: (i % 5 + 1) * 100,
+            imageUrl: `/placeholder.svg`,
+            hashtags: [`jillr`, `challenge${i+1}`, `fun`],
+            industry: ['Fashion', 'Beauty', 'Sport', 'Tech', 'Food'][i % 5] as IndustryType
+          };
+        });
+        
+        // Alle Challenges kombinieren
+        const combinedChallenges = [...allChallenges, ...demoChallenges];
+        
         // Filtern nach Challenge-Typ
-        let filteredChallenges = allChallenges;
+        let filteredChallenges = combinedChallenges;
         if (challengeType !== 'all') {
-          filteredChallenges = allChallenges.filter(challenge => challenge.type === challengeType);
+          filteredChallenges = combinedChallenges.filter(challenge => challenge.type === challengeType);
         }
         
         // Sortieren nach ausgewähltem Kriterium
@@ -64,10 +85,10 @@ const Explore = () => {
     title: challenge.title,
     description: challenge.description,
     type: challenge.type,
-    hashtags: challenge.hashtags,
-    xpReward: challenge.xpReward,
-    endDate: challenge.endDate,
-    imageUrl: challenge.imageUrl
+    hashtags: challenge.hashtags || [],
+    xpReward: challenge.xpReward || 0,
+    endDate: challenge.endDate || '',
+    imageUrl: challenge.imageUrl || '/placeholder.svg'
   }));
 
   return (
@@ -112,7 +133,9 @@ const Explore = () => {
           ) : (
             <>
               {formattedChallenges.length > 0 ? (
-                <ChallengeGrid challenges={formattedChallenges} />
+                <div className="pb-8">
+                  <ChallengeGrid challenges={formattedChallenges} />
+                </div>
               ) : (
                 <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
                   <Sparkles className="h-16 w-16 text-jillr-neonPurple mb-4 opacity-50" />

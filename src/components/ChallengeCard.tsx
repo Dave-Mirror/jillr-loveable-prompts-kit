@@ -50,11 +50,12 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({
   endDate,
   imageUrl = '/placeholder.svg',
 }) => {
-  const typeIcon = typeIcons[type] || '🎯';
+  // Sicherstellen, dass typeIcon immer einen Wert hat
+  const typeIcon = typeIcons[type.toLowerCase()] || '🎯';
   
   return (
     <Link to={`/challenge/${id}`} className="block w-full transition-transform hover:scale-[1.02] focus:scale-[1.02]">
-      <div className="challenge-card h-full flex flex-col">
+      <div className="challenge-card h-full flex flex-col bg-jillr-dark border border-jillr-border/30 rounded-lg overflow-hidden shadow-lg shadow-jillr-dark/50">
         <div className="relative aspect-video rounded-t-lg overflow-hidden">
           <img 
             src={imageUrl} 
@@ -86,13 +87,13 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({
           
           <div className="mt-auto space-y-3">
             <div className="flex flex-wrap gap-1.5">
-              {hashtags.slice(0, 3).map((tag, index) => (
+              {hashtags && hashtags.slice(0, 3).map((tag, index) => (
                 <div key={index} className="flex items-center text-xs px-2 py-1 rounded-full bg-jillr-darkBlue text-jillr-neonBlue">
                   <Hash size={10} className="mr-0.5" />
                   {tag}
                 </div>
               ))}
-              {hashtags.length > 3 && (
+              {hashtags && hashtags.length > 3 && (
                 <div className="text-xs px-2 py-1 rounded-full bg-jillr-darkBlue text-gray-400">
                   +{hashtags.length - 3}
                 </div>
