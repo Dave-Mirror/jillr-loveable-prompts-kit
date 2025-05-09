@@ -1,6 +1,37 @@
 
 import { Challenge, Company, UserReward, IndustryType } from './types';
 
+// Icons for industry types
+export const industryIcons: Record<string, string> = {
+  all: '🌐',
+  fashion: '👗',
+  beauty: '💄',
+  sport: '🏃',
+  food: '🍔',
+  travel: '✈️',
+  gaming: '🎮',
+  mobility: '🚗',
+  sustainability: '♻️',
+  entertainment: '🎬',
+  education: '📚',
+  lifestyle: '🌿', // Adding lifestyle as a special case
+};
+
+// Icons for challenge types
+export const challengeTypeIcons: Record<string, string> = {
+  all: '🌐',
+  photo: '📷',
+  video: '🎥',
+  ar: '👓',
+  geofencing: '📍',
+  fitness: '💪',
+  wearable: '⌚',
+  schnitzeljagd: '🔍',
+  community: '👥',
+  battle: '⚔️',
+  review: '⭐',
+};
+
 // Mock challenges data
 export const mockChallenges: Challenge[] = [
   {
@@ -29,7 +60,7 @@ export const mockChallenges: Challenge[] = [
     type: 'photo',
     brandId: 'company-2',
     brandName: 'UrbanVibes',
-    industry: 'lifestyle',
+    industry: 'lifestyle' as IndustryType, // Cast to IndustryType to fix the error
     hashtags: ['urban', 'photography', 'city'],
     xpReward: 400,
     coinReward: 150,
@@ -61,7 +92,7 @@ export const mockCompanies: Company[] = [
   {
     id: 'company-2',
     name: 'UrbanVibes',
-    industry: 'lifestyle',
+    industry: 'lifestyle' as IndustryType, // Cast to IndustryType to fix the error
     description: 'Urban lifestyle and photography brand',
     logoUrl: 'https://placehold.co/100x100/9b87f5/FFFFFF/png?text=UV',
     website: 'https://example.com/urbanvibes',

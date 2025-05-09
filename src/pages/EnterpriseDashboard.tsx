@@ -1,11 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { getEnterpriseProfile, createEnterpriseProfile, updateEnterpriseProfile } from '@/utils/enterprise/mockProfiles';
 
 // Imported components
 import EnterpriseHeader from '@/components/enterprise/EnterpriseHeader';
@@ -30,43 +29,31 @@ const EnterpriseDashboard = () => {
       
       try {
         setIsLoading(true);
-        const { data, error } = await supabase
-          .from('enterprise_profiles')
-          .select('*')
-          .eq('user_id', user.id)
-          .single();
+        const { data, error } = await getEnterpriseProfile(user.id);
         
         if (error) {
-          if (error.code === 'PGRST116') {
-            const newProfile = {
-              user_id: user.id,
-              company_name: 'My Brand',
-              branding_colors: {
-                primary: '#9b87f5',
-                secondary: '#7E69AB'
-              },
-              industry: ['Marketing'],
-              hashtags: []
-            };
-            
-            const { data: newData, error: createError } = await supabase
-              .from('enterprise_profiles')
-              .insert(newProfile)
-              .select()
-              .single();
+          const newProfile = {
+            user_id: user.id,
+            company_name: 'My Brand',
+            branding_colors: {
+              primary: '#9b87f5',
+              secondary: '#7E69AB'
+            },
+            industry: ['Marketing'],
+            hashtags: []
+          };
+          
+          const { data: newData, error: createError } = await createEnterpriseProfile(newProfile);
               
-            if (createError) {
-              throw createError;
-            }
-            
-            setEnterpriseProfile(newData);
-            toast({
-              title: "Profile created",
-              description: "Your enterprise profile has been initialized. Please update your information.",
-            });
-          } else {
-            throw error;
+          if (createError) {
+            throw createError;
           }
+          
+          setEnterpriseProfile(newData);
+          toast({
+            title: "Profile created",
+            description: "Your enterprise profile has been initialized. Please update your information.",
+          });
         } else {
           setEnterpriseProfile(data);
         }
@@ -89,10 +76,7 @@ const EnterpriseDashboard = () => {
     if (!enterpriseProfile) return;
     
     try {
-      const { error } = await supabase
-        .from('enterprise_profiles')
-        .update(updatedData)
-        .eq('id', enterpriseProfile.id);
+      const { error } = await updateEnterpriseProfile(enterpriseProfile.id, updatedData);
         
       if (error) throw error;
       

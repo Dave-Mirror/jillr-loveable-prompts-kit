@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
@@ -12,6 +11,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Checkbox } from '@/components/ui/checkbox';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { upsertUserChallenge } from '@/utils/upload/mockUserChallenges';
 
 const capCutTemplates = [
   { value: 'default', label: 'Default Template' },
@@ -106,7 +106,7 @@ const Upload = () => {
     }, 1500);
   };
 
-  const onSubmit = async (data: FormValues) => {
+  const handleSubmit = async (data: FormValues) => {
     if (!id || !challenge) return;
     
     setIsSubmitting(true);
@@ -143,18 +143,14 @@ const Upload = () => {
         
       if (uploadError) throw uploadError;
       
-      // Mark this challenge as active for the user
-      const { error: challengeError } = await supabase
-        .from('user_challenges')
-        .upsert({
-          user_id: userId,
-          challenge_id: id,
-          status: 'active',
-          joined_at: new Date().toISOString(),
-        }, {
-          onConflict: 'user_id,challenge_id',
-        });
-        
+      // Mark this challenge as active for the user using our mock function
+      const { error: challengeError } = await upsertUserChallenge({
+        user_id: userId,
+        challenge_id: id,
+        status: 'active',
+        joined_at: new Date().toISOString(),
+      });
+      
       if (challengeError) throw challengeError;
       
       // Award XP and coins to the user's wallet
