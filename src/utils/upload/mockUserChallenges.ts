@@ -13,14 +13,18 @@ export interface UserChallenge {
 // Mock function for managing user challenges when DB table doesn't exist yet
 export const upsertUserChallenge = async (userChallenge: Partial<UserChallenge>) => {
   try {
-    // First try real database
-    const { data, error } = await supabase
-      .from('user_challenges')
-      .upsert(userChallenge, { onConflict: 'user_id,challenge_id' })
-      .select();
-      
-    if (!error && data) {
-      return { data, error: null };
+    // First try real database - but handle it safely in case the table doesn't exist
+    try {
+      const { data, error } = await supabase
+        .from('user_challenges')
+        .upsert(userChallenge, { onConflict: 'user_id,challenge_id' })
+        .select();
+        
+      if (!error && data) {
+        return { data, error: null };
+      }
+    } catch (err) {
+      console.log("Database error, using mock data instead:", err);
     }
     
     // If real DB fails, return mock data

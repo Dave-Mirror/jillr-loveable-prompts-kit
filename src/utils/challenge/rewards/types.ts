@@ -83,7 +83,7 @@ export type IndustryType =
   | 'sustainability'
   | 'entertainment'
   | 'education'
-  | 'lifestyle'; // Adding lifestyle to fix the type error
+  | 'lifestyle'; // Added lifestyle to fix the type error
 
 // Neue Schnittstelle für Unternehmen/Marken
 export interface Company {

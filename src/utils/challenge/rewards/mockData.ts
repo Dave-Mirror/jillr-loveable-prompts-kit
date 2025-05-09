@@ -60,7 +60,7 @@ export const mockChallenges: Challenge[] = [
     type: 'photo',
     brandId: 'company-2',
     brandName: 'UrbanVibes',
-    industry: 'lifestyle' as IndustryType, // Cast to IndustryType to fix the error
+    industry: 'lifestyle',
     hashtags: ['urban', 'photography', 'city'],
     xpReward: 400,
     coinReward: 150,
@@ -92,7 +92,7 @@ export const mockCompanies: Company[] = [
   {
     id: 'company-2',
     name: 'UrbanVibes',
-    industry: 'lifestyle' as IndustryType, // Cast to IndustryType to fix the error
+    industry: 'lifestyle',
     description: 'Urban lifestyle and photography brand',
     logoUrl: 'https://placehold.co/100x100/9b87f5/FFFFFF/png?text=UV',
     website: 'https://example.com/urbanvibes',

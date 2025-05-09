@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
@@ -244,7 +245,7 @@ const Upload = () => {
         <h2 className="text-xl neon-text mb-6">{challenge.title}</h2>
         
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
             {/* Video Upload */}
             <div className="p-6 border-2 border-dashed border-jillr-neonPurple/30 rounded-lg text-center">
               <div className="flex flex-col items-center justify-center">
