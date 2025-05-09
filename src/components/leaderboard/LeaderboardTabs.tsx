@@ -25,32 +25,32 @@ const LeaderboardTabs: React.FC<LeaderboardTabsProps> = ({
 }) => {
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-      <div className="sticky top-0 z-10 bg-jillr-darkAccent/95 backdrop-blur-md border-b border-jillr-border/30 shadow-md">
-        <TabsList className="grid grid-cols-4 bg-transparent p-0 h-auto">
+      <div className="sticky top-0 z-20 bg-jillr-darkAccent/95 backdrop-blur-md border-b border-jillr-border/30 shadow-md">
+        <TabsList className="grid grid-cols-4 bg-transparent p-0 h-auto w-full">
           <TabsTrigger 
             value="global" 
-            className="data-[state=active]:bg-jillr-neonPurple/20 data-[state=active]:text-jillr-neonPurple py-4 rounded-none border-b-2 border-transparent data-[state=active]:border-jillr-neonPurple"
+            className="data-[state=active]:bg-jillr-neonPurple/20 data-[state=active]:text-jillr-neonPurple py-4 rounded-none border-b-2 border-transparent data-[state=active]:border-jillr-neonPurple flex flex-row items-center justify-center"
           >
             <Globe className="h-4 w-4 mr-2" />
             <span className="hidden sm:inline">Global</span>
           </TabsTrigger>
           <TabsTrigger 
             value="city" 
-            className="data-[state=active]:bg-jillr-neonGreen/20 data-[state=active]:text-jillr-neonGreen py-4 rounded-none border-b-2 border-transparent data-[state=active]:border-jillr-neonGreen"
+            className="data-[state=active]:bg-jillr-neonGreen/20 data-[state=active]:text-jillr-neonGreen py-4 rounded-none border-b-2 border-transparent data-[state=active]:border-jillr-neonGreen flex flex-row items-center justify-center"
           >
             <MapPin className="h-4 w-4 mr-2" />
             <span className="hidden sm:inline">Cities</span>
           </TabsTrigger>
           <TabsTrigger 
             value="challenge-type" 
-            className="data-[state=active]:bg-jillr-neonBlue/20 data-[state=active]:text-jillr-neonBlue py-4 rounded-none border-b-2 border-transparent data-[state=active]:border-jillr-neonBlue"
+            className="data-[state=active]:bg-jillr-neonBlue/20 data-[state=active]:text-jillr-neonBlue py-4 rounded-none border-b-2 border-transparent data-[state=active]:border-jillr-neonBlue flex flex-row items-center justify-center"
           >
             <Video className="h-4 w-4 mr-2" />
             <span className="hidden sm:inline">Challenges</span>
           </TabsTrigger>
           <TabsTrigger 
             value="team" 
-            className="data-[state=active]:bg-jillr-neonPink/20 data-[state=active]:text-jillr-neonPink py-4 rounded-none border-b-2 border-transparent data-[state=active]:border-jillr-neonPink"
+            className="data-[state=active]:bg-jillr-neonPink/20 data-[state=active]:text-jillr-neonPink py-4 rounded-none border-b-2 border-transparent data-[state=active]:border-jillr-neonPink flex flex-row items-center justify-center"
           >
             <Users className="h-4 w-4 mr-2" />
             <span className="hidden sm:inline">Teams</span>

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ChevronDown, Coins, Filter, Trophy, Video, Zap, Search } from 'lucide-react';
+import { ChevronDown, Coins, Filter, Trophy, Video, Zap, Search, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -11,13 +11,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface LeaderboardHeaderProps {
   sortBy: string;
   setSortBy: (value: string) => void;
+  timeFrame?: string;
+  setTimeFrame?: (value: string) => void;
 }
 
-const LeaderboardHeader = ({ sortBy, setSortBy }: LeaderboardHeaderProps) => {
+const LeaderboardHeader = ({ sortBy, setSortBy, timeFrame = 'all-time', setTimeFrame }: LeaderboardHeaderProps) => {
   return (
     <div className="space-y-4">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pt-4 pb-2">
@@ -33,37 +36,65 @@ const LeaderboardHeader = ({ sortBy, setSortBy }: LeaderboardHeaderProps) => {
           </p>
         </div>
 
-        <div className="flex flex-col sm:flex-row items-center gap-3">
-          <div className="relative w-full sm:w-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-row gap-3">
+          <div className="relative w-full">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input 
               placeholder="Nach Nutzern suchen..." 
-              className="pl-9 bg-jillr-darkAccent border-jillr-border w-full sm:w-[200px]" 
+              className="pl-9 bg-jillr-darkAccent border-jillr-border w-full" 
             />
           </div>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="flex items-center gap-2 bg-jillr-darkAccent border-jillr-border hover:bg-jillr-darkLight">
-                <Filter className="h-4 w-4" />
-                <span className="hidden xs:inline">Sort:</span> {sortBy === 'xp' ? 'XP Punkte' : sortBy === 'coins' ? 'Coins' : 'Challenges'}
-                <ChevronDown className="h-4 w-4 ml-1" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="bg-jillr-darkAccent border-jillr-border">
-              <DropdownMenuLabel>Sortieren nach</DropdownMenuLabel>
-              <DropdownMenuSeparator className="bg-jillr-border/50" />
-              <DropdownMenuItem onClick={() => setSortBy('xp')} className="hover:bg-jillr-darkLight">
-                <Zap className="h-4 w-4 mr-2 text-jillr-neonGreen" /> XP Punkte
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setSortBy('coins')} className="hover:bg-jillr-darkLight">
-                <Coins className="h-4 w-4 mr-2 text-jillr-neonPink" /> Coins
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setSortBy('challenges')} className="hover:bg-jillr-darkLight">
-                <Video className="h-4 w-4 mr-2 text-jillr-neonBlue" /> Challenge Anzahl
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {setTimeFrame && (
+            <Select
+              value={timeFrame}
+              onValueChange={(value) => setTimeFrame(value)}
+            >
+              <SelectTrigger className="bg-jillr-darkAccent border-jillr-border w-full">
+                <Clock className="h-4 w-4 mr-2" />
+                <span className="hidden xs:inline">Zeitraum:</span>
+                <span>
+                  {timeFrame === 'all-time' ? 'Gesamt' : 
+                   timeFrame === 'weekly' ? 'Diese Woche' : 
+                   'Dieser Monat'}
+                </span>
+              </SelectTrigger>
+              <SelectContent position="popper" className="bg-jillr-darkAccent border-jillr-border">
+                <SelectItem value="all-time">Gesamt</SelectItem>
+                <SelectItem value="weekly">Diese Woche</SelectItem>
+                <SelectItem value="monthly">Dieser Monat</SelectItem>
+              </SelectContent>
+            </Select>
+          )}
+
+          <Select
+            value={sortBy}
+            onValueChange={(value) => setSortBy(value)}
+          >
+            <SelectTrigger className="bg-jillr-darkAccent border-jillr-border w-full">
+              <Filter className="h-4 w-4 mr-2" />
+              <span className="hidden xs:inline">Sort:</span>
+              <span>
+                {sortBy === 'xp' ? 'XP Punkte' : 
+                 sortBy === 'coins' ? 'Coins' : 
+                 'Challenges'}
+              </span>
+            </SelectTrigger>
+            <SelectContent position="popper" className="bg-jillr-darkAccent border-jillr-border z-50">
+              <SelectItem value="xp" className="flex items-center">
+                <Zap className="h-4 w-4 mr-2 text-jillr-neonGreen" />
+                <span>XP Punkte</span>
+              </SelectItem>
+              <SelectItem value="coins" className="flex items-center">
+                <Coins className="h-4 w-4 mr-2 text-jillr-neonPink" />
+                <span>Coins</span>
+              </SelectItem>
+              <SelectItem value="challenges" className="flex items-center">
+                <Video className="h-4 w-4 mr-2 text-jillr-neonBlue" />
+                <span>Challenge Anzahl</span>
+              </SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
     </div>
