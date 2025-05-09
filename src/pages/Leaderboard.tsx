@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { data as mockUsers, badgeSystem } from '@/data/leaderboardMockData';
+import { mockUsers, badgeSystem } from '@/data/leaderboardMockData';
 import PageContainer from '@/components/navigation/PageContainer';
 import { useLeaderboardData } from '@/hooks/useLeaderboardData';
 import LeaderboardHeader from '@/components/leaderboard/LeaderboardHeader';
