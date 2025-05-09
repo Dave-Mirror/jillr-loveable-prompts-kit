@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import ProfileEditModal from './ProfileEditModal';
-import UserAvatar from './header/UserAvatar';
+import UserAvatarCustomizable from './header/UserAvatarCustomizable';
 import UserInfo from './header/UserInfo';
 import UserStats from './header/UserStats';
 import LevelProgress from './header/LevelProgress';
@@ -36,11 +36,14 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ userProfile }) => {
     <Card className="border-jillr-neonPurple/20 bg-gradient-to-br from-jillr-darkBlue to-black">
       <CardContent className="pt-6">
         <div className="flex flex-col md:flex-row gap-6">
-          {/* Profile image section */}
-          <UserAvatar 
+          {/* Profile image section - now using the customizable avatar */}
+          <UserAvatarCustomizable 
             avatar={mockProfileData.avatar}
             username={mockProfileData.username}
-            onEditClick={() => setIsEditing(true)}
+            onEditProfile={() => setIsEditing(true)}
+            userLevel={currentLevel}
+            userCoins={userProfile.coins || 0}
+            userXp={currentXP}
           />
           
           {/* Profile info section */}
