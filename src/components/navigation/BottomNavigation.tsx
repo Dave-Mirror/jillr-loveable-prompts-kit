@@ -1,8 +1,9 @@
+
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   Home, Search, Trophy, Wallet, User, Map, Zap, ShoppingBag, Menu,
-  BarChart, Video, Settings, Bell, Heart, Database, Edit, Compass
+  BarChart, Video, Settings, Bell, Heart, Database, Edit, Compass, Users
 } from 'lucide-react';
 import { 
   Sheet,
@@ -23,7 +24,7 @@ const BottomNavigation = () => {
     { icon: Home, path: '/', label: 'Home' },
     { icon: Zap, path: '/explore', label: 'Entdecken' },
     { icon: Compass, path: '/challenge-feed', label: 'Feed' },
-    { icon: Map, path: '/livemap', label: 'Map' },
+    { icon: Users, path: '/creator-marketplace', label: 'Creator' },
     { icon: User, path: '/profile', label: 'Profil' }
   ];
   
@@ -46,7 +47,8 @@ const BottomNavigation = () => {
       { icon: Compass, path: '/challenge-feed', label: 'Feed' },
       { icon: Video, path: '/creator-dashboard', label: 'Creator Studio' },
       { icon: Edit, path: '/content-editor', label: 'Content Editor' },
-      { icon: Heart, path: '/favorites', label: 'Favoriten' }
+      { icon: Heart, path: '/favorites', label: 'Favoriten' },
+      { icon: Users, path: '/creator-marketplace', label: 'Creator Marketplace' }
     ],
     'Weitere': [
       { icon: BarChart, path: '/brand-dashboard', label: 'Brand Portal' },

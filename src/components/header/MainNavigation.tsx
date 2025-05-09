@@ -163,6 +163,15 @@ const MainNavigation: React.FC = () => {
             Rewards
           </NavLink>
         </NavigationMenuItem>
+        <NavigationMenuItem>
+          <NavLink 
+            href="/creator-marketplace" 
+            className="bg-transparent hover:bg-jillr-darkAccent/50 text-jillr-neonPurple"
+          >
+            <Users className="mr-1 h-4 w-4" />
+            Creator Marketplace
+          </NavLink>
+        </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>
   );
