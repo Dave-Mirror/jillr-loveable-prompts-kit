@@ -16,13 +16,13 @@ export const useChallengeData = (challengeId: string | undefined) => {
       }
       
       try {
-        // Für Demo-Zwecke: Wenn die ID das Format 'challenge-X' hat, erstellen wir Beispieldaten
-        if (challengeId.startsWith('challenge-')) {
+        // Für Demo-Zwecke: Wenn die ID numerisch oder im Format 'challenge-X' ist, erstellen wir Beispieldaten
+        if (/^\d+$/.test(challengeId) || challengeId.startsWith('challenge-')) {
           // Mock-Daten für Demo-Zwecke
           setTimeout(() => {
             const demoChallenge: Challenge = {
               id: challengeId,
-              title: `Challenge ${challengeId.split('-')[1]}`,
+              title: `Challenge ${challengeId.startsWith('challenge-') ? challengeId.split('-')[1] : challengeId}`,
               description: 'Dies ist eine Demo Challenge für die jillr Plattform. Nehmen Sie teil und gewinnen Sie tolle Preise!',
               type: 'Video',
               imageUrl: '/placeholder.svg',

@@ -6,14 +6,13 @@ import { formatSubmissions } from './formatting';
 
 // Function to validate and format challenge IDs
 const validateChallengeId = (id: string): string => {
-  // Check if the ID is a simple number (like "1", "2", etc.)
-  if (/^\d+$/.test(id)) {
-    // Convert to the UUID format used in the database for simple numeric IDs
-    // Format: 00000000-0000-0000-0000-00000000000{id}
-    return `00000000-0000-0000-0000-${id.padStart(12, '0')}`;
+  // Wenn wir eine numerische ID oder eine ID im Format 'challenge-X' haben, 
+  // geben wir sie unverändert zurück, da sie in useChallengeData speziell behandelt wird
+  if (/^\d+$/.test(id) || id.startsWith('challenge-')) {
+    return id;
   }
   
-  // If it's already a UUID or another format, return as is
+  // Wenn es bereits eine UUID oder ein anderes Format ist, unverändert zurückgeben
   return id;
 };
 
@@ -39,13 +38,13 @@ export const fetchChallengeDetails = async (
     
     console.log('Fetching challenge with validated ID:', validatedId);
     
-    // For demo purposes, fetch from sample data when using numeric IDs
-    if (/^\d+$/.test(challengeId)) {
+    // For demo purposes, fetch from sample data when using numeric IDs or 'challenge-X' format
+    if (/^\d+$/.test(challengeId) || challengeId.startsWith('challenge-')) {
       // Mock data for demo purposes
       setTimeout(() => {
         const mockChallenge: Challenge = {
           id: validatedId,
-          title: `Challenge ${challengeId}`,
+          title: `Challenge ${challengeId.startsWith('challenge-') ? challengeId.split('-')[1] : challengeId}`,
           description: 'Dies ist eine Demo-Challenge für Test-Zwecke.',
           type: 'Community',
           start_date: new Date().toISOString(),
