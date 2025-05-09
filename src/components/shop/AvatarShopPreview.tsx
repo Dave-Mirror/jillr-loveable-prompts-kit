@@ -34,7 +34,7 @@ const AvatarShopPreview: React.FC = () => {
         <Button 
           className="w-full" 
           variant="outline"
-          onClick={() => navigate('/profile?tab=settings')}
+          onClick={() => navigate('/profile?tab=avatar')}
         >
           Avatarshop öffnen
         </Button>

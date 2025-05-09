@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Award, Coins, HeartHandshake, Trophy, Shirt, Hat, Glasses, Zap } from 'lucide-react';
+import { Award, Coins, HeartHandshake, Trophy, Shirt, CircleUser, Glasses, Zap } from 'lucide-react';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import AvatarCustomizationModal from '../avatar/AvatarCustomizationModal';
@@ -154,7 +154,7 @@ const AvatarTab: React.FC<AvatarTabProps> = ({ userProfile }) => {
                         <Badge variant="outline" className="text-xs py-0">
                           {item.unlockedAt}
                         </Badge>
-                        {item.type === 'head' && <Hat size={12} />}
+                        {item.type === 'head' && <CircleUser size={12} />} {/* Changed from Hat to CircleUser */}
                         {item.type === 'body' && <Shirt size={12} />}
                         {item.type === 'face' && <Glasses size={12} />}
                       </div>
@@ -197,7 +197,7 @@ const AvatarTab: React.FC<AvatarTabProps> = ({ userProfile }) => {
                         <Badge variant="secondary" className="text-xs py-0">
                           {item.unlocksAt}
                         </Badge>
-                        {item.type === 'head' && <Hat size={12} />}
+                        {item.type === 'head' && <CircleUser size={12} />} {/* Changed from Hat to CircleUser */}
                         {item.type === 'body' && <Shirt size={12} />}
                         {item.type === 'face' && <Glasses size={12} />}
                       </div>

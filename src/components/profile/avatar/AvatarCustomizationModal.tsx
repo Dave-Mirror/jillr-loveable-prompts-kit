@@ -7,8 +7,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
 import { toast } from '@/hooks/use-toast';
 import { 
-  Shirt, Hat, Glasses, Clock, Star, ShoppingBag, 
-  Coins, Award, Lock, CheckCircle  
+  Shirt, 
+  CircleUser, // Replace Hat with CircleUser for head items
+  Glasses, 
+  Clock, 
+  Star, 
+  ShoppingBag, 
+  Coins, 
+  Award, 
+  Lock, 
+  CheckCircle  
 } from 'lucide-react';
 
 // Types for avatar customization
@@ -291,7 +299,7 @@ const AvatarCustomizationModal: React.FC<AvatarCustomizationModalProps> = ({
             <Tabs defaultValue="head" value={activeTab} onValueChange={setActiveTab} className="w-full flex flex-col flex-1">
               <TabsList className="grid grid-cols-5">
                 <TabsTrigger value="head" className="flex items-center gap-1">
-                  <Hat className="h-4 w-4" />
+                  <CircleUser className="h-4 w-4" /> {/* Changed from Hat to CircleUser */}
                   <span className="hidden sm:inline">Kopf</span>
                 </TabsTrigger>
                 <TabsTrigger value="face" className="flex items-center gap-1">
