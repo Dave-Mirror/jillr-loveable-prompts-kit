@@ -29,9 +29,9 @@ const CategoryFilters = ({ title, filters, createLabel }: CategoryFiltersProps) 
     <motion.div 
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="mb-6 p-4 bg-jillr-darkAccent/50 backdrop-blur-sm border border-jillr-border/30 rounded-lg"
+      className="mb-8 p-5 bg-jillr-darkAccent/30 backdrop-blur-md border border-jillr-border/20 rounded-xl shadow-lg"
     >
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
         <h3 className="font-medium text-sm md:text-base flex items-center">
           {title}
           {selectedFilter && (
@@ -47,18 +47,18 @@ const CategoryFilters = ({ title, filters, createLabel }: CategoryFiltersProps) 
               variant="ghost" 
               size="sm" 
               onClick={handleReset} 
-              className="h-8 px-2 text-xs hover:bg-jillr-darkLight"
+              className="h-9 px-3 text-xs hover:bg-jillr-darkLight"
             >
               <FilterX className="h-3 w-3 mr-1" /> Reset
             </Button>
           )}
           
-          <ToggleGroup type="single" value={viewMode} onValueChange={(value) => value && setViewMode(value as 'grid' | 'dropdown')}>
-            <ToggleGroupItem value="grid" size="sm" className="h-8 px-2 text-xs">
+          <ToggleGroup type="single" value={viewMode} onValueChange={(value) => value && setViewMode(value as 'grid' | 'dropdown')} className="bg-jillr-darkLight/50 p-1 rounded-lg">
+            <ToggleGroupItem value="grid" size="sm" className="h-7 px-3 py-1 text-xs rounded-md data-[state=on]:bg-jillr-darkAccent data-[state=on]:shadow-sm">
               <ChevronDown className="h-3 w-3" />
               <span className="ml-1">Grid</span>
             </ToggleGroupItem>
-            <ToggleGroupItem value="dropdown" size="sm" className="h-8 px-2 text-xs">
+            <ToggleGroupItem value="dropdown" size="sm" className="h-7 px-3 py-1 text-xs rounded-md data-[state=on]:bg-jillr-darkAccent data-[state=on]:shadow-sm">
               <ChevronUp className="h-3 w-3" />
               <span className="ml-1">Dropdown</span>
             </ToggleGroupItem>
@@ -67,7 +67,7 @@ const CategoryFilters = ({ title, filters, createLabel }: CategoryFiltersProps) 
       </div>
       
       {viewMode === 'grid' ? (
-        <div className="flex flex-wrap gap-2 mt-2">
+        <div className="flex flex-wrap gap-2 mt-3">
           {filters.map((filter, index) => (
             <motion.div
               key={filter}
@@ -79,10 +79,10 @@ const CategoryFilters = ({ title, filters, createLabel }: CategoryFiltersProps) 
               <Badge 
                 variant={selectedFilter === filter ? "default" : "outline"} 
                 className={`
-                  cursor-pointer transition-all hover:scale-105 px-3 py-1.5
+                  cursor-pointer transition-all duration-200 hover:scale-105 px-3 py-1.5 text-sm
                   ${selectedFilter === filter 
-                    ? "bg-jillr-neonPurple text-white" 
-                    : "bg-jillr-darkLight hover:bg-jillr-darkLight/80 border-jillr-border"}
+                    ? "bg-jillr-neonPurple text-white shadow-sm" 
+                    : "bg-jillr-darkLight/50 hover:bg-jillr-darkLight/80 border-jillr-border/30"}
                 `}
                 onClick={() => handleFilterClick(filter)}
               >
@@ -94,19 +94,19 @@ const CategoryFilters = ({ title, filters, createLabel }: CategoryFiltersProps) 
           {createLabel && (
             <Badge 
               variant="outline" 
-              className="cursor-pointer bg-jillr-neonPink/10 border-jillr-neonPink/30 text-jillr-neonPink hover:bg-jillr-neonPink/20 transition-all hover:scale-105 px-3 py-1.5"
+              className="cursor-pointer bg-jillr-neonPink/10 border-jillr-neonPink/30 text-jillr-neonPink hover:bg-jillr-neonPink/20 transition-all hover:scale-105 px-3 py-1.5 text-sm"
             >
               {createLabel}
             </Badge>
           )}
         </div>
       ) : (
-        <div className="mt-2">
+        <div className="mt-3">
           <Select value={selectedFilter || ""} onValueChange={setSelectedFilter}>
-            <SelectTrigger className="w-full sm:w-[240px] bg-jillr-darkLight border-jillr-border">
+            <SelectTrigger className="w-full sm:w-[260px] bg-jillr-darkLight/50 border-jillr-border/30">
               <SelectValue placeholder={`Wähle ${title}...`} />
             </SelectTrigger>
-            <SelectContent className="z-50 bg-jillr-darkAccent border-jillr-border">
+            <SelectContent className="z-50 bg-jillr-darkAccent/95 backdrop-blur-md border-jillr-border/30">
               {filters.map((filter) => (
                 <SelectItem key={filter} value={filter} className="hover:bg-jillr-darkLight focus:bg-jillr-darkLight">
                   {filter}

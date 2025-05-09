@@ -22,12 +22,12 @@ interface LeaderboardHeaderProps {
 
 const LeaderboardHeader = ({ sortBy, setSortBy, timeFrame = 'all-time', setTimeFrame }: LeaderboardHeaderProps) => {
   return (
-    <div className="space-y-4">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pt-4 pb-2">
+    <div className="space-y-6">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pt-6 pb-4">
         <div>
-          <h1 className="text-3xl md:text-4xl font-bold flex items-center gap-2">
-            <Trophy className="h-8 w-8 text-jillr-neonPurple animate-pulse-soft" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-jillr-neonPurple to-jillr-neonPink">
+          <h1 className="text-3xl md:text-5xl font-bold flex items-center gap-3 mb-3">
+            <Trophy className="h-10 w-10 text-jillr-neonPurple animate-pulse-soft" />
+            <span className="text-transparent bg-clip-text bg-gradient-to-br from-jillr-neonPurple to-jillr-neonPink">
               Leaderboard
             </span>
           </h1>
@@ -38,10 +38,10 @@ const LeaderboardHeader = ({ sortBy, setSortBy, timeFrame = 'all-time', setTimeF
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-row gap-3">
           <div className="relative w-full">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input 
               placeholder="Nach Nutzern suchen..." 
-              className="pl-9 bg-jillr-darkAccent border-jillr-border w-full" 
+              className="pl-10 pr-4 w-full bg-jillr-darkAccent/60 border-jillr-border/30" 
             />
           </div>
 
@@ -50,7 +50,7 @@ const LeaderboardHeader = ({ sortBy, setSortBy, timeFrame = 'all-time', setTimeF
               value={timeFrame}
               onValueChange={(value) => setTimeFrame(value)}
             >
-              <SelectTrigger className="bg-jillr-darkAccent border-jillr-border w-full">
+              <SelectTrigger className="bg-jillr-darkAccent/60 border-jillr-border/30 w-full">
                 <Clock className="h-4 w-4 mr-2" />
                 <span className="hidden xs:inline">Zeitraum:</span>
                 <span>
@@ -59,7 +59,7 @@ const LeaderboardHeader = ({ sortBy, setSortBy, timeFrame = 'all-time', setTimeF
                    'Dieser Monat'}
                 </span>
               </SelectTrigger>
-              <SelectContent position="popper" className="bg-jillr-darkAccent border-jillr-border">
+              <SelectContent position="popper" className="bg-jillr-darkAccent/95 backdrop-blur-md border-jillr-border/30">
                 <SelectItem value="all-time">Gesamt</SelectItem>
                 <SelectItem value="weekly">Diese Woche</SelectItem>
                 <SelectItem value="monthly">Dieser Monat</SelectItem>
@@ -71,7 +71,7 @@ const LeaderboardHeader = ({ sortBy, setSortBy, timeFrame = 'all-time', setTimeF
             value={sortBy}
             onValueChange={(value) => setSortBy(value)}
           >
-            <SelectTrigger className="bg-jillr-darkAccent border-jillr-border w-full">
+            <SelectTrigger className="bg-jillr-darkAccent/60 border-jillr-border/30 w-full">
               <Filter className="h-4 w-4 mr-2" />
               <span className="hidden xs:inline">Sort:</span>
               <span>
@@ -80,7 +80,7 @@ const LeaderboardHeader = ({ sortBy, setSortBy, timeFrame = 'all-time', setTimeF
                  'Challenges'}
               </span>
             </SelectTrigger>
-            <SelectContent position="popper" className="bg-jillr-darkAccent border-jillr-border z-50">
+            <SelectContent position="popper" className="bg-jillr-darkAccent/95 backdrop-blur-md border-jillr-border/30 z-50">
               <SelectItem value="xp" className="flex items-center">
                 <Zap className="h-4 w-4 mr-2 text-jillr-neonGreen" />
                 <span>XP Punkte</span>

@@ -25,35 +25,35 @@ const LeaderboardTabs: React.FC<LeaderboardTabsProps> = ({
 }) => {
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-      <div className="sticky top-0 z-20 bg-jillr-darkAccent/95 backdrop-blur-md border-b border-jillr-border/30 shadow-md">
-        <TabsList className="grid grid-cols-4 bg-transparent p-0 h-auto w-full">
+      <div className="sticky top-0 z-20 bg-jillr-darkAccent/95 backdrop-blur-xl border-b border-jillr-border/20 shadow-md">
+        <TabsList className="flex justify-between bg-transparent p-0 h-auto w-full">
           <TabsTrigger 
             value="global" 
-            className="data-[state=active]:bg-jillr-neonPurple/20 data-[state=active]:text-jillr-neonPurple py-4 rounded-none border-b-2 border-transparent data-[state=active]:border-jillr-neonPurple flex flex-row items-center justify-center gap-2"
+            className="flex-1 py-5 rounded-none border-b-2 border-transparent data-[state=active]:border-jillr-neonPurple data-[state=active]:bg-jillr-neonPurple/10 data-[state=active]:text-jillr-neonPurple transition-all duration-200 flex flex-row items-center justify-center gap-2"
           >
             <Globe className="h-5 w-5" />
-            <span className="hidden sm:inline text-base">Global</span>
+            <span className="hidden sm:inline text-base font-medium">Global</span>
           </TabsTrigger>
           <TabsTrigger 
             value="city" 
-            className="data-[state=active]:bg-jillr-neonGreen/20 data-[state=active]:text-jillr-neonGreen py-4 rounded-none border-b-2 border-transparent data-[state=active]:border-jillr-neonGreen flex flex-row items-center justify-center gap-2"
+            className="flex-1 py-5 rounded-none border-b-2 border-transparent data-[state=active]:border-jillr-neonGreen data-[state=active]:bg-jillr-neonGreen/10 data-[state=active]:text-jillr-neonGreen transition-all duration-200 flex flex-row items-center justify-center gap-2"
           >
             <MapPin className="h-5 w-5" />
-            <span className="hidden sm:inline text-base">Cities</span>
+            <span className="hidden sm:inline text-base font-medium">Cities</span>
           </TabsTrigger>
           <TabsTrigger 
             value="challenge-type" 
-            className="data-[state=active]:bg-jillr-neonBlue/20 data-[state=active]:text-jillr-neonBlue py-4 rounded-none border-b-2 border-transparent data-[state=active]:border-jillr-neonBlue flex flex-row items-center justify-center gap-2"
+            className="flex-1 py-5 rounded-none border-b-2 border-transparent data-[state=active]:border-jillr-neonBlue data-[state=active]:bg-jillr-neonBlue/10 data-[state=active]:text-jillr-neonBlue transition-all duration-200 flex flex-row items-center justify-center gap-2"
           >
             <Video className="h-5 w-5" />
-            <span className="hidden sm:inline text-base">Challenges</span>
+            <span className="hidden sm:inline text-base font-medium">Challenges</span>
           </TabsTrigger>
           <TabsTrigger 
             value="team" 
-            className="data-[state=active]:bg-jillr-neonPink/20 data-[state=active]:text-jillr-neonPink py-4 rounded-none border-b-2 border-transparent data-[state=active]:border-jillr-neonPink flex flex-row items-center justify-center gap-2"
+            className="flex-1 py-5 rounded-none border-b-2 border-transparent data-[state=active]:border-jillr-neonPink data-[state=active]:bg-jillr-neonPink/10 data-[state=active]:text-jillr-neonPink transition-all duration-200 flex flex-row items-center justify-center gap-2"
           >
             <Users className="h-5 w-5" />
-            <span className="hidden sm:inline text-base">Teams</span>
+            <span className="hidden sm:inline text-base font-medium">Teams</span>
           </TabsTrigger>
         </TabsList>
       </div>
