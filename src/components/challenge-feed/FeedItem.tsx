@@ -1,0 +1,114 @@
+
+import React, { useState } from 'react';
+import { 
+  Heart, MessageSquare, Share, Award, Star, Flame, 
+  Info, ChevronDown, ChevronUp, Flag 
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { toast } from '@/hooks/use-toast';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FeedItem as FeedItemType } from '@/utils/challenge/feed';
+import AchievementPanel from './AchievementPanel';
+import FeedItemActions from './FeedItemActions';
+import FeedItemHeader from './FeedItemHeader';
+import FeedItemCaption from './FeedItemCaption';
+import FeedItemTooltip from './FeedItemTooltip';
+import JoinChallengeButton from './JoinChallengeButton';
+
+interface FeedItemProps {
+  item: FeedItemType;
+  index: number;
+  activeIndex: number;
+  onLike: (id: string) => void;
+  onComment: (id: string) => void;
+  onShare: (id: string) => void;
+  onSupportCause: (id: string) => void;
+  onJoinChallenge: (challengeId: string, challengeTitle: string) => void;
+  toggleAchievement: (id: string | null) => void;
+  showAchievement: string | null;
+}
+
+const FeedItem: React.FC<FeedItemProps> = ({ 
+  item, 
+  index, 
+  activeIndex,
+  onLike,
+  onComment,
+  onShare,
+  onSupportCause,
+  onJoinChallenge,
+  toggleAchievement,
+  showAchievement
+}) => {
+  return (
+    <div 
+      className={`feed-item relative h-screen w-full flex items-center justify-center bg-black overflow-hidden snap-center`}
+    >
+      {/* Video/Image Content */}
+      {item.content.type === 'video' ? (
+        <video
+          src={item.content.url}
+          className="absolute inset-0 w-full h-full object-cover"
+          loop
+          muted
+          playsInline
+          autoPlay={index === activeIndex}
+          controls={false}
+        />
+      ) : (
+        <img
+          src={item.content.url}
+          className="absolute inset-0 w-full h-full object-cover"
+          alt={item.caption}
+        />
+      )}
+      
+      {/* Overlay gradient for better text visibility */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30" />
+      
+      {/* User & Challenge Info */}
+      <FeedItemHeader item={item} />
+      
+      {/* Caption & Tags */}
+      <FeedItemCaption item={item} />
+      
+      {/* Right side interactions */}
+      <FeedItemActions 
+        item={item} 
+        onLike={onLike}
+        onComment={onComment}
+        onShare={onShare}
+        onSupportCause={onSupportCause}
+        onJoinChallenge={onJoinChallenge}
+        toggleAchievement={toggleAchievement}
+        showAchievement={showAchievement}
+      />
+      
+      {/* Achievement details panel - slides up when toggled */}
+      <AchievementPanel 
+        item={item} 
+        showAchievement={showAchievement} 
+        toggleAchievement={toggleAchievement} 
+      />
+      
+      {/* Indicator for scrolling */}
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 animate-bounce">
+        <ChevronDown className="h-6 w-6 text-white/50" />
+      </div>
+      
+      {/* Tooltip for the Impact Points feature */}
+      <FeedItemTooltip />
+
+      {/* Challenge Participation Button - Floating action button */}
+      <JoinChallengeButton 
+        challengeId={item.challenge.id} 
+        challengeTitle={item.challenge.title} 
+        onJoinChallenge={onJoinChallenge} 
+      />
+    </div>
+  );
+};
+
+export default FeedItem;

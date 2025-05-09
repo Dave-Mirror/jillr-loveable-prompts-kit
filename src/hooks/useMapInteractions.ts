@@ -1,90 +1,73 @@
 
-import { useState, useCallback, useEffect } from 'react';
-import { useToast } from '@/hooks/use-toast';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
-import { joinChallenge } from '@/utils/challenge';
-import { defaultCenter } from '@/utils/mapUtils';
+import { useState, useCallback } from 'react';
+import { toast } from '@/hooks/use-toast';
+import { type LiveMapMarker } from '@/types/livemap';
 
-export const useMapInteractions = () => {
-  const [selectedItem, setSelectedItem] = useState<any>(null);
-  const [mapCenter, setMapCenter] = useState(defaultCenter);
-  const [map, setMap] = useState<google.maps.Map | null>(null);
-  const [infoWindow, setInfoWindow] = useState<any>(null);
-  const navigate = useNavigate();
-  const { toast } = useToast();
-  const { user } = useAuth();
+export function useMapInteractions() {
+  const [selectedMarker, setSelectedMarker] = useState<LiveMapMarker | null>(null);
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
-  // Get user's current location
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setMapCenter({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-          });
-        },
-        (error) => {
-          console.error("Error getting location:", error);
-        }
-      );
-    }
+  const handleMarkerClick = useCallback((marker: LiveMapMarker) => {
+    setSelectedMarker(marker);
+    setIsDetailsOpen(true);
   }, []);
 
-  const onMapLoad = useCallback((map: google.maps.Map) => {
-    setMap(map);
+  const handleCloseDetails = useCallback(() => {
+    setIsDetailsOpen(false);
+    // Optional: Add a small delay before clearing the selected marker
+    // so the closing animation can complete
+    setTimeout(() => setSelectedMarker(null), 300);
   }, []);
 
-  const onMapUnmount = useCallback(() => {
-    setMap(null);
+  const handleClaimReward = useCallback((markerId: string) => {
+    toast({
+      title: "Reward Claimed!",
+      description: `You've successfully claimed the reward at location ${markerId}.`,
+    });
+    // Here you would typically call an API to mark this reward as claimed
   }, []);
 
-  const handleItemClick = (item: any) => {
-    setSelectedItem(item);
-    setInfoWindow(null);
-  };
+  const handleJoinEvent = useCallback((eventId: string) => {
+    toast({
+      title: "Event Joined!",
+      description: `You've successfully registered for the event.`,
+    });
+    // Here you would typically call an API to register for the event
+  }, []);
 
-  const handleCloseDialog = () => {
-    setSelectedItem(null);
-  };
+  const handleTrackChallenge = useCallback((challengeId: string) => {
+    toast({
+      title: "Challenge Tracked",
+      description: "This challenge has been added to your tracking list.",
+    });
+    // Here you would typically call an API to track the challenge
+  }, []);
 
-  const handleJoinChallenge = () => {
-    if (selectedItem?.type === 'challenge') {
-      joinChallenge(selectedItem.id, user, navigate);
-    } else if (selectedItem?.type === 'drop') {
-      toast({
-        title: "Product Reserved!",
-        description: `You've reserved ${selectedItem.title}. Pick it up within the next 24 hours!`,
-      });
-    } else if (selectedItem?.type === 'easteregg') {
-      toast({
-        title: "Easter Egg Found!",
-        description: `You've unlocked ${selectedItem.reward}!`,
-      });
-    }
-    setSelectedItem(null);
-  };
+  const handleScanQrCode = useCallback(() => {
+    toast({
+      title: "Camera Access Required",
+      description: "Please allow camera access to scan QR codes.",
+    });
+    // Implement QR code scanning logic here
+  }, []);
 
-  const handleMarkerClick = (item: any) => {
-    setInfoWindow(item);
-  };
-
-  const handleInfoWindowClose = () => {
-    setInfoWindow(null);
-  };
+  const handleCollectEasterEgg = useCallback((eggId: string) => {
+    toast({
+      title: "Easter Egg Found!",
+      description: "You've discovered a hidden treasure!",
+    });
+    // Here you would typically call an API to mark this easter egg as found
+  }, []);
 
   return {
-    selectedItem,
-    mapCenter,
-    map,
-    infoWindow,
-    onMapLoad,
-    onMapUnmount,
-    handleItemClick,
-    handleCloseDialog,
-    handleJoinChallenge,
+    selectedMarker,
+    isDetailsOpen,
     handleMarkerClick,
-    handleInfoWindowClose
+    handleCloseDetails,
+    handleClaimReward,
+    handleJoinEvent,
+    handleTrackChallenge,
+    handleScanQrCode,
+    handleCollectEasterEgg,
   };
-};
+}
