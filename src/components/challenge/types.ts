@@ -92,7 +92,11 @@ export type CommunitySubmissionsProps = {
 };
 
 export type RewardsCardProps = {
-  challengeRewards: Reward[];
+  challengeRewards: {
+    type: string;
+    value: number;
+    icon: string;
+  }[];
 };
 
 export type UserProgressCardProps = {
