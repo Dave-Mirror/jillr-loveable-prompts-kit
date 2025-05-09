@@ -1,36 +1,39 @@
 
 import React from 'react';
 import { ChevronUp, ChevronDown, Minus } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 interface RankChangeIndicatorProps {
   change: number;
-  className?: string;
 }
 
-const RankChangeIndicator: React.FC<RankChangeIndicatorProps> = ({ change, className }) => {
+const RankChangeIndicator: React.FC<RankChangeIndicatorProps> = ({ change }) => {
   if (change === 0) {
-    return (
-      <div className={`flex items-center text-muted-foreground ${className}`}>
-        <Minus className="h-3 w-3 mr-1" />
-        <span className="text-xs">0</span>
-      </div>
-    );
+    return <Minus className="h-3 w-3 text-gray-400" />;
   }
 
   if (change > 0) {
     return (
-      <div className={`flex items-center text-green-500 ${className}`}>
-        <ChevronUp className="h-3 w-3 mr-1" />
+      <motion.div
+        initial={{ scale: 0.8 }}
+        animate={{ scale: 1 }}
+        className="text-jillr-neonGreen flex items-center text-xs"
+      >
+        <ChevronUp className="h-3 w-3" />
         <span className="text-xs">{change}</span>
-      </div>
+      </motion.div>
     );
   }
 
   return (
-    <div className={`flex items-center text-red-500 ${className}`}>
-      <ChevronDown className="h-3 w-3 mr-1" />
+    <motion.div
+      initial={{ scale: 0.8 }}
+      animate={{ scale: 1 }}
+      className="text-jillr-neonPink flex items-center text-xs"
+    >
+      <ChevronDown className="h-3 w-3" />
       <span className="text-xs">{Math.abs(change)}</span>
-    </div>
+    </motion.div>
   );
 };
 

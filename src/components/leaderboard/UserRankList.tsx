@@ -2,8 +2,9 @@
 import React from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { MapPin, Users, Zap } from 'lucide-react';
+import { MapPin, Users, Zap, Award, Star } from 'lucide-react';
 import RankChangeIndicator from './RankChangeIndicator';
+import { motion } from 'framer-motion';
 
 type User = {
   id: string;
@@ -28,72 +29,105 @@ interface UserRankListProps {
 
 const UserRankList = ({ users, tabValue, startRank = 4 }: UserRankListProps) => {
   return (
-    <div className="space-y-4">
+    <motion.div 
+      className="space-y-3"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
+    >
       {users.map((user, index) => (
-        <div key={user.id} className="flex items-center gap-4 p-3 rounded-lg border border-border">
-          <div className="flex items-center gap-1 w-10">
-            <div className="text-xl font-bold text-center">{index + startRank}</div>
+        <motion.div 
+          key={user.id} 
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: index * 0.05, duration: 0.2 }}
+          whileHover={{ scale: 1.01, transition: { duration: 0.15 } }}
+          className="flex items-center gap-3 p-3 rounded-lg border border-jillr-border/30 bg-jillr-darkAccent/50 backdrop-blur-sm hover:bg-jillr-darkLight transition-colors"
+        >
+          <div className="flex items-center gap-1 min-w-[36px]">
+            <div className="text-lg font-bold text-center">{index + startRank}</div>
             {user.rankChange !== undefined && (
               <RankChangeIndicator change={user.rankChange} />
             )}
           </div>
-          <Avatar className="h-10 w-10">
-            <AvatarImage src={user.avatarUrl} />
-            <AvatarFallback>{user.username.substring(0, 2).toUpperCase()}</AvatarFallback>
-          </Avatar>
-          <div className="flex-1">
-            <div className="font-medium">{user.username}</div>
-            {tabValue === 'city' && (
-              <div className="text-xs flex items-center gap-1">
-                <MapPin className="h-3 w-3" /> {user.city}
-              </div>
-            )}
-            {tabValue === 'challenge-type' && (
-              <div className="text-xs text-muted-foreground">{user.challengeType}</div>
-            )}
-            {tabValue === 'team' && (
-              <div className="text-xs flex items-center gap-1">
-                <Users className="h-3 w-3" /> {user.team}
-              </div>
-            )}
-            {tabValue === 'global' && (
-              <div className="text-xs text-muted-foreground">{user.city}</div>
-            )}
+          
+          <div className="relative">
+            <Avatar className="h-10 w-10 ring-1 ring-jillr-border/50">
+              <AvatarImage src={user.avatarUrl} />
+              <AvatarFallback>{user.username.substring(0, 2).toUpperCase()}</AvatarFallback>
+            </Avatar>
+            <div className="absolute -bottom-1 -right-1 bg-jillr-dark text-xs px-1 rounded-md border border-jillr-border/50">
+              {user.level}
+            </div>
           </div>
-          <div className="flex gap-6">
+          
+          <div className="flex-1 min-w-0">
+            <div className="font-medium truncate">{user.username}</div>
+            <div className="flex items-center gap-2 text-xs text-gray-400">
+              {tabValue === 'city' && (
+                <div className="flex items-center gap-1">
+                  <MapPin className="h-3 w-3" /> {user.city}
+                </div>
+              )}
+              {tabValue === 'challenge-type' && (
+                <span className="truncate">{user.challengeType}</span>
+              )}
+              {tabValue === 'team' && (
+                <div className="flex items-center gap-1 truncate">
+                  <Users className="h-3 w-3 flex-shrink-0" /> <span className="truncate">{user.team}</span>
+                </div>
+              )}
+              {tabValue === 'global' && (
+                <div className="flex items-center gap-1 truncate">
+                  <MapPin className="h-3 w-3 flex-shrink-0" /> <span className="truncate">{user.city}</span>
+                </div>
+              )}
+            </div>
+          </div>
+          
+          <div className="flex flex-col xs:flex-row gap-3 xs:gap-4 ml-auto">
             <div className="flex flex-col items-center">
-              <div className="text-xs text-muted-foreground">XP</div>
+              <div className="text-xs text-gray-400 flex items-center">
+                <Zap className="h-3 w-3 mr-1 text-jillr-neonGreen" /> XP
+              </div>
               <div className="font-medium">{user.xp.toLocaleString()}</div>
             </div>
             
             {tabValue === 'global' && (
-              <div className="flex flex-col items-center">
-                <div className="text-xs text-muted-foreground">Coins</div>
+              <div className="hidden sm:flex flex-col items-center">
+                <div className="text-xs text-gray-400">Coins</div>
                 <div className="font-medium">{user.coins.toLocaleString()}</div>
               </div>
             )}
             
             <div className="flex flex-col items-center">
-              <div className="text-xs text-muted-foreground">Challenges</div>
+              <div className="text-xs text-gray-400">Challenges</div>
               <div className="font-medium">{user.challenges}</div>
             </div>
-            
-            {tabValue === 'global' && (
-              <div className="hidden md:flex items-center gap-1">
-                {user.badges.slice(0, 1).map((badge, idx) => (
-                  <Badge key={idx} variant="outline" className="text-xs">
-                    {badge}
-                  </Badge>
-                ))}
+          </div>
+          
+          <div className="hidden md:block">
+            {user.badges.length > 0 && (
+              <div className="flex items-center gap-1">
+                <Badge variant="outline" className="bg-jillr-darkLight border-jillr-border/50 text-xs flex items-center gap-1">
+                  <Award className="h-3 w-3 text-jillr-neonPurple" /> {user.badges[0]}
+                </Badge>
                 {user.badges.length > 1 && (
                   <span className="text-xs text-muted-foreground">+{user.badges.length - 1}</span>
                 )}
               </div>
             )}
           </div>
-        </div>
+        </motion.div>
       ))}
-    </div>
+      
+      {users.length === 0 && (
+        <div className="text-center py-10">
+          <Star className="h-16 w-16 text-muted-foreground mx-auto mb-4 opacity-20" />
+          <p className="text-muted-foreground">Keine weiteren Nutzer gefunden</p>
+        </div>
+      )}
+    </motion.div>
   );
 };
 

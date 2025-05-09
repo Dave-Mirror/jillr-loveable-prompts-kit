@@ -1,10 +1,12 @@
 
-import React, { useState } from 'react';
-import { mockUsers, badgeSystem } from '@/data/leaderboardMockData';
+import React from 'react';
+import { data as mockUsers, badgeSystem } from '@/data/leaderboardMockData';
 import PageContainer from '@/components/navigation/PageContainer';
+import { useLeaderboardData } from '@/hooks/useLeaderboardData';
 import LeaderboardHeader from '@/components/leaderboard/LeaderboardHeader';
 import LeaderboardTabs from '@/components/leaderboard/LeaderboardTabs';
-import { useLeaderboard } from '@/hooks/useLeaderboard';
+import { Card, CardContent } from '@/components/ui/card';
+import { Trophy, Medal, Crown } from 'lucide-react';
 
 const Leaderboard = () => {
   const {
@@ -17,22 +19,44 @@ const Leaderboard = () => {
     cities,
     challengeTypes,
     teams
-  } = useLeaderboard(mockUsers, badgeSystem);
+  } = useLeaderboardData(mockUsers, badgeSystem);
 
   return (
     <PageContainer previousPage="/explore" nextPage="/wallet">
-      <div className="container mx-auto max-w-6xl py-6">
-        <LeaderboardHeader sortBy={sortBy} setSortBy={setSortBy} />
-        
-        <LeaderboardTabs
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-          users={users}
-          isLoading={isLoading}
-          cityFilters={cities}
-          challengeFilters={challengeTypes}
-          teamFilters={teams}
-        />
+      <div className="container mx-auto max-w-6xl pb-16">
+        <div className="relative">
+          {/* Decorative elements */}
+          <div className="absolute -top-6 left-4 md:left-12 text-jillr-neonPurple/20 transform rotate-12">
+            <Trophy size={64} strokeWidth={1.5} />
+          </div>
+          <div className="absolute -top-4 right-4 md:right-16 text-jillr-neonGreen/20 transform -rotate-12">
+            <Medal size={48} strokeWidth={1.5} />
+          </div>
+          <div className="absolute top-12 left-1/2 -translate-x-1/2 text-jillr-neonPink/20">
+            <Crown size={56} strokeWidth={1.5} />
+          </div>
+
+          {/* Gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-background to-transparent pointer-events-none h-40"></div>
+          
+          {/* Main content */}
+          <LeaderboardHeader sortBy={sortBy} setSortBy={setSortBy} />
+          
+          <Card className="relative border border-jillr-neonPurple/30 bg-jillr-darkAccent/50 overflow-hidden mt-4">
+            <div className="absolute inset-0 bg-gradient-to-br from-jillr-neonPurple/5 to-jillr-neonPink/5 pointer-events-none"></div>
+            <CardContent className="p-0">
+              <LeaderboardTabs
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
+                users={users}
+                isLoading={isLoading}
+                cityFilters={cities}
+                challengeFilters={challengeTypes}
+                teamFilters={teams}
+              />
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </PageContainer>
   );
