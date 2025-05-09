@@ -34,7 +34,7 @@ const EditorToolbar: React.FC<EditorToolbarProps> = ({
         toast({
           title: "KI-Optimierung abgeschlossen",
           description: "Dein Video wurde mit KI-Templates optimiert für maximales Engagement.",
-          variant: "success"
+          variant: "default"
         });
       }
     }, 2000);
