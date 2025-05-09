@@ -28,6 +28,20 @@ const HeaderContainer: React.FC<HeaderContainerProps> = ({ children }) => {
 
   // Check if we're on the home page or explore page to apply transparent header
   const shouldBeTransparent = location.pathname === '/' || location.pathname === '/explore';
+  // Check if we're on the challenge feed to apply full-screen mode
+  const isFullscreenPage = location.pathname === '/challenge-feed';
+
+  if (isFullscreenPage) {
+    return (
+      <header className="fixed top-0 left-0 right-0 z-50 w-full pointer-events-none">
+        <div className="container">
+          <div className="flex items-center justify-between pt-safe">
+            {children}
+          </div>
+        </div>
+      </header>
+    );
+  }
 
   return (
     <header 

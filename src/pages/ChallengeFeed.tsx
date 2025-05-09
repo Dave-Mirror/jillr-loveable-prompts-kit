@@ -274,7 +274,7 @@ const ChallengeFeed = () => {
               <span className="text-jillr-neonGreen text-xs mt-1">{item.impactPoints} IP</span>
             </div>
             
-            {/* Challenge Join Button - New addition */}
+            {/* Challenge Join Button - Side action */}
             <div className="flex flex-col items-center">
               <Button 
                 variant="ghost" 
@@ -366,7 +366,7 @@ const ChallengeFeed = () => {
           <div className="absolute bottom-32 left-1/2 transform -translate-x-1/2">
             <Button 
               onClick={() => handleJoinChallenge(item.challenge.id, item.challenge.title)}
-              className="bg-gradient-to-r from-jillr-neonPurple to-jillr-neonPink px-6 py-2 rounded-full text-white font-medium flex items-center gap-2 shadow-lg hover:shadow-xl transition-all"
+              className="bg-gradient-to-r from-jillr-neonPurple to-jillr-neonPink px-6 py-2 rounded-full text-white font-medium flex items-center gap-2 shadow-lg hover:shadow-xl transition-all pointer-events-auto"
             >
               <Flag className="h-5 w-5" />
               Challenge teilnehmen
