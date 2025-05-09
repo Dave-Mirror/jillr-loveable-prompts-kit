@@ -13,12 +13,13 @@ const MobileProfileNavigation: React.FC<MobileProfileNavigationProps> = ({
   setActiveTab 
 }) => {
   const tabs = [
-    { value: 'activity', label: 'Activity' },
-    { value: 'rewards', label: 'Rewards' },
+    { value: 'activity', label: 'Aktivität' },
+    { value: 'rewards', label: 'Belohnungen' },
     { value: 'community', label: 'Community' },
-    { value: 'statistics', label: 'Stats' },
-    { value: 'social', label: 'Social' },
-    { value: 'settings', label: 'Settings' }
+    { value: 'statistics', label: 'Statistik' },
+    { value: 'social', label: 'Social Media' },
+    { value: 'data', label: 'Meine Daten' },
+    { value: 'settings', label: 'Einstellungen' }
   ];
 
   return (

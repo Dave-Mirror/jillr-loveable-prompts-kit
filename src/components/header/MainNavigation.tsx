@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   Home, Compass, Zap, Trophy, Map, ShoppingBag, Briefcase, Video, Edit, 
-  ChevronDown, Wallet, User, MoreHorizontal
+  ChevronDown, Wallet, User, MoreHorizontal, Database
 } from 'lucide-react';
 import { 
   NavigationMenu, 
@@ -42,6 +42,7 @@ const MainNavigation: React.FC<MainNavigationProps> = ({ user }) => {
     { name: 'Leaderboard', icon: Trophy, path: '/leaderboard' },
     { name: 'Wallet', icon: Wallet, path: '/wallet' },
     { name: 'Profile', icon: User, path: '/profile' },
+    { name: 'Meine Daten', icon: Database, path: '/profile?tab=data' },
     { name: 'Challenge Explorer', icon: Compass, path: '/dashboard' },
   ];
 
@@ -66,7 +67,7 @@ const MainNavigation: React.FC<MainNavigationProps> = ({ user }) => {
       <Link 
         to={item.path} 
         className={`flex items-center gap-2 px-3 py-2 rounded-md transition-colors hover:bg-white/10 ${
-          location.pathname === item.path ? 'text-jillr-neonPurple border-b-2 border-jillr-neonPurple' : 'text-foreground'
+          location.pathname === item.path && !item.path.includes('?') ? 'text-jillr-neonPurple border-b-2 border-jillr-neonPurple' : 'text-foreground'
         }`}
       >
         <item.icon size={16} />

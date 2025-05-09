@@ -1,5 +1,6 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import ProfileHeader from '@/components/profile/ProfileHeader';
 import ProfileTabs from '@/components/profile/ProfileTabs';
@@ -17,9 +18,20 @@ const mockUserProfile = {
 const Profile = () => {
   const { userProfile, isLoading } = useAuth();
   const [activeTab, setActiveTab] = useState('activity');
-
+  const location = useLocation();
+  
   // Use mock profile if user is not authenticated
   const profileData = userProfile || mockUserProfile;
+  
+  // Parse the tab parameter from the URL
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const tabParam = searchParams.get('tab');
+    
+    if (tabParam && ['activity', 'rewards', 'community', 'statistics', 'social', 'data', 'settings'].includes(tabParam)) {
+      setActiveTab(tabParam);
+    }
+  }, [location]);
 
   if (isLoading) {
     return <ProfileLoading />;

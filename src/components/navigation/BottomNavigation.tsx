@@ -3,7 +3,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   Home, Search, Trophy, Wallet, User, Map, Zap, ShoppingBag, MoreHorizontal,
-  BarChart, Video, Settings, Bell, Heart, Star, Edit, Compass
+  BarChart, Video, Settings, Bell, Heart, Database, Edit, Compass
 } from 'lucide-react';
 import { 
   Sheet,
@@ -19,7 +19,7 @@ const BottomNavigation = () => {
     { icon: Home, path: '/', label: 'Home' },
     { icon: Zap, path: '/explore', label: 'Entdecken' },
     { icon: Compass, path: '/challenge-feed', label: 'Feed' },
-    { icon: Map, path: '/livemap', label: 'Map' },
+    { icon: User, path: '/profile', label: 'Profil' },
     { icon: MoreHorizontal, path: '#more', label: 'Mehr', isMore: true }
   ];
   
@@ -28,7 +28,8 @@ const BottomNavigation = () => {
   const moreItems = [
     { icon: Trophy, path: '/leaderboard', label: 'Rangliste' },
     { icon: Wallet, path: '/wallet', label: 'Wallet' },
-    { icon: User, path: '/profile', label: 'Profil' },
+    { icon: Map, path: '/livemap', label: 'Map' },
+    { icon: Database, path: '/profile?tab=data', label: 'Meine Daten' },
     { icon: Search, path: '/search', label: 'Suche' },
     { icon: Compass, path: '/dashboard', label: 'Challenge Explorer' },
     { icon: BarChart, path: '/brand-dashboard', label: 'Brand Portal' },
@@ -62,7 +63,7 @@ const BottomNavigation = () => {
                     <h3 className="text-lg font-semibold text-center mb-6">Mehr Optionen</h3>
                     <div className="grid grid-cols-4 gap-4">
                       {moreItems.map((moreItem) => {
-                        const isMoreItemActive = location.pathname === moreItem.path;
+                        const isMoreItemActive = location.pathname === moreItem.path.split('?')[0];
                         return (
                           <Link 
                             key={moreItem.path} 
