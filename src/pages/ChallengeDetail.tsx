@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
@@ -174,8 +173,21 @@ const ChallengeDetail: React.FC = () => {
           
           <RewardsCard 
             challengeRewards={[
-              { type: 'xp', value: challenge.xp_reward || 100, icon: '⭐' },
-              { type: 'coins', value: challenge.coin_reward || 50, icon: '🪙' },
+              { 
+                type: 'xp', 
+                value: challenge.xp_reward || 100, 
+                icon: '⭐',
+                immediate: true,
+                description: `${challenge.xp_reward || 100} XP für deinen Account` 
+              },
+              { 
+                type: 'coins', 
+                value: challenge.coin_reward || 50, 
+                icon: '🪙',
+                immediate: false,
+                description: `${challenge.coin_reward || 50} Coins für deinen Wallet`,
+                level: 500
+              },
             ]} 
           />
           

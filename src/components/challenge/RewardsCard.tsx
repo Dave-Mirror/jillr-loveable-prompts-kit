@@ -1,10 +1,26 @@
 
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Gift, Award } from 'lucide-react';
+import { Gift, Award, Clock, Trophy } from 'lucide-react';
 import { RewardsCardProps } from './types';
+import { Badge } from '@/components/ui/badge';
 
-export const RewardsCard: React.FC<RewardsCardProps> = ({ challengeRewards }) => {
+// Updated reward type to match what's used in the component
+interface ChallengeReward {
+  type: string;
+  value: number;
+  icon: string;
+  description?: string;
+  immediate?: boolean;
+  level?: number;
+}
+
+// Update the props interface to use our enhanced type
+export interface EnhancedRewardsCardProps {
+  challengeRewards: ChallengeReward[];
+}
+
+export const RewardsCard: React.FC<EnhancedRewardsCardProps> = ({ challengeRewards }) => {
   const getRewardIcon = (type: string) => {
     switch (type) {
       case 'xp':
@@ -49,9 +65,25 @@ export const RewardsCard: React.FC<RewardsCardProps> = ({ challengeRewards }) =>
                 <div>
                   <p className="font-medium">{reward.value} {reward.type}</p>
                   <p className="text-sm text-muted-foreground">
-                    {getRewardDescription(reward.type, reward.value)}
+                    {reward.description || getRewardDescription(reward.type, reward.value)}
                   </p>
                 </div>
+              </div>
+              <div className="flex flex-col items-end gap-1">
+                {reward.immediate !== undefined && (
+                  <Badge variant={reward.immediate ? "default" : "outline"} className="text-xs">
+                    {reward.immediate ? (
+                      <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> Sofort</span>
+                    ) : (
+                      <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> Nach Verifizierung</span>
+                    )}
+                  </Badge>
+                )}
+                {reward.level !== undefined && (
+                  <Badge variant="secondary" className="text-xs">
+                    <span className="flex items-center gap-1"><Trophy className="h-3 w-3" /> Ab {reward.level}+ Views</span>
+                  </Badge>
+                )}
               </div>
             </div>
           ))}

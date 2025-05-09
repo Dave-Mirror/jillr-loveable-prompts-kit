@@ -1,4 +1,3 @@
-
 import { Reward } from '@/types/dashboard';
 
 // Define allowed submission statuses
@@ -91,12 +90,17 @@ export type CommunitySubmissionsProps = {
   inviteFriends: () => void;
 };
 
+export type ChallengeReward = {
+  type: string;
+  value: number;
+  icon: string;
+  description?: string;
+  immediate?: boolean;
+  level?: number;
+};
+
 export type RewardsCardProps = {
-  challengeRewards: {
-    type: string;
-    value: number;
-    icon: string;
-  }[];
+  challengeRewards: ChallengeReward[];
 };
 
 export type UserProgressCardProps = {
