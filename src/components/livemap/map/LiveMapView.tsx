@@ -126,7 +126,7 @@ const LiveMapView = () => {
                         type: infoWindow.type,
                         title: infoWindow.title,
                         description: infoWindow.description,
-                        challengeId: infoWindow.challengeId
+                        challengeId: infoWindow.challengeId // Now this is properly typed
                       })}
                     >
                       View Details

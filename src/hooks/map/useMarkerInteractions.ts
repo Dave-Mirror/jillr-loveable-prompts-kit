@@ -9,7 +9,8 @@ export function useMarkerInteractions() {
     title: string, 
     description: string, 
     id: string, 
-    type: string 
+    type: string,
+    challengeId?: string  // Added the challengeId property as optional
   } | null>(null);
 
   const handleMarkerClick = useCallback((marker: LiveMapMarker) => {
@@ -19,7 +20,8 @@ export function useMarkerInteractions() {
       title: marker.title,
       description: marker.description,
       id: marker.id,
-      type: marker.type
+      type: marker.type,
+      challengeId: marker.challengeId // Include the challengeId from marker
     });
   }, []);
 

@@ -17,7 +17,8 @@ export function useItemDialog() {
         position: {
           x: 0, // Default values
           y: 0
-        }
+        },
+        challengeId: item.challengeId // Make sure to include the challengeId
       };
       setSelectedItem(mapElement);
       setIsDetailsOpen(true);
