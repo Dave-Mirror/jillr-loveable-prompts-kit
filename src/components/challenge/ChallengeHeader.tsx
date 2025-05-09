@@ -2,7 +2,13 @@
 import React from 'react';
 import { Users } from 'lucide-react';
 import CountdownTimer from '@/components/CountdownTimer';
-import { ChallengeHeaderProps } from './types';
+import { Challenge, Submission } from './types';
+
+export interface ChallengeHeaderProps {
+  challenge: Challenge;
+  submissions: Submission[];
+  getChallengeTypeIcon: (type: string | null | undefined) => JSX.Element;
+}
 
 export const ChallengeHeader: React.FC<ChallengeHeaderProps> = ({ 
   challenge, 
