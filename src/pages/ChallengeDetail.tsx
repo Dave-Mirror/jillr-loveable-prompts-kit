@@ -1,21 +1,14 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { toast } from '@/hooks/use-toast';
 import { ChallengeHeader } from '@/components/challenge/ChallengeHeader';
-import { ChallengeDetails } from '@/components/challenge/ChallengeDetails';
-import { LeaderboardCard } from '@/components/challenge/LeaderboardCard';
-import { RewardsCard } from '@/components/challenge/RewardsCard';
-import { CommunitySubmissions } from '@/components/challenge/CommunitySubmissions';
-import { UserProgressCard } from '@/components/challenge/UserProgressCard';
-import LiveMapPromotion from '@/components/challenge/LiveMapPromotion';
+import { ChallengeDetailContent } from '@/components/challenge/ChallengeDetailContent';
+import { ChallengeSidebar } from '@/components/challenge/ChallengeSidebar';
+import { ChallengeLoading } from '@/components/challenge/ChallengeLoading';
+import { ChallengeNotFound } from '@/components/challenge/ChallengeNotFound';
 import DataPermissionPrompt from '@/components/challenge/DataPermissionPrompt';
-import { SecurityInfo } from '@/components/challenge/SecurityInfo';
-import { ChallengeActions } from '@/components/challenge/ChallengeActions';
-import CoachTipSection from '@/components/challenge/CoachTipSection';
 import useChallengeData from '@/hooks/useChallengeData';
 import { useDataPermissionPrompt } from '@/hooks/useDataPermissionPrompt';
 import { Camera, Map, FileQuestion } from 'lucide-react';
@@ -101,36 +94,19 @@ const ChallengeDetail: React.FC = () => {
         return <FileQuestion className="h-5 w-5 text-jillr-neonPink" />;
     }
   };
+
+  const topUsers = [
+    { id: '1', user_id: '123', username: 'TikTokPro', views: 5600, likes: 890 },
+    { id: '2', user_id: '456', username: 'DanceQueen', views: 3200, likes: 654 },
+    { id: '3', user_id: '789', username: 'CreatorX', views: 2800, likes: 420 },
+  ];
   
   if (isLoading) {
-    return (
-      <div className="container py-8">
-        <Skeleton className="h-64 w-full mb-6 rounded-xl" />
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 space-y-6">
-            <Skeleton className="h-20 w-2/3" />
-            <Skeleton className="h-40 w-full" />
-            <Skeleton className="h-60 w-full" />
-          </div>
-          <div className="space-y-6">
-            <Skeleton className="h-40 w-full" />
-            <Skeleton className="h-40 w-full" />
-          </div>
-        </div>
-      </div>
-    );
+    return <ChallengeLoading />;
   }
   
   if (!challenge) {
-    return (
-      <div className="container py-24 text-center">
-        <h2 className="text-2xl font-bold mb-4">Challenge nicht gefunden</h2>
-        <p className="text-muted-foreground mb-8">Die gesuchte Challenge konnte nicht gefunden werden.</p>
-        <Button variant="default" asChild>
-          <a href="/explore">Zurück zur Übersicht</a>
-        </Button>
-      </div>
-    );
+    return <ChallengeNotFound />;
   }
 
   return (
@@ -142,73 +118,25 @@ const ChallengeDetail: React.FC = () => {
       />
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
-        <div className="lg:col-span-2 space-y-6">
-          <ChallengeDetails challenge={challenge} />
-          
-          <CommunitySubmissions 
-            verifiedSubmissions={verifiedSubmissions}
-            inviteFriends={inviteFriends}
-          />
-          
-          <CoachTipSection
-            coachTip={coachTip}
-            isLoadingTip={isLoadingTip}
-            requestCoachTip={requestCoachTip}
-          />
-        </div>
+        <ChallengeDetailContent 
+          challenge={challenge}
+          verifiedSubmissions={verifiedSubmissions}
+          coachTip={coachTip}
+          isLoadingTip={isLoadingTip}
+          requestCoachTip={requestCoachTip}
+          inviteFriends={inviteFriends}
+        />
         
-        <div className="space-y-6">
-          <Card>
-            <CardContent className="pt-6">
-              <ChallengeActions
-                handleJoinClick={handleJoinClick}
-                requestCoachTip={requestCoachTip}
-                shareChallenge={() => shareChallenge(challenge.id)}
-                coachTip={coachTip}
-                isLoadingTip={isLoadingTip}
-                challenge={challenge}
-              />
-            </CardContent>
-          </Card>
-          
-          <RewardsCard 
-            challengeRewards={[
-              { 
-                type: 'xp', 
-                value: challenge.xp_reward || 100, 
-                icon: '⭐',
-                immediate: true,
-                description: `${challenge.xp_reward || 100} XP für deinen Account` 
-              },
-              { 
-                type: 'coins', 
-                value: challenge.coin_reward || 50, 
-                icon: '🪙',
-                immediate: false,
-                description: `${challenge.coin_reward || 50} Coins für deinen Wallet`,
-                level: 500
-              },
-            ]} 
-          />
-          
-          <LeaderboardCard 
-            topUsers={[
-              { id: '1', user_id: '123', username: 'TikTokPro', views: 5600, likes: 890 },
-              { id: '2', user_id: '456', username: 'DanceQueen', views: 3200, likes: 654 },
-              { id: '3', user_id: '789', username: 'CreatorX', views: 2800, likes: 420 },
-            ]}
-          />
-          
-          <UserProgressCard 
-            user={{ id: '123', name: 'User', submissions: 0 }}
-            challenge={challenge}
-            submissions={submissions.filter(s => s.user_id === '123')}
-          />
-          
-          <LiveMapPromotion />
-          
-          <SecurityInfo />
-        </div>
+        <ChallengeSidebar 
+          challenge={challenge}
+          submissions={submissions}
+          handleJoinClick={handleJoinClick}
+          requestCoachTip={requestCoachTip}
+          shareChallenge={shareChallenge}
+          coachTip={coachTip}
+          isLoadingTip={isLoadingTip}
+          topUsers={topUsers}
+        />
       </div>
       
       <DataPermissionPrompt 
