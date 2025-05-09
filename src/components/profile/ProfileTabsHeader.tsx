@@ -1,79 +1,41 @@
 
 import React from 'react';
-import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
-} from '@/components/ui/select';
-import { 
-  Activity, 
-  Award, 
-  Users, 
-  BarChart3, 
-  Share2, 
-  Settings 
-} from 'lucide-react';
-import MobileProfileNavigation from './MobileProfileNavigation';
+import { TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Activity, Award, Users, BarChart3, Monitor, Settings, Shield } from 'lucide-react';
 
 interface ProfileTabsHeaderProps {
   activeTab: string;
   setActiveTab: (value: string) => void;
 }
 
-const ProfileTabsHeader: React.FC<ProfileTabsHeaderProps> = ({ activeTab, setActiveTab }) => {
-  const tabOptions = [
-    { value: 'activity', label: 'Challenge Activity', icon: Activity },
-    { value: 'rewards', label: 'Rewards & XP', icon: Award },
-    { value: 'community', label: 'Community', icon: Users },
-    { value: 'statistics', label: 'Statistics', icon: BarChart3 },
-    { value: 'social', label: 'Social Media', icon: Share2 },
-    { value: 'settings', label: 'Settings', icon: Settings }
+const ProfileTabsHeader: React.FC<ProfileTabsHeaderProps> = ({ 
+  activeTab, 
+  setActiveTab 
+}) => {
+  const tabs = [
+    { value: 'activity', icon: <Activity className="h-4 w-4 mr-2" />, label: 'Aktivität' },
+    { value: 'rewards', icon: <Award className="h-4 w-4 mr-2" />, label: 'Belohnungen' },
+    { value: 'community', icon: <Users className="h-4 w-4 mr-2" />, label: 'Community' },
+    { value: 'statistics', icon: <BarChart3 className="h-4 w-4 mr-2" />, label: 'Statistiken' },
+    { value: 'social', icon: <Monitor className="h-4 w-4 mr-2" />, label: 'Social Media' },
+    { value: 'data', icon: <Shield className="h-4 w-4 mr-2" />, label: 'Meine Daten' },
+    { value: 'settings', icon: <Settings className="h-4 w-4 mr-2" />, label: 'Einstellungen' }
   ];
-
-  // Get current tab data
-  const currentTab = tabOptions.find(tab => tab.value === activeTab) || tabOptions[0];
-  const CurrentIcon = currentTab.icon;
-
+  
   return (
-    <div className="sticky top-0 z-20 bg-background/95 backdrop-blur-sm py-3 border-b">
-      <div className="container max-w-4xl">
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2 text-lg font-medium">
-            <CurrentIcon size={20} className="text-jillr-neonPurple" />
-            <span>{currentTab.label}</span>
-          </div>
-          
-          <div className="hidden md:block">
-            <Select value={activeTab} onValueChange={setActiveTab}>
-              <SelectTrigger className="w-[180px] bg-jillr-darkBlue/10 border-jillr-neonPurple/20">
-                <SelectValue placeholder="Select view" />
-              </SelectTrigger>
-              <SelectContent className="bg-jillr-darkBlue border-jillr-neonPurple/20 text-white z-50">
-                {tabOptions.map(tab => {
-                  const TabIcon = tab.icon;
-                  return (
-                    <SelectItem 
-                      key={tab.value} 
-                      value={tab.value}
-                      className="focus:bg-jillr-neonPurple/20 focus:text-white"
-                    >
-                      <div className="flex items-center gap-2">
-                        <TabIcon size={16} />
-                        <span>{tab.label}</span>
-                      </div>
-                    </SelectItem>
-                  );
-                })}
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-        
-        <MobileProfileNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
-      </div>
-    </div>
+    <TabsList className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2">
+      {tabs.map(tab => (
+        <TabsTrigger 
+          key={tab.value} 
+          value={tab.value} 
+          onClick={() => setActiveTab(tab.value)}
+          className={`flex items-center ${activeTab === tab.value ? 'bg-jillr-neonPurple/20 text-jillr-neonPurple' : ''}`}
+        >
+          {tab.icon}
+          {tab.label}
+        </TabsTrigger>
+      ))}
+    </TabsList>
   );
 };
 

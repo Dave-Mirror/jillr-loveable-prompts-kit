@@ -7,6 +7,7 @@ import CommunityTab from './tabs/CommunityTab';
 import StatsTab from './tabs/StatsTab';
 import SocialTab from './tabs/SocialTab';
 import SettingsTab from './tabs/SettingsTab';
+import DataVaultTab from './tabs/DataVaultTab';
 import ProfileTabsHeader from './ProfileTabsHeader';
 
 interface ProfileTabsProps {
@@ -42,6 +43,10 @@ const ProfileTabs: React.FC<ProfileTabsProps> = ({
       
       <TabsContent value="social" className="mt-6">
         <SocialTab userProfile={userProfile} />
+      </TabsContent>
+      
+      <TabsContent value="data" className="mt-6">
+        <DataVaultTab userProfile={userProfile} />
       </TabsContent>
       
       <TabsContent value="settings" className="mt-6">
