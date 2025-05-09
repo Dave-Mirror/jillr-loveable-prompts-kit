@@ -51,6 +51,7 @@ const LeaderboardTabContent = ({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3 }}
+          className="px-2 sm:px-4 md:px-6"
         >
           {filterTitle && filters && (
             <CategoryFilters
@@ -65,6 +66,7 @@ const LeaderboardTabContent = ({
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.1 }}
+            className="mt-6 mb-8"
           >
             <TopUsersPodium users={users} />
           </motion.div>
@@ -76,11 +78,11 @@ const LeaderboardTabContent = ({
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.2 }}
             >
-              <Separator className="my-4 bg-jillr-border/30" />
+              <Separator className="my-6 bg-jillr-border/30" />
               
-              <div className="bg-jillr-darkAccent/30 p-4 rounded-lg border border-jillr-border/20">
+              <div className="bg-jillr-darkAccent/30 p-4 md:p-6 rounded-lg border border-jillr-border/20">
                 <h3 className="text-lg font-medium mb-4 flex items-center">
-                  <span className="bg-jillr-neonPurple/20 text-jillr-neonPurple px-2 py-1 rounded-md mr-2">
+                  <span className="bg-jillr-neonPurple/20 text-jillr-neonPurple px-3 py-1 rounded-md mr-2">
                     {users.length - 3}
                   </span> 
                   Weitere Teilnehmer

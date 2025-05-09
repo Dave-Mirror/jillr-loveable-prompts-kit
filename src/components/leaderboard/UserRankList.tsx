@@ -42,28 +42,28 @@ const UserRankList = ({ users, tabValue, startRank = 4 }: UserRankListProps) => 
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: index * 0.05, duration: 0.2 }}
           whileHover={{ scale: 1.01, transition: { duration: 0.15 } }}
-          className="flex items-center gap-3 p-3 rounded-lg border border-jillr-border/30 bg-jillr-darkAccent/50 backdrop-blur-sm hover:bg-jillr-darkLight transition-colors"
+          className="flex items-center gap-3 p-3 md:p-4 rounded-lg border border-jillr-border/30 bg-jillr-darkAccent/50 backdrop-blur-sm hover:bg-jillr-darkLight transition-colors"
         >
-          <div className="flex items-center gap-1 min-w-[36px]">
-            <div className="text-lg font-bold text-center">{index + startRank}</div>
+          <div className="flex items-center gap-1 min-w-[40px] md:min-w-[46px]">
+            <div className="text-xl md:text-2xl font-bold text-center">{index + startRank}</div>
             {user.rankChange !== undefined && (
               <RankChangeIndicator change={user.rankChange} />
             )}
           </div>
           
           <div className="relative">
-            <Avatar className="h-10 w-10 ring-1 ring-jillr-border/50">
+            <Avatar className="h-12 w-12 md:h-14 md:w-14 ring-1 ring-jillr-border/50">
               <AvatarImage src={user.avatarUrl} />
               <AvatarFallback>{user.username.substring(0, 2).toUpperCase()}</AvatarFallback>
             </Avatar>
-            <div className="absolute -bottom-1 -right-1 bg-jillr-dark text-xs px-1 rounded-md border border-jillr-border/50">
+            <div className="absolute -bottom-1 -right-1 bg-jillr-dark text-xs md:text-sm px-1 rounded-md border border-jillr-border/50">
               {user.level}
             </div>
           </div>
           
           <div className="flex-1 min-w-0">
-            <div className="font-medium truncate">{user.username}</div>
-            <div className="flex items-center gap-2 text-xs text-gray-400">
+            <div className="font-medium text-base md:text-lg truncate">{user.username}</div>
+            <div className="flex items-center gap-2 text-xs md:text-sm text-gray-400">
               {tabValue === 'city' && (
                 <div className="flex items-center gap-1">
                   <MapPin className="h-3 w-3" /> {user.city}
@@ -90,26 +90,26 @@ const UserRankList = ({ users, tabValue, startRank = 4 }: UserRankListProps) => 
               <div className="text-xs text-gray-400 flex items-center">
                 <Zap className="h-3 w-3 mr-1 text-jillr-neonGreen" /> XP
               </div>
-              <div className="font-medium">{user.xp.toLocaleString()}</div>
+              <div className="font-medium md:text-lg">{user.xp.toLocaleString()}</div>
             </div>
             
             {tabValue === 'global' && (
               <div className="hidden sm:flex flex-col items-center">
                 <div className="text-xs text-gray-400">Coins</div>
-                <div className="font-medium">{user.coins.toLocaleString()}</div>
+                <div className="font-medium md:text-lg">{user.coins.toLocaleString()}</div>
               </div>
             )}
             
             <div className="flex flex-col items-center">
               <div className="text-xs text-gray-400">Challenges</div>
-              <div className="font-medium">{user.challenges}</div>
+              <div className="font-medium md:text-lg">{user.challenges}</div>
             </div>
           </div>
           
           <div className="hidden md:block">
             {user.badges.length > 0 && (
               <div className="flex items-center gap-1">
-                <Badge variant="outline" className="bg-jillr-darkLight border-jillr-border/50 text-xs flex items-center gap-1">
+                <Badge variant="outline" className="bg-jillr-darkLight border-jillr-border/50 text-xs flex items-center gap-1 px-2 py-1">
                   <Award className="h-3 w-3 text-jillr-neonPurple" /> {user.badges[0]}
                 </Badge>
                 {user.badges.length > 1 && (
