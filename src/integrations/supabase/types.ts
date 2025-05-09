@@ -95,6 +95,33 @@ export type Database = {
           },
         ]
       }
+      user_data_permissions: {
+        Row: {
+          data_type: string
+          date_given: string | null
+          id: string
+          status: boolean | null
+          user_id: string | null
+          xp_rewarded: number | null
+        }
+        Insert: {
+          data_type: string
+          date_given?: string | null
+          id?: string
+          status?: boolean | null
+          user_id?: string | null
+          xp_rewarded?: number | null
+        }
+        Update: {
+          data_type?: string
+          date_given?: string | null
+          id?: string
+          status?: boolean | null
+          user_id?: string | null
+          xp_rewarded?: number | null
+        }
+        Relationships: []
+      }
       wallets: {
         Row: {
           coins_total: number | null

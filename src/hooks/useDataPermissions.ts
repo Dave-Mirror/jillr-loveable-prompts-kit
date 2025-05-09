@@ -35,8 +35,37 @@ export const useDataPermissions = () => {
       try {
         setIsLoading(true);
         
-        // Since the user_data_permissions table may not exist yet, we're using localStorage as a fallback
-        // In a production environment, this would be replaced with actual database queries
+        // Query the user_data_permissions table
+        const { data, error } = await supabase
+          .from('user_data_permissions')
+          .select('*')
+          .eq('user_id', user.id);
+          
+        if (error) throw error;
+        
+        if (data && data.length > 0) {
+          // Map the database records to our DataPermissionSetting type
+          const fetchedPermissions = data.map(item => ({
+            user_id: item.user_id,
+            data_type: item.data_type as DataType,
+            status: item.status || false,
+            xp_rewarded: item.xp_rewarded || 0,
+            date_given: item.date_given
+          }));
+          
+          setPermissions(fetchedPermissions);
+          
+          // Calculate total XP rewarded
+          const total = fetchedPermissions.reduce((sum, permission) => sum + (permission.xp_rewarded || 0), 0);
+          setTotalXpRewarded(total);
+        } else {
+          // No permissions found, create default entries
+          const defaultPermissions = await createDefaultPermissions(user.id);
+          setPermissions(defaultPermissions);
+        }
+      } catch (error) {
+        console.error('Error fetching data permissions:', error);
+        // Fallback to localStorage if database query fails
         const storedPermissions = localStorage.getItem(`${LOCAL_STORAGE_KEY}_${user.id}`);
         
         if (storedPermissions) {
@@ -47,7 +76,7 @@ export const useDataPermissions = () => {
           const total = parsedPermissions.reduce((sum, permission) => sum + (permission.xp_rewarded || 0), 0);
           setTotalXpRewarded(total);
         } else {
-          // No permissions found, create default entries
+          // Create default permissions in localStorage as fallback
           const defaultPermissions = Object.entries(DATA_PERMISSION_DEFAULTS).map(([key, value]) => ({
             user_id: user.id,
             data_type: key as DataType,
@@ -55,13 +84,11 @@ export const useDataPermissions = () => {
             xp_rewarded: 0,
             date_given: null
           }));
-
-          // Save to localStorage
+          
           localStorage.setItem(`${LOCAL_STORAGE_KEY}_${user.id}`, JSON.stringify(defaultPermissions));
           setPermissions(defaultPermissions);
         }
-      } catch (error) {
-        console.error('Error fetching data permissions:', error);
+        
         toast({
           title: 'Fehler',
           description: 'Deine Datenfreigaben konnten nicht geladen werden.',
@@ -74,6 +101,38 @@ export const useDataPermissions = () => {
 
     fetchPermissions();
   }, [user, toast]);
+  
+  const createDefaultPermissions = async (userId: string): Promise<DataPermissionSetting[]> => {
+    const defaultPermissions = Object.entries(DATA_PERMISSION_DEFAULTS).map(([key, value]) => ({
+      user_id: userId,
+      data_type: key as DataType,
+      status: false,
+      xp_rewarded: 0,
+      date_given: null
+    }));
+    
+    try {
+      // Insert the default permissions into the database
+      const { error } = await supabase
+        .from('user_data_permissions')
+        .insert(defaultPermissions.map(p => ({
+          user_id: p.user_id,
+          data_type: p.data_type,
+          status: p.status,
+          xp_rewarded: p.xp_rewarded,
+          date_given: p.date_given
+        })));
+      
+      if (error) throw error;
+      
+      return defaultPermissions;
+    } catch (error) {
+      console.error('Error creating default permissions:', error);
+      // Store in localStorage as fallback
+      localStorage.setItem(`${LOCAL_STORAGE_KEY}_${userId}`, JSON.stringify(defaultPermissions));
+      return defaultPermissions;
+    }
+  };
 
   const updatePermission = async (dataType: DataType, status: boolean): Promise<boolean> => {
     if (!user) {
@@ -97,19 +156,36 @@ export const useDataPermissions = () => {
         ? DATA_PERMISSION_DEFAULTS[dataType].xpReward 
         : 0;
       
+      const dateGiven = status ? new Date().toISOString() : null;
+      
+      // Update the database
+      const { error } = await supabase
+        .from('user_data_permissions')
+        .update({
+          status,
+          date_given: dateGiven,
+          xp_rewarded: status ? xpToAward : 0
+        })
+        .eq('user_id', user.id)
+        .eq('data_type', dataType);
+      
+      if (error) throw error;
+      
       // Update local state
       const updatedPermissions = permissions.map(p => 
         p.data_type === dataType 
           ? { 
               ...p, 
               status, 
-              date_given: status ? new Date().toISOString() : null,
+              date_given: dateGiven,
               xp_rewarded: status ? xpToAward : 0
             } 
           : p
       );
       
       setPermissions(updatedPermissions);
+      
+      // Update localStorage backup
       localStorage.setItem(`${LOCAL_STORAGE_KEY}_${user.id}`, JSON.stringify(updatedPermissions));
 
       // Update total XP rewarded
