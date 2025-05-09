@@ -7,6 +7,7 @@ import { ChallengeSidebar } from '@/components/challenge/ChallengeSidebar';
 import { ChallengeLoading } from '@/components/challenge/ChallengeLoading';
 import { ChallengeNotFound } from '@/components/challenge/ChallengeNotFound';
 import DataPermissionPrompt from '@/components/challenge/DataPermissionPrompt';
+import LiveMapPromotion from '@/components/challenge/LiveMapPromotion';
 import useChallengeDetailPage from '@/hooks/useChallengeDetailPage';
 import { Camera, Map, FileQuestion } from 'lucide-react';
 
@@ -57,14 +58,20 @@ const ChallengeDetail: React.FC = () => {
       />
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
-        <ChallengeDetailContent 
-          challenge={challenge}
-          verifiedSubmissions={verifiedSubmissions}
-          coachTip={coachTip}
-          isLoadingTip={isLoadingTip}
-          requestCoachTip={requestCoachTip}
-          inviteFriends={inviteFriends}
-        />
+        <div className="lg:col-span-2">
+          <ChallengeDetailContent 
+            challenge={challenge}
+            verifiedSubmissions={verifiedSubmissions}
+            coachTip={coachTip}
+            isLoadingTip={isLoadingTip}
+            requestCoachTip={requestCoachTip}
+            inviteFriends={inviteFriends}
+          />
+          
+          <div className="mt-6">
+            <LiveMapPromotion />
+          </div>
+        </div>
         
         <ChallengeSidebar 
           challenge={challenge}

@@ -1,4 +1,3 @@
-
 import { Reward } from '@/types/dashboard';
 
 // Define allowed submission statuses
@@ -21,7 +20,12 @@ export type ChallengeType =
   | 'Gamification'
   | 'Community'
   | 'Battle'
-  | 'Review';
+  | 'Review'
+  | 'Live Party'
+  | 'Zero Waste'
+  | 'Team Battle'
+  | 'Easter Egg Hunt'
+  | 'Last-Minute Trip';
 
 export type Submission = {
   id: string;
@@ -92,6 +96,9 @@ export type ChallengeReward = {
   description?: string;
   immediate?: boolean;
   level?: number;
+  location_based?: boolean;
+  social_based?: boolean;
+  team_based?: boolean;
 };
 
 export type RewardsCardProps = {

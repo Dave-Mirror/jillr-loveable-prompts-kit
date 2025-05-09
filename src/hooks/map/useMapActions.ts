@@ -1,12 +1,15 @@
 
 import { useCallback } from 'react';
 import { toast } from '@/hooks/use-toast';
+import { useNavigate } from 'react-router-dom';
 
 export function useMapActions() {
-  const handleClaimReward = useCallback((markerId: string) => {
+  const navigate = useNavigate();
+
+  const handleClaimReward = useCallback((markerId: string, rewardAmount: number = 50) => {
     toast({
       title: "Reward Claimed!",
-      description: `You've successfully claimed the reward at location ${markerId}.`,
+      description: `You've successfully claimed ${rewardAmount} XP at location ${markerId}.`,
     });
     // Here you would typically call an API to mark this reward as claimed
   }, []);
@@ -19,14 +22,28 @@ export function useMapActions() {
     // Here you would typically call an API to register for the event
   }, []);
 
-  const handleJoinChallenge = useCallback((challengeId: string) => {
+  const handleJoinChallenge = useCallback((challengeId: string | undefined) => {
+    if (!challengeId) {
+      toast({
+        title: "Error",
+        description: "Could not find challenge information.",
+        variant: "destructive"
+      });
+      return false;
+    }
+    
     toast({
       title: "Challenge Joined",
       description: "You've successfully joined this challenge.",
     });
-    // Here you would typically call an API to join the challenge
-    return true; // Return value to indicate success for consumers
-  }, []);
+    
+    // Navigate to the challenge detail page
+    setTimeout(() => {
+      navigate(`/challenge/${challengeId}`);
+    }, 1000);
+    
+    return true;
+  }, [navigate]);
 
   const handleTrackChallenge = useCallback((challengeId: string) => {
     toast({
@@ -44,10 +61,10 @@ export function useMapActions() {
     // Implement QR code scanning logic here
   }, []);
 
-  const handleCollectEasterEgg = useCallback((eggId: string) => {
+  const handleCollectEasterEgg = useCallback((eggId: string, xpReward: number = 25) => {
     toast({
       title: "Easter Egg Found!",
-      description: "You've discovered a hidden treasure!",
+      description: `You've discovered a hidden treasure! +${xpReward} XP`,
     });
     // Here you would typically call an API to mark this easter egg as found
   }, []);
