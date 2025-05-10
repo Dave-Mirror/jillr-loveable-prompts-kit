@@ -20,7 +20,9 @@ const PreviewPublish = ({ data, onChange }) => {
     input.accept = mediaType === 'image' ? 'image/*' : 'video/*';
     
     input.onchange = (e) => {
-      const file = e.target.files?.[0]; // Use optional chaining
+      // Properly type the event target as HTMLInputElement
+      const target = e.target as HTMLInputElement;
+      const file = target.files?.[0]; // Use optional chaining
       if (!file) return;
       
       // Check file size (max 50MB for videos, 5MB for images)
