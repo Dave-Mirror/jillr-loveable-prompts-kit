@@ -12,7 +12,7 @@ const FeedItemCaption: React.FC<FeedItemCaptionProps> = ({ item }) => {
     <div className="absolute bottom-24 left-4 right-12 max-w-[80%]">
       <p className="text-white mb-2">{item.caption}</p>
       <div className="flex flex-wrap gap-1">
-        {item.tags.map(tag => (
+        {item.hashtags.map(tag => (
           <Badge key={tag} variant="outline" className="text-xs bg-white/10">
             #{tag}
           </Badge>

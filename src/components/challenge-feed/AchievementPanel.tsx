@@ -40,7 +40,7 @@ const AchievementPanel: React.FC<AchievementPanelProps> = ({
                 <span className="text-2xl">{achievement.icon}</span>
                 <div>
                   <p className="text-white font-medium">{achievement.name}</p>
-                  <p className="text-jillr-neonPurple text-xs">+{achievement.points} points</p>
+                  <p className="text-jillr-neonPurple text-xs">+25 points</p>
                 </div>
               </div>
             ))}

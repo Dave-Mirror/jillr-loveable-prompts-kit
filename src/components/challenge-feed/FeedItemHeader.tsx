@@ -20,11 +20,9 @@ const FeedItemHeader: React.FC<FeedItemHeaderProps> = ({ item }) => {
         <p className="text-xs text-gray-300">@{item.user.username}</p>
       </div>
       
-      {item.challenge.brand && (
-        <Badge className="ml-2 bg-jillr-neonPurple/80 hover:bg-jillr-neonPurple">
-          {item.challenge.title}
-        </Badge>
-      )}
+      <Badge className="ml-2 bg-jillr-neonPurple/80 hover:bg-jillr-neonPurple">
+        {item.challenge.title}
+      </Badge>
     </div>
   );
 };

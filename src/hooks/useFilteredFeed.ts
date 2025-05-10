@@ -16,12 +16,12 @@ export const useFilteredFeed = (feedItems: FeedItem[]) => {
     
     if (filterType !== 'all') {
       filtered = filtered.filter(item => {
-        // Check both challenge types and tags
+        // Check both challenge types and hashtags
         const challengeType = item.challenge.title.toLowerCase();
-        const tags = item.tags.map(tag => tag.toLowerCase());
+        const hashtags = item.hashtags.map(tag => tag.toLowerCase());
         
         return challengeType.includes(filterType) || 
-               tags.some(tag => tag.includes(filterType));
+               hashtags.some(tag => tag.includes(filterType));
       });
     }
     
