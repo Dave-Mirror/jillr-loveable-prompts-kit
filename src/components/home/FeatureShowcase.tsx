@@ -1,12 +1,12 @@
 
 import React, { useState } from 'react';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Play, Star, Map, Users, Upload, Image, Video } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
-import { VideoModal } from './VideoModal'; // Changed from default import to named import
+import { VideoModal } from './VideoModal';
 import { toast } from 'sonner';
+import FeatureCarousel from './features/FeatureCarousel';
+import { Feature, getInitialFeatures } from './features/featureData';
+import { handleImageUpload, handleVideoUpload } from './features/mediaUtils';
 
 const FeatureShowcase = () => {
   const navigate = useNavigate();
@@ -20,40 +20,7 @@ const FeatureShowcase = () => {
     videoUrl: '',
   });
   
-  const [features, setFeatures] = useState([
-    {
-      title: "Kreative Challenges",
-      description: "Nimm an spannenden Challenges teil und zeige deine Kreativität.",
-      image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81",
-      videoUrl: "", // Leerer String bedeutet kein Video vorhanden
-      icon: <Play className="h-10 w-10 text-jillr-neonPurple" />,
-      action: () => navigate('/explore')
-    },
-    {
-      title: "Community Features",
-      description: "Verbinde dich mit anderen kreativen Köpfen und teile deine Ideen.",
-      image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c",
-      videoUrl: "",
-      icon: <Users className="h-10 w-10 text-jillr-neonPurple" />,
-      action: () => navigate('/challenge-feed')
-    },
-    {
-      title: "Easter Eggs entdecken",
-      description: "Finde versteckte Überraschungen und sammle besondere Belohnungen.",
-      image: "https://images.unsplash.com/photo-1500673922987-e212871fec22",
-      videoUrl: "",
-      icon: <Star className="h-10 w-10 text-jillr-neonPurple" />,
-      action: () => navigate('/livemap')
-    },
-    {
-      title: "Lokale Aktivitäten",
-      description: "Entdecke Challenges und Events in deiner Nähe.",
-      image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81",
-      videoUrl: "",
-      icon: <Map className="h-10 w-10 text-jillr-neonPurple" />,
-      action: () => navigate('/livemap')
-    }
-  ]);
+  const [features, setFeatures] = useState<Feature[]>(getInitialFeatures(navigate));
 
   const openVideoModal = (title: string, videoUrl: string) => {
     if (!videoUrl) {
@@ -74,53 +41,12 @@ const FeatureShowcase = () => {
     });
   };
 
-  const handleImageUpload = (index: number) => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
-    input.onchange = async (e: Event) => {
-      const target = e.target as HTMLInputElement;
-      if (target.files && target.files[0]) {
-        const file = target.files[0];
-        const imageUrl = URL.createObjectURL(file);
-        const updatedFeatures = [...features];
-        updatedFeatures[index] = {
-          ...updatedFeatures[index],
-          image: imageUrl
-        };
-        setFeatures(updatedFeatures);
-        toast.success('Bild erfolgreich hochgeladen');
-      }
-    };
-    input.click();
+  const onImageUpload = (index: number) => {
+    handleImageUpload(index, features, setFeatures);
   };
 
-  const handleVideoUpload = (index: number) => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'video/*';
-    input.onchange = async (e: Event) => {
-      const target = e.target as HTMLInputElement;
-      if (target.files && target.files[0]) {
-        const file = target.files[0];
-        
-        // Prüfe ob die Datei zu groß ist
-        if (file.size > 50 * 1024 * 1024) { // 50MB Limit
-          toast.error('Video ist zu groß. Maximum: 50MB');
-          return;
-        }
-        
-        const videoUrl = URL.createObjectURL(file);
-        const updatedFeatures = [...features];
-        updatedFeatures[index] = {
-          ...updatedFeatures[index],
-          videoUrl: videoUrl
-        };
-        setFeatures(updatedFeatures);
-        toast.success('Video erfolgreich hochgeladen');
-      }
-    };
-    input.click();
+  const onVideoUpload = (index: number) => {
+    handleVideoUpload(index, features, setFeatures);
   };
   
   return (
@@ -133,83 +59,12 @@ const FeatureShowcase = () => {
           </p>
         </div>
         
-        <Carousel
-          opts={{ 
-            align: "start",
-            loop: true
-          }}
-          className="w-full"
-        >
-          <CarouselContent className="py-4">
-            {features.map((feature, index) => (
-              <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3 pl-4">
-                <div className="p-1">
-                  <Card className="border-jillr-neonPurple/20 hover:border-jillr-neonPurple/50 transition-all duration-300">
-                    <CardContent className="p-0">
-                      <div className="relative group overflow-hidden rounded-t-xl">
-                        {/* Image with play button overlay */}
-                        <div className="aspect-video overflow-hidden">
-                          <img 
-                            src={feature.image} 
-                            alt={feature.title} 
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                          />
-                        </div>
-                        
-                        {/* Media controls overlay */}
-                        <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                          <div className="flex gap-2">
-                            {feature.videoUrl && (
-                              <Button 
-                                size="sm" 
-                                variant="secondary" 
-                                className="bg-black/50 hover:bg-black/70"
-                                onClick={() => openVideoModal(feature.title, feature.videoUrl)}
-                              >
-                                <Play className="h-5 w-5 text-white" />
-                              </Button>
-                            )}
-                            <Button 
-                              size="sm" 
-                              variant="secondary" 
-                              className="bg-black/50 hover:bg-black/70"
-                              onClick={() => handleImageUpload(index)}
-                            >
-                              <Image className="h-5 w-5 text-white" />
-                            </Button>
-                            <Button 
-                              size="sm" 
-                              variant="secondary" 
-                              className="bg-black/50 hover:bg-black/70"
-                              onClick={() => handleVideoUpload(index)}
-                            >
-                              <Video className="h-5 w-5 text-white" />
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <div className="p-5">
-                        <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-                        <p className="text-muted-foreground text-sm mb-4">{feature.description}</p>
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          onClick={feature.action}
-                          className="w-full border-jillr-neonPurple/30 text-jillr-neonPurple hover:bg-jillr-neonPurple hover:text-white"
-                        >
-                          Mehr erfahren
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious className="hidden md:flex left-0" />
-          <CarouselNext className="hidden md:flex right-0" />
-        </Carousel>
+        <FeatureCarousel 
+          features={features}
+          onVideoPlay={openVideoModal}
+          onImageUpload={onImageUpload}
+          onVideoUpload={onVideoUpload}
+        />
         
         <div className="mt-8 text-center">
           <Button
@@ -222,7 +77,6 @@ const FeatureShowcase = () => {
         </div>
       </div>
       
-      {/* Video modal for playing uploaded videos */}
       <VideoModal
         isOpen={activeVideoModal.isOpen}
         onClose={closeVideoModal}
