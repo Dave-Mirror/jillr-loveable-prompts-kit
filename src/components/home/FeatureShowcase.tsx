@@ -1,28 +1,39 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Play, Star, Map, Users } from "lucide-react";
+import { Play, Star, Map, Users, Upload, Image, Video } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
+import VideoModal from './VideoModal';
+import { toast } from 'sonner';
 
 const FeatureShowcase = () => {
   const navigate = useNavigate();
+  const [activeVideoModal, setActiveVideoModal] = useState<{
+    isOpen: boolean;
+    title: string;
+    videoUrl: string;
+  }>({
+    isOpen: false,
+    title: '',
+    videoUrl: '',
+  });
   
-  const features = [
+  const [features, setFeatures] = useState([
     {
       title: "Kreative Challenges",
       description: "Nimm an spannenden Challenges teil und zeige deine Kreativität.",
       image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81",
-      videoUrl: "https://www.example.com/challenge-preview.mp4", // Beispiel-URL
+      videoUrl: "", // Leerer String bedeutet kein Video vorhanden
       icon: <Play className="h-10 w-10 text-jillr-neonPurple" />,
       action: () => navigate('/explore')
     },
     {
       title: "Community Features",
       description: "Verbinde dich mit anderen kreativen Köpfen und teile deine Ideen.",
-      image: "https://images.unsplash.com/photo-1721322800607-8c38375eef04",
-      videoUrl: "https://www.example.com/community-preview.mp4", // Beispiel-URL
+      image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c",
+      videoUrl: "",
       icon: <Users className="h-10 w-10 text-jillr-neonPurple" />,
       action: () => navigate('/challenge-feed')
     },
@@ -30,7 +41,7 @@ const FeatureShowcase = () => {
       title: "Easter Eggs entdecken",
       description: "Finde versteckte Überraschungen und sammle besondere Belohnungen.",
       image: "https://images.unsplash.com/photo-1500673922987-e212871fec22",
-      videoUrl: "https://www.example.com/easteregg-preview.mp4", // Beispiel-URL
+      videoUrl: "",
       icon: <Star className="h-10 w-10 text-jillr-neonPurple" />,
       action: () => navigate('/livemap')
     },
@@ -38,11 +49,79 @@ const FeatureShowcase = () => {
       title: "Lokale Aktivitäten",
       description: "Entdecke Challenges und Events in deiner Nähe.",
       image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81",
-      videoUrl: "https://www.example.com/location-preview.mp4", // Beispiel-URL
+      videoUrl: "",
       icon: <Map className="h-10 w-10 text-jillr-neonPurple" />,
       action: () => navigate('/livemap')
     }
-  ];
+  ]);
+
+  const openVideoModal = (title: string, videoUrl: string) => {
+    if (!videoUrl) {
+      toast.error("Kein Video für dieses Feature verfügbar");
+      return;
+    }
+    setActiveVideoModal({
+      isOpen: true,
+      title,
+      videoUrl
+    });
+  };
+
+  const closeVideoModal = () => {
+    setActiveVideoModal({
+      ...activeVideoModal,
+      isOpen: false
+    });
+  };
+
+  const handleImageUpload = (index: number) => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = async (e: Event) => {
+      const target = e.target as HTMLInputElement;
+      if (target.files && target.files[0]) {
+        const file = target.files[0];
+        const imageUrl = URL.createObjectURL(file);
+        const updatedFeatures = [...features];
+        updatedFeatures[index] = {
+          ...updatedFeatures[index],
+          image: imageUrl
+        };
+        setFeatures(updatedFeatures);
+        toast.success('Bild erfolgreich hochgeladen');
+      }
+    };
+    input.click();
+  };
+
+  const handleVideoUpload = (index: number) => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'video/*';
+    input.onchange = async (e: Event) => {
+      const target = e.target as HTMLInputElement;
+      if (target.files && target.files[0]) {
+        const file = target.files[0];
+        
+        // Prüfe ob die Datei zu groß ist
+        if (file.size > 50 * 1024 * 1024) { // 50MB Limit
+          toast.error('Video ist zu groß. Maximum: 50MB');
+          return;
+        }
+        
+        const videoUrl = URL.createObjectURL(file);
+        const updatedFeatures = [...features];
+        updatedFeatures[index] = {
+          ...updatedFeatures[index],
+          videoUrl: videoUrl
+        };
+        setFeatures(updatedFeatures);
+        toast.success('Video erfolgreich hochgeladen');
+      }
+    };
+    input.click();
+  };
   
   return (
     <div className="py-12 px-4 bg-gradient-to-b from-jillr-dark to-jillr-darkBlue">
@@ -77,9 +156,36 @@ const FeatureShowcase = () => {
                           />
                         </div>
                         
-                        {/* Play button overlay */}
+                        {/* Media controls overlay */}
                         <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                          {feature.icon}
+                          <div className="flex gap-2">
+                            {feature.videoUrl && (
+                              <Button 
+                                size="sm" 
+                                variant="secondary" 
+                                className="bg-black/50 hover:bg-black/70"
+                                onClick={() => openVideoModal(feature.title, feature.videoUrl)}
+                              >
+                                <Play className="h-5 w-5 text-white" />
+                              </Button>
+                            )}
+                            <Button 
+                              size="sm" 
+                              variant="secondary" 
+                              className="bg-black/50 hover:bg-black/70"
+                              onClick={() => handleImageUpload(index)}
+                            >
+                              <Image className="h-5 w-5 text-white" />
+                            </Button>
+                            <Button 
+                              size="sm" 
+                              variant="secondary" 
+                              className="bg-black/50 hover:bg-black/70"
+                              onClick={() => handleVideoUpload(index)}
+                            >
+                              <Video className="h-5 w-5 text-white" />
+                            </Button>
+                          </div>
                         </div>
                       </div>
                       
@@ -115,6 +221,14 @@ const FeatureShowcase = () => {
           </Button>
         </div>
       </div>
+      
+      {/* Video modal for playing uploaded videos */}
+      <VideoModal
+        isOpen={activeVideoModal.isOpen}
+        onClose={closeVideoModal}
+        title={activeVideoModal.title}
+        videoUrl={activeVideoModal.videoUrl}
+      />
     </div>
   );
 };

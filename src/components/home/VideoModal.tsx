@@ -23,14 +23,20 @@ const VideoModal: React.FC<VideoModalProps> = ({ isOpen, onClose, title, videoUr
         </DialogHeader>
         
         <div className="aspect-video w-full">
-          <video
-            src={videoUrl}
-            controls
-            autoPlay
-            className="w-full h-full object-cover rounded-md"
-          >
-            Dein Browser unterstützt keine Videos.
-          </video>
+          {videoUrl ? (
+            <video
+              src={videoUrl}
+              controls
+              autoPlay
+              className="w-full h-full object-cover rounded-md"
+            >
+              Dein Browser unterstützt keine Videos.
+            </video>
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-jillr-darkAccent/50 rounded-md">
+              <p className="text-muted-foreground">Kein Video verfügbar</p>
+            </div>
+          )}
         </div>
       </DialogContent>
     </Dialog>
