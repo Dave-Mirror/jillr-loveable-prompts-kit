@@ -29,6 +29,9 @@ const ChallengeFeed = () => {
     handleShare,
     handleSupportCause,
     handleJoinChallenge,
+    addComment,
+    activeComments,
+    setActiveComments,
   } = useFeedInteractions(feedItems, setFeedItems);
 
   if (loading) {
@@ -68,8 +71,10 @@ const ChallengeFeed = () => {
                   onShare={handleShare}
                   onSupportCause={handleSupportCause}
                   onJoinChallenge={handleJoinChallenge}
+                  onAddComment={addComment}
                   toggleAchievement={toggleAchievement}
                   showAchievement={showAchievement}
+                  activeComments={activeComments}
                 />
               </motion.div>
             ))

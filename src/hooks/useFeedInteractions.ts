@@ -4,10 +4,23 @@ import { toast } from '@/hooks/use-toast';
 import { FeedItem } from '@/utils/challenge/feed';
 import { joinChallenge } from '@/utils/challenge/feed';
 
+interface Comment {
+  id: string;
+  userId: string;
+  username: string;
+  userAvatar: string;
+  text: string;
+  timestamp: string;
+  likes: number;
+}
+
 export const useFeedInteractions = (
   feedItems: FeedItem[],
   setFeedItems: React.Dispatch<React.SetStateAction<FeedItem[]>>
 ) => {
+  // Track which feed item's comments are currently open
+  const [activeComments, setActiveComments] = useState<string | null>(null);
+
   // Handle like interaction
   const handleLike = (id: string) => {
     setFeedItems(items => 
@@ -26,9 +39,38 @@ export const useFeedInteractions = (
 
   // Handle comment interaction
   const handleComment = (id: string) => {
+    // Toggle comments view
+    setActiveComments(activeComments === id ? null : id);
+  };
+
+  // Add a comment to a feed item
+  const addComment = (feedItemId: string, commentText: string) => {
+    const now = new Date();
+    const newComment: Comment = {
+      id: `comment-${Date.now()}`,
+      userId: 'current-user',
+      username: 'Du',
+      userAvatar: '/placeholder.svg',
+      text: commentText,
+      timestamp: now.toLocaleTimeString(),
+      likes: 0
+    };
+    
+    setFeedItems(items => 
+      items.map(item => 
+        item.id === feedItemId 
+          ? { 
+              ...item, 
+              comments: item.comments + 1,
+              commentsList: [...(item.commentsList || []), newComment]
+            } 
+          : item
+      )
+    );
+    
     toast({
-      title: "Comments",
-      description: "Comments feature coming soon!",
+      title: "Kommentar hinzugefügt",
+      description: "Dein Kommentar wurde erfolgreich gepostet.",
     });
   };
 
@@ -90,5 +132,8 @@ export const useFeedInteractions = (
     handleShare,
     handleSupportCause,
     handleJoinChallenge,
+    addComment,
+    activeComments,
+    setActiveComments,
   };
 };

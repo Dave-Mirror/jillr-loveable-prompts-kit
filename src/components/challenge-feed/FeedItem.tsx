@@ -13,6 +13,7 @@ import FeedItemHeader from './FeedItemHeader';
 import FeedItemCaption from './FeedItemCaption';
 import FeedItemTooltip from './FeedItemTooltip';
 import JoinChallengeButton from './JoinChallengeButton';
+import CommentSection from './CommentSection';
 
 interface FeedItemProps {
   item: FeedItemType;
@@ -23,8 +24,10 @@ interface FeedItemProps {
   onShare: (id: string) => void;
   onSupportCause: (id: string) => void;
   onJoinChallenge: (challengeId: string, challengeTitle: string) => void;
+  onAddComment: (feedItemId: string, text: string) => void;
   toggleAchievement: (id: string | null) => void;
   showAchievement: string | null;
+  activeComments: string | null;
 }
 
 const FeedItem: React.FC<FeedItemProps> = ({ 
@@ -36,8 +39,10 @@ const FeedItem: React.FC<FeedItemProps> = ({
   onShare,
   onSupportCause,
   onJoinChallenge,
+  onAddComment,
   toggleAchievement,
-  showAchievement
+  showAchievement,
+  activeComments
 }) => {
   return (
     <div 
@@ -110,6 +115,15 @@ const FeedItem: React.FC<FeedItemProps> = ({
         item={item} 
         showAchievement={showAchievement} 
         toggleAchievement={toggleAchievement} 
+      />
+      
+      {/* Comment section */}
+      <CommentSection
+        feedItemId={item.id}
+        comments={item.commentsList || []}
+        isOpen={activeComments === item.id}
+        onClose={() => onComment(item.id)}
+        onAddComment={onAddComment}
       />
       
       {/* Indicator for scrolling */}
