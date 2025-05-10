@@ -3,16 +3,10 @@ import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Play, Image, Video } from "lucide-react";
+import { Feature, getIconComponent } from './featureData';
 
 interface FeatureCardProps {
-  feature: {
-    title: string;
-    description: string;
-    image: string;
-    videoUrl: string;
-    icon: React.ReactNode;
-    action: () => void;
-  };
+  feature: Feature;
   index: number;
   onVideoPlay: (title: string, videoUrl: string) => void;
   onImageUpload: (index: number) => void;
@@ -74,7 +68,10 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
           </div>
           
           <div className="p-5">
-            <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
+            <div className="mb-2 flex items-center gap-2">
+              {getIconComponent(feature.iconType)}
+              <h3 className="text-lg font-semibold">{feature.title}</h3>
+            </div>
             <p className="text-muted-foreground text-sm mb-4">{feature.description}</p>
             <Button 
               variant="outline" 

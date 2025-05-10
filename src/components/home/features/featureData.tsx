@@ -7,7 +7,7 @@ export interface Feature {
   description: string;
   image: string;
   videoUrl: string;
-  icon: React.ReactNode;
+  iconType: 'play' | 'users' | 'star' | 'map';
   action: () => void;
 }
 
@@ -17,7 +17,7 @@ export const getInitialFeatures = (navigate: (path: string) => void): Feature[] 
     description: "Nimm an spannenden Challenges teil und zeige deine Kreativität.",
     image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81",
     videoUrl: "",
-    icon: <Play className="h-10 w-10 text-jillr-neonPurple" />,
+    iconType: 'play',
     action: () => navigate('/explore')
   },
   {
@@ -25,7 +25,7 @@ export const getInitialFeatures = (navigate: (path: string) => void): Feature[] 
     description: "Verbinde dich mit anderen kreativen Köpfen und teile deine Ideen.",
     image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c",
     videoUrl: "",
-    icon: <Users className="h-10 w-10 text-jillr-neonPurple" />,
+    iconType: 'users',
     action: () => navigate('/challenge-feed')
   },
   {
@@ -33,7 +33,7 @@ export const getInitialFeatures = (navigate: (path: string) => void): Feature[] 
     description: "Finde versteckte Überraschungen und sammle besondere Belohnungen.",
     image: "https://images.unsplash.com/photo-1500673922987-e212871fec22",
     videoUrl: "",
-    icon: <Star className="h-10 w-10 text-jillr-neonPurple" />,
+    iconType: 'star',
     action: () => navigate('/livemap')
   },
   {
@@ -41,7 +41,22 @@ export const getInitialFeatures = (navigate: (path: string) => void): Feature[] 
     description: "Entdecke Challenges und Events in deiner Nähe.",
     image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81",
     videoUrl: "",
-    icon: <Map className="h-10 w-10 text-jillr-neonPurple" />,
+    iconType: 'map',
     action: () => navigate('/livemap')
   }
 ];
+
+export const getIconComponent = (iconType: string) => {
+  switch (iconType) {
+    case 'play':
+      return <Play className="h-10 w-10 text-jillr-neonPurple" />;
+    case 'users':
+      return <Users className="h-10 w-10 text-jillr-neonPurple" />;
+    case 'star':
+      return <Star className="h-10 w-10 text-jillr-neonPurple" />;
+    case 'map':
+      return <Map className="h-10 w-10 text-jillr-neonPurple" />;
+    default:
+      return <Play className="h-10 w-10 text-jillr-neonPurple" />;
+  }
+};
