@@ -6,6 +6,9 @@ import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 import PageContainer from '@/components/navigation/PageContainer';
 import { useIsMobile } from '@/hooks/use-mobile';
+import FeatureShowcase from '@/components/home/FeatureShowcase';
+import HowItWorksSection from '@/components/home/HowItWorksSection';
+import AvatarShopPreview from '@/components/shop/AvatarShopPreview';
 
 const Index = () => {
   const navigate = useNavigate();
@@ -97,6 +100,60 @@ const Index = () => {
               </div>
             </div>
           </motion.div>
+        </div>
+        
+        {/* Feature Showcase - NEUE KOMPONENTE */}
+        <FeatureShowcase />
+        
+        {/* How it Works Section - NEUE KOMPONENTE */}
+        <HowItWorksSection />
+        
+        {/* Preview Avatars und Shop */}
+        <div className="py-12 px-4 bg-jillr-darkBlue/30">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl md:text-3xl font-bold mb-4">Personalisiere dein Erlebnis</h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto">
+                Gestalte deinen Avatar und entdecke einzigartige Items im Shop.
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="md:col-span-2 bg-jillr-darkBlue/50 rounded-xl p-6 border border-jillr-neonPurple/20">
+                <h3 className="text-xl font-semibold mb-4">Warum einen Avatar erstellen?</h3>
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-2">
+                    <Check className="h-5 w-5 text-jillr-neonGreen mt-0.5" />
+                    <span>Zeige deine Persönlichkeit in der Community</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <Check className="h-5 w-5 text-jillr-neonGreen mt-0.5" />
+                    <span>Sammle einzigartige Items und Accessoires</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <Check className="h-5 w-5 text-jillr-neonGreen mt-0.5" />
+                    <span>Schalte besondere Items durch Level-Aufstiege frei</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <Check className="h-5 w-5 text-jillr-neonGreen mt-0.5" />
+                    <span>Verdiene Auszeichnungen und zeige sie stolz</span>
+                  </li>
+                </ul>
+                <div className="mt-6">
+                  <Button
+                    onClick={() => navigate('/auth')}
+                    className="bg-jillr-neonPurple hover:bg-jillr-neonPurple/90"
+                  >
+                    Erstelle deinen Avatar
+                  </Button>
+                </div>
+              </div>
+              
+              <div className="md:col-span-1">
+                <AvatarShopPreview />
+              </div>
+            </div>
+          </div>
         </div>
         
         {/* Features Section */}
