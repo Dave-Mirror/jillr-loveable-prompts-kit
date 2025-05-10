@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Play, Star, Map, Users, Upload, Image, Video } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
-import VideoModal from './VideoModal';
+import { VideoModal } from './VideoModal'; // Changed from default import to named import
 import { toast } from 'sonner';
 
 const FeatureShowcase = () => {

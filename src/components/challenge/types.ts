@@ -1,3 +1,4 @@
+
 import { Reward } from '@/types/dashboard';
 
 // Define allowed submission statuses
@@ -59,6 +60,9 @@ export type Challenge = {
   hashtags?: string[];
   views?: number;
   status?: 'active' | 'completed' | 'draft';
+  // Add the new properties needed for preview media
+  previewMediaType?: 'image' | 'video';
+  previewMediaUrl?: string;
 };
 
 export type ChallengeDetailsProps = {

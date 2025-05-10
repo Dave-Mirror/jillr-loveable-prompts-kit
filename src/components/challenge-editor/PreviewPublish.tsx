@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { FormField, FormItem, FormLabel, FormControl, FormDescription } from '@/components/ui/form';
@@ -19,7 +20,7 @@ const PreviewPublish = ({ data, onChange }) => {
     input.accept = mediaType === 'image' ? 'image/*' : 'video/*';
     
     input.onchange = (e) => {
-      const file = e.target.files[0];
+      const file = e.target.files?.[0]; // Use optional chaining
       if (!file) return;
       
       // Check file size (max 50MB for videos, 5MB for images)
