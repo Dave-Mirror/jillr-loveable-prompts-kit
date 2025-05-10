@@ -26,6 +26,8 @@ export const useChallengeData = (challengeId: string | undefined) => {
               description: 'Dies ist eine Demo Challenge für die jillr Plattform. Nehmen Sie teil und gewinnen Sie tolle Preise!',
               type: 'Video',
               imageUrl: '/placeholder.svg',
+              previewMediaType: 'image',
+              previewMediaUrl: 'https://images.unsplash.com/photo-1605810230434-7631ac76ec81',
               brand_logo: '/placeholder.svg',
               brand_name: 'jillr Demo',
               start_date: new Date().toISOString(),

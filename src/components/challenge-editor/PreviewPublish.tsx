@@ -1,12 +1,49 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { FormField, FormItem, FormLabel, FormControl, FormDescription } from '@/components/ui/form';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Award, Calendar, Flag, Globe, Hash, Info, Medal, Music, Target, Video } from 'lucide-react';
+import { Award, Calendar, Flag, Globe, Hash, Info, Medal, Music, Target, Video, Upload, Image } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
 
 const PreviewPublish = ({ data, onChange }) => {
+  const [previewMedia, setPreviewMedia] = useState({
+    type: data.previewMediaType || 'image',
+    url: data.previewMediaUrl || ''
+  });
+
+  const handleMediaUpload = (mediaType) => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = mediaType === 'image' ? 'image/*' : 'video/*';
+    
+    input.onchange = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      
+      // Check file size (max 50MB for videos, 5MB for images)
+      const maxSize = mediaType === 'image' ? 5 * 1024 * 1024 : 50 * 1024 * 1024;
+      if (file.size > maxSize) {
+        toast.error(`Datei zu groß. Maximum: ${mediaType === 'image' ? '5MB' : '50MB'}`);
+        return;
+      }
+      
+      const url = URL.createObjectURL(file);
+      setPreviewMedia({ type: mediaType, url });
+      
+      // Update the parent component's data
+      onChange({ 
+        previewMediaType: mediaType, 
+        previewMediaUrl: url 
+      });
+      
+      toast.success(`${mediaType === 'image' ? 'Bild' : 'Video'} erfolgreich hochgeladen`);
+    };
+    
+    input.click();
+  };
+  
   return (
     <div className="space-y-8">
       <div>
@@ -20,6 +57,54 @@ const PreviewPublish = ({ data, onChange }) => {
             <CardContent className="p-6">
               <h4 className="text-xl font-bold">{data.title || "Challenge Title"}</h4>
               <p className="mt-2 text-muted-foreground">{data.description || "Challenge description will appear here."}</p>
+              
+              {/* Preview Media Section */}
+              <div className="mt-4 mb-4">
+                <div className="aspect-video rounded-md overflow-hidden bg-jillr-darkBlue/30 border border-jillr-border/30">
+                  {previewMedia.url ? (
+                    previewMedia.type === 'video' ? (
+                      <video 
+                        src={previewMedia.url}
+                        className="w-full h-full object-cover"
+                        controls
+                      />
+                    ) : (
+                      <img 
+                        src={previewMedia.url}
+                        className="w-full h-full object-cover"
+                        alt="Challenge preview"
+                      />
+                    )
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+                      <p>Lade ein Vorschaubild oder -video hoch</p>
+                    </div>
+                  )}
+                </div>
+                
+                <div className="flex gap-2 mt-2 justify-center">
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleMediaUpload('image')}
+                    className="flex items-center gap-1"
+                  >
+                    <Image className="h-4 w-4" />
+                    Bild hochladen
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleMediaUpload('video')}
+                    className="flex items-center gap-1"
+                  >
+                    <Video className="h-4 w-4" />
+                    Video hochladen
+                  </Button>
+                </div>
+              </div>
               
               <div className="mt-6 space-y-4">
                 <div className="flex items-center gap-2">

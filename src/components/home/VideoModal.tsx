@@ -28,6 +28,7 @@ const VideoModal: React.FC<VideoModalProps> = ({ isOpen, onClose, title, videoUr
               src={videoUrl}
               controls
               autoPlay
+              playsInline
               className="w-full h-full object-cover rounded-md"
             >
               Dein Browser unterstützt keine Videos.
@@ -43,4 +44,4 @@ const VideoModal: React.FC<VideoModalProps> = ({ isOpen, onClose, title, videoUr
   );
 };
 
-export default VideoModal;
+export { VideoModal };

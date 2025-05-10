@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, ArrowRight, Check, Eye, Save } from 'lucide-react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useChallengeTabs } from '@/hooks/challenge-editor/useChallengeTabs';
 import ChallengeHeader from '@/components/challenge-editor/ChallengeHeader';
@@ -17,6 +16,9 @@ const ChallengeEditor = () => {
     type: [],
     title: '',
     description: '',
+    // Preview media
+    previewMediaType: 'image',
+    previewMediaUrl: '',
     // Content requirements
     contentFormats: [],
     platforms: [],
