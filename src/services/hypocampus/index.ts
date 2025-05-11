@@ -4,3 +4,4 @@ export * from './dbUtils';
 export * from './triggerService';
 export * from './rewardService';
 export * from './memoryService';
+export * from './triggerMatchingService';
