@@ -84,6 +84,30 @@ const mockRewardLogs: RewardLog[] = [
   }
 ];
 
+// Mock data for memory snapshots
+const mockMemorySnapshots: MemorySnapshot[] = [
+  {
+    id: uuidv4(),
+    user_id: 'user-123',
+    activity_type: 'app_opened',
+    data: { 
+      hour: 9,
+      screen: '/dashboard'
+    },
+    created_at: new Date().toISOString()
+  },
+  {
+    id: uuidv4(),
+    user_id: 'user-123',
+    activity_type: 'challenge_viewed',
+    data: { 
+      challenge_id: 'chal-123',
+      hour: 14
+    },
+    created_at: new Date(Date.now() - 86400000).toISOString()
+  }
+];
+
 // Methods to mimic Supabase queries for triggers
 export const getTriggersForUser = async (userId: string): Promise<Trigger[]> => {
   // Simulate API delay
@@ -141,4 +165,23 @@ export const createRewardLog = async (rewardLog: Omit<RewardLog, 'id' | 'created
   
   mockRewardLogs.push(newLog);
   return newLog;
+};
+
+// Methods to mimic Supabase queries for memory snapshots
+export const createMemorySnapshot = async (snapshot: Omit<MemorySnapshot, 'id' | 'created_at'>): Promise<MemorySnapshot> => {
+  await new Promise(resolve => setTimeout(resolve, 300));
+  
+  const newSnapshot: MemorySnapshot = {
+    ...snapshot,
+    id: uuidv4(),
+    created_at: new Date().toISOString()
+  };
+  
+  mockMemorySnapshots.push(newSnapshot);
+  return newSnapshot;
+};
+
+export const getMemorySnapshotsForUser = async (userId: string): Promise<MemorySnapshot[]> => {
+  await new Promise(resolve => setTimeout(resolve, 300));
+  return mockMemorySnapshots.filter(snapshot => snapshot.user_id === userId);
 };

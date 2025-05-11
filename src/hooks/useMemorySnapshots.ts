@@ -2,6 +2,7 @@
 import { useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { v4 as uuidv4 } from 'uuid';
+import { createMemorySnapshot } from '@/services/mockHypocampusService';
 
 // Activity types
 export type ActivityType = 
@@ -28,9 +29,6 @@ interface SnapshotData {
 export const useMemorySnapshots = () => {
   const { user } = useAuth();
   
-  // Store snapshots locally for now
-  const memorySnapshots: any[] = [];
-
   // Function to capture and store memory snapshots
   const captureSnapshot = async (activityType: ActivityType, data: SnapshotData = {}) => {
     if (!user) return;
@@ -41,18 +39,13 @@ export const useMemorySnapshots = () => {
         data.hour = new Date().getHours();
       }
       
-      // Create snapshot object
-      const snapshot = {
-        id: uuidv4(),
+      // Create snapshot using our mock service
+      const snapshot = await createMemorySnapshot({
         user_id: user.id,
         activity_type: activityType,
-        data: data,
-        created_at: new Date().toISOString()
-      };
+        data: data
+      });
       
-      // In a real implementation, this would be inserted into Supabase
-      // For now, we'll just add it to our local array and log it
-      memorySnapshots.push(snapshot);
       console.log('Memory snapshot captured:', snapshot);
       
       return snapshot;

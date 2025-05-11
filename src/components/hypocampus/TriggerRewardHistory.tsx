@@ -5,17 +5,9 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/hooks/useAuth';
-import { supabase } from '@/integrations/supabase/client';
 import { Award, Clock } from 'lucide-react';
-
-interface RewardLog {
-  id: string;
-  reward_type: string;
-  xp_earned: number;
-  coin_earned: number;
-  description: string;
-  timestamp: string;
-}
+import { getRewardsForUser } from '@/services/mockHypocampusService';
+import { RewardLog } from '@/types/hypocampus';
 
 interface ChartData {
   date: string;
@@ -33,18 +25,13 @@ const TriggerRewardHistory: React.FC = () => {
       if (!user) return;
 
       try {
-        const { data, error } = await supabase
-          .from('rewards_log')
-          .select('*')
-          .eq('user_id', user.id)
-          .order('timestamp', { ascending: false });
-
-        if (error) throw error;
-        setRewardLogs(data || []);
+        setIsLoading(true);
+        const data = await getRewardsForUser(user.id);
+        setRewardLogs(data);
 
         // Process data for chart
         const last7Days = getLast7Days();
-        const chartData = processChartData(data || [], last7Days);
+        const chartData = processChartData(data, last7Days);
         setChartData(chartData);
       } catch (error) {
         console.error('Error fetching reward logs:', error);
@@ -76,7 +63,7 @@ const TriggerRewardHistory: React.FC = () => {
     
     // Sum XP for each day
     logs.forEach(log => {
-      const logDate = new Date(log.timestamp).toISOString().split('T')[0];
+      const logDate = new Date(log.created_at).toISOString().split('T')[0];
       if (last7Days.includes(logDate)) {
         dailyXP[logDate] = (dailyXP[logDate] || 0) + log.xp_earned;
       }
@@ -164,7 +151,7 @@ const TriggerRewardHistory: React.FC = () => {
                         </div>
                         <div className="flex items-center text-xs text-gray-400">
                           <Clock className="h-3 w-3 mr-1" />
-                          {new Date(log.timestamp).toLocaleDateString('de-DE', {
+                          {new Date(log.created_at).toLocaleDateString('de-DE', {
                             hour: '2-digit',
                             minute: '2-digit',
                             day: '2-digit',
@@ -172,7 +159,7 @@ const TriggerRewardHistory: React.FC = () => {
                           })}
                         </div>
                       </div>
-                      <p className="text-sm mt-1">{log.description}</p>
+                      <p className="text-sm mt-1">{log.description || 'Keine Beschreibung'}</p>
                     </div>
                   </div>
                 ))}

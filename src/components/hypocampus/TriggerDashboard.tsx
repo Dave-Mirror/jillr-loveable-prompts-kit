@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
@@ -9,24 +10,7 @@ import { getTriggersForUser, updateTrigger } from '@/services/mockHypocampusServ
 import { Trigger } from '@/types/hypocampus';
 import { Clock, MapPin, ActivityIcon, CloudRain, SmilePlus, Zap, Award, Star } from 'lucide-react';
 
-interface Trigger {
-  id: string;
-  description: string;
-  trigger_condition: {
-    type: string;
-    value: string;
-    original: string;
-  };
-  trigger_action: {
-    type: string;
-    value: string;
-    amount?: string | null;
-    original: string;
-  };
-  active: boolean;
-  created_by: 'user' | 'brand' | 'system';
-  created_at: string;
-}
+// Remove the duplicate Trigger interface since we're importing it from types/hypocampus
 
 const TriggerDashboard: React.FC = () => {
   const [triggers, setTriggers] = useState<Trigger[]>([]);
@@ -154,7 +138,7 @@ const TriggerDashboard: React.FC = () => {
                         {new Date(trigger.created_at).toLocaleDateString('de-DE')}
                       </span>
                     </div>
-                    <p className="font-medium mb-2">{trigger.description}</p>
+                    <p className="font-medium mb-2">{trigger.description || 'Kein Titel'}</p>
                     <div className="flex items-center gap-2">
                       <div className="flex items-center gap-1.5 bg-black/30 px-2 py-1 rounded text-xs">
                         {getConditionIcon(trigger.trigger_condition.type)}
@@ -202,6 +186,40 @@ const TriggerDashboard: React.FC = () => {
       </CardContent>
     </Card>
   );
+};
+
+// Add back the helper functions
+const getConditionIcon = (type: string) => {
+  switch (type) {
+    case 'time': return <Clock className="h-4 w-4 text-jillr-neonBlue" />;
+    case 'location': return <MapPin className="h-4 w-4 text-jillr-neonGreen" />;
+    case 'activity': return <ActivityIcon className="h-4 w-4 text-jillr-neonPurple" />;
+    case 'weather': return <CloudRain className="h-4 w-4 text-jillr-neonBlue" />;
+    case 'mood': return <SmilePlus className="h-4 w-4 text-jillr-neonPink" />;
+    default: return <Star className="h-4 w-4 text-yellow-400" />;
+  }
+};
+
+const getActionIcon = (type: string) => {
+  switch (type) {
+    case 'reward': return <Award className="h-4 w-4 text-yellow-400" />;
+    case 'challenge': return <Star className="h-4 w-4 text-jillr-neonGreen" />;
+    case 'avatar': return <ActivityIcon className="h-4 w-4 text-jillr-neonPink" />;
+    default: return <Zap className="h-4 w-4 text-jillr-neonPurple" />;
+  }
+};
+
+const getCreatorBadge = (createdBy: 'user' | 'brand' | 'system') => {
+  switch (createdBy) {
+    case 'user':
+      return <Badge variant="outline" className="text-xs">Eigener Trigger</Badge>;
+    case 'brand':
+      return <Badge variant="outline" className="bg-jillr-neonBlue/10 text-jillr-neonBlue text-xs">Brand Trigger</Badge>;
+    case 'system':
+      return <Badge variant="outline" className="bg-jillr-neonPurple/10 text-jillr-neonPurple text-xs">AI empfohlen</Badge>;
+    default:
+      return null;
+  }
 };
 
 export default TriggerDashboard;
