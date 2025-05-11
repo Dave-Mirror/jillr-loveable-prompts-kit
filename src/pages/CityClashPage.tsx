@@ -5,15 +5,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Search, Map, Trophy, Zap, Users, Clock, Flame } from 'lucide-react';
+import { Search, Map, Trophy, Zap, Users, Clock, Flame, Filter, MapPin, Camera, Video, Flag, Leaf, Recycle, Compass, Puzzle } from 'lucide-react';
 import CityClashChallengeGrid from '@/components/city-clash/CityClashChallengeGrid';
 import CityClashMap from '@/components/city-clash/CityClashMap';
 import CityClashLeaderboard from '@/components/city-clash/CityClashLeaderboard';
 import { useCityClashData } from '@/hooks/useCityClashData';
+import ChallengeCategories from '@/components/city-clash/ChallengeCategories';
 
 const CityClashPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState('challenges');
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
   const { 
     challenges, 
     districts, 
@@ -21,13 +23,29 @@ const CityClashPage: React.FC = () => {
     leaderboard,
     activeChallenges,
     isLoading,
-    filterChallenges
+    filterChallenges,
+    filterChallengesByCategory
   } = useCityClashData();
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
     filterChallenges(e.target.value);
   };
+
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+    filterChallengesByCategory(category);
+  };
+
+  // Challenge categories based on the document
+  const challengeCategories = [
+    { id: 'all', name: 'Alle', icon: <Compass className="h-4 w-4" /> },
+    { id: 'location', name: 'Standort', icon: <MapPin className="h-4 w-4" /> },
+    { id: 'social', name: 'Social Media', icon: <Video className="h-4 w-4" /> },
+    { id: 'team', name: 'Team', icon: <Users className="h-4 w-4" /> },
+    { id: 'eco', name: 'Nachhaltigkeit', icon: <Leaf className="h-4 w-4" /> },
+    { id: 'mystery', name: 'Mystery', icon: <Puzzle className="h-4 w-4" /> }
+  ];
 
   return (
     <PageContainer previousPage="/explore" nextPage="/leaderboard">
@@ -58,7 +76,7 @@ const CityClashPage: React.FC = () => {
             
             <div className="flex gap-2">
               <Button variant="outline" className="bg-jillr-dark border-jillr-border gap-2">
-                <Clock className="h-4 w-4" /> Filter
+                <Filter className="h-4 w-4" /> Filter
               </Button>
               <Button className="bg-gradient-to-r from-jillr-neonPurple to-jillr-neonPink hover:opacity-90">
                 Team beitreten
@@ -66,25 +84,22 @@ const CityClashPage: React.FC = () => {
             </div>
           </div>
 
+          {/* Challenge Categories */}
           <div className="flex flex-wrap gap-2 mb-4">
-            <Badge variant="outline" className="bg-jillr-neonPurple/10 hover:bg-jillr-neonPurple/20 cursor-pointer">
-              Alle
-            </Badge>
-            <Badge variant="outline" className="bg-jillr-neonPurple/10 hover:bg-jillr-neonPurple/20 cursor-pointer">
-              Time Rush
-            </Badge>
-            <Badge variant="outline" className="bg-jillr-neonPurple/10 hover:bg-jillr-neonPurple/20 cursor-pointer">
-              Team Battle
-            </Badge>
-            <Badge variant="outline" className="bg-jillr-neonPurple/10 hover:bg-jillr-neonPurple/20 cursor-pointer">
-              Digital Heist
-            </Badge>
-            <Badge variant="outline" className="bg-jillr-neonPurple/10 hover:bg-jillr-neonPurple/20 cursor-pointer">
-              Mystery Card
-            </Badge>
-            <Badge variant="outline" className="bg-jillr-neonPurple/10 hover:bg-jillr-neonPurple/20 cursor-pointer">
-              Shadow Quest
-            </Badge>
+            {challengeCategories.map((category) => (
+              <Badge 
+                key={category.id}
+                variant="outline" 
+                className={`flex items-center gap-1 px-3 py-1 cursor-pointer transition-all ${
+                  selectedCategory === category.id 
+                    ? "bg-jillr-neonPurple/30 text-white" 
+                    : "bg-jillr-neonPurple/10 hover:bg-jillr-neonPurple/20"
+                }`}
+                onClick={() => handleCategoryChange(category.id)}
+              >
+                {category.icon} {category.name}
+              </Badge>
+            ))}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
@@ -128,6 +143,9 @@ const CityClashPage: React.FC = () => {
           </TabsList>
           
           <TabsContent value="challenges">
+            {/* Category sections */}
+            <ChallengeCategories selectedCategory={selectedCategory} />
+            
             <div className="mb-6">
               <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
                 <Flame className="h-5 w-5 text-jillr-neonPink" />

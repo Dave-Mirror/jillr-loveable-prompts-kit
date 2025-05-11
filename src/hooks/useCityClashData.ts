@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { toast } from '@/hooks/use-toast';
 
@@ -8,6 +7,7 @@ export interface CityChallenge {
   title: string;
   description: string;
   type: 'time_rush' | 'team_battle' | 'digital_heist' | 'mystery_card' | 'shadow_quest' | 'secret_society' | 'urban_legend';
+  category?: 'location' | 'social' | 'team' | 'eco' | 'mystery';
   difficulty: 'easy' | 'medium' | 'hard' | 'expert';
   reward: {
     xp: number;
@@ -234,13 +234,14 @@ export const useCityClashData = () => {
           }
         ];
         
-        // Mock data for challenges
+        // Enhanced mock data for challenges with categories
         const mockChallenges: CityChallenge[] = [
           {
             id: 'challenge-city-1',
             title: 'Urban Sprint Challenge',
             description: 'Erreiche 5 Checkpoints in der Stadt so schnell wie möglich und gewinne exklusive Sneakers.',
             type: 'time_rush',
+            category: 'team',
             difficulty: 'medium',
             reward: {
               xp: 500,
@@ -262,6 +263,7 @@ export const useCityClashData = () => {
             title: 'The Vault - Codeknacker Challenge',
             description: 'Finde alle Hinweise in der Stadt und knacke den Code des digitalen Tresors für exklusive Rewards.',
             type: 'digital_heist',
+            category: 'mystery',
             difficulty: 'hard',
             reward: {
               xp: 750,
@@ -280,6 +282,7 @@ export const useCityClashData = () => {
             title: 'Nightlife XP - Club Expedition',
             description: 'Besuche 3 teilnehmende Clubs und sammle Punkte für Freigetränke und VIP-Zugang.',
             type: 'shadow_quest',
+            category: 'location',
             difficulty: 'easy',
             reward: {
               xp: 350,
@@ -301,6 +304,7 @@ export const useCityClashData = () => {
             title: 'Mystery Card Collection',
             description: 'Sammle alle 5 Kartenteile in verschiedenen Stores der Stadt und gewinne limitierte Trading Cards.',
             type: 'mystery_card',
+            category: 'mystery',
             difficulty: 'medium',
             reward: {
               xp: 450,
@@ -324,6 +328,7 @@ export const useCityClashData = () => {
             title: 'Team Territory Battle',
             description: 'Kämpfe mit deinem Team um die Kontrolle über Westend und gewinne exklusive Team-Rewards.',
             type: 'team_battle',
+            category: 'team',
             difficulty: 'expert',
             reward: {
               xp: 1000,
@@ -342,6 +347,7 @@ export const useCityClashData = () => {
             title: 'Secret Society Initiation',
             description: 'Finde die geheimen QR-Codes in der Stadt und erhalte Zugang zur exklusiven Secret Society.',
             type: 'secret_society',
+            category: 'mystery',
             difficulty: 'expert',
             reward: {
               xp: 1200,
@@ -360,6 +366,7 @@ export const useCityClashData = () => {
             title: 'Urban Legends Tour',
             description: 'Entdecke die versteckten Geschichten und Legenden der Stadt durch interaktive Storytelling-Punkte.',
             type: 'urban_legend',
+            category: 'location',
             difficulty: 'easy',
             reward: {
               xp: 300,
@@ -374,6 +381,110 @@ export const useCityClashData = () => {
             participants: 231,
             startDate: '2025-05-05T09:00:00Z',
             endDate: '2025-06-05T18:00:00Z',
+            imageUrl: '/placeholder.svg'
+          },
+          // New challenges based on the document
+          {
+            id: 'challenge-city-8',
+            title: 'Eco-Hero Müllsammelaktion',
+            description: 'Sammle Müll in deinem Stadtteil und dokumentiere deinen Beitrag zur Stadtsäuberung.',
+            type: 'shadow_quest',
+            category: 'eco',
+            difficulty: 'easy',
+            reward: {
+              xp: 400,
+              coins: 150
+            },
+            duration: '1 Tag',
+            districtId: 'district-3',
+            districtName: 'Glockenbach',
+            participants: 98,
+            startDate: '2025-05-20T09:00:00Z',
+            endDate: '2025-05-20T18:00:00Z',
+            imageUrl: '/placeholder.svg'
+          },
+          {
+            id: 'challenge-city-9',
+            title: 'TikTok Viral Challenge',
+            description: 'Erstelle ein virales TikTok Video mit dem Jillr Filter und erreiche mindestens 1000 Views.',
+            type: 'shadow_quest',
+            category: 'social',
+            difficulty: 'medium',
+            reward: {
+              xp: 600,
+              coins: 200
+            },
+            duration: '1 Woche',
+            districtId: 'district-1',
+            districtName: 'Schwabing',
+            brandId: 'brand-5',
+            brandName: 'TrendyMedia',
+            brandLogo: '/placeholder.svg',
+            participants: 256,
+            startDate: '2025-05-10T00:00:00Z',
+            endDate: '2025-05-17T23:59:59Z',
+            imageUrl: '/placeholder.svg'
+          },
+          {
+            id: 'challenge-city-10',
+            title: 'Street Art Digital Battle',
+            description: 'Hinterlasse digitale Graffiti an bestimmten Orten und überdecke die Tags anderer Teams.',
+            type: 'team_battle',
+            category: 'team',
+            difficulty: 'medium',
+            reward: {
+              xp: 500,
+              coins: 180
+            },
+            duration: '3 Tage',
+            districtId: 'district-2',
+            districtName: 'Maxvorstadt',
+            teamId: 'team-3',
+            teamName: 'Night Owls',
+            participants: 147,
+            startDate: '2025-05-18T12:00:00Z',
+            endDate: '2025-05-21T12:00:00Z',
+            imageUrl: '/placeholder.svg'
+          },
+          {
+            id: 'challenge-city-11',
+            title: 'CO₂-Tracker Challenge',
+            description: 'Sammle 50 emissionsfreie Kilometer zu Fuß oder mit dem Rad innerhalb einer Woche.',
+            type: 'shadow_quest',
+            category: 'eco',
+            difficulty: 'medium',
+            reward: {
+              xp: 450,
+              products: [{ name: 'Eco-Friendly Water Bottle', image: '/placeholder.svg' }]
+            },
+            duration: '1 Woche',
+            districtId: 'district-5',
+            districtName: 'Westend',
+            brandId: 'brand-6',
+            brandName: 'GreenMobility',
+            brandLogo: '/placeholder.svg',
+            participants: 183,
+            startDate: '2025-05-15T00:00:00Z',
+            endDate: '2025-05-22T23:59:59Z',
+            imageUrl: '/placeholder.svg'
+          },
+          {
+            id: 'challenge-city-12',
+            title: 'QR-Code Checkpoint Race',
+            description: 'Scanne alle 5 QR-Codes in der Innenstadt so schnell wie möglich und gewinne attraktive Preise.',
+            type: 'time_rush',
+            category: 'location',
+            difficulty: 'hard',
+            reward: {
+              xp: 800,
+              coins: 300
+            },
+            duration: '4 Stunden',
+            districtId: 'district-2',
+            districtName: 'Maxvorstadt',
+            participants: 126,
+            startDate: '2025-05-25T10:00:00Z',
+            endDate: '2025-05-25T14:00:00Z',
             imageUrl: '/placeholder.svg'
           }
         ];
@@ -410,8 +521,22 @@ export const useCityClashData = () => {
       challenge.description.toLowerCase().includes(lowercaseQuery) ||
       challenge.districtName.toLowerCase().includes(lowercaseQuery) ||
       challenge.type.toLowerCase().includes(lowercaseQuery) ||
+      (challenge.category && challenge.category.toLowerCase().includes(lowercaseQuery)) ||
       (challenge.brandName && challenge.brandName.toLowerCase().includes(lowercaseQuery)) ||
       (challenge.teamName && challenge.teamName.toLowerCase().includes(lowercaseQuery))
+    );
+    
+    setActiveChallenges(filtered);
+  };
+
+  const filterChallengesByCategory = (category: string) => {
+    if (category === 'all') {
+      setActiveChallenges(challenges);
+      return;
+    }
+    
+    const filtered = challenges.filter(challenge => 
+      challenge.category === category
     );
     
     setActiveChallenges(filtered);
@@ -424,6 +549,7 @@ export const useCityClashData = () => {
     teams,
     leaderboard,
     isLoading,
-    filterChallenges
+    filterChallenges,
+    filterChallengesByCategory
   };
 };

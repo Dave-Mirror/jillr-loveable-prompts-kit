@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { 
   Clock, Trophy, Users, MapPin, 
   Zap, Timer, Shield, Flag,
+  Puzzle, Leaf, Video, Camera,
   Sparkles, Key, Moon, Brain
 } from 'lucide-react';
 import { CityChallenge } from '@/hooks/useCityClashData';
@@ -39,6 +40,28 @@ const getChallengeTypeLabel = (type: CityChallenge['type']) => {
     case 'secret_society': return 'Secret Society';
     case 'urban_legend': return 'Urban Legend';
     default: return type;
+  }
+};
+
+const getCategoryIcon = (category?: string) => {
+  switch (category) {
+    case 'location': return <MapPin className="h-4 w-4" />;
+    case 'social': return <Video className="h-4 w-4" />;
+    case 'team': return <Users className="h-4 w-4" />;
+    case 'eco': return <Leaf className="h-4 w-4" />;
+    case 'mystery': return <Puzzle className="h-4 w-4" />;
+    default: return null;
+  }
+};
+
+const getCategoryColor = (category?: string) => {
+  switch (category) {
+    case 'location': return 'text-blue-400 border-blue-400/30 bg-blue-400/10';
+    case 'social': return 'text-purple-400 border-purple-400/30 bg-purple-400/10';
+    case 'team': return 'text-orange-400 border-orange-400/30 bg-orange-400/10';
+    case 'eco': return 'text-green-400 border-green-400/30 bg-green-400/10';
+    case 'mystery': return 'text-red-400 border-red-400/30 bg-red-400/10';
+    default: return '';
   }
 };
 
@@ -87,6 +110,15 @@ const CityClashCard: React.FC<CityClashCardProps> = ({ challenge }) => {
               {challenge.difficulty.charAt(0).toUpperCase() + challenge.difficulty.slice(1)}
             </Badge>
             
+            {challenge.category && (
+              <Badge variant="outline" className={`backdrop-blur-sm border-none ${getCategoryColor(challenge.category)}`}>
+                <div className="flex items-center gap-1">
+                  {getCategoryIcon(challenge.category)}
+                  {challenge.category.charAt(0).toUpperCase() + challenge.category.slice(1)}
+                </div>
+              </Badge>
+            )}
+
             <Badge variant="outline" className="bg-jillr-neonPurple/80 backdrop-blur-sm border-none text-white">
               <div className="flex items-center gap-1">
                 {getChallengeIcon(challenge.type)}
