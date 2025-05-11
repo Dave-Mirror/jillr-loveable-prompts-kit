@@ -1,6 +1,5 @@
 
 import React, { useState } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { BarChart2, ChevronDown, Settings, Video, Wrench, Zap } from 'lucide-react';
@@ -9,9 +8,27 @@ import KpiDashboard from '@/components/brand/KpiDashboard';
 import NotificationCenter from '@/components/brand/NotificationCenter';
 import ApiConnections from '@/components/brand/ApiConnections';
 import BrandHypocampusDashboard from '@/components/brand/BrandHypocampusDashboard';
+import FilterDropdown, { FilterOption } from '@/components/ui/filter-dropdown';
 
 const BrandDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
+
+  const tabOptions: FilterOption[] = [
+    { value: 'overview', label: 'Overview' },
+    { value: 'create', label: 'Create Challenge' },
+    { value: 'hypocampus', label: 'Automatisierung' },
+    { value: 'integrations', label: 'Integrations' },
+  ];
+  
+  const getIcon = () => {
+    switch(activeTab) {
+      case "overview": return <BarChart2 className="h-5 w-5 text-jillr-neonBlue mr-2" />;
+      case "create": return <Video className="h-5 w-5 text-jillr-neonPurple mr-2" />;
+      case "hypocampus": return <Zap className="h-5 w-5 text-jillr-neonGreen mr-2" />;
+      case "integrations": return <Settings className="h-5 w-5 text-gray-400 mr-2" />;
+      default: return <BarChart2 className="h-5 w-5 text-jillr-neonBlue mr-2" />;
+    }
+  };
   
   return (
     <div className="container py-8">
@@ -71,52 +88,44 @@ const BrandDashboard = () => {
         </div>
       </div>
       
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid grid-cols-4 mb-8">
-          <TabsTrigger value="overview" className="flex items-center gap-2">
-            <BarChart2 className="h-4 w-4" />
-            <span>Overview</span>
-          </TabsTrigger>
-          <TabsTrigger value="create" className="flex items-center gap-2">
-            <Video className="h-4 w-4" />
-            <span>Create Challenge</span>
-          </TabsTrigger>
-          <TabsTrigger value="hypocampus" className="flex items-center gap-2">
-            <Zap className="h-4 w-4" />
-            <span>Automatisierung</span>
-          </TabsTrigger>
-          <TabsTrigger value="integrations" className="flex items-center gap-2">
-            <Settings className="h-4 w-4" />
-            <span>Integrations</span>
-          </TabsTrigger>
-        </TabsList>
-        
-        <TabsContent value="overview" className="space-y-8">
-          <KpiDashboard />
-        </TabsContent>
-        
-        <TabsContent value="create">
-          <div className="p-8 text-center">
-            <h3 className="text-xl font-semibold mb-4">Create New Challenge</h3>
-            <p className="text-muted-foreground mb-6">
-              Use our challenge editor to create a new marketing challenge for your audience.
-            </p>
-            <Link to="/challenge-editor">
-              <Button className="bg-jillr-neonPurple hover:bg-jillr-neonPurple/80">
-                Go to Challenge Editor
-              </Button>
-            </Link>
-          </div>
-        </TabsContent>
-        
-        <TabsContent value="hypocampus">
-          <BrandHypocampusDashboard />
-        </TabsContent>
-        
-        <TabsContent value="integrations">
-          <ApiConnections />
-        </TabsContent>
-      </Tabs>
+      <div className="mb-6 flex justify-between items-center">
+        <div className="flex items-center">
+          {getIcon()}
+          <h3 className="text-xl font-bold">
+            {activeTab === "overview" && "Dashboard Overview"}
+            {activeTab === "create" && "Create New Challenge"}
+            {activeTab === "hypocampus" && "Automatisierung"}
+            {activeTab === "integrations" && "API Integrationen"}
+          </h3>
+        </div>
+        <FilterDropdown
+          options={tabOptions}
+          activeValue={activeTab}
+          onSelect={setActiveTab}
+          label="Ansicht"
+          buttonVariant="default"
+        />
+      </div>
+      
+      {activeTab === "overview" && <KpiDashboard />}
+      
+      {activeTab === "create" && (
+        <div className="p-8 text-center bg-jillr-darkAccent/40 rounded-xl border border-jillr-border/20">
+          <h3 className="text-xl font-semibold mb-4">Create New Challenge</h3>
+          <p className="text-muted-foreground mb-6">
+            Use our challenge editor to create a new marketing challenge for your audience.
+          </p>
+          <Link to="/challenge-editor">
+            <Button className="bg-jillr-neonPurple hover:bg-jillr-neonPurple/80">
+              Go to Challenge Editor
+            </Button>
+          </Link>
+        </div>
+      )}
+      
+      {activeTab === "hypocampus" && <BrandHypocampusDashboard />}
+      
+      {activeTab === "integrations" && <ApiConnections />}
     </div>
   );
 };
