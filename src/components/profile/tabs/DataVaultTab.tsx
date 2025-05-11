@@ -14,8 +14,8 @@ const DataVaultTab: React.FC<DataVaultTabProps> = ({ userProfile }) => {
   const [activeTab, setActiveTab] = useState('permissions');
 
   const tabOptions: FilterOption[] = [
-    { value: 'permissions', label: 'Datenberechtigungen' },
-    { value: 'triggers', label: 'Automatisierungen' },
+    { value: 'permissions', label: 'Datenberechtigungen', icon: <Database className="h-4 w-4" /> },
+    { value: 'triggers', label: 'Automatisierungen', icon: <Zap className="h-4 w-4" /> },
   ];
 
   const getIcon = () => {
@@ -51,6 +51,7 @@ const DataVaultTab: React.FC<DataVaultTabProps> = ({ userProfile }) => {
           activeValue={activeTab}
           onSelect={setActiveTab}
           label="Ansicht"
+          buttonVariant="default"
         />
       </div>
       

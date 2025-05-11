@@ -6,6 +6,7 @@ import CompletedChallengesTab from './challenge-tabs/CompletedChallengesTab';
 import PendingChallengesTab from './challenge-tabs/PendingChallengesTab';
 import UgcContentSidebar from './challenge-content/UgcContentSidebar';
 import { ActiveChallenge, CompletedChallenge, ContentUpload } from './challenge-tabs/types';
+import FilterDropdown, { FilterOption } from '@/components/ui/filter-dropdown';
 
 interface ChallengeActivityProps {
   userProfile: any;
@@ -13,6 +14,12 @@ interface ChallengeActivityProps {
 
 const ChallengeActivity: React.FC<ChallengeActivityProps> = ({ userProfile }) => {
   const [activeTab, setActiveTab] = useState('active');
+  
+  const tabOptions: FilterOption[] = [
+    { value: 'active', label: 'Active Challenges' },
+    { value: 'completed', label: 'Completed' },
+    { value: 'pending', label: 'Pending' },
+  ];
   
   // Mock data - in a real app, this would likely come from an API or context
   const activeChallenges: ActiveChallenge[] = [
@@ -88,27 +95,29 @@ const ChallengeActivity: React.FC<ChallengeActivityProps> = ({ userProfile }) =>
 
   return (
     <div className="space-y-6">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-bold">Challenge Activity</h2>
+        <FilterDropdown
+          options={tabOptions}
+          activeValue={activeTab}
+          onSelect={setActiveTab}
+          label="Status"
+        />
+      </div>
+      
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid grid-cols-3 w-full">
-              <TabsTrigger value="active">Active Challenges</TabsTrigger>
-              <TabsTrigger value="completed">Completed</TabsTrigger>
-              <TabsTrigger value="pending">Pending</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="active" className="mt-4">
-              <ActiveChallengesTab activeChallenges={activeChallenges} />
-            </TabsContent>
-            
-            <TabsContent value="completed" className="mt-4">
-              <CompletedChallengesTab completedChallenges={completedChallenges} />
-            </TabsContent>
-            
-            <TabsContent value="pending" className="mt-4">
-              <PendingChallengesTab />
-            </TabsContent>
-          </Tabs>
+          <TabsContent value={activeTab === 'active' ? activeTab : ''} className="mt-0">
+            <ActiveChallengesTab activeChallenges={activeChallenges} />
+          </TabsContent>
+          
+          <TabsContent value={activeTab === 'completed' ? activeTab : ''} className="mt-0">
+            <CompletedChallengesTab completedChallenges={completedChallenges} />
+          </TabsContent>
+          
+          <TabsContent value={activeTab === 'pending' ? activeTab : ''} className="mt-0">
+            <PendingChallengesTab />
+          </TabsContent>
         </div>
         
         <div>

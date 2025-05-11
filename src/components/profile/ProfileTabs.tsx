@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsContent } from '@/components/ui/tabs';
 import ActivityTab from './tabs/ActivityTab';
 import RewardsTab from './tabs/RewardsTab';
 import CommunityTab from './tabs/CommunityTab';
@@ -10,6 +10,8 @@ import DataVaultTab from './tabs/DataVaultTab';
 import SettingsTab from './tabs/SettingsTab';
 import HypocampusTab from './tabs/HypocampusTab';
 import { useNavigate, useLocation } from 'react-router-dom';
+import FilterDropdown, { FilterOption } from '@/components/ui/filter-dropdown';
+import { Activity, Award, Users, BarChart3, Monitor, Database, Settings, Zap } from 'lucide-react';
 
 interface ProfileTabsProps {
   userProfile: any;
@@ -31,18 +33,57 @@ const ProfileTabs: React.FC<ProfileTabsProps> = ({ userProfile, activeTab, setAc
     navigate(`${location.pathname}?${searchParams.toString()}`, { replace: true });
   };
 
+  // Tab options for the dropdown
+  const tabOptions: FilterOption[] = [
+    { value: 'activity', label: 'Aktivität' },
+    { value: 'rewards', label: 'Belohnungen' },
+    { value: 'hypocampus', label: 'Automatisierung' },
+    { value: 'community', label: 'Community' },
+    { value: 'statistics', label: 'Statistiken' },
+    { value: 'social', label: 'Social Media' },
+    { value: 'data', label: 'Meine Daten' },
+    { value: 'settings', label: 'Einstellungen' }
+  ];
+
+  // Get icon for the current tab
+  const getIcon = () => {
+    switch(activeTab) {
+      case "activity": return <Activity className="h-5 w-5 text-jillr-neonBlue mr-2" />;
+      case "rewards": return <Award className="h-5 w-5 text-jillr-neonPurple mr-2" />;
+      case "hypocampus": return <Zap className="h-5 w-5 text-jillr-neonGreen mr-2" />;
+      case "community": return <Users className="h-5 w-5 text-jillr-neonBlue mr-2" />;
+      case "statistics": return <BarChart3 className="h-5 w-5 text-jillr-neonPurple mr-2" />;
+      case "social": return <Monitor className="h-5 w-5 text-jillr-neonGreen mr-2" />;
+      case "data": return <Database className="h-5 w-5 text-jillr-neonBlue mr-2" />;
+      case "settings": return <Settings className="h-5 w-5 text-jillr-neonPurple mr-2" />;
+      default: return <Activity className="h-5 w-5 text-jillr-neonBlue mr-2" />;
+    }
+  };
+
   return (
     <Tabs value={activeTab} onValueChange={handleTabChange} className="mt-6">
-      <TabsList className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 mb-8">
-        <TabsTrigger value="activity">Aktivität</TabsTrigger>
-        <TabsTrigger value="rewards">Belohnungen</TabsTrigger>
-        <TabsTrigger value="hypocampus">Automatisierung</TabsTrigger>
-        <TabsTrigger value="community">Community</TabsTrigger>
-        <TabsTrigger value="statistics">Statistiken</TabsTrigger>
-        <TabsTrigger value="social">Social</TabsTrigger>
-        <TabsTrigger value="data">Meine Daten</TabsTrigger>
-        <TabsTrigger value="settings">Einstellungen</TabsTrigger>
-      </TabsList>
+      <div className="flex justify-between items-center mb-6">
+        <div className="flex items-center">
+          {getIcon()}
+          <h3 className="font-medium">
+            {activeTab === "activity" && "Aktivität"}
+            {activeTab === "rewards" && "Belohnungen"}
+            {activeTab === "hypocampus" && "Automatisierung"}
+            {activeTab === "community" && "Community"}
+            {activeTab === "statistics" && "Statistiken"}
+            {activeTab === "social" && "Social Media"}
+            {activeTab === "data" && "Meine Daten"}
+            {activeTab === "settings" && "Einstellungen"}
+          </h3>
+        </div>
+        <FilterDropdown
+          options={tabOptions}
+          activeValue={activeTab}
+          onSelect={handleTabChange}
+          label="Ansicht"
+          buttonVariant="default"
+        />
+      </div>
       
       <div className="w-full px-1">
         <TabsContent value="activity">

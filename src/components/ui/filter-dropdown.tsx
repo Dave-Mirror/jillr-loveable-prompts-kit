@@ -1,7 +1,7 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Button } from '@/components/ui/button';
-import { ChevronDown, Filter } from 'lucide-react';
+import { ChevronDown, Filter, ListFilter } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,6 +12,7 @@ import {
 export interface FilterOption {
   value: string;
   label: string;
+  icon?: React.ReactNode;
 }
 
 interface FilterDropdownProps {
@@ -21,6 +22,8 @@ interface FilterDropdownProps {
   label?: string;
   className?: string;
   buttonVariant?: 'default' | 'outline' | 'ghost';
+  showFilterIcon?: boolean;
+  fullWidth?: boolean;
 }
 
 const FilterDropdown: React.FC<FilterDropdownProps> = ({
@@ -29,7 +32,9 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
   onSelect,
   label = 'Filter',
   className = '',
-  buttonVariant = 'outline'
+  buttonVariant = 'outline',
+  showFilterIcon = true,
+  fullWidth = false
 }) => {
   const activeOption = options.find(opt => opt.value === activeValue) || options[0];
   
@@ -38,23 +43,31 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
       <DropdownMenuTrigger asChild>
         <Button 
           variant={buttonVariant} 
-          className={`flex items-center gap-2 ${className}`}
+          className={`flex items-center gap-2 ${fullWidth ? 'w-full justify-between' : ''} ${className}`}
           size="sm"
         >
-          <Filter className="h-4 w-4" />
+          {showFilterIcon && (
+            buttonVariant === 'default' ? 
+              <ListFilter className="h-4 w-4" /> : 
+              <Filter className="h-4 w-4" />
+          )}
           {label}: {activeOption?.label}
           <ChevronDown className="h-4 w-4 ml-1" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="bg-jillr-dark border border-jillr-neonPurple/30 min-w-[200px]">
+      <DropdownMenuContent 
+        className="bg-jillr-dark border border-jillr-neonPurple/30 min-w-[200px] z-50"
+        align="end"
+      >
         {options.map((option) => (
           <DropdownMenuItem
             key={option.value}
             onClick={() => onSelect(option.value)}
-            className={`cursor-pointer ${
+            className={`cursor-pointer flex items-center ${
               activeValue === option.value ? 'bg-jillr-neonPurple/20 text-jillr-neonPurple' : ''
             }`}
           >
+            {option.icon && <span className="mr-2">{option.icon}</span>}
             {option.label}
           </DropdownMenuItem>
         ))}

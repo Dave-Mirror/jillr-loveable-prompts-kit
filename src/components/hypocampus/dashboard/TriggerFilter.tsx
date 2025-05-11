@@ -2,8 +2,8 @@
 import React from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Search, Zap } from 'lucide-react';
+import FilterDropdown, { FilterOption } from '@/components/ui/filter-dropdown';
 
 interface TriggerFilterProps {
   searchQuery: string;
@@ -26,6 +26,25 @@ const TriggerFilter: React.FC<TriggerFilterProps> = ({
   resetFilters,
   userRole,
 }) => {
+  const categoryOptions: FilterOption[] = [
+    { value: 'all', label: 'Alle Kategorien' },
+    { value: 'time', label: 'Zeit' },
+    { value: 'location', label: 'Ort' },
+    { value: 'activity', label: 'Aktivität' },
+    { value: 'weather', label: 'Wetter' },
+    ...(userRole !== 'brand' ? [
+      { value: 'mood', label: 'Stimmung' },
+      { value: 'social', label: 'Social Media' },
+      { value: 'achievement', label: 'Erfolge' }
+    ] : [])
+  ];
+  
+  const statusOptions: FilterOption[] = [
+    { value: 'all', label: 'Alle Status' },
+    { value: 'active', label: 'Aktiv' },
+    { value: 'inactive', label: 'Inaktiv' }
+  ];
+  
   return (
     <div className="space-y-4 mb-4">
       <div className="flex items-center gap-2">
@@ -40,38 +59,23 @@ const TriggerFilter: React.FC<TriggerFilterProps> = ({
       
       <div className="flex flex-wrap gap-2">
         <div className="flex-1 min-w-[150px]">
-          <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-            <SelectTrigger>
-              <SelectValue placeholder="Kategorie" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Alle Kategorien</SelectItem>
-              <SelectItem value="time">Zeit</SelectItem>
-              <SelectItem value="location">Ort</SelectItem>
-              <SelectItem value="activity">Aktivität</SelectItem>
-              <SelectItem value="weather">Wetter</SelectItem>
-              {userRole !== 'brand' && (
-                <>
-                  <SelectItem value="mood">Stimmung</SelectItem>
-                  <SelectItem value="social">Social Media</SelectItem>
-                  <SelectItem value="achievement">Erfolge</SelectItem>
-                </>
-              )}
-            </SelectContent>
-          </Select>
+          <FilterDropdown
+            options={categoryOptions} 
+            activeValue={categoryFilter}
+            onSelect={setCategoryFilter}
+            label="Kategorie"
+            fullWidth
+          />
         </div>
         
         <div className="flex-1 min-w-[150px]">
-          <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger>
-              <SelectValue placeholder="Status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Alle Status</SelectItem>
-              <SelectItem value="active">Aktiv</SelectItem>
-              <SelectItem value="inactive">Inaktiv</SelectItem>
-            </SelectContent>
-          </Select>
+          <FilterDropdown
+            options={statusOptions}
+            activeValue={statusFilter}
+            onSelect={setStatusFilter}
+            label="Status"
+            fullWidth
+          />
         </div>
         
         <Button 

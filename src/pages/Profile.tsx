@@ -28,7 +28,7 @@ const Profile = () => {
     const searchParams = new URLSearchParams(location.search);
     const tabParam = searchParams.get('tab');
     
-    if (tabParam && ['activity', 'rewards', 'community', 'statistics', 'social', 'data', 'settings'].includes(tabParam)) {
+    if (tabParam && ['activity', 'rewards', 'community', 'statistics', 'social', 'data', 'settings', 'hypocampus'].includes(tabParam)) {
       setActiveTab(tabParam);
     }
   }, [location]);
