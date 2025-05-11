@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useForm, FormProvider } from 'react-hook-form';
-import { useChallengeTabs } from '@/hooks/challenge-editor/useChallengeTabs';
+import { useChallengeTabs, ChallengeTab } from '@/hooks/challenge-editor/useChallengeTabs';
 import ChallengeHeader from '@/components/challenge-editor/ChallengeHeader';
 import ChallengeTabContent from '@/components/challenge-editor/ChallengeTabContent';
 import ChallengeTabNavigation from '@/components/challenge-editor/ChallengeTabNavigation';
@@ -75,6 +75,11 @@ const ChallengeEditor = () => {
     // Here you would typically save to localStorage or your database
   };
 
+  // Create a wrapped setActiveTab function that handles string conversion to ChallengeTab
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab as ChallengeTab);
+  };
+
   return (
     <div className="container py-8 max-w-5xl">
       <ChallengeHeader onSaveDraft={handleSaveDraft} />
@@ -87,7 +92,7 @@ const ChallengeEditor = () => {
           <FormProvider {...methods}>
             <ChallengeTabNavigation 
               activeTab={activeTab}
-              setActiveTab={setActiveTab}
+              setActiveTab={handleTabChange}
               tabsConfig={tabsConfig}
             />
             

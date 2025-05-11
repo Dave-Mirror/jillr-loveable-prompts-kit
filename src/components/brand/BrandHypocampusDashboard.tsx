@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import TriggerDashboard from '@/components/hypocampus/TriggerDashboard';
 import HypocampusAnalytics from '@/components/hypocampus/HypocampusAnalytics';
-import { BrandTriggerConfigurator } from '@/components/hypocampus/BrandTriggerConfigurator';
+import BrandTriggerConfigurator from '@/components/hypocampus/BrandTriggerConfigurator';
 
 const BrandHypocampusDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState('analytics');
