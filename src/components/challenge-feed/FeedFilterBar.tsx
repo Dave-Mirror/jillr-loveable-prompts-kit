@@ -1,76 +1,90 @@
 
 import React from 'react';
-import { Filter } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  ToggleGroup,
-  ToggleGroupItem
-} from "@/components/ui/toggle-group";
+  Video, Camera, Badge, MapPin, 
+  TrendingUp, Clock, Zap, Map, 
+  Flag, Users, Shield 
+} from 'lucide-react';
 
 interface FeedFilterBarProps {
   filterType: string;
-  setFilterType: (type: string) => void;
+  setFilterType: (value: string) => void;
   sortBy: string;
-  setSortBy: (sort: string) => void;
+  setSortBy: (value: string) => void;
 }
 
-const FeedFilterBar: React.FC<FeedFilterBarProps> = ({
-  filterType,
-  setFilterType,
-  sortBy,
-  setSortBy
+const FeedFilterBar: React.FC<FeedFilterBarProps> = ({ 
+  filterType, 
+  setFilterType, 
+  sortBy, 
+  setSortBy 
 }) => {
   return (
-    <div className="w-full px-4 py-2 bg-background/80 backdrop-blur-sm flex items-center justify-between gap-2 sticky top-0 z-30">
-      <div className="flex items-center gap-2">
-        <Filter className="h-4 w-4 text-muted-foreground" />
-        <span className="text-sm font-medium">Filter:</span>
-      </div>
-      
-      <div className="flex items-center gap-2 overflow-x-auto hide-scrollbar">
-        <ToggleGroup 
-          type="single" 
+    <div className="mx-auto px-4 py-4 sticky top-0 bg-jillr-dark z-10 border-b border-jillr-border/50">
+      <div className="max-w-md mx-auto">
+        <Tabs 
+          defaultValue={filterType} 
           value={filterType} 
-          onValueChange={(value) => value && setFilterType(value)}
-          className="flex gap-1"
+          onValueChange={setFilterType}
+          className="w-full mb-4"
         >
-          <ToggleGroupItem value="all" className="text-xs whitespace-nowrap">
-            Alle
-          </ToggleGroupItem>
-          <ToggleGroupItem value="photo" className="text-xs whitespace-nowrap">
-            Foto
-          </ToggleGroupItem>
-          <ToggleGroupItem value="video" className="text-xs whitespace-nowrap">
-            Video
-          </ToggleGroupItem>
-          <ToggleGroupItem value="community" className="text-xs whitespace-nowrap">
-            Community
-          </ToggleGroupItem>
-          <ToggleGroupItem value="sustainability" className="text-xs whitespace-nowrap">
-            Nachhaltigkeit
-          </ToggleGroupItem>
-          <ToggleGroupItem value="fitness" className="text-xs whitespace-nowrap">
-            Fitness
-          </ToggleGroupItem>
-        </ToggleGroup>
+          <TabsList className="w-full overflow-x-auto flex whitespace-nowrap h-auto py-1 px-1 gap-1">
+            <TabsTrigger value="all" className="flex items-center gap-1 rounded-md">
+              <Zap className="h-4 w-4" />
+              <span>Alle</span>
+            </TabsTrigger>
+            <TabsTrigger value="video" className="flex items-center gap-1 rounded-md">
+              <Video className="h-4 w-4" />
+              <span>Video</span>
+            </TabsTrigger>
+            <TabsTrigger value="photo" className="flex items-center gap-1 rounded-md">
+              <Camera className="h-4 w-4" />
+              <span>Photo</span>
+            </TabsTrigger>
+            <TabsTrigger value="ar" className="flex items-center gap-1 rounded-md">
+              <Badge className="h-4 w-4" />
+              <span>AR</span>
+            </TabsTrigger>
+            <TabsTrigger value="geofencing" className="flex items-center gap-1 rounded-md">
+              <MapPin className="h-4 w-4" />
+              <span>Geo</span>
+            </TabsTrigger>
+            <TabsTrigger value="city_clash" className="flex items-center gap-1 rounded-md">
+              <Map className="h-4 w-4" />
+              <span>City Clash</span>
+            </TabsTrigger>
+            <TabsTrigger value="team_battle" className="flex items-center gap-1 rounded-md">
+              <Shield className="h-4 w-4" />
+              <span>Team Battle</span>
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
+
+        <div className="flex justify-center">
+          <Tabs 
+            defaultValue={sortBy} 
+            value={sortBy} 
+            onValueChange={setSortBy}
+          >
+            <TabsList className="bg-jillr-darkLight">
+              <TabsTrigger value="latest" className="flex items-center gap-1">
+                <Clock className="h-3 w-3" />
+                <span>Neueste</span>
+              </TabsTrigger>
+              <TabsTrigger value="popular" className="flex items-center gap-1">
+                <Zap className="h-3 w-3" />
+                <span>Beliebt</span>
+              </TabsTrigger>
+              <TabsTrigger value="trending" className="flex items-center gap-1">
+                <TrendingUp className="h-3 w-3" />
+                <span>Trending</span>
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
       </div>
-      
-      <Select value={sortBy} onValueChange={setSortBy}>
-        <SelectTrigger className="w-[110px] h-8">
-          <SelectValue placeholder="Sortieren" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="latest">Neueste</SelectItem>
-          <SelectItem value="popular">Beliebt</SelectItem>
-          <SelectItem value="trending">Trending</SelectItem>
-        </SelectContent>
-      </Select>
     </div>
   );
 };

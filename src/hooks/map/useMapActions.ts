@@ -32,6 +32,20 @@ export function useMapActions() {
       return false;
     }
     
+    // If this is a city clash challenge, navigate to the city clash page
+    if (challengeId.startsWith('challenge-city-')) {
+      toast({
+        title: "City Clash Challenge",
+        description: "Öffne City Clash für diese Challenge.",
+      });
+      
+      setTimeout(() => {
+        navigate('/city-clash');
+      }, 1000);
+      
+      return true;
+    }
+    
     toast({
       title: "Challenge Joined",
       description: "You've successfully joined this challenge.",
@@ -68,6 +82,21 @@ export function useMapActions() {
     });
     // Here you would typically call an API to mark this easter egg as found
   }, []);
+  
+  const handleJoinCityClash = useCallback((districtId?: string) => {
+    toast({
+      title: "City Clash",
+      description: districtId ? 
+        `Du nimmst jetzt an City Clash im District ${districtId} teil!` : 
+        "Du nimmst jetzt an City Clash teil!",
+    });
+    
+    setTimeout(() => {
+      navigate('/city-clash');
+    }, 1000);
+    
+    return true;
+  }, [navigate]);
 
   return {
     handleClaimReward,
@@ -75,6 +104,7 @@ export function useMapActions() {
     handleJoinChallenge,
     handleTrackChallenge,
     handleScanQrCode,
-    handleCollectEasterEgg
+    handleCollectEasterEgg,
+    handleJoinCityClash
   };
 }

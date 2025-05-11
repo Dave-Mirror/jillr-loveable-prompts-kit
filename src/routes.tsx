@@ -19,6 +19,7 @@ import EnterpriseDashboard from '@/pages/EnterpriseDashboard';
 import ChallengeEditor from '@/pages/ChallengeEditor';
 import HypocampusPage from '@/pages/HypocampusPage';
 import TriggerManagementPage from '@/pages/TriggerManagementPage';
+import CityClashPage from '@/pages/CityClashPage';
 
 export const routes = createBrowserRouter([
   {
@@ -88,6 +89,10 @@ export const routes = createBrowserRouter([
   {
     path: '/trigger-management',
     element: <TriggerManagementPage />,
+  },
+  {
+    path: '/city-clash',
+    element: <CityClashPage />,
   },
   {
     path: '*',

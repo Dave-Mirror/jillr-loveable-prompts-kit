@@ -2,7 +2,7 @@
 import { useState, useMemo } from 'react';
 import { FeedItem } from '@/utils/challenge/feed';
 
-export type FilterType = 'all' | 'video' | 'photo' | 'ar' | 'geofencing';
+export type FilterType = 'all' | 'video' | 'photo' | 'ar' | 'geofencing' | 'city_clash' | 'team_battle';
 export type SortType = 'latest' | 'popular' | 'trending';
 
 export const useFilteredFeed = (feedItems: FeedItem[]) => {
@@ -19,6 +19,19 @@ export const useFilteredFeed = (feedItems: FeedItem[]) => {
         // Check both challenge types and hashtags
         const challengeType = item.challenge.title.toLowerCase();
         const hashtags = item.hashtags.map(tag => tag.toLowerCase());
+        
+        // Special handling for city_clash and team_battle
+        if (filterType === 'city_clash') {
+          return challengeType.includes('city') || 
+                 challengeType.includes('clash') || 
+                 hashtags.some(tag => tag.includes('city') || tag.includes('clash'));
+        }
+        
+        if (filterType === 'team_battle') {
+          return challengeType.includes('team') || 
+                 challengeType.includes('battle') || 
+                 hashtags.some(tag => tag.includes('team') || tag.includes('battle'));
+        }
         
         return challengeType.includes(filterType) || 
                hashtags.some(tag => tag.includes(filterType));

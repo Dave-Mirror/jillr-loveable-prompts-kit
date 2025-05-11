@@ -2,13 +2,16 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Zap, TrendingUp, Clock, Users } from 'lucide-react';
+import { Zap, TrendingUp, Clock, Users, Map, Flag, Sparkles } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 interface TriggerRecommendationsProps {
   userRole: 'personal' | 'brand';
 }
 
 const TriggerRecommendations: React.FC<TriggerRecommendationsProps> = ({ userRole }) => {
+  const navigate = useNavigate();
+  
   const recommendations = userRole === 'personal' ? [
     {
       title: "Morgens aktiv",
@@ -30,6 +33,13 @@ const TriggerRecommendations: React.FC<TriggerRecommendationsProps> = ({ userRol
       type: "social",
       performance: 76,
       icon: <Users className="h-4 w-4" />,
+    },
+    {
+      title: "City Clash",
+      description: "Verbinde dich mit lokalen Challenges",
+      type: "location",
+      performance: 89,
+      icon: <Map className="h-4 w-4" />,
     },
   ] : [
     {
@@ -53,7 +63,18 @@ const TriggerRecommendations: React.FC<TriggerRecommendationsProps> = ({ userRol
       performance: 82,
       icon: <Zap className="h-4 w-4" />,
     },
+    {
+      title: "City Clash Sponsoring",
+      description: "Sponsere lokale City Clash Events",
+      type: "district",
+      performance: 94,
+      icon: <Flag className="h-4 w-4" />,
+    },
   ];
+  
+  const handleCityClashNavigate = () => {
+    navigate('/city-clash');
+  };
   
   return (
     <div className="space-y-4">
@@ -74,7 +95,12 @@ const TriggerRecommendations: React.FC<TriggerRecommendationsProps> = ({ userRol
             </Badge>
           </div>
           <p className="text-sm text-gray-400 mb-3">{rec.description}</p>
-          <Button variant="outline" size="sm" className="w-full">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="w-full"
+            onClick={rec.type === 'district' || rec.type === 'location' ? handleCityClashNavigate : undefined}
+          >
             Erstellen
           </Button>
         </div>
