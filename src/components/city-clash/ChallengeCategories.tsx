@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { MapPin, Camera, Video, Users, Flag, Leaf, Puzzle, Clock } from 'lucide-react';
+import { MapPin, Camera, Video, Users, Flag, Leaf, Puzzle, Clock, Recycle } from 'lucide-react';
 
 interface ChallengeCategoriesProps {
   selectedCategory: string;
