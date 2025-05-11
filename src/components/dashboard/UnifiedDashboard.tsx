@@ -13,56 +13,38 @@ import CreatorDashboardContent from './dashboards/CreatorDashboardContent';
 import BrandDashboardContent from './dashboards/BrandDashboardContent';
 import EnterpriseDashboardContent from './dashboards/EnterpriseDashboardContent';
 
-const UnifiedDashboard = () => {
+interface UnifiedDashboardProps {
+  initialActiveTab?: string;
+}
+
+const UnifiedDashboard = ({ initialActiveTab = 'user' }: UnifiedDashboardProps) => {
   const { user, userProfile } = useAuth();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('user');
+  const [activeTab, setActiveTab] = useState(initialActiveTab);
   
-  // Bestimme die Standardansicht basierend auf der Benutzerrolle
+  // Update active tab when initialActiveTab changes
   useEffect(() => {
-    if (user) {
-      if (user.email?.includes('brand') || userProfile?.accountType === 'brand') {
-        setActiveTab('brand');
-      } else if (userProfile?.isCreator) {
-        setActiveTab('creator');
-      } else if (userProfile?.isEnterprise) {
-        setActiveTab('enterprise');
-      }
-    }
-  }, [user, userProfile]);
+    setActiveTab(initialActiveTab);
+  }, [initialActiveTab]);
 
   return (
-    <div className="container py-8">
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8">
-        <div>
-          <h1 className="text-3xl font-bold">Dashboard</h1>
-          <p className="text-muted-foreground">Verwalte deine Aktivitäten und Inhalte</p>
-        </div>
-        <div className="flex flex-wrap gap-2 mt-4 md:mt-0">
-          <Button 
-            variant="outline" 
-            onClick={() => navigate('/challenge-editor')}
-            className="flex items-center gap-2"
-          >
-            <Video className="h-4 w-4" /> Challenge erstellen
-          </Button>
-        </div>
+    <div>
+      <div className="flex flex-wrap gap-2 mb-6">
+        <Button 
+          variant="outline" 
+          onClick={() => navigate('/challenge-editor')}
+          className="flex items-center gap-2"
+        >
+          <Video className="h-4 w-4" /> Challenge erstellen
+        </Button>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
-        <TabsList className="grid grid-cols-2 md:grid-cols-4 gap-2 bg-background mb-4">
-          <TabsTrigger value="user" className="flex items-center gap-2">
-            <User className="h-4 w-4" /> Nutzer
-          </TabsTrigger>
-          <TabsTrigger value="creator" className="flex items-center gap-2">
-            <Zap className="h-4 w-4" /> Creator
-          </TabsTrigger>
-          <TabsTrigger value="brand" className="flex items-center gap-2">
-            <BarChart2 className="h-4 w-4" /> Brand
-          </TabsTrigger>
-          <TabsTrigger value="enterprise" className="flex items-center gap-2">
-            <Building2 className="h-4 w-4" /> Enterprise
-          </TabsTrigger>
+        <TabsList className="hidden">
+          <TabsTrigger value="user">Nutzer</TabsTrigger>
+          <TabsTrigger value="creator">Creator</TabsTrigger>
+          <TabsTrigger value="brand">Brand</TabsTrigger>
+          <TabsTrigger value="enterprise">Enterprise</TabsTrigger>
         </TabsList>
 
         <TabsContent value="user">

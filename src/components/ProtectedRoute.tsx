@@ -62,45 +62,6 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, roleRequired 
   // This is a temporary solution to ensure dashboards are accessible
   console.log("Bypassing auth check for demonstration purposes");
   return <>{children}</>;
-
-  // The following code is commented out to ensure dashboards are accessible
-  /*
-  // Check for valid session and user - nur für geschützte Routen erforderlich
-  if (!session || !user) {
-    // Save the current location for redirect after login
-    console.log("No session or user found, redirecting to auth");
-    return <Navigate to="/auth" state={{ from: location }} replace />;
-  }
-
-  // Rollenbasierte Zugriffssteuerung, wenn eine Rolle erforderlich ist
-  if (roleRequired) {
-    const userRole = getUserRole(userProfile);
-    
-    // Prüfe, ob der Benutzer die erforderliche Rolle hat
-    if (roleRequired !== userRole) {
-      console.log(`User lacks required role: ${roleRequired}, has ${userRole}`);
-      return (
-        <div className="container py-8">
-          <div className="bg-destructive/10 border border-destructive text-destructive p-4 rounded-md">
-            <h2 className="text-xl font-bold mb-2">Zugriff verweigert</h2>
-            <p>Du benötigst {roleRequired}-Berechtigungen, um auf diese Seite zuzugreifen.</p>
-          </div>
-        </div>
-      );
-    }
-  }
-  */
 };
-
-// Bestimmt die Rolle des Benutzers basierend auf dem Profil
-function getUserRole(userProfile: any): 'user' | 'creator' | 'brand' | 'enterprise' {
-  if (!userProfile) return 'user';
-  
-  if (userProfile.isEnterprise) return 'enterprise';
-  if (userProfile.email?.includes('brand') || userProfile.accountType === 'brand') return 'brand';
-  if (userProfile.isCreator) return 'creator';
-  
-  return 'user';
-}
 
 export default ProtectedRoute;
