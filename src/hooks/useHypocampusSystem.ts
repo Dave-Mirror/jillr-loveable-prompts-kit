@@ -5,6 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { createRewardLog, getRewards } from '@/services/mockHypocampusService';
 import { processTriggers } from '@/services/triggerProcessingService';
+import { ContextTrigger } from '@/types/hypocampus';
 
 export const useHypocampusSystem = () => {
   const { captureSnapshot } = useMemorySnapshots();
@@ -57,11 +58,12 @@ export const useHypocampusSystem = () => {
           const rewards = await getRewards();
           
           // Process each matched trigger
-          for (const trigger of matchedTriggers) {
+          for (const trigger of matchedTriggers as ContextTrigger[]) {
             if (trigger.action_type.startsWith('reward_')) {
               // Find the appropriate reward based on the action type
-              const rewardType = trigger.action_type.split('_')[1];
-              const rewardSize = trigger.action_type.split('_')[2];
+              const rewardParts = trigger.action_type.split('_');
+              const rewardType = rewardParts[1] || 'xp';
+              const rewardSize = rewardParts[2] || 'small';
               
               let xpValue = 25; // Default to small reward
               
@@ -79,7 +81,8 @@ export const useHypocampusSystem = () => {
                   user_id: user.id,
                   reward_id: matchingReward.id,
                   trigger_id: trigger.id,
-                  status: 'granted'
+                  status: 'granted',
+                  reward_type: rewardType
                 });
                 
                 // Notify the user

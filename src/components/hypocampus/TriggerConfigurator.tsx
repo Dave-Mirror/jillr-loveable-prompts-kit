@@ -104,7 +104,6 @@ const TriggerConfigurator: React.FC = () => {
       
       // Prepare trigger object
       const newTrigger: Omit<ContextTrigger, 'id' | 'created_at' | 'updated_at'> = {
-        user_id: user.id,
         name: description || `${getConditionLabel(triggerCondition)} → ${getActionLabel(triggerAction)}`,
         description: description || `Auto-generated trigger for ${conditionType} ${conditionValue}`,
         category: conditionType,
@@ -115,7 +114,8 @@ const TriggerConfigurator: React.FC = () => {
         },
         action_type: triggerAction,
         reward_id: rewardId,
-        active: true
+        active: true,
+        user_id: user.id
       };
 
       // Save trigger using our service

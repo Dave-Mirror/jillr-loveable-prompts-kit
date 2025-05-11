@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getTriggersForBrand, createTrigger, updateTrigger } from '@/services/mockHypocampusService';
-import { Trigger } from '@/types/hypocampus';
+import { ContextTrigger } from '@/types/hypocampus';
 
 // This component would be used in the brand dashboard
 // For demo purposes, we'll include brand selection in this component
@@ -42,7 +42,7 @@ const BrandTriggerConfigurator: React.FC = () => {
   const [description, setDescription] = useState('');
   const [locationName, setLocationName] = useState('');
   const [selectedTab, setSelectedTab] = useState('create');
-  const [triggers, setTriggers] = useState<Trigger[]>([]);
+  const [triggers, setTriggers] = useState<ContextTrigger[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   
   const { toast } = useToast();
@@ -60,29 +60,28 @@ const BrandTriggerConfigurator: React.FC = () => {
     setIsLoading(true);
 
     try {
-      // Create condition and action objects
-      const conditionObject = {
-        type: triggerCondition.split('_')[0] || 'custom',
-        value: triggerCondition.split('_')[1] || triggerCondition,
-        original: triggerCondition,
-        location: locationName || undefined
-      };
-      
-      const actionObject = {
-        type: triggerAction.split('_')[0] || 'custom',
-        value: triggerAction.split('_')[1] || triggerAction,
-        original: triggerAction
+      // Parse condition and action
+      const [conditionType, conditionValue] = triggerCondition.split('_');
+      const [actionType, actionValue] = triggerAction.split('_');
+
+      // Create new trigger
+      const newTrigger: Omit<ContextTrigger, 'id' | 'created_at' | 'updated_at'> = {
+        name: description || `${getConditionLabel(triggerCondition)} → ${getActionLabel(triggerAction)}`,
+        description: description || `Auto-generated brand trigger for ${conditionType} ${conditionValue}`,
+        category: conditionType,
+        condition_type: triggerCondition,
+        target_value: { 
+          type: conditionType,
+          value: conditionValue,
+          location: locationName || undefined
+        },
+        action_type: triggerAction,
+        active: true,
+        brand_id: selectedBrand
       };
 
-      // Save trigger using our mock service
-      await createTrigger({
-        brand_id: selectedBrand,
-        created_by: 'brand',
-        trigger_condition: conditionObject,
-        trigger_action: actionObject,
-        description: description || `${getConditionLabel(triggerCondition)} → ${getActionLabel(triggerAction)}`,
-        active: true
-      });
+      // Save trigger using our service
+      await createTrigger(newTrigger);
 
       toast({
         title: "Trigger erstellt",

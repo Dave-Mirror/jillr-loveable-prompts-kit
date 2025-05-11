@@ -1,6 +1,8 @@
 
 export interface ContextTrigger {
   id: string;
+  user_id?: string;
+  brand_id?: string;
   name: string;
   description?: string;
   category?: string;
@@ -41,6 +43,7 @@ export interface RewardLog {
   trigger_id: string;
   granted_at: string;
   status: string;
+  rewards?: Reward; // For joined queries
 }
 
 export interface UserContextSetting {
@@ -52,3 +55,6 @@ export interface UserContextSetting {
   allow_data_analysis: boolean;
   created_at: string;
 }
+
+// Add Trigger alias for backward compatibility
+export type Trigger = ContextTrigger;
