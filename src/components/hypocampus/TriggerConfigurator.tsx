@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -6,7 +5,8 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
-import { supabase } from '@/integrations/supabase/client';
+import { createTrigger } from '@/services/mockHypocampusService';
+import { TriggerCondition, TriggerAction } from '@/types/hypocampus';
 
 // Trigger condition options
 const whenOptions = [
@@ -71,31 +71,30 @@ const TriggerConfigurator: React.FC = () => {
       // Parse the condition type and value
       const [conditionType, conditionValue] = triggerCondition.split('_');
       
-      // Create JSON objects for the condition and action
-      const conditionObject = {
+      // Create objects for the condition and action
+      const conditionObject: TriggerCondition = {
         type: conditionType,
         value: conditionValue,
         original: triggerCondition
       };
       
       const [actionType, actionValue, actionAmount] = triggerAction.split('_');
-      const actionObject = {
+      const actionObject: TriggerAction = {
         type: actionType,
         value: actionValue,
         amount: actionAmount || null,
         original: triggerAction
       };
 
-      // Save to Supabase
-      const { error } = await supabase.from('context_triggers').insert({
+      // Save trigger using our mock service
+      await createTrigger({
         user_id: user.id,
         created_by: 'user',
         trigger_condition: conditionObject,
         trigger_action: actionObject,
-        description: description || `${getConditionLabel(triggerCondition)} → ${getActionLabel(triggerAction)}`
+        description: description || `${getConditionLabel(triggerCondition)} → ${getActionLabel(triggerAction)}`,
+        active: true
       });
-
-      if (error) throw error;
 
       toast({
         title: "Trigger gespeichert",

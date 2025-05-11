@@ -1,7 +1,7 @@
 
 import { useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { supabase } from '@/integrations/supabase/client';
+import { v4 as uuidv4 } from 'uuid';
 
 // Activity types
 export type ActivityType = 
@@ -27,6 +27,9 @@ interface SnapshotData {
 
 export const useMemorySnapshots = () => {
   const { user } = useAuth();
+  
+  // Store snapshots locally for now
+  const memorySnapshots: any[] = [];
 
   // Function to capture and store memory snapshots
   const captureSnapshot = async (activityType: ActivityType, data: SnapshotData = {}) => {
@@ -38,18 +41,24 @@ export const useMemorySnapshots = () => {
         data.hour = new Date().getHours();
       }
       
-      // Insert snapshot into the database
-      const { error } = await supabase.from('memory_snapshots').insert({
+      // Create snapshot object
+      const snapshot = {
+        id: uuidv4(),
         user_id: user.id,
         activity_type: activityType,
-        data: data
-      });
+        data: data,
+        created_at: new Date().toISOString()
+      };
       
-      if (error) {
-        console.error('Error saving memory snapshot:', error);
-      }
+      // In a real implementation, this would be inserted into Supabase
+      // For now, we'll just add it to our local array and log it
+      memorySnapshots.push(snapshot);
+      console.log('Memory snapshot captured:', snapshot);
+      
+      return snapshot;
     } catch (err) {
       console.error('Failed to capture memory snapshot:', err);
+      return null;
     }
   };
   

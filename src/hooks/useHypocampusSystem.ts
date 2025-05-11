@@ -2,8 +2,9 @@
 import { useEffect } from 'react';
 import useMemorySnapshots from './useMemorySnapshots';
 import { useAuth } from '@/hooks/useAuth';
-import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { v4 as uuidv4 } from 'uuid';
+import { createRewardLog } from '@/services/mockHypocampusService';
 
 export const useHypocampusSystem = () => {
   const { captureSnapshot } = useMemorySnapshots();
@@ -47,20 +48,24 @@ export const useHypocampusSystem = () => {
           activity: window.location.pathname.split('/')[1] || 'home'
         };
         
-        // Call backend to check for matching triggers
-        const { data, error } = await supabase.functions.invoke('process-snapshots', {
-          body: { userId: user.id, context }
-        });
+        // Mock processing triggers
+        // In a real implementation, this would call the Supabase function
         
-        if (error) throw error;
-        
-        // Process any matched triggers with rewards
-        if (data.rewards && data.rewards.length > 0) {
-          data.rewards.forEach((reward: any) => {
-            toast({
-              title: "Trigger aktiviert!",
-              description: reward.description || `Du hast ${reward.xp_earned} XP verdient!`,
-            });
+        // Simulate a reward occasionally (10% chance when on hypocampus page)
+        if (context.screen === '/hypocampus' && Math.random() < 0.1) {
+          const mockReward = {
+            user_id: user.id,
+            trigger_id: uuidv4(),
+            reward_type: 'xp',
+            xp_earned: 25,
+            description: 'Hypocampus-System erkundet'
+          };
+          
+          await createRewardLog(mockReward);
+          
+          toast({
+            title: "Trigger aktiviert!",
+            description: `Du hast ${mockReward.xp_earned} XP verdient!`,
           });
         }
       } catch (err) {

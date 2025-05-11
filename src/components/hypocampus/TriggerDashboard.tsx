@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
@@ -6,7 +5,8 @@ import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
-import { supabase } from '@/integrations/supabase/client';
+import { getTriggersForUser, updateTrigger } from '@/services/mockHypocampusService';
+import { Trigger } from '@/types/hypocampus';
 import { Clock, MapPin, ActivityIcon, CloudRain, SmilePlus, Zap, Award, Star } from 'lucide-react';
 
 interface Trigger {
@@ -39,14 +39,9 @@ const TriggerDashboard: React.FC = () => {
       if (!user) return;
 
       try {
-        const { data, error } = await supabase
-          .from('context_triggers')
-          .select('*')
-          .eq('user_id', user.id)
-          .order('created_at', { ascending: false });
-
-        if (error) throw error;
-        setTriggers(data || []);
+        setIsLoading(true);
+        const data = await getTriggersForUser(user.id);
+        setTriggers(data);
       } catch (error) {
         console.error('Error fetching triggers:', error);
         toast({
@@ -64,12 +59,7 @@ const TriggerDashboard: React.FC = () => {
 
   const handleToggleTrigger = async (id: string, currentActive: boolean) => {
     try {
-      const { error } = await supabase
-        .from('context_triggers')
-        .update({ active: !currentActive })
-        .eq('id', id);
-
-      if (error) throw error;
+      await updateTrigger(id, { active: !currentActive });
 
       // Update local state
       setTriggers(triggers.map(trigger => 

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -6,7 +5,8 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { supabase } from '@/integrations/supabase/client';
+import { getTriggersForBrand, createTrigger, updateTrigger } from '@/services/mockHypocampusService';
+import { Trigger } from '@/types/hypocampus';
 
 // This component would be used in the brand dashboard
 // For demo purposes, we'll include brand selection in this component
@@ -42,7 +42,7 @@ const BrandTriggerConfigurator: React.FC = () => {
   const [description, setDescription] = useState('');
   const [locationName, setLocationName] = useState('');
   const [selectedTab, setSelectedTab] = useState('create');
-  const [triggers, setTriggers] = useState<any[]>([]);
+  const [triggers, setTriggers] = useState<Trigger[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   
   const { toast } = useToast();
@@ -62,21 +62,20 @@ const BrandTriggerConfigurator: React.FC = () => {
     try {
       // Create condition and action objects
       const conditionObject = {
-        type: triggerCondition.split('_')[0],
+        type: triggerCondition.split('_')[0] || 'custom',
         value: triggerCondition.split('_')[1] || triggerCondition,
         original: triggerCondition,
         location: locationName || undefined
       };
       
       const actionObject = {
-        type: triggerAction.split('_')[0],
+        type: triggerAction.split('_')[0] || 'custom',
         value: triggerAction.split('_')[1] || triggerAction,
         original: triggerAction
       };
 
-      // In a real app, we would use the actual brand ID from authentication
-      // For demo, we'll use the mock brand ID
-      const { error } = await supabase.from('context_triggers').insert({
+      // Save trigger using our mock service
+      await createTrigger({
         brand_id: selectedBrand,
         created_by: 'brand',
         trigger_condition: conditionObject,
@@ -84,8 +83,6 @@ const BrandTriggerConfigurator: React.FC = () => {
         description: description || `${getConditionLabel(triggerCondition)} → ${getActionLabel(triggerAction)}`,
         active: true
       });
-
-      if (error) throw error;
 
       toast({
         title: "Trigger erstellt",
@@ -118,14 +115,8 @@ const BrandTriggerConfigurator: React.FC = () => {
     
     setIsLoading(true);
     try {
-      const { data, error } = await supabase
-        .from('context_triggers')
-        .select('*')
-        .eq('brand_id', brandId)
-        .order('created_at', { ascending: false });
-        
-      if (error) throw error;
-      setTriggers(data || []);
+      const data = await getTriggersForBrand(brandId);
+      setTriggers(data);
     } catch (error) {
       console.error('Error loading brand triggers:', error);
       toast({
@@ -140,13 +131,8 @@ const BrandTriggerConfigurator: React.FC = () => {
 
   const handleToggleTrigger = async (id: string, currentActive: boolean) => {
     try {
-      const { error } = await supabase
-        .from('context_triggers')
-        .update({ active: !currentActive })
-        .eq('id', id);
-
-      if (error) throw error;
-
+      await updateTrigger(id, { active: !currentActive });
+      
       setTriggers(triggers.map(trigger => 
         trigger.id === id ? { ...trigger, active: !currentActive } : trigger
       ));
