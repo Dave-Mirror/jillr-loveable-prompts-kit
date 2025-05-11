@@ -59,7 +59,7 @@ export const useHypocampusSystem = () => {
           
           // Process each matched trigger
           for (const trigger of matchedTriggers as ContextTrigger[]) {
-            if (trigger.action_type.startsWith('reward_')) {
+            if (trigger.action_type?.startsWith('reward_')) {
               // Find the appropriate reward based on the action type
               const rewardParts = trigger.action_type.split('_');
               const rewardType = rewardParts[1] || 'xp';
@@ -81,7 +81,8 @@ export const useHypocampusSystem = () => {
                   user_id: user.id,
                   reward_id: matchingReward.id,
                   trigger_id: trigger.id,
-                  status: 'granted'
+                  status: 'granted',
+                  reward_type: rewardType
                 });
                 
                 // Notify the user

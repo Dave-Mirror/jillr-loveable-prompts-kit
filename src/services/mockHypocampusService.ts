@@ -1,5 +1,5 @@
 
-import { ContextTrigger, MemorySnapshot, RewardLog, Reward, UserContextSetting } from '@/types/hypocampus';
+import { ContextTrigger, MemorySnapshot, RewardLog, Reward, UserContextSetting, Trigger } from '@/types/hypocampus';
 import { v4 as uuidv4 } from 'uuid';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -62,7 +62,8 @@ const mockRewardLogs: RewardLog[] = [
     reward_id: 'reward-1',
     trigger_id: mockTriggers[0].id,
     granted_at: new Date().toISOString(),
-    status: 'granted'
+    status: 'granted',
+    reward_type: 'xp'
   },
   {
     id: uuidv4(),
@@ -70,7 +71,8 @@ const mockRewardLogs: RewardLog[] = [
     reward_id: 'reward-2',
     trigger_id: mockTriggers[1].id,
     granted_at: new Date(Date.now() - 86400000).toISOString(),
-    status: 'granted'
+    status: 'granted',
+    reward_type: 'xp'
   }
 ];
 
@@ -102,44 +104,107 @@ const mockMemorySnapshots: MemorySnapshot[] = [
   }
 ];
 
+// Check if a table exists in the database
+async function tableExists(tableName: string): Promise<boolean> {
+  try {
+    // Use system schema to check if the table exists
+    const { data } = await supabase
+      .from('pg_tables')
+      .select('tablename')
+      .eq('schemaname', 'public')
+      .eq('tablename', tableName)
+      .single();
+    
+    return !!data;
+  } catch (err) {
+    // If this fails, the table likely doesn't exist
+    return false;
+  }
+}
+
 // Methods to interact with context_triggers
 export const getTriggersForUser = async (userId: string): Promise<ContextTrigger[]> => {
   try {
-    // Since the table doesn't exist in the DB schema yet, just return the mock data
-    console.log('Using mock triggers since the tables are not yet created in Supabase');
-    return mockTriggers.filter(trigger => trigger.user_id === userId || !trigger.user_id);
+    // Check if the context_triggers table exists
+    const exists = await tableExists('context_triggers');
+    
+    if (exists) {
+      const { data, error } = await supabase
+        .from('context_triggers')
+        .select('*')
+        .or(`user_id.eq.${userId},user_id.is.null`);
+      
+      if (error) throw error;
+      return data as ContextTrigger[];
+    } else {
+      // Return mock data if the table doesn't exist
+      console.log('Using mock triggers since the context_triggers table doesn\'t exist yet');
+      return mockTriggers.filter(trigger => trigger.user_id === userId || !trigger.user_id);
+    }
   } catch (err) {
     console.error('Error fetching triggers:', err);
+    // Return mock data as fallback
     return mockTriggers.filter(trigger => trigger.user_id === userId || !trigger.user_id);
   }
 };
 
 export const getTriggersForBrand = async (brandId: string): Promise<ContextTrigger[]> => {
   try {
-    // Since the table doesn't exist in the DB schema yet, just return the mock data
-    console.log('Using mock brand triggers since the tables are not yet created in Supabase');
-    return mockTriggers.filter(trigger => trigger.brand_id === brandId);
+    // Check if the context_triggers table exists
+    const exists = await tableExists('context_triggers');
+    
+    if (exists) {
+      const { data, error } = await supabase
+        .from('context_triggers')
+        .select('*')
+        .eq('brand_id', brandId);
+      
+      if (error) throw error;
+      return data as ContextTrigger[];
+    } else {
+      // Return mock data if the table doesn't exist
+      console.log('Using mock brand triggers since the context_triggers table doesn\'t exist yet');
+      return mockTriggers.filter(trigger => trigger.brand_id === brandId);
+    }
   } catch (err) {
     console.error('Error fetching brand triggers:', err);
+    // Return mock data as fallback
     return mockTriggers.filter(trigger => trigger.brand_id === brandId);
   }
 };
 
 export const createTrigger = async (trigger: Omit<ContextTrigger, 'id' | 'created_at' | 'updated_at'>): Promise<ContextTrigger> => {
   try {
-    // Since the table doesn't exist in the DB schema yet, just use mock data
-    console.log('Using mock service since the tables are not yet created in Supabase');
+    // Check if the context_triggers table exists
+    const exists = await tableExists('context_triggers');
     
-    // Return mock data as fallback
-    const newTrigger: ContextTrigger = {
-      ...trigger,
-      id: uuidv4(),
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    };
-    
-    mockTriggers.push(newTrigger);
-    return newTrigger;
+    if (exists) {
+      const { data, error } = await supabase
+        .from('context_triggers')
+        .insert({
+          ...trigger,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        })
+        .select()
+        .single();
+      
+      if (error) throw error;
+      return data as ContextTrigger;
+    } else {
+      // Return mock data as fallback
+      console.log('Using mock service since the context_triggers table doesn\'t exist yet');
+      
+      const newTrigger: ContextTrigger = {
+        ...trigger,
+        id: uuidv4(),
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+      
+      mockTriggers.push(newTrigger);
+      return newTrigger;
+    }
   } catch (err) {
     console.error('Error creating trigger:', err);
     
@@ -158,20 +223,37 @@ export const createTrigger = async (trigger: Omit<ContextTrigger, 'id' | 'create
 
 export const updateTrigger = async (id: string, updates: Partial<ContextTrigger>): Promise<ContextTrigger> => {
   try {
-    // Since the table doesn't exist in the DB schema yet, just use mock data
-    console.log('Using mock service since the tables are not yet created in Supabase');
+    // Check if the context_triggers table exists
+    const exists = await tableExists('context_triggers');
     
-    // Mock update as fallback
-    const index = mockTriggers.findIndex(t => t.id === id);
-    if (index === -1) throw new Error('Trigger not found');
-    
-    mockTriggers[index] = { 
-      ...mockTriggers[index], 
-      ...updates, 
-      updated_at: new Date().toISOString() 
-    };
-    
-    return mockTriggers[index];
+    if (exists) {
+      const { data, error } = await supabase
+        .from('context_triggers')
+        .update({
+          ...updates,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', id)
+        .select()
+        .single();
+      
+      if (error) throw error;
+      return data as ContextTrigger;
+    } else {
+      // Mock update as fallback
+      console.log('Using mock service since the context_triggers table doesn\'t exist yet');
+      
+      const index = mockTriggers.findIndex(t => t.id === id);
+      if (index === -1) throw new Error('Trigger not found');
+      
+      mockTriggers[index] = { 
+        ...mockTriggers[index], 
+        ...updates, 
+        updated_at: new Date().toISOString() 
+      };
+      
+      return mockTriggers[index];
+    }
   } catch (err) {
     console.error('Error updating trigger:', err);
     
@@ -192,11 +274,24 @@ export const updateTrigger = async (id: string, updates: Partial<ContextTrigger>
 // Methods for rewards
 export const getRewards = async (): Promise<Reward[]> => {
   try {
-    // Since the table doesn't exist in the DB schema yet, just return the mock data
-    console.log('Using mock rewards since the tables are not yet created in Supabase');
-    return mockRewards;
+    // Check if the rewards table exists
+    const exists = await tableExists('rewards');
+    
+    if (exists) {
+      const { data, error } = await supabase
+        .from('rewards')
+        .select('*');
+      
+      if (error) throw error;
+      return data as Reward[];
+    } else {
+      // Return mock data if the table doesn't exist
+      console.log('Using mock rewards since the rewards table doesn\'t exist yet');
+      return mockRewards;
+    }
   } catch (err) {
     console.error('Error fetching rewards:', err);
+    // Return mock data as fallback
     return mockRewards;
   }
 };
@@ -204,29 +299,62 @@ export const getRewards = async (): Promise<Reward[]> => {
 // Methods for reward logs
 export const getRewardsForUser = async (userId: string): Promise<RewardLog[]> => {
   try {
-    // Since the table doesn't exist in the DB schema yet, just return the mock data
-    console.log('Using mock reward logs since the tables are not yet created in Supabase');
-    return mockRewardLogs.filter(log => log.user_id === userId);
+    // Check if the reward_logs table exists
+    const exists = await tableExists('reward_logs');
+    
+    if (exists) {
+      const { data, error } = await supabase
+        .from('reward_logs')
+        .select(`
+          *,
+          rewards:reward_id (*)
+        `)
+        .eq('user_id', userId);
+      
+      if (error) throw error;
+      return data as RewardLog[];
+    } else {
+      // Return mock data if the table doesn't exist
+      console.log('Using mock reward logs since the reward_logs table doesn\'t exist yet');
+      return mockRewardLogs.filter(log => log.user_id === userId);
+    }
   } catch (err) {
     console.error('Error fetching reward logs:', err);
+    // Return mock data as fallback
     return mockRewardLogs.filter(log => log.user_id === userId);
   }
 };
 
 export const createRewardLog = async (rewardLog: Omit<RewardLog, 'id' | 'granted_at'>): Promise<RewardLog> => {
   try {
-    // Since the table doesn't exist in the DB schema yet, just use mock data
-    console.log('Using mock service since the tables are not yet created in Supabase');
+    // Check if the reward_logs table exists
+    const exists = await tableExists('reward_logs');
     
-    // Return mock data as fallback
-    const newLog: RewardLog = {
-      ...rewardLog,
-      id: uuidv4(),
-      granted_at: new Date().toISOString()
-    };
-    
-    mockRewardLogs.push(newLog);
-    return newLog;
+    if (exists) {
+      const { data, error } = await supabase
+        .from('reward_logs')
+        .insert({
+          ...rewardLog,
+          granted_at: new Date().toISOString()
+        })
+        .select()
+        .single();
+      
+      if (error) throw error;
+      return data as RewardLog;
+    } else {
+      // Return mock data as fallback
+      console.log('Using mock service since the reward_logs table doesn\'t exist yet');
+      
+      const newLog: RewardLog = {
+        ...rewardLog,
+        id: uuidv4(),
+        granted_at: new Date().toISOString()
+      };
+      
+      mockRewardLogs.push(newLog);
+      return newLog;
+    }
   } catch (err) {
     console.error('Error creating reward log:', err);
     
@@ -250,21 +378,40 @@ export const createMemorySnapshot = async (snapshot: Partial<MemorySnapshot>): P
       throw new Error('user_id is required');
     }
 
-    // Since the table doesn't exist in the DB schema yet, just use mock data
-    console.log('Using mock service since the tables are not yet created in Supabase');
+    // Check if the memory_snapshots table exists
+    const exists = await tableExists('memory_snapshots');
     
-    // Return mock data as fallback
-    const newSnapshot: MemorySnapshot = {
-      id: uuidv4(),
-      user_id: snapshot.user_id || 'unknown',
-      snapshot_date: snapshot.snapshot_date || new Date().toISOString().split('T')[0],
-      data: snapshot.data || {},
-      context_score: snapshot.context_score || 50,
-      created_at: new Date().toISOString()
-    };
-    
-    mockMemorySnapshots.push(newSnapshot);
-    return newSnapshot;
+    if (exists) {
+      const { data, error } = await supabase
+        .from('memory_snapshots')
+        .insert({
+          user_id: snapshot.user_id,
+          snapshot_date: snapshot.snapshot_date || new Date().toISOString().split('T')[0],
+          data: snapshot.data || {},
+          context_score: snapshot.context_score || 50,
+          interpreted_summary: snapshot.interpreted_summary
+        })
+        .select()
+        .single();
+      
+      if (error) throw error;
+      return data as MemorySnapshot;
+    } else {
+      // Return mock data as fallback
+      console.log('Using mock service since the memory_snapshots table doesn\'t exist yet');
+      
+      const newSnapshot: MemorySnapshot = {
+        id: uuidv4(),
+        user_id: snapshot.user_id,
+        snapshot_date: snapshot.snapshot_date || new Date().toISOString().split('T')[0],
+        data: snapshot.data || {},
+        context_score: snapshot.context_score || 50,
+        created_at: new Date().toISOString()
+      };
+      
+      mockMemorySnapshots.push(newSnapshot);
+      return newSnapshot;
+    }
   } catch (err) {
     console.error('Error creating memory snapshot:', err);
     
@@ -285,30 +432,59 @@ export const createMemorySnapshot = async (snapshot: Partial<MemorySnapshot>): P
 
 export const getMemorySnapshotsForUser = async (userId: string): Promise<MemorySnapshot[]> => {
   try {
-    // Since the table doesn't exist in the DB schema yet, just return the mock data
-    console.log('Using mock snapshots since the tables are not yet created in Supabase');
-    return mockMemorySnapshots.filter(snapshot => snapshot.user_id === userId);
+    // Check if the memory_snapshots table exists
+    const exists = await tableExists('memory_snapshots');
+    
+    if (exists) {
+      const { data, error } = await supabase
+        .from('memory_snapshots')
+        .select('*')
+        .eq('user_id', userId);
+      
+      if (error) throw error;
+      return data as MemorySnapshot[];
+    } else {
+      // Return mock data if the table doesn't exist
+      console.log('Using mock snapshots since the memory_snapshots table doesn\'t exist yet');
+      return mockMemorySnapshots.filter(snapshot => snapshot.user_id === userId);
+    }
   } catch (err) {
     console.error('Error fetching memory snapshots:', err);
+    // Return mock data as fallback
     return mockMemorySnapshots.filter(snapshot => snapshot.user_id === userId);
   }
 };
 
 export const getUserContextSettings = async (userId: string): Promise<UserContextSetting | null> => {
   try {
-    // Since the table doesn't exist in the DB schema yet, just return mock data
-    console.log('Using mock settings since the tables are not yet created in Supabase');
-    return {
-      id: uuidv4(),
-      user_id: userId,
-      preferred_trigger_types: ['time', 'location'],
-      time_windows: { morning: true, evening: true },
-      allow_behavioral_tracking: true,
-      allow_data_analysis: true,
-      created_at: new Date().toISOString()
-    };
+    // Check if the user_context_settings table exists
+    const exists = await tableExists('user_context_settings');
+    
+    if (exists) {
+      const { data, error } = await supabase
+        .from('user_context_settings')
+        .select('*')
+        .eq('user_id', userId)
+        .maybeSingle();
+      
+      if (error) throw error;
+      return data as UserContextSetting;
+    } else {
+      // Return mock data if the table doesn't exist
+      console.log('Using mock settings since the user_context_settings table doesn\'t exist yet');
+      return {
+        id: uuidv4(),
+        user_id: userId,
+        preferred_trigger_types: ['time', 'location'],
+        time_windows: { morning: true, evening: true },
+        allow_behavioral_tracking: true,
+        allow_data_analysis: true,
+        created_at: new Date().toISOString()
+      };
+    }
   } catch (err) {
     console.error('Error fetching user context settings:', err);
+    // Return mock data as fallback
     return {
       id: uuidv4(),
       user_id: userId,
@@ -323,19 +499,66 @@ export const getUserContextSettings = async (userId: string): Promise<UserContex
 
 export const updateUserContextSettings = async (userId: string, settings: Partial<UserContextSetting>): Promise<UserContextSetting> => {
   try {
-    // Since the table doesn't exist in the DB schema yet, just return mock data
-    console.log('Using mock service since the tables are not yet created in Supabase');
-    return {
-      id: uuidv4(),
-      user_id: userId,
-      preferred_trigger_types: settings.preferred_trigger_types || ['time', 'location'],
-      time_windows: settings.time_windows || { morning: true, evening: true },
-      allow_behavioral_tracking: settings.allow_behavioral_tracking !== undefined ? settings.allow_behavioral_tracking : true,
-      allow_data_analysis: settings.allow_data_analysis !== undefined ? settings.allow_data_analysis : true,
-      created_at: new Date().toISOString()
-    };
+    // Check if the user_context_settings table exists
+    const exists = await tableExists('user_context_settings');
+    
+    if (exists) {
+      // First check if settings already exist for this user
+      const { data: existingSettings } = await supabase
+        .from('user_context_settings')
+        .select('*')
+        .eq('user_id', userId)
+        .maybeSingle();
+      
+      if (existingSettings) {
+        // Update existing settings
+        const { data, error } = await supabase
+          .from('user_context_settings')
+          .update({
+            preferred_trigger_types: settings.preferred_trigger_types || existingSettings.preferred_trigger_types,
+            time_windows: settings.time_windows || existingSettings.time_windows,
+            allow_behavioral_tracking: settings.allow_behavioral_tracking !== undefined ? settings.allow_behavioral_tracking : existingSettings.allow_behavioral_tracking,
+            allow_data_analysis: settings.allow_data_analysis !== undefined ? settings.allow_data_analysis : existingSettings.allow_data_analysis
+          })
+          .eq('id', existingSettings.id)
+          .select()
+          .single();
+        
+        if (error) throw error;
+        return data as UserContextSetting;
+      } else {
+        // Create new settings
+        const { data, error } = await supabase
+          .from('user_context_settings')
+          .insert({
+            user_id: userId,
+            preferred_trigger_types: settings.preferred_trigger_types || ['time', 'location'],
+            time_windows: settings.time_windows || { morning: true, evening: true },
+            allow_behavioral_tracking: settings.allow_behavioral_tracking !== undefined ? settings.allow_behavioral_tracking : true,
+            allow_data_analysis: settings.allow_data_analysis !== undefined ? settings.allow_data_analysis : true
+          })
+          .select()
+          .single();
+        
+        if (error) throw error;
+        return data as UserContextSetting;
+      }
+    } else {
+      // Return mock data if the table doesn't exist
+      console.log('Using mock service since the user_context_settings table doesn\'t exist yet');
+      return {
+        id: uuidv4(),
+        user_id: userId,
+        preferred_trigger_types: settings.preferred_trigger_types || ['time', 'location'],
+        time_windows: settings.time_windows || { morning: true, evening: true },
+        allow_behavioral_tracking: settings.allow_behavioral_tracking !== undefined ? settings.allow_behavioral_tracking : true,
+        allow_data_analysis: settings.allow_data_analysis !== undefined ? settings.allow_data_analysis : true,
+        created_at: new Date().toISOString()
+      };
+    }
   } catch (err) {
     console.error('Error updating user context settings:', err);
+    // Return mock data as fallback
     return {
       id: uuidv4(),
       user_id: userId,

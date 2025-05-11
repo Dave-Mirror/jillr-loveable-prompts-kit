@@ -43,7 +43,7 @@ export interface RewardLog {
   trigger_id: string;
   granted_at: string;
   status: string;
-  reward_type?: string; // Adding this field to match the usage in code
+  reward_type?: string; // This field exists now in our DB
   rewards?: Reward; // For joined queries
 }
 

@@ -57,6 +57,170 @@ export type Database = {
         }
         Relationships: []
       }
+      context_triggers: {
+        Row: {
+          action_type: string
+          active: boolean | null
+          brand_id: string | null
+          category: string | null
+          condition_type: string
+          created_at: string | null
+          description: string | null
+          id: string
+          name: string
+          reward_id: string | null
+          target_value: Json
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action_type: string
+          active?: boolean | null
+          brand_id?: string | null
+          category?: string | null
+          condition_type: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name: string
+          reward_id?: string | null
+          target_value: Json
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action_type?: string
+          active?: boolean | null
+          brand_id?: string | null
+          category?: string | null
+          condition_type?: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+          reward_id?: string | null
+          target_value?: Json
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "context_triggers_reward_id_fkey"
+            columns: ["reward_id"]
+            isOneToOne: false
+            referencedRelation: "rewards"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      memory_snapshots: {
+        Row: {
+          context_score: number | null
+          created_at: string | null
+          data: Json | null
+          id: string
+          interpreted_summary: string | null
+          snapshot_date: string
+          user_id: string | null
+        }
+        Insert: {
+          context_score?: number | null
+          created_at?: string | null
+          data?: Json | null
+          id?: string
+          interpreted_summary?: string | null
+          snapshot_date: string
+          user_id?: string | null
+        }
+        Update: {
+          context_score?: number | null
+          created_at?: string | null
+          data?: Json | null
+          id?: string
+          interpreted_summary?: string | null
+          snapshot_date?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      reward_logs: {
+        Row: {
+          granted_at: string | null
+          id: string
+          reward_id: string | null
+          reward_type: string | null
+          status: string | null
+          trigger_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          granted_at?: string | null
+          id?: string
+          reward_id?: string | null
+          reward_type?: string | null
+          status?: string | null
+          trigger_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          granted_at?: string | null
+          id?: string
+          reward_id?: string | null
+          reward_type?: string | null
+          status?: string | null
+          trigger_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reward_logs_reward_id_fkey"
+            columns: ["reward_id"]
+            isOneToOne: false
+            referencedRelation: "rewards"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reward_logs_trigger_id_fkey"
+            columns: ["trigger_id"]
+            isOneToOne: false
+            referencedRelation: "context_triggers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      rewards: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          expires_at: string | null
+          id: string
+          reward_type: string
+          title: string
+          usage_limit: number | null
+          value: number
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          expires_at?: string | null
+          id?: string
+          reward_type: string
+          title: string
+          usage_limit?: number | null
+          value: number
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          expires_at?: string | null
+          id?: string
+          reward_type?: string
+          title?: string
+          usage_limit?: number | null
+          value?: number
+        }
+        Relationships: []
+      }
       uploads: {
         Row: {
           challenge_id: string | null
@@ -94,6 +258,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      user_context_settings: {
+        Row: {
+          allow_behavioral_tracking: boolean | null
+          allow_data_analysis: boolean | null
+          created_at: string | null
+          id: string
+          preferred_trigger_types: string[] | null
+          time_windows: Json | null
+          user_id: string | null
+        }
+        Insert: {
+          allow_behavioral_tracking?: boolean | null
+          allow_data_analysis?: boolean | null
+          created_at?: string | null
+          id?: string
+          preferred_trigger_types?: string[] | null
+          time_windows?: Json | null
+          user_id?: string | null
+        }
+        Update: {
+          allow_behavioral_tracking?: boolean | null
+          allow_data_analysis?: boolean | null
+          created_at?: string | null
+          id?: string
+          preferred_trigger_types?: string[] | null
+          time_windows?: Json | null
+          user_id?: string | null
+        }
+        Relationships: []
       }
       user_data_permissions: {
         Row: {

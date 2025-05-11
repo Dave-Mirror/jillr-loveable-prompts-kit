@@ -17,7 +17,7 @@ export const processTriggers = async (userId: string, context: Context) => {
   if (!userId) return [];
   
   try {
-    // Get user's triggers using the mock service
+    // Get user's triggers using the service
     console.log('Checking triggers for user', userId);
     const triggers = await getTriggersForUser(userId);
     
@@ -34,8 +34,14 @@ export const processTriggers = async (userId: string, context: Context) => {
 };
 
 const matchTriggerCondition = (trigger: ContextTrigger, context: Context): boolean => {
-  const conditionType = trigger.condition_type.split('_')[0];
-  const conditionValue = trigger.condition_type.split('_')[1];
+  // Safely handle trigger condition format
+  if (!trigger.condition_type) return false;
+  
+  const conditionParts = trigger.condition_type.split('_');
+  if (conditionParts.length < 2) return false;
+  
+  const conditionType = conditionParts[0];
+  const conditionValue = conditionParts[1];
   
   // Match based on condition type
   switch (conditionType) {
