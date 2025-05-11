@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { User, Session } from '@supabase/supabase-js';
 import AuthContext from '@/contexts/AuthContext';
+import { toast } from 'sonner';
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -15,15 +16,19 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [userProfile, setUserProfile] = useState<any | null>(null);
 
   useEffect(() => {
+    console.log("AuthProvider initialized");
+    
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        console.log("Auth state changed:", event);
         setSession(session);
         setUser(session?.user ?? null);
         
         // Fetch user profile if authenticated
         if (session?.user) {
           setTimeout(async () => {
+            console.log("Fetching user profile after auth state change");
             await fetchUserProfile(session.user.id);
           }, 0);
         } else {
@@ -36,6 +41,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     // THEN check for existing session
     supabase.auth.getSession().then(async ({ data: { session } }) => {
+      console.log("Initial session check:", session ? "Session found" : "No session");
       setSession(session);
       setUser(session?.user ?? null);
       
@@ -44,13 +50,22 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }
       
       setIsLoading(false);
+    })
+    .catch(err => {
+      console.error("Error checking session:", err);
+      setIsLoading(false);
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      console.log("Unsubscribing from auth changes");
+      subscription.unsubscribe();
+    };
   }, []);
 
   const fetchUserProfile = async (userId: string) => {
     try {
+      console.log("Fetching user profile for:", userId);
+      
       // Instead of querying the profiles table directly, we'll query wallets table
       // and create a synthetic profile from wallet data, since we don't have 
       // a profiles table in the type definitions
@@ -63,13 +78,19 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (error) {
         console.error('Error fetching user wallet:', error);
         // Create a default profile with just the user ID
-        setUserProfile({
+        const defaultProfile = {
           id: userId,
           active_challenges: 0,
           level: 1,
           xp: 0,
-          coins: 0
-        });
+          coins: 0,
+          // Add role properties for easier access
+          isCreator: userId.includes('creator'),
+          isEnterprise: userId.includes('enterprise'),
+          accountType: userId.includes('brand') ? 'brand' : 'user'
+        };
+        console.log("Created default profile:", defaultProfile);
+        setUserProfile(defaultProfile);
         return;
       }
       
@@ -79,20 +100,31 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         active_challenges: 0, // This would normally come from a count of user_challenges
         level: calculateLevel(data.xp_total || 0),
         xp: data.xp_total || 0,
-        coins: data.coins_total || 0
+        coins: data.coins_total || 0,
+        // Add role properties for easier access
+        isCreator: userId.includes('creator') || data.is_creator,
+        isEnterprise: userId.includes('enterprise') || data.is_enterprise,
+        accountType: userId.includes('brand') ? 'brand' : (data.account_type || 'user')
       };
       
+      console.log("Fetched profile data:", profileData);
       setUserProfile(profileData);
     } catch (error) {
       console.error('Error in fetchUserProfile:', error);
       // Fallback profile
-      setUserProfile({
+      const fallbackProfile = {
         id: userId,
         active_challenges: 0,
         level: 1,
         xp: 0,
-        coins: 0
-      });
+        coins: 0,
+        // Assume some role based on user ID for testing
+        isCreator: userId.includes('creator'),
+        isEnterprise: userId.includes('enterprise'),
+        accountType: userId.includes('brand') ? 'brand' : 'user'
+      };
+      console.log("Using fallback profile:", fallbackProfile);
+      setUserProfile(fallbackProfile);
     }
   };
 
@@ -103,7 +135,13 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const signOut = async () => {
-    await supabase.auth.signOut();
+    try {
+      await supabase.auth.signOut();
+      toast.success("Du wurdest erfolgreich abgemeldet");
+    } catch (error) {
+      console.error("Error signing out:", error);
+      toast.error("Fehler beim Abmelden");
+    }
   };
 
   return (

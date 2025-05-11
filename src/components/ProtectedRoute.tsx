@@ -12,8 +12,22 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, roleRequired 
   const { user, isLoading, session, userProfile } = useAuth();
   const location = useLocation();
 
-  // Special case for wallet, profile, and hypocampus pages - allow access without authentication
-  if (location.pathname === '/wallet' || location.pathname === '/profile' || location.pathname === '/hypocampus') {
+  // Öffentlich zugängliche Routen, die keine Authentifizierung erfordern
+  const publicRoutes = [
+    '/wallet', 
+    '/profile', 
+    '/hypocampus',
+    '/explore',
+    '/feed',
+    '/map', 
+    '/city-clash',
+    '/leaderboard',
+    '/creator-marketplace',
+    '/shop'
+  ];
+  
+  // Prüfen, ob die aktuelle Route öffentlich ist
+  if (publicRoutes.includes(location.pathname) || location.pathname.startsWith('/challenge/')) {
     return <>{children}</>;
   }
 
@@ -28,13 +42,13 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, roleRequired 
     );
   }
 
-  // Check for valid session and user
+  // Check for valid session and user - nur für geschützte Routen erforderlich
   if (!session || !user) {
     // Save the current location for redirect after login
     return <Navigate to="/auth" state={{ from: location }} replace />;
   }
 
-  // Role-based access control wenn eine Rolle erforderlich ist
+  // Rollenbasierte Zugriffssteuerung, wenn eine Rolle erforderlich ist
   if (roleRequired) {
     const userRole = getUserRole(userProfile);
     

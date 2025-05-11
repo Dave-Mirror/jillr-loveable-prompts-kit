@@ -65,7 +65,7 @@ const App = () => (
                       <Route path="/auth" element={<Auth />} />
                       <Route path="/auth/callback" element={<AuthCallback />} />
                       
-                      {/* Entdecken-Kategorie */}
+                      {/* Entdecken-Kategorie - öffentlich zugänglich */}
                       <Route path="/explore" element={<Explore />} />
                       <Route path="/feed" element={<ChallengeFeed />} />
                       <Route path="/map" element={<LiveMap />} />
@@ -94,21 +94,17 @@ const App = () => (
                         </ProtectedRoute>
                       } />
                       
-                      {/* Community-Kategorie */}
+                      {/* Community-Kategorie - öffentlich zugänglich */}
                       <Route path="/shop" element={<Shop />} />
                       <Route path="/leaderboard" element={<Leaderboard />} />
                       <Route path="/creator-marketplace" element={<CreatorMarketplace />} />
                       
-                      {/* Persönlich-Kategorie */}
+                      {/* Persönlich-Kategorie - öffentlich zugänglich */}
                       <Route path="/profile" element={<Profile />} />
                       <Route path="/wallet" element={<Wallet />} />
                       
                       {/* System-Seiten - mit Rollenbeschränkungen */}
-                      <Route path="/hypocampus" element={
-                        <ProtectedRoute roleRequired="brand">
-                          <HypocampusPage />
-                        </ProtectedRoute>
-                      } />
+                      <Route path="/hypocampus" element={<HypocampusPage />} />
                       <Route path="/trigger-management" element={
                         <ProtectedRoute roleRequired="brand">
                           <TriggerManagementPage />
