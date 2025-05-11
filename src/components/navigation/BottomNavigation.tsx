@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   Home, Search, Trophy, Wallet, User, Map, Zap, ShoppingBag, Menu,
-  BarChart, Video, Settings, Bell, Heart, Database, Edit, Compass, Users, City
+  BarChart, Video, Settings, Bell, Heart, Database, Edit, Compass, Users, Building
 } from 'lucide-react';
 import { 
   Sheet,
@@ -24,7 +24,7 @@ const BottomNavigation = () => {
     { icon: Home, path: '/', label: 'Home' },
     { icon: Zap, path: '/explore', label: 'Entdecken' },
     { icon: Compass, path: '/feed', label: 'Feed' },
-    { icon: City, path: '/city-clash', label: 'City Clash' },
+    { icon: Building, path: '/city-clash', label: 'City Clash' },
     { icon: User, path: '/profile', label: 'Profil' }
   ];
   
@@ -40,7 +40,7 @@ const BottomNavigation = () => {
     'Entdecken': [
       { icon: Zap, path: '/explore', label: 'Entdecken' },
       { icon: Map, path: '/map', label: 'Live Map' },
-      { icon: City, path: '/city-clash', label: 'City Clash' },
+      { icon: Building, path: '/city-clash', label: 'City Clash' },
       { icon: Compass, path: '/dashboard', label: 'Challenge Explorer' },
       { icon: Search, path: '/search', label: 'Suche' }
     ],
