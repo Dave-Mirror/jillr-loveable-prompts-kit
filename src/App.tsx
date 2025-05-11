@@ -30,6 +30,7 @@ import PageTransition from "./components/navigation/PageTransition";
 import CreatorMarketplace from "./pages/CreatorMarketplace";
 import ChallengeFeed from "./pages/ChallengeFeed";
 import HypocampusPage from "./pages/HypocampusPage";
+import TriggerManagementPage from "./pages/TriggerManagementPage";
 import HypocampusProvider from "./providers/HypocampusProvider";
 
 const queryClient = new QueryClient();
@@ -69,6 +70,7 @@ const App = () => (
                       <Route path="/creator-marketplace" element={<CreatorMarketplace />} />
                       <Route path="/challenge-feed" element={<ChallengeFeed />} />
                       <Route path="/hypocampus" element={<HypocampusPage />} />
+                      <Route path="/trigger-management" element={<TriggerManagementPage />} />
                       <Route path="/auth" element={<Auth />} />
                       <Route path="/auth/callback" element={<AuthCallback />} />
                       {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

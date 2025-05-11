@@ -14,7 +14,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger 
 } from '@/components/ui/dropdown-menu';
-import { ChevronDown, Settings, Download, Share, Info } from 'lucide-react';
+import { ChevronDown, Settings, Download, Share, Info, Sliders } from 'lucide-react';
 import { 
   Tooltip,
   TooltipContent,
@@ -28,7 +28,7 @@ const HypocampusPage: React.FC = () => {
 
   return (
     <div className="container max-w-6xl mx-auto py-8 px-4">
-      <div className="mb-8 flex justify-between items-start">
+      <div className="mb-8 flex justify-between items-start flex-wrap gap-4">
         <div>
           <h1 className="text-3xl font-bold text-white mb-2">Hypocampus-System</h1>
           <p className="text-gray-400">
@@ -37,6 +37,13 @@ const HypocampusPage: React.FC = () => {
         </div>
         
         <div className="flex items-center gap-3">
+          <Link to="/trigger-management">
+            <Button className="flex items-center gap-2 bg-jillr-neonPurple hover:bg-jillr-neonPurple/90">
+              <Sliders size={16} />
+              <span>Erweitertes Trigger-Management</span>
+            </Button>
+          </Link>
+          
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>

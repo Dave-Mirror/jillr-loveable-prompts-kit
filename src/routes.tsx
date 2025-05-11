@@ -18,6 +18,7 @@ import Leaderboard from '@/pages/Leaderboard';
 import EnterpriseDashboard from '@/pages/EnterpriseDashboard';
 import ChallengeEditor from '@/pages/ChallengeEditor';
 import HypocampusPage from '@/pages/HypocampusPage';
+import TriggerManagementPage from '@/pages/TriggerManagementPage';
 
 export const routes = createBrowserRouter([
   {
@@ -83,6 +84,10 @@ export const routes = createBrowserRouter([
   {
     path: '/hypocampus',
     element: <HypocampusPage />,
+  },
+  {
+    path: '/trigger-management',
+    element: <TriggerManagementPage />,
   },
   {
     path: '*',
