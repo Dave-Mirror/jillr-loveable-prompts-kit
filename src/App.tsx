@@ -29,6 +29,7 @@ import BottomNavigation from "./components/navigation/BottomNavigation";
 import PageTransition from "./components/navigation/PageTransition";
 import CreatorMarketplace from "./pages/CreatorMarketplace";
 import ChallengeFeed from "./pages/ChallengeFeed";
+import HypocampusPage from "./pages/HypocampusPage";
 
 const queryClient = new QueryClient();
 
@@ -69,6 +70,7 @@ const App = () => (
                     <Route path="/challenge-editor" element={<ChallengeEditor />} />
                     <Route path="/creator-marketplace" element={<CreatorMarketplace />} />
                     <Route path="/challenge-feed" element={<ChallengeFeed />} />
+                    <Route path="/hypocampus" element={<HypocampusPage />} />
                     <Route path="/auth" element={<Auth />} />
                     <Route path="/auth/callback" element={<AuthCallback />} />
                     {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

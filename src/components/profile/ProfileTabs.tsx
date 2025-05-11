@@ -10,7 +10,7 @@ import SocialTab from './tabs/SocialTab';
 import DataVaultTab from './tabs/DataVaultTab';
 import SettingsTab from './tabs/SettingsTab';
 import AvatarTab from './tabs/AvatarTab';
-import { User } from 'lucide-react';
+import { User, Brain } from 'lucide-react';
 
 interface ProfileTabsProps {
   userProfile: any;
@@ -23,6 +23,13 @@ const ProfileTabs: React.FC<ProfileTabsProps> = ({ userProfile, activeTab, setAc
   
   const handleTabChange = (value: string) => {
     setActiveTab(value);
+    
+    // Special case for hypocampus tab
+    if (value === 'hypocampus') {
+      navigate('/hypocampus');
+      return;
+    }
+    
     navigate(`/profile?tab=${value}`);
   };
 
@@ -38,6 +45,10 @@ const ProfileTabs: React.FC<ProfileTabsProps> = ({ userProfile, activeTab, setAc
         <TabsTrigger value="avatar">
           <User className="w-4 h-4 mr-1" />
           Avatar
+        </TabsTrigger>
+        <TabsTrigger value="hypocampus">
+          <Brain className="w-4 h-4 mr-1" />
+          Trigger
         </TabsTrigger>
         <TabsTrigger value="settings">Einstellungen</TabsTrigger>
       </TabsList>
