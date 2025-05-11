@@ -1,6 +1,7 @@
 
 import { ContextTrigger } from '@/types/hypocampus';
 import { supabase } from '@/integrations/supabase/client';
+import { getTriggersForUser } from './mockHypocampusService';
 
 interface Context {
   hour?: number;
@@ -16,52 +17,16 @@ export const processTriggers = async (userId: string, context: Context) => {
   if (!userId) return [];
   
   try {
-    // Check if the table exists in Supabase
-    const { error: checkError } = await supabase
-      .from('context_triggers')
-      .select('count')
-      .limit(1)
-      .single();
+    // Get user's triggers using the mock service
+    console.log('Checking triggers for user', userId);
+    const triggers = await getTriggersForUser(userId);
     
-    // If no error, table exists
-    if (!checkError) {
-      const { data: triggers, error } = await supabase
-        .from('context_triggers')
-        .select('*')
-        .eq('user_id', userId)
-        .eq('active', true);
-        
-      if (error) throw error;
-      
-      // Filter triggers that match the current context
-      const matchingTriggers = (triggers as ContextTrigger[]).filter(trigger => 
-        matchTriggerCondition(trigger, context)
-      );
-      
-      return matchingTriggers;
-    } else {
-      // Mock implementation for local testing
-      console.log('Using mock trigger processing - context_triggers table may not exist yet');
-      const mockTriggers: ContextTrigger[] = [
-        {
-          id: '1',
-          user_id: userId,
-          name: 'Morning App Open',
-          description: 'Morgens App öffnen',
-          category: 'time',
-          condition_type: 'time_morning',
-          target_value: { hour_range: [6, 11] },
-          action_type: 'reward_xp_small',
-          active: true,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        }
-      ];
-      
-      return mockTriggers.filter(trigger => 
-        matchTriggerCondition(trigger, context)
-      );
-    }
+    // Filter triggers that match the current context
+    const matchingTriggers = triggers.filter(trigger => 
+      matchTriggerCondition(trigger, context)
+    );
+    
+    return matchingTriggers;
   } catch (error) {
     console.error('Error processing triggers:', error);
     return [];

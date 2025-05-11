@@ -81,8 +81,7 @@ export const useHypocampusSystem = () => {
                   user_id: user.id,
                   reward_id: matchingReward.id,
                   trigger_id: trigger.id,
-                  status: 'granted',
-                  reward_type: rewardType
+                  status: 'granted'
                 });
                 
                 // Notify the user
