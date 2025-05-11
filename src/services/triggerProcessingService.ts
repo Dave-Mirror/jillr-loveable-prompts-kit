@@ -1,7 +1,7 @@
 
 import { ContextTrigger } from '@/types/hypocampus';
 import { supabase } from '@/integrations/supabase/client';
-import { getTriggersForUser } from './mockHypocampusService';
+import { getTriggersForUser } from './hypocampus/triggerService';
 
 interface Context {
   hour?: number;

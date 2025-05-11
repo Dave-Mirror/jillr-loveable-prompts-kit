@@ -1,7 +1,7 @@
 
 import { useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { createMemorySnapshot } from '@/services/mockHypocampusService';
+import { createMemorySnapshot } from '@/services/hypocampus/memoryService';
 
 // Activity types
 export type ActivityType = 

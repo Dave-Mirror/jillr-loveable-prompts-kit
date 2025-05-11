@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import useMemorySnapshots from './useMemorySnapshots';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
-import { createRewardLog, getRewards } from '@/services/mockHypocampusService';
+import { createRewardLog, getRewards } from '@/services/hypocampus/rewardService';
 import { processTriggers } from '@/services/triggerProcessingService';
 import { ContextTrigger } from '@/types/hypocampus';
 
