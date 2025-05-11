@@ -3,11 +3,12 @@ import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { BarChart2, ChevronDown, Settings, Video, Wrench } from 'lucide-react';
+import { BarChart2, ChevronDown, Settings, Video, Wrench, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import KpiDashboard from '@/components/brand/KpiDashboard';
 import NotificationCenter from '@/components/brand/NotificationCenter';
 import ApiConnections from '@/components/brand/ApiConnections';
+import BrandHypocampusDashboard from '@/components/brand/BrandHypocampusDashboard';
 
 const BrandDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -71,7 +72,7 @@ const BrandDashboard = () => {
       </div>
       
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid grid-cols-3 mb-8">
+        <TabsList className="grid grid-cols-4 mb-8">
           <TabsTrigger value="overview" className="flex items-center gap-2">
             <BarChart2 className="h-4 w-4" />
             <span>Overview</span>
@@ -79,6 +80,10 @@ const BrandDashboard = () => {
           <TabsTrigger value="create" className="flex items-center gap-2">
             <Video className="h-4 w-4" />
             <span>Create Challenge</span>
+          </TabsTrigger>
+          <TabsTrigger value="hypocampus" className="flex items-center gap-2">
+            <Zap className="h-4 w-4" />
+            <span>Automatisierung</span>
           </TabsTrigger>
           <TabsTrigger value="integrations" className="flex items-center gap-2">
             <Settings className="h-4 w-4" />
@@ -102,6 +107,10 @@ const BrandDashboard = () => {
               </Button>
             </Link>
           </div>
+        </TabsContent>
+        
+        <TabsContent value="hypocampus">
+          <BrandHypocampusDashboard />
         </TabsContent>
         
         <TabsContent value="integrations">

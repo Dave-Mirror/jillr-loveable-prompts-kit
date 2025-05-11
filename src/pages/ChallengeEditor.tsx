@@ -47,6 +47,8 @@ const ChallengeEditor = () => {
     startDate: new Date(),
     endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days from now
     maxParticipants: 0,
+    // Automation
+    triggers: [],
     // Advanced settings
     formatRequirements: '',
     contentGuidelines: '',

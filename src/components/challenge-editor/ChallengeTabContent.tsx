@@ -1,13 +1,14 @@
 
 import React from 'react';
-import ChallengeBasics from '@/components/challenge-editor/ChallengeBasics';
-import ContentRequirements from '@/components/challenge-editor/ContentRequirements';
-import KpiSettings from '@/components/challenge-editor/KpiSettings';
-import TargetAudience from '@/components/challenge-editor/TargetAudience';
-import RewardsIncentives from '@/components/challenge-editor/RewardsIncentives';
-import TimingLimitations from '@/components/challenge-editor/TimingLimitations';
-import AdvancedSettings from '@/components/challenge-editor/AdvancedSettings';
-import PreviewPublish from '@/components/challenge-editor/PreviewPublish';
+import ChallengeBasics from './ChallengeBasics';
+import ContentRequirements from './ContentRequirements';
+import KpiSettings from './KpiSettings';
+import TargetAudience from './TargetAudience';
+import RewardsIncentives from './RewardsIncentives';
+import TimingLimitations from './TimingLimitations';
+import AdvancedSettings from './AdvancedSettings';
+import AutomationTab from './AutomationTab';
+import PreviewPublish from './PreviewPublish';
 
 interface ChallengeTabContentProps {
   activeTab: string;
@@ -20,65 +21,33 @@ const ChallengeTabContent: React.FC<ChallengeTabContentProps> = ({
   data,
   onChange
 }) => {
-  return (
-    <>
-      {activeTab === 'basics' && (
-        <ChallengeBasics 
-          data={data} 
-          onChange={(data) => onChange('basics', data)} 
-        />
-      )}
-      
-      {activeTab === 'content' && (
-        <ContentRequirements 
-          data={data} 
-          onChange={(data) => onChange('content', data)} 
-        />
-      )}
-      
-      {activeTab === 'kpis' && (
-        <KpiSettings 
-          data={data} 
-          onChange={(data) => onChange('kpis', data)} 
-        />
-      )}
-      
-      {activeTab === 'audience' && (
-        <TargetAudience 
-          data={data} 
-          onChange={(data) => onChange('audience', data)} 
-        />
-      )}
-      
-      {activeTab === 'rewards' && (
-        <RewardsIncentives 
-          data={data} 
-          onChange={(data) => onChange('rewards', data)} 
-        />
-      )}
-      
-      {activeTab === 'timing' && (
-        <TimingLimitations 
-          data={data} 
-          onChange={(data) => onChange('timing', data)} 
-        />
-      )}
-      
-      {activeTab === 'advanced' && (
-        <AdvancedSettings 
-          data={data} 
-          onChange={(data) => onChange('advanced', data)} 
-        />
-      )}
-      
-      {activeTab === 'preview' && (
-        <PreviewPublish 
-          data={data} 
-          onChange={(data) => onChange('preview', data)} 
-        />
-      )}
-    </>
-  );
+  // Helper function to handle data changes for specific sections
+  const handleSectionChange = (sectionData: any) => {
+    onChange(activeTab, sectionData);
+  };
+
+  switch (activeTab) {
+    case 'basics':
+      return <ChallengeBasics data={data} onChange={handleSectionChange} />;
+    case 'content':
+      return <ContentRequirements data={data} onChange={handleSectionChange} />;
+    case 'kpis':
+      return <KpiSettings data={data} onChange={handleSectionChange} />;
+    case 'audience':
+      return <TargetAudience data={data} onChange={handleSectionChange} />;
+    case 'rewards':
+      return <RewardsIncentives data={data} onChange={handleSectionChange} />;
+    case 'timing':
+      return <TimingLimitations data={data} onChange={handleSectionChange} />;
+    case 'automation':
+      return <AutomationTab data={data} onChange={handleSectionChange} />;
+    case 'advanced':
+      return <AdvancedSettings data={data} onChange={handleSectionChange} />;
+    case 'preview':
+      return <PreviewPublish data={data} onChange={handleSectionChange} />;
+    default:
+      return <div>Tab nicht gefunden: {activeTab}</div>;
+  }
 };
 
 export default ChallengeTabContent;

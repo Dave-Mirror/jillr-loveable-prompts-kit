@@ -1,28 +1,75 @@
 
 import { useState } from 'react';
 
-export function useChallengeTabs() {
-  const [activeTab, setActiveTab] = useState('basics');
+export type ChallengeTab = 'basics' | 'content' | 'kpis' | 'audience' | 'rewards' | 'timing' | 'automation' | 'advanced' | 'preview';
 
-  // Map of tabs with their display names and indices
-  const tabsConfig = [
-    { id: 'basics', name: '1. Basics' },
-    { id: 'content', name: '2. Content' },
-    { id: 'kpis', name: '3. KPIs' },
-    { id: 'audience', name: '4. Audience' },
-    { id: 'rewards', name: '5. Rewards' },
-    { id: 'timing', name: '6. Timing' },
-    { id: 'advanced', name: '7. Advanced' },
-    { id: 'preview', name: '8. Preview' }
+interface TabConfig {
+  id: ChallengeTab;
+  label: string;
+  description: string;
+}
+
+export const useChallengeTabs = () => {
+  const [activeTab, setActiveTab] = useState<ChallengeTab>('basics');
+
+  const tabsConfig: TabConfig[] = [
+    {
+      id: 'basics',
+      label: 'Basics',
+      description: 'Challenge Grundlagen'
+    },
+    {
+      id: 'content',
+      label: 'Content',
+      description: 'Inhaltsanforderungen'
+    },
+    {
+      id: 'kpis',
+      label: 'KPIs',
+      description: 'Leistungskennzahlen'
+    },
+    {
+      id: 'audience',
+      label: 'Zielgruppe',
+      description: 'Zielgruppendefinition'
+    },
+    {
+      id: 'rewards',
+      label: 'Belohnungen',
+      description: 'Anreize & Belohnungen'
+    },
+    {
+      id: 'timing',
+      label: 'Timing',
+      description: 'Zeitpläne & Limits'
+    },
+    {
+      id: 'automation',
+      label: 'Automation',
+      description: 'Trigger & Workflows'
+    },
+    {
+      id: 'advanced',
+      label: 'Erweitert',
+      description: 'Erweiterte Einstellungen'
+    },
+    {
+      id: 'preview',
+      label: 'Vorschau',
+      description: 'Vorschau & Veröffentlichung'
+    }
   ];
 
-  const navigateTab = (direction) => {
-    const tabs = tabsConfig.map(tab => tab.id);
-    const currentIndex = tabs.indexOf(activeTab);
-    const newIndex = direction === 'next' 
-      ? Math.min(currentIndex + 1, tabs.length - 1) 
-      : Math.max(currentIndex - 1, 0);
-    setActiveTab(tabs[newIndex]);
+  const navigateTab = (direction: 'next' | 'prev') => {
+    const currentIndex = tabsConfig.findIndex(tab => tab.id === activeTab);
+    
+    if (direction === 'next') {
+      const nextIndex = Math.min(currentIndex + 1, tabsConfig.length - 1);
+      setActiveTab(tabsConfig[nextIndex].id);
+    } else {
+      const prevIndex = Math.max(currentIndex - 1, 0);
+      setActiveTab(tabsConfig[prevIndex].id);
+    }
   };
 
   return {
@@ -31,4 +78,6 @@ export function useChallengeTabs() {
     tabsConfig,
     navigateTab
   };
-}
+};
+
+export default useChallengeTabs;
