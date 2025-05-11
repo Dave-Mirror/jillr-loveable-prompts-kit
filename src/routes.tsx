@@ -7,7 +7,7 @@ import Auth from '@/pages/Auth';
 import Explore from '@/pages/Explore';
 import Index from '@/pages/Index';
 import NotFound from '@/pages/NotFound';
-import CreatorDashboard from '@/pages/CreatorDashboard';
+import Dashboard from '@/pages/Dashboard';
 import ChallengeFeed from '@/pages/ChallengeFeed';
 import ContentEditor from '@/pages/ContentEditor';
 import Upload from '@/pages/Upload';
@@ -15,7 +15,6 @@ import Wallet from '@/pages/Wallet';
 import LiveMap from '@/pages/LiveMap';
 import Shop from '@/pages/Shop';
 import Leaderboard from '@/pages/Leaderboard';
-import EnterpriseDashboard from '@/pages/EnterpriseDashboard';
 import ChallengeEditor from '@/pages/ChallengeEditor';
 import HypocampusPage from '@/pages/HypocampusPage';
 import TriggerManagementPage from '@/pages/TriggerManagementPage';
@@ -44,7 +43,7 @@ export const routes = createBrowserRouter([
   },
   {
     path: '/dashboard',
-    element: <CreatorDashboard />,
+    element: <Dashboard />,
   },
   {
     path: '/feed',
@@ -75,10 +74,6 @@ export const routes = createBrowserRouter([
     element: <Leaderboard />,
   },
   {
-    path: '/enterprise',
-    element: <EnterpriseDashboard />,
-  },
-  {
     path: '/challenge-editor',
     element: <ChallengeEditor />,
   },
@@ -93,6 +88,28 @@ export const routes = createBrowserRouter([
   {
     path: '/city-clash',
     element: <CityClashPage />,
+  },
+  
+  // Leite alte Routen auf neue um
+  {
+    path: '/creator-dashboard',
+    element: <Dashboard />,
+  },
+  {
+    path: '/brand-dashboard',
+    element: <Dashboard />,
+  },
+  {
+    path: '/enterprise',
+    element: <Dashboard />,
+  },
+  {
+    path: '/livemap',
+    element: <LiveMap />,
+  },
+  {
+    path: '/challenge-feed',
+    element: <ChallengeFeed />,
   },
   {
     path: '*',

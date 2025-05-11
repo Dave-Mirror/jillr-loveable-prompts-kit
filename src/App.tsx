@@ -17,9 +17,7 @@ import Auth from "./pages/Auth";
 import AuthCallback from "./pages/AuthCallback";
 import NotFound from "./pages/NotFound";
 import Wallet from "./pages/Wallet";
-import CreatorDashboard from "./pages/CreatorDashboard";
 import Shop from "./pages/Shop";
-import BrandDashboard from "./pages/BrandDashboard";
 import Leaderboard from "./pages/Leaderboard";
 import LiveMap from "./pages/LiveMap";
 import Index from "./pages/Index";
@@ -61,22 +59,26 @@ const App = () => (
                         </ProtectedRoute>
                       } />
                       <Route path="/wallet" element={<Wallet />} />
-                      <Route path="/creator-dashboard" element={<CreatorDashboard />} />
-                      <Route path="/brand-dashboard" element={<BrandDashboard />} />
-                      <Route path="/leaderboard" element={<Leaderboard />} />
                       <Route path="/shop" element={<Shop />} />
-                      <Route path="/livemap" element={<LiveMap />} />
                       <Route path="/map" element={<LiveMap />} />
                       <Route path="/city-clash" element={<CityClashPage />} />
                       <Route path="/content-editor" element={<ContentEditor />} />
                       <Route path="/challenge-editor" element={<ChallengeEditor />} />
                       <Route path="/creator-marketplace" element={<CreatorMarketplace />} />
-                      <Route path="/challenge-feed" element={<ChallengeFeed />} />
                       <Route path="/feed" element={<ChallengeFeed />} />
+                      <Route path="/leaderboard" element={<Leaderboard />} />
                       <Route path="/hypocampus" element={<HypocampusPage />} />
                       <Route path="/trigger-management" element={<TriggerManagementPage />} />
                       <Route path="/auth" element={<Auth />} />
                       <Route path="/auth/callback" element={<AuthCallback />} />
+
+                      {/* Umleitungen für alte Routen */}
+                      <Route path="/creator-dashboard" element={<Dashboard />} />
+                      <Route path="/brand-dashboard" element={<Dashboard />} />
+                      <Route path="/enterprise" element={<Dashboard />} />
+                      <Route path="/livemap" element={<LiveMap />} />
+                      <Route path="/challenge-feed" element={<ChallengeFeed />} />
+
                       {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                       <Route path="*" element={<NotFound />} />
                     </Routes>

@@ -41,8 +41,7 @@ export const MainNavigation = () => {
       <NavItem to="/city-clash" label="City Clash" icon={<Building className="w-4 h-4" />} />
       <NavItem to="/shop" label="Shop" icon={<ShoppingBag className="w-4 h-4" />} />
       <NavItem to="/leaderboard" label="Rangliste" icon={<Award className="w-4 h-4" />} />
-      <NavItem to="/hypocampus" label="Trigger" icon={<Brain className="w-4 h-4" />} />
-      <NavItem to="/creator-marketplace" label="Creator" icon={<Video className="w-4 h-4" />} />
+      <NavItem to="/dashboard" label="Dashboard" icon={<Video className="w-4 h-4" />} />
       <NavItem to="/profile" label="Profil" icon={<User className="w-4 h-4" />} />
     </nav>
   );

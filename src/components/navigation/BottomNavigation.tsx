@@ -19,7 +19,7 @@ const BottomNavigation = () => {
   const location = useLocation();
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   
-  // Main nav items for the bottom bar - keep this limited to 5 items
+  // Hauptnavigationselemente für die untere Leiste - auf 5 Elemente beschränkt
   const mainNavItems = [
     { icon: Home, path: '/', label: 'Home' },
     { icon: Zap, path: '/explore', label: 'Entdecken' },
@@ -28,7 +28,7 @@ const BottomNavigation = () => {
     { icon: User, path: '/profile', label: 'Profil' }
   ];
   
-  // Additional items that will be shown in the categories
+  // Zusätzliche Elemente, die in Kategorien angezeigt werden
   const categorizedItems = {
     'Persönlich': [
       { icon: User, path: '/profile', label: 'Profil' },
@@ -41,25 +41,25 @@ const BottomNavigation = () => {
       { icon: Zap, path: '/explore', label: 'Entdecken' },
       { icon: Map, path: '/map', label: 'Live Map' },
       { icon: Building, path: '/city-clash', label: 'City Clash' },
-      { icon: Compass, path: '/dashboard', label: 'Challenge Explorer' },
+      { icon: Compass, path: '/dashboard', label: 'Dashboard' },
       { icon: Search, path: '/search', label: 'Suche' }
     ],
     'Content': [
       { icon: Compass, path: '/feed', label: 'Feed' },
-      { icon: Video, path: '/creator-dashboard', label: 'Creator Studio' },
+      { icon: Video, path: '/dashboard', label: 'Creator Studio' },
       { icon: Edit, path: '/content-editor', label: 'Content Editor' },
       { icon: Heart, path: '/favorites', label: 'Favoriten' },
       { icon: Users, path: '/creator-marketplace', label: 'Creator Marketplace' }
     ],
     'Weitere': [
-      { icon: BarChart, path: '/brand-dashboard', label: 'Brand Portal' },
+      { icon: BarChart, path: '/dashboard', label: 'Brand Portal' },
       { icon: Edit, path: '/challenge-editor', label: 'Challenge Editor' },
       { icon: ShoppingBag, path: '/shop', label: 'Shop' },
       { icon: Settings, path: '/settings', label: 'Einstellungen' }
     ]
   };
 
-  // Function to handle menu section click
+  // Funktion zum Umschalten von Menüabschnitten
   const handleMenuClick = (menu: string) => {
     setActiveMenu(activeMenu === menu ? null : menu);
   };
@@ -93,7 +93,7 @@ const BottomNavigation = () => {
         })}
       </div>
 
-      {/* Quick Access Menu Sheet */}
+      {/* Schnellzugriff-Menü */}
       <Sheet>
         <SheetTrigger asChild className="absolute -top-16 right-4 rounded-full shadow-lg md:hidden">
           <Button

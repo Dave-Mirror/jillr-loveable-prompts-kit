@@ -18,7 +18,7 @@ interface RightSectionProps {
 }
 
 const RightSection: React.FC<RightSectionProps> = ({ user, userProfile, signOut }) => {
-  // Simplified main nav items for consistency but we won't show them in the UI anymore
+  // Vereinfachte Navigation mit konsolidierten Routen
   const mainNavItems = [
     { name: 'Home', icon: Home, path: '/' },
     { name: 'Explore', icon: Zap, path: '/explore' },
@@ -27,7 +27,7 @@ const RightSection: React.FC<RightSectionProps> = ({ user, userProfile, signOut 
     { name: 'City Clash', icon: Building, path: '/city-clash' },
     { name: 'Leaderboard', icon: Trophy, path: '/leaderboard' },
     { name: 'Shop', icon: ShoppingBag, path: '/shop' },
-    { name: 'Challenge Explorer', icon: Compass, path: user?.email?.includes('brand') ? '/brand-dashboard' : '/dashboard' }
+    { name: 'Dashboard', icon: Compass, path: '/dashboard' }
   ];
 
   return (

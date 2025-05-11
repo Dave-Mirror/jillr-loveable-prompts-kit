@@ -15,16 +15,21 @@ const Explore = () => {
   const [challengeType, setChallengeType] = useState<ChallengeType | 'all'>('all');
   const [sortBy, setSortBy] = useState<'latest' | 'rewards' | 'endDate'>('latest');
   const [challenges, setChallenges] = useState<Challenge[]>([]);
+  const [filteredChallenges, setFilteredChallenges] = useState<Challenge[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
   const { toast } = useToast();
+  
+  // Verfügbare Filter-Optionen
+  const [availableIndustries, setAvailableIndustries] = useState<string[]>([]);
+  const [availableChallengeTypes, setAvailableChallengeTypes] = useState<string[]>([]);
 
-  // Laden der Challenges beim ersten Rendering und bei Filter-Änderungen
+  // Laden der Challenges beim ersten Rendering
   useEffect(() => {
     const fetchChallenges = async () => {
       setIsLoading(true);
       try {
-        const allChallenges = await getChallenges(industry);
+        const allChallenges = await getChallenges('all'); // Alle Challenges laden
         
         // Generieren zusätzlicher Demo-Challenges für eine umfangreichere Anzeige
         const demoExtraCount = 15; // Zusätzliche Demo-Challenges
@@ -44,10 +49,9 @@ const Explore = () => {
             imageUrl: `/placeholder.svg`,
             hashtags: [`jillr`, `challenge${i+1}`, `fun`],
             industry: industryType,
-            // Adding the missing properties to match Challenge type
             brandId: `demo-brand-${i % 5 + 1}`,
             brandName: `Demo Brand ${i % 5 + 1}`,
-            locationBased: i % 3 === 0, // Every third challenge is location-based
+            locationBased: i % 3 === 0,
             status: 'active',
             rewards: [],
             coinReward: (i % 3 + 1) * 50
@@ -56,24 +60,15 @@ const Explore = () => {
         
         // Alle Challenges kombinieren
         const combinedChallenges = [...allChallenges, ...demoChallenges];
+        setChallenges(combinedChallenges);
         
-        // Filtern nach Challenge-Typ
-        let filteredChallenges = combinedChallenges;
-        if (challengeType !== 'all') {
-          filteredChallenges = combinedChallenges.filter(challenge => challenge.type === challengeType);
-        }
+        // Verfügbare Filteroptionen extrahieren
+        const uniqueIndustries = Array.from(new Set(combinedChallenges.map(c => c.industry)));
+        const uniqueTypes = Array.from(new Set(combinedChallenges.map(c => c.type)));
         
-        // Sortieren nach ausgewähltem Kriterium
-        const sortedChallenges = [...filteredChallenges];
-        if (sortBy === 'latest') {
-          sortedChallenges.sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime());
-        } else if (sortBy === 'rewards') {
-          sortedChallenges.sort((a, b) => (b.xpReward || 0) - (a.xpReward || 0));
-        } else if (sortBy === 'endDate') {
-          sortedChallenges.sort((a, b) => new Date(a.endDate).getTime() - new Date(b.endDate).getTime());
-        }
+        setAvailableIndustries(uniqueIndustries);
+        setAvailableChallengeTypes(uniqueTypes);
         
-        setChallenges(sortedChallenges);
       } catch (error) {
         console.error('Fehler beim Laden der Challenges:', error);
         toast({
@@ -87,10 +82,39 @@ const Explore = () => {
     };
 
     fetchChallenges();
-  }, [industry, challengeType, sortBy, toast]);
+  }, [toast]);
+  
+  // Filtern und Sortieren der Challenges bei Änderung der Filter
+  useEffect(() => {
+    if (!challenges.length) return;
+    
+    let result = [...challenges];
+    
+    // Nach Branche filtern
+    if (industry !== 'all') {
+      result = result.filter(challenge => challenge.industry === industry);
+    }
+    
+    // Nach Challenge-Typ filtern
+    if (challengeType !== 'all') {
+      result = result.filter(challenge => challenge.type === challengeType);
+    }
+    
+    // Sortieren nach ausgewähltem Kriterium
+    if (sortBy === 'latest') {
+      result.sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime());
+    } else if (sortBy === 'rewards') {
+      result.sort((a, b) => (b.xpReward || 0) - (a.xpReward || 0));
+    } else if (sortBy === 'endDate') {
+      result.sort((a, b) => new Date(a.endDate).getTime() - new Date(b.endDate).getTime());
+    }
+    
+    setFilteredChallenges(result);
+    
+  }, [challenges, industry, challengeType, sortBy]);
 
   // Umwandlung der Challenges für die ChallengeGrid-Komponente
-  const formattedChallenges = challenges.map(challenge => ({
+  const formattedChallenges = filteredChallenges.map(challenge => ({
     id: challenge.id,
     title: challenge.title,
     description: challenge.description,
@@ -132,6 +156,8 @@ const Explore = () => {
               setIndustry={setIndustry}
               setChallengeType={setChallengeType}
               setSortBy={setSortBy}
+              availableIndustries={availableIndustries}
+              availableChallengeTypes={availableChallengeTypes}
             />
           )}
           
