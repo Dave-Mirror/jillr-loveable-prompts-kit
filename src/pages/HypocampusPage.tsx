@@ -5,20 +5,11 @@ import TriggerDashboard from '@/components/hypocampus/TriggerDashboard';
 import TriggerRewardHistory from '@/components/hypocampus/TriggerRewardHistory';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/hooks/useAuth';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 
 const HypocampusPage: React.FC = () => {
   const { user } = useAuth();
-
-  if (!user) {
-    return (
-      <div className="container max-w-6xl mx-auto py-8 px-4">
-        <div className="py-12 text-center">
-          <h2 className="text-2xl font-semibold mb-4">Anmeldung erforderlich</h2>
-          <p>Bitte melde dich an, um das Hypocampus-System zu nutzen.</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="container max-w-6xl mx-auto py-8 px-4">
@@ -29,7 +20,23 @@ const HypocampusPage: React.FC = () => {
         </p>
       </div>
       
-      <Tabs defaultValue="my-triggers" className="space-y-8">
+      {!user ? (
+        <div className="py-12 text-center bg-jillr-darkBlue/30 rounded-xl border border-jillr-border/20 p-8">
+          <h2 className="text-2xl font-semibold mb-4">Vorschau des Hypocampus-Systems</h2>
+          <p className="mb-8 max-w-lg mx-auto">
+            Das Hypocampus-System erlaubt es dir, kontextbasierte Trigger zu definieren,
+            die automatisch auf dein Verhalten reagieren. 
+            Für vollständigen Zugriff auf alle Funktionen ist eine Anmeldung empfohlen.
+          </p>
+          <Link to="/auth">
+            <Button className="bg-jillr-neonPurple hover:bg-jillr-neonPurple/80">
+              Anmelden für mehr Funktionen
+            </Button>
+          </Link>
+        </div>
+      ) : null}
+      
+      <Tabs defaultValue="my-triggers" className="space-y-8 mt-8">
         <TabsList className="w-full border-b border-gray-800 mb-4">
           <TabsTrigger value="my-triggers" className="flex-1">Meine Trigger</TabsTrigger>
           <TabsTrigger value="new-trigger" className="flex-1">Neuer Trigger</TabsTrigger>

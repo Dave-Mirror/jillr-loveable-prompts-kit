@@ -12,8 +12,8 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, roleRequired 
   const { user, isLoading, session } = useAuth();
   const location = useLocation();
 
-  // Special case for wallet and profile pages - allow access without authentication
-  if (location.pathname === '/wallet' || location.pathname === '/profile') {
+  // Special case for wallet, profile, and hypocampus pages - allow access without authentication
+  if (location.pathname === '/wallet' || location.pathname === '/profile' || location.pathname === '/hypocampus') {
     return <>{children}</>;
   }
 

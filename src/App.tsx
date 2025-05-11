@@ -50,11 +50,7 @@ const App = () => (
                     <Routes>
                       <Route path="/" element={<Index />} />
                       <Route path="/dashboard" element={<Dashboard />} />
-                      <Route path="/profile" element={
-                        <ProtectedRoute>
-                          <Profile />
-                        </ProtectedRoute>
-                      } />
+                      <Route path="/profile" element={<Profile />} />
                       <Route path="/explore" element={<Explore />} />
                       <Route path="/challenge/:id" element={<ChallengeDetail />} />
                       <Route path="/upload/:id" element={
