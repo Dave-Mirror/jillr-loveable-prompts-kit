@@ -1,10 +1,10 @@
 
 import React, { useState } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import DataManager from '../data-vault/DataManager';
 import TriggerDashboard from '@/components/hypocampus/TriggerDashboard';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Shield, Database, Zap } from 'lucide-react';
+import FilterDropdown, { FilterOption } from '@/components/ui/filter-dropdown';
 
 interface DataVaultTabProps {
   userProfile: any;
@@ -12,6 +12,19 @@ interface DataVaultTabProps {
 
 const DataVaultTab: React.FC<DataVaultTabProps> = ({ userProfile }) => {
   const [activeTab, setActiveTab] = useState('permissions');
+
+  const tabOptions: FilterOption[] = [
+    { value: 'permissions', label: 'Datenberechtigungen' },
+    { value: 'triggers', label: 'Automatisierungen' },
+  ];
+
+  const getIcon = () => {
+    switch(activeTab) {
+      case "permissions": return <Database className="h-5 w-5 text-jillr-neonBlue mr-2" />;
+      case "triggers": return <Zap className="h-5 w-5 text-jillr-neonPurple mr-2" />;
+      default: return <Database className="h-5 w-5 text-jillr-neonBlue mr-2" />;
+    }
+  };
 
   return (
     <div>
@@ -25,35 +38,40 @@ const DataVaultTab: React.FC<DataVaultTabProps> = ({ userProfile }) => {
         Je mehr Daten du freigibst, desto personalisierter wird dein Erlebnis mit Jillr.
       </p>
       
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid grid-cols-2 mb-6">
-          <TabsTrigger value="permissions" className="flex items-center gap-2">
-            <Database className="h-4 w-4" />
-            <span>Datenberechtigungen</span>
-          </TabsTrigger>
-          <TabsTrigger value="triggers" className="flex items-center gap-2">
-            <Zap className="h-4 w-4" />
-            <span>Automatisierungen</span>
-          </TabsTrigger>
-        </TabsList>
+      <div className="flex justify-between items-center mb-6">
+        <div className="flex items-center">
+          {getIcon()}
+          <h3 className="font-medium">
+            {activeTab === "permissions" && "Daten-Einstellungen"}
+            {activeTab === "triggers" && "Automatisierte Abläufe"}
+          </h3>
+        </div>
+        <FilterDropdown
+          options={tabOptions}
+          activeValue={activeTab}
+          onSelect={setActiveTab}
+          label="Ansicht"
+        />
+      </div>
+      
+      <div className="mt-4">
+        {activeTab === "permissions" && <DataManager />}
         
-        <TabsContent value="permissions" className="mt-2">
-          <DataManager />
-        </TabsContent>
-        
-        <TabsContent value="triggers" className="mt-2">
-          <Card className="border border-jillr-neonPurple/30 mb-6">
-            <CardHeader>
-              <CardTitle>Datenbasierte Automatisierungen</CardTitle>
-              <CardDescription>
-                Definiere, wie die App auf deine Daten reagieren soll. Beispiel: Erhalte Belohnungen für Standortdaten.
-              </CardDescription>
-            </CardHeader>
-          </Card>
-          
-          <TriggerDashboard userRole="personal" />
-        </TabsContent>
-      </Tabs>
+        {activeTab === "triggers" && (
+          <>
+            <Card className="border border-jillr-neonPurple/30 mb-6">
+              <CardHeader>
+                <CardTitle>Datenbasierte Automatisierungen</CardTitle>
+                <CardDescription>
+                  Definiere, wie die App auf deine Daten reagieren soll. Beispiel: Erhalte Belohnungen für Standortdaten.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+            
+            <TriggerDashboard userRole="personal" />
+          </>
+        )}
+      </div>
     </div>
   );
 };

@@ -1,11 +1,11 @@
 
-import React from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState } from 'react';
 import { UserReward } from '@/utils/challenge/rewards/types';
 import RewardChallengeTab from './RewardChallengeTab';
 import RewardAvailableTab from './RewardAvailableTab';
 import RewardClaimedTab from './RewardClaimedTab';
 import { Trophy, Gift, Check } from 'lucide-react';
+import FilterDropdown, { FilterOption } from '@/components/ui/filter-dropdown';
 
 interface RewardTabsProps {
   userRewards: UserReward[];
@@ -26,57 +26,67 @@ const RewardTabs: React.FC<RewardTabsProps> = ({
   openRewardDetails,
   navigate
 }) => {
+  const [activeTab, setActiveTab] = useState("challenge-rewards");
+  
+  const tabOptions: FilterOption[] = [
+    { value: "challenge-rewards", label: "Challenge Rewards" },
+    { value: "available", label: "Available Rewards" },
+    { value: "claimed", label: "Claimed Rewards" }
+  ];
+  
+  const getIcon = () => {
+    switch(activeTab) {
+      case "challenge-rewards": return <Trophy size={16} className="text-jillr-neonPurple mr-2" />;
+      case "available": return <Gift size={16} className="text-jillr-neonBlue mr-2" />;
+      case "claimed": return <Check size={16} className="text-jillr-neonGreen mr-2" />;
+      default: return <Trophy size={16} className="text-jillr-neonPurple mr-2" />;
+    }
+  };
+
   return (
-    <Tabs defaultValue="challenge-rewards" className="neon-card overflow-hidden">
-      <TabsList className="grid grid-cols-3 w-full bg-jillr-dark border-b border-jillr-neonPurple/20">
-        <TabsTrigger 
-          value="challenge-rewards"
-          className="data-[state=active]:bg-jillr-neonPurple/20 data-[state=active]:text-jillr-neonPurple flex items-center gap-2"
-        >
-          <Trophy size={16} />
-          <span>Challenge Rewards</span>
-        </TabsTrigger>
-        <TabsTrigger 
-          value="available"
-          className="data-[state=active]:bg-jillr-neonBlue/20 data-[state=active]:text-jillr-neonBlue flex items-center gap-2"
-        >
-          <Gift size={16} />
-          <span>Available Rewards</span>
-        </TabsTrigger>
-        <TabsTrigger 
-          value="claimed"
-          className="data-[state=active]:bg-jillr-neonGreen/20 data-[state=active]:text-jillr-neonGreen flex items-center gap-2"
-        >
-          <Check size={16} />
-          <span>Claimed Rewards</span>
-        </TabsTrigger>
-      </TabsList>
+    <div className="neon-card overflow-hidden">
+      <div className="p-4 bg-jillr-dark/90 flex justify-between items-center border-b border-jillr-neonPurple/20">
+        <div className="flex items-center">
+          {getIcon()}
+          <h3 className="font-medium">
+            {activeTab === "challenge-rewards" && "Challenge Rewards"}
+            {activeTab === "available" && "Available Rewards"}
+            {activeTab === "claimed" && "Claimed Rewards"}
+          </h3>
+        </div>
+        <FilterDropdown 
+          options={tabOptions} 
+          activeValue={activeTab} 
+          onSelect={setActiveTab}
+          label="Show" 
+        />
+      </div>
       
       <div className="p-4 bg-jillr-dark/90 h-full">
-        <TabsContent value="challenge-rewards" className="mt-4 animate-fade-in">
+        {activeTab === "challenge-rewards" && (
           <RewardChallengeTab 
             groupedRewards={groupedRewards} 
             isLoading={isLoading} 
             openRewardDetails={openRewardDetails}
             navigate={navigate}
           />
-        </TabsContent>
+        )}
         
-        <TabsContent value="available" className="mt-4 animate-fade-in">
+        {activeTab === "available" && (
           <RewardAvailableTab 
             availableRewards={availableRewards}
           />
-        </TabsContent>
+        )}
         
-        <TabsContent value="claimed" className="mt-4 animate-fade-in">
+        {activeTab === "claimed" && (
           <RewardClaimedTab 
             claimedRewards={claimedRewards}
             userRewards={userRewards}
             openRewardDetails={openRewardDetails}
           />
-        </TabsContent>
+        )}
       </div>
-    </Tabs>
+    </div>
   );
 };
 

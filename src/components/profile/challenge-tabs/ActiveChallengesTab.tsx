@@ -1,10 +1,11 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Upload, Zap, Award, Clock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import FilterDropdown, { FilterOption } from '@/components/ui/filter-dropdown';
 
 interface ActiveChallengeProps {
   activeChallenges: any[];
@@ -12,14 +13,34 @@ interface ActiveChallengeProps {
 
 const ActiveChallengesTab: React.FC<ActiveChallengeProps> = ({ activeChallenges }) => {
   const navigate = useNavigate();
+  const [statusFilter, setStatusFilter] = useState('all');
   
   const handleUploadContent = () => {
     navigate('/content-editor');
   };
+
+  const filterOptions: FilterOption[] = [
+    { value: 'all', label: 'Alle Challenges' },
+    { value: 'in_progress', label: 'In Progress' },
+    { value: 'not_started', label: 'Nicht gestartet' }
+  ];
+  
+  const filteredChallenges = statusFilter === 'all' 
+    ? activeChallenges 
+    : activeChallenges.filter(c => c.status === statusFilter);
   
   return (
     <div className="space-y-4">
-      {activeChallenges.map(challenge => (
+      <div className="flex justify-end mb-4">
+        <FilterDropdown 
+          options={filterOptions}
+          activeValue={statusFilter}
+          onSelect={setStatusFilter}
+          label="Status"
+        />
+      </div>
+      
+      {filteredChallenges.map(challenge => (
         <Card key={challenge.id}>
           <CardHeader className="pb-2">
             <div className="flex justify-between items-start">
@@ -66,6 +87,12 @@ const ActiveChallengesTab: React.FC<ActiveChallengeProps> = ({ activeChallenges 
           </CardContent>
         </Card>
       ))}
+      
+      {filteredChallenges.length === 0 && (
+        <div className="text-center py-8">
+          <p className="text-muted-foreground">Keine Challenges in dieser Kategorie gefunden.</p>
+        </div>
+      )}
     </div>
   );
 };
