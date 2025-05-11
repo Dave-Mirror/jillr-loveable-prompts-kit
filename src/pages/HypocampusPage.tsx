@@ -14,7 +14,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger 
 } from '@/components/ui/dropdown-menu';
-import { ChevronDown, Settings, Download, Share } from 'lucide-react';
+import { ChevronDown, Settings, Download, Share, Info } from 'lucide-react';
+import { 
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const HypocampusPage: React.FC = () => {
   const { user } = useAuth();
@@ -31,6 +37,19 @@ const HypocampusPage: React.FC = () => {
         </div>
         
         <div className="flex items-center gap-3">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="outline" size="icon">
+                  <Info size={16} />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p className="max-w-xs">Hypocampus ermöglicht es dir, automatische Aktionen auf Basis deiner Aktivitäten zu definieren.</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          
           {user && (
             <>
               <DropdownMenu>
@@ -53,7 +72,7 @@ const HypocampusPage: React.FC = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
               
-              {user.role === 'brand' && (
+              {user.email?.includes('brand') && (
                 <div className="flex border border-jillr-border rounded-md overflow-hidden">
                   <Button 
                     variant={activeView === 'personal' ? 'default' : 'ghost'} 
@@ -77,27 +96,27 @@ const HypocampusPage: React.FC = () => {
       </div>
       
       {!user ? (
-        <div className="py-12 text-center bg-jillr-darkBlue/30 rounded-xl border border-jillr-border/20 p-8">
-          <h2 className="text-2xl font-semibold mb-4">Vorschau des Hypocampus-Systems</h2>
-          <p className="mb-8 max-w-lg mx-auto">
-            Das Hypocampus-System erlaubt es dir, kontextbasierte Trigger zu definieren,
-            die automatisch auf dein Verhalten reagieren. 
-            Für vollständigen Zugriff auf alle Funktionen ist eine Anmeldung empfohlen.
+        <div className="py-8 text-center bg-jillr-darkBlue/30 rounded-xl border border-jillr-border/20 p-6 mb-8">
+          <h2 className="text-2xl font-semibold mb-4">Willkommen im Hypocampus-System</h2>
+          <p className="mb-6 max-w-lg mx-auto">
+            Du kannst das Hypocampus-System ohne Anmeldung testen und erkunden.
+            Für personalisierte Trigger und das Speichern deiner Einstellungen 
+            empfehlen wir dir, dich anzumelden.
           </p>
           <Link to="/auth">
             <Button className="bg-jillr-neonPurple hover:bg-jillr-neonPurple/80">
-              Anmelden für mehr Funktionen
+              Anmelden für personalisierte Erfahrung
             </Button>
           </Link>
         </div>
       ) : null}
       
-      <Tabs defaultValue="my-triggers" className="space-y-8 mt-8">
+      <Tabs defaultValue="my-triggers" className="space-y-8">
         <TabsList className="w-full border-b border-gray-800 mb-4">
           <TabsTrigger value="my-triggers" className="flex-1">Meine Trigger</TabsTrigger>
           <TabsTrigger value="new-trigger" className="flex-1">Neuer Trigger</TabsTrigger>
           <TabsTrigger value="statistics" className="flex-1">Statistiken</TabsTrigger>
-          {user && <TabsTrigger value="analytics" className="flex-1">Analytics</TabsTrigger>}
+          <TabsTrigger value="analytics" className="flex-1">Analytics</TabsTrigger>
         </TabsList>
         
         <TabsContent value="my-triggers" className="pt-4">
@@ -105,18 +124,58 @@ const HypocampusPage: React.FC = () => {
         </TabsContent>
         
         <TabsContent value="new-trigger" className="pt-4">
-          <TriggerConfigurator triggerType={activeView} />
+          {user ? (
+            <TriggerConfigurator triggerType={activeView} />
+          ) : (
+            <div className="p-6 text-center bg-jillr-darkBlue/30 rounded-xl border border-jillr-border/20">
+              <h3 className="text-xl font-semibold mb-3">Neue Trigger erstellen</h3>
+              <p className="mb-4">Erstelle personalisierte Trigger, die automatisch auf dein Verhalten reagieren.</p>
+              <div className="bg-jillr-dark/50 p-4 rounded-lg max-w-2xl mx-auto mb-4">
+                <h4 className="font-medium mb-2">Beispiel-Trigger:</h4>
+                <p className="text-sm">WENN ich morgens die App öffne, DANN erhalte ich XP-Punkte</p>
+                <p className="text-sm mt-1">WENN ich drei Tage in Folge aktiv bin, DANN erhalte ich eine Belohnung</p>
+              </div>
+              <Link to="/auth">
+                <Button>Anmelden zum Erstellen</Button>
+              </Link>
+            </div>
+          )}
         </TabsContent>
         
         <TabsContent value="statistics" className="pt-4">
-          <TriggerRewardHistory />
+          {user ? (
+            <TriggerRewardHistory />
+          ) : (
+            <div className="p-6 text-center bg-jillr-darkBlue/30 rounded-xl border border-jillr-border/20">
+              <h3 className="text-xl font-semibold mb-3">Statistik-Übersicht</h3>
+              <p className="mb-4">Verfolge deine Trigger-Aktivitäten und erhaltenen Belohnungen im Zeitverlauf.</p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto mb-4">
+                <div className="bg-jillr-dark/50 p-4 rounded-lg">
+                  <h4 className="font-medium mb-1">Aktivierte Trigger</h4>
+                  <p className="text-3xl font-bold text-jillr-neonPurple">--</p>
+                  <p className="text-xs text-gray-400">Benötigt Anmeldung</p>
+                </div>
+                <div className="bg-jillr-dark/50 p-4 rounded-lg">
+                  <h4 className="font-medium mb-1">Erhaltene Belohnungen</h4>
+                  <p className="text-3xl font-bold text-jillr-neonGreen">--</p>
+                  <p className="text-xs text-gray-400">Benötigt Anmeldung</p>
+                </div>
+                <div className="bg-jillr-dark/50 p-4 rounded-lg">
+                  <h4 className="font-medium mb-1">Aktivitätsrate</h4>
+                  <p className="text-3xl font-bold text-jillr-neonBlue">--</p>
+                  <p className="text-xs text-gray-400">Benötigt Anmeldung</p>
+                </div>
+              </div>
+              <Link to="/auth">
+                <Button>Anmelden für Statistiken</Button>
+              </Link>
+            </div>
+          )}
         </TabsContent>
         
-        {user && (
-          <TabsContent value="analytics" className="pt-4">
-            <HypocampusAnalytics />
-          </TabsContent>
-        )}
+        <TabsContent value="analytics" className="pt-4">
+          <HypocampusAnalytics />
+        </TabsContent>
       </Tabs>
     </div>
   );

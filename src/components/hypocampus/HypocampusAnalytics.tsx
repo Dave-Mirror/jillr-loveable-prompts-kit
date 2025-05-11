@@ -5,6 +5,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { useAuth } from '@/hooks/useAuth';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 
 // Mock-Daten für die Analysegrafiken
 const triggerPerformanceData = [
@@ -38,28 +40,44 @@ const HypocampusAnalytics: React.FC = () => {
   const { user } = useAuth();
   const [timeRange, setTimeRange] = useState('7d');
   
+  // For guest users, we'll show demo data
+  const showDemoData = !user;
+  
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-semibold">Trigger Analytics</h2>
-        <Select value={timeRange} onValueChange={setTimeRange}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Zeitraum wählen" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="7d">Letzte 7 Tage</SelectItem>
-            <SelectItem value="30d">Letzte 30 Tage</SelectItem>
-            <SelectItem value="3m">Letzte 3 Monate</SelectItem>
-            <SelectItem value="1y">Letztes Jahr</SelectItem>
-          </SelectContent>
-        </Select>
+        <h2 className="text-2xl font-semibold">
+          {showDemoData ? 'Demo Analytics' : 'Trigger Analytics'}
+        </h2>
+        
+        {!showDemoData && (
+          <Select value={timeRange} onValueChange={setTimeRange}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Zeitraum wählen" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="7d">Letzte 7 Tage</SelectItem>
+              <SelectItem value="30d">Letzte 30 Tage</SelectItem>
+              <SelectItem value="3m">Letzte 3 Monate</SelectItem>
+              <SelectItem value="1y">Letztes Jahr</SelectItem>
+            </SelectContent>
+          </Select>
+        )}
       </div>
+      
+      {showDemoData && (
+        <div className="bg-jillr-darkBlue/30 p-4 rounded-lg mb-2 border border-jillr-border/20">
+          <p className="text-sm text-gray-300">
+            Dies sind Demo-Daten zu Anschauungszwecken. Für persönliche Analytics und detaillierte Auswertungen deiner Trigger ist eine Anmeldung erforderlich.
+          </p>
+        </div>
+      )}
       
       <Tabs defaultValue="performance" className="space-y-6">
         <TabsList>
           <TabsTrigger value="performance">Performance</TabsTrigger>
           <TabsTrigger value="categories">Kategorien</TabsTrigger>
-          {user?.role === 'brand' && <TabsTrigger value="brand">Marken-Insights</TabsTrigger>}
+          {!showDemoData && user?.email?.includes('brand') && <TabsTrigger value="brand">Marken-Insights</TabsTrigger>}
         </TabsList>
         
         <TabsContent value="performance">
@@ -146,11 +164,21 @@ const HypocampusAnalytics: React.FC = () => {
                   </div>
                 ))}
               </div>
+              
+              {showDemoData && (
+                <div className="mt-6">
+                  <Link to="/auth">
+                    <Button className="bg-jillr-neonPurple hover:bg-jillr-neonPurple/80">
+                      Anmelden für persönliche Daten
+                    </Button>
+                  </Link>
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
         
-        {user?.role === 'brand' && (
+        {!showDemoData && user?.email?.includes('brand') && (
           <TabsContent value="brand">
             <Card className="bg-jillr-dark border-jillr-neonPurple/30">
               <CardHeader>

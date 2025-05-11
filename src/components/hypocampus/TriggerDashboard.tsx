@@ -43,18 +43,22 @@ const TriggerDashboard: React.FC<TriggerDashboardProps> = ({ userRole = 'persona
 
   useEffect(() => {
     const fetchTriggers = async () => {
-      if (!user) return;
-
       try {
         setIsLoading(true);
         let data;
         
-        if (userRole === 'brand' && user.brand_id) {
-          // Wenn Markenansicht und Nutzer hat eine Brand-ID
-          data = await getTriggersForBrand(user.brand_id);
+        if (user) {
+          // If user is logged in, fetch their triggers
+          if (userRole === 'brand' && user?.email?.includes('brand')) {
+            // For brand users, fetch brand triggers (using email as a workaround)
+            data = await getTriggersForBrand(user.id);
+          } else {
+            // For personal users, fetch their personal triggers
+            data = await getTriggersForUser(user.id);
+          }
         } else {
-          // Standard: Persönliche Trigger des Nutzers laden
-          data = await getTriggersForUser(user.id);
+          // For non-authenticated users, show demo triggers
+          data = await getTriggersForUser('demo-user');
         }
         
         setTriggers(data);
@@ -106,6 +110,16 @@ const TriggerDashboard: React.FC<TriggerDashboardProps> = ({ userRole = 'persona
 
   const handleToggleTrigger = async (id: string, currentActive: boolean) => {
     try {
+      // Only allow authenticated users to modify triggers
+      if (!user) {
+        toast({
+          title: "Anmeldung erforderlich",
+          description: "Um Trigger zu aktivieren oder deaktivieren, musst du dich anmelden.",
+          variant: "default"
+        });
+        return;
+      }
+      
       await updateTrigger(id, { active: !currentActive });
 
       // Update local state
@@ -188,8 +202,8 @@ const TriggerDashboard: React.FC<TriggerDashboardProps> = ({ userRole = 'persona
         </CardTitle>
         <CardDescription>
           {filteredTriggers.length > 0
-            ? `Du hast ${filteredTriggers.length} Trigger, davon ${filteredTriggers.filter(t => t.active).length} aktiv`
-            : 'Du hast noch keine Trigger erstellt'}
+            ? `${user ? 'Du hast' : 'Beispiel:'} ${filteredTriggers.length} Trigger, davon ${filteredTriggers.filter(t => t.active).length} aktiv`
+            : user ? 'Du hast noch keine Trigger erstellt' : 'Keine Beispiel-Trigger verfügbar'}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -325,7 +339,7 @@ const TriggerDashboard: React.FC<TriggerDashboardProps> = ({ userRole = 'persona
             <p className="text-muted-foreground">
               {searchQuery || categoryFilter !== 'all' || statusFilter !== 'all'
                 ? 'Keine Trigger entsprechen den Filterkriterien.'
-                : 'Du hast noch keine Trigger erstellt. Erstelle deinen ersten Trigger, um automatische Reaktionen zu definieren.'}
+                : user ? 'Du hast noch keine Trigger erstellt. Erstelle deinen ersten Trigger, um automatische Reaktionen zu definieren.' : 'Keine Demo-Trigger verfügbar.'}
             </p>
             {(searchQuery || categoryFilter !== 'all' || statusFilter !== 'all') && (
               <Button 
