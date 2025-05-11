@@ -7,15 +7,20 @@ import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/hooks/useAuth';
 import { Award, Clock } from 'lucide-react';
 import { getRewardsForUser } from '@/services/mockHypocampusService';
-import { RewardLog } from '@/types/hypocampus';
+import { RewardLog, Reward } from '@/types/hypocampus';
 
 interface ChartData {
   date: string;
   xp: number;
 }
 
+// Extended type with joined reward data
+interface RewardLogWithDetails extends RewardLog {
+  rewards?: Reward;
+}
+
 const TriggerRewardHistory: React.FC = () => {
-  const [rewardLogs, setRewardLogs] = useState<RewardLog[]>([]);
+  const [rewardLogs, setRewardLogs] = useState<RewardLogWithDetails[]>([]);
   const [chartData, setChartData] = useState<ChartData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useAuth();
@@ -53,7 +58,7 @@ const TriggerRewardHistory: React.FC = () => {
     return dates;
   };
 
-  const processChartData = (logs: RewardLog[], last7Days: string[]): ChartData[] => {
+  const processChartData = (logs: RewardLogWithDetails[], last7Days: string[]): ChartData[] => {
     const dailyXP: Record<string, number> = {};
     
     // Initialize all days with 0 XP
@@ -63,9 +68,11 @@ const TriggerRewardHistory: React.FC = () => {
     
     // Sum XP for each day
     logs.forEach(log => {
-      const logDate = new Date(log.created_at).toISOString().split('T')[0];
+      const logDate = new Date(log.granted_at).toISOString().split('T')[0];
+      
       if (last7Days.includes(logDate)) {
-        dailyXP[logDate] = (dailyXP[logDate] || 0) + log.xp_earned;
+        const xpValue = log.rewards?.reward_type === 'xp' ? log.rewards.value : 0;
+        dailyXP[logDate] = (dailyXP[logDate] || 0) + xpValue;
       }
     });
     
@@ -79,6 +86,14 @@ const TriggerRewardHistory: React.FC = () => {
   const formatDate = (dateStr: string): string => {
     const date = new Date(dateStr);
     return date.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' });
+  };
+
+  const getRewardValue = (log: RewardLogWithDetails): number => {
+    return log.rewards?.value || 0;
+  };
+
+  const getRewardDescription = (log: RewardLogWithDetails): string => {
+    return log.rewards?.description || 'Keine Beschreibung';
   };
 
   if (isLoading) {
@@ -145,13 +160,13 @@ const TriggerRewardHistory: React.FC = () => {
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <Badge variant="outline" className="bg-jillr-neonPurple/10 text-xs">
-                            {log.reward_type.toUpperCase()}
+                            {log.rewards?.reward_type.toUpperCase() || 'XP'}
                           </Badge>
-                          <Badge className="bg-jillr-neonGreen">+{log.xp_earned} XP</Badge>
+                          <Badge className="bg-jillr-neonGreen">+{getRewardValue(log)} XP</Badge>
                         </div>
                         <div className="flex items-center text-xs text-gray-400">
                           <Clock className="h-3 w-3 mr-1" />
-                          {new Date(log.created_at).toLocaleDateString('de-DE', {
+                          {new Date(log.granted_at).toLocaleDateString('de-DE', {
                             hour: '2-digit',
                             minute: '2-digit',
                             day: '2-digit',
@@ -159,7 +174,7 @@ const TriggerRewardHistory: React.FC = () => {
                           })}
                         </div>
                       </div>
-                      <p className="text-sm mt-1">{log.description || 'Keine Beschreibung'}</p>
+                      <p className="text-sm mt-1">{getRewardDescription(log)}</p>
                     </div>
                   </div>
                 ))}

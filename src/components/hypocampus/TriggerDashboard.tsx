@@ -7,13 +7,11 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
 import { getTriggersForUser, updateTrigger } from '@/services/mockHypocampusService';
-import { Trigger } from '@/types/hypocampus';
+import { ContextTrigger } from '@/types/hypocampus';
 import { Clock, MapPin, ActivityIcon, CloudRain, SmilePlus, Zap, Award, Star } from 'lucide-react';
 
-// Remove the duplicate Trigger interface since we're importing it from types/hypocampus
-
 const TriggerDashboard: React.FC = () => {
-  const [triggers, setTriggers] = useState<Trigger[]>([]);
+  const [triggers, setTriggers] = useState<ContextTrigger[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
   const { user } = useAuth();
@@ -64,8 +62,8 @@ const TriggerDashboard: React.FC = () => {
     }
   };
 
-  const getConditionIcon = (type: string) => {
-    switch (type) {
+  const getConditionIcon = (category: string) => {
+    switch (category) {
       case 'time': return <Clock className="h-4 w-4 text-jillr-neonBlue" />;
       case 'location': return <MapPin className="h-4 w-4 text-jillr-neonGreen" />;
       case 'activity': return <ActivityIcon className="h-4 w-4 text-jillr-neonPurple" />;
@@ -75,26 +73,11 @@ const TriggerDashboard: React.FC = () => {
     }
   };
 
-  const getActionIcon = (type: string) => {
-    switch (type) {
-      case 'reward': return <Award className="h-4 w-4 text-yellow-400" />;
-      case 'challenge': return <Star className="h-4 w-4 text-jillr-neonGreen" />;
-      case 'avatar': return <ActivityIcon className="h-4 w-4 text-jillr-neonPink" />;
-      default: return <Zap className="h-4 w-4 text-jillr-neonPurple" />;
-    }
-  };
-
-  const getCreatorBadge = (createdBy: 'user' | 'brand' | 'system') => {
-    switch (createdBy) {
-      case 'user':
-        return <Badge variant="outline" className="text-xs">Eigener Trigger</Badge>;
-      case 'brand':
-        return <Badge variant="outline" className="bg-jillr-neonBlue/10 text-jillr-neonBlue text-xs">Brand Trigger</Badge>;
-      case 'system':
-        return <Badge variant="outline" className="bg-jillr-neonPurple/10 text-jillr-neonPurple text-xs">AI empfohlen</Badge>;
-      default:
-        return null;
-    }
+  const getActionIcon = (actionType: string) => {
+    if (actionType.startsWith('reward_')) return <Award className="h-4 w-4 text-yellow-400" />;
+    if (actionType.startsWith('challenge_')) return <Star className="h-4 w-4 text-jillr-neonGreen" />;
+    if (actionType.startsWith('avatar_')) return <ActivityIcon className="h-4 w-4 text-jillr-neonPink" />;
+    return <Zap className="h-4 w-4 text-jillr-neonPurple" />;
   };
 
   if (isLoading) {
@@ -133,37 +116,38 @@ const TriggerDashboard: React.FC = () => {
                 >
                   <div>
                     <div className="flex items-center gap-2 mb-1">
-                      {getCreatorBadge(trigger.created_by)}
+                      <Badge variant="outline" className="text-xs">
+                        {trigger.category || 'Benutzerdefiniert'}
+                      </Badge>
                       <span className="text-xs text-gray-400">
                         {new Date(trigger.created_at).toLocaleDateString('de-DE')}
                       </span>
                     </div>
-                    <p className="font-medium mb-2">{trigger.description || 'Kein Titel'}</p>
+                    <p className="font-medium mb-2">{trigger.name || trigger.description || 'Kein Titel'}</p>
                     <div className="flex items-center gap-2">
                       <div className="flex items-center gap-1.5 bg-black/30 px-2 py-1 rounded text-xs">
-                        {getConditionIcon(trigger.trigger_condition.type)}
+                        {getConditionIcon(trigger.category || '')}
                         <span>WENN</span>
                       </div>
                       <div className="text-xs text-gray-300">
-                        {trigger.trigger_condition.type === 'time' && 'Uhrzeit: '}
-                        {trigger.trigger_condition.type === 'location' && 'Ort: '}
-                        {trigger.trigger_condition.type === 'activity' && 'Aktivität: '}
-                        {trigger.trigger_condition.type === 'weather' && 'Wetter: '}
-                        {trigger.trigger_condition.type === 'mood' && 'Stimmung: '}
-                        {trigger.trigger_condition.value}
+                        {trigger.target_value?.type === 'time' && 'Uhrzeit: '}
+                        {trigger.target_value?.type === 'location' && 'Ort: '}
+                        {trigger.target_value?.type === 'activity' && 'Aktivität: '}
+                        {trigger.target_value?.type === 'weather' && 'Wetter: '}
+                        {trigger.target_value?.type === 'mood' && 'Stimmung: '}
+                        {trigger.target_value?.value || ''}
                       </div>
                     </div>
                     <div className="flex items-center gap-2 mt-1">
                       <div className="flex items-center gap-1.5 bg-black/30 px-2 py-1 rounded text-xs">
-                        {getActionIcon(trigger.trigger_action.type)}
+                        {getActionIcon(trigger.action_type)}
                         <span>DANN</span>
                       </div>
                       <div className="text-xs text-gray-300">
-                        {trigger.trigger_action.type === 'reward' && 'Belohnung: '}
-                        {trigger.trigger_action.type === 'challenge' && 'Challenge: '}
-                        {trigger.trigger_action.type === 'avatar' && 'Avatar: '}
-                        {trigger.trigger_action.value}
-                        {trigger.trigger_action.amount && ` (${trigger.trigger_action.amount})`}
+                        {trigger.action_type?.split('_')[0] === 'reward' && 'Belohnung: '}
+                        {trigger.action_type?.split('_')[0] === 'challenge' && 'Challenge: '}
+                        {trigger.action_type?.split('_')[0] === 'avatar' && 'Avatar: '}
+                        {trigger.action_type?.split('_')[1] || ''}
                       </div>
                     </div>
                   </div>
@@ -186,40 +170,6 @@ const TriggerDashboard: React.FC = () => {
       </CardContent>
     </Card>
   );
-};
-
-// Add back the helper functions
-const getConditionIcon = (type: string) => {
-  switch (type) {
-    case 'time': return <Clock className="h-4 w-4 text-jillr-neonBlue" />;
-    case 'location': return <MapPin className="h-4 w-4 text-jillr-neonGreen" />;
-    case 'activity': return <ActivityIcon className="h-4 w-4 text-jillr-neonPurple" />;
-    case 'weather': return <CloudRain className="h-4 w-4 text-jillr-neonBlue" />;
-    case 'mood': return <SmilePlus className="h-4 w-4 text-jillr-neonPink" />;
-    default: return <Star className="h-4 w-4 text-yellow-400" />;
-  }
-};
-
-const getActionIcon = (type: string) => {
-  switch (type) {
-    case 'reward': return <Award className="h-4 w-4 text-yellow-400" />;
-    case 'challenge': return <Star className="h-4 w-4 text-jillr-neonGreen" />;
-    case 'avatar': return <ActivityIcon className="h-4 w-4 text-jillr-neonPink" />;
-    default: return <Zap className="h-4 w-4 text-jillr-neonPurple" />;
-  }
-};
-
-const getCreatorBadge = (createdBy: 'user' | 'brand' | 'system') => {
-  switch (createdBy) {
-    case 'user':
-      return <Badge variant="outline" className="text-xs">Eigener Trigger</Badge>;
-    case 'brand':
-      return <Badge variant="outline" className="bg-jillr-neonBlue/10 text-jillr-neonBlue text-xs">Brand Trigger</Badge>;
-    case 'system':
-      return <Badge variant="outline" className="bg-jillr-neonPurple/10 text-jillr-neonPurple text-xs">AI empfohlen</Badge>;
-    default:
-      return null;
-  }
 };
 
 export default TriggerDashboard;

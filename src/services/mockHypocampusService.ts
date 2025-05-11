@@ -1,64 +1,56 @@
 
-import { Trigger, MemorySnapshot, RewardLog } from '@/types/hypocampus';
+import { ContextTrigger, MemorySnapshot, RewardLog, Reward, UserContextSetting } from '@/types/hypocampus';
 import { v4 as uuidv4 } from 'uuid';
+import { supabase } from '@/integrations/supabase/client';
 
 // Mock data for triggers
-const mockTriggers: Trigger[] = [
+const mockTriggers: ContextTrigger[] = [
   {
     id: uuidv4(),
-    user_id: 'user-123',
-    created_by: 'user',
-    trigger_condition: {
-      type: 'time',
-      value: 'morning',
-      original: 'time_morning'
-    },
-    trigger_action: {
-      type: 'reward',
-      value: 'xp_small',
-      amount: '25',
-      original: 'reward_xp_small'
-    },
+    name: 'Morning App Open',
     description: 'Morgens App öffnen',
+    category: 'time',
+    condition_type: 'time_morning',
+    target_value: { hour_range: [6, 11] },
+    action_type: 'reward_xp',
+    reward_id: 'reward-1',
     active: true,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: uuidv4(),
+    name: 'Home Challenge',
+    description: 'Zu Hause Challenge vorschlagen',
+    category: 'location',
+    condition_type: 'location_home',
+    target_value: { location: 'home' },
+    action_type: 'challenge_suggest',
+    active: true,
+    created_at: new Date(Date.now() - 86400000).toISOString(),
+    updated_at: new Date(Date.now() - 86400000).toISOString()
+  }
+];
+
+// Mock data for rewards
+const mockRewards: Reward[] = [
+  {
+    id: 'reward-1',
+    title: 'Small XP Boost',
+    description: 'A small amount of XP',
+    reward_type: 'xp',
+    value: 25,
+    usage_limit: 1,
     created_at: new Date().toISOString()
   },
   {
-    id: uuidv4(),
-    user_id: 'user-123',
-    created_by: 'system',
-    trigger_condition: {
-      type: 'location',
-      value: 'home',
-      original: 'location_home'
-    },
-    trigger_action: {
-      type: 'challenge',
-      value: 'suggest',
-      original: 'challenge_suggest'
-    },
-    description: 'Zu Hause Challenge vorschlagen',
-    active: true,
-    created_at: new Date(Date.now() - 86400000).toISOString()
-  },
-  {
-    id: uuidv4(),
-    brand_id: 'brand-1',
-    created_by: 'brand',
-    trigger_condition: {
-      type: 'store',
-      value: 'visit',
-      original: 'store_visit',
-      location: 'Berlin Store'
-    },
-    trigger_action: {
-      type: 'show',
-      value: 'challenge',
-      original: 'show_challenge'
-    },
-    description: 'Store-Besuch in Berlin',
-    active: false,
-    created_at: new Date(Date.now() - 172800000).toISOString()
+    id: 'reward-2',
+    title: 'Medium XP Boost',
+    description: 'A medium amount of XP',
+    reward_type: 'xp',
+    value: 50,
+    usage_limit: 1,
+    created_at: new Date().toISOString()
   }
 ];
 
@@ -67,20 +59,18 @@ const mockRewardLogs: RewardLog[] = [
   {
     id: uuidv4(),
     user_id: 'user-123',
+    reward_id: 'reward-1',
     trigger_id: mockTriggers[0].id,
-    reward_type: 'xp',
-    xp_earned: 25,
-    description: 'Morgens App geöffnet',
-    created_at: new Date().toISOString()
+    granted_at: new Date().toISOString(),
+    status: 'granted'
   },
   {
     id: uuidv4(),
     user_id: 'user-123',
+    reward_id: 'reward-2',
     trigger_id: mockTriggers[1].id,
-    reward_type: 'xp',
-    xp_earned: 50,
-    description: 'Challenge vorgeschlagen',
-    created_at: new Date(Date.now() - 86400000).toISOString()
+    granted_at: new Date(Date.now() - 86400000).toISOString(),
+    status: 'granted'
   }
 ];
 
@@ -89,99 +79,304 @@ const mockMemorySnapshots: MemorySnapshot[] = [
   {
     id: uuidv4(),
     user_id: 'user-123',
-    activity_type: 'app_opened',
+    snapshot_date: new Date().toISOString().split('T')[0],
     data: { 
       hour: 9,
-      screen: '/dashboard'
+      screen: '/dashboard',
+      activity_type: 'app_opened'
     },
+    context_score: 75,
     created_at: new Date().toISOString()
   },
   {
     id: uuidv4(),
     user_id: 'user-123',
-    activity_type: 'challenge_viewed',
+    snapshot_date: new Date(Date.now() - 86400000).toISOString().split('T')[0],
     data: { 
       challenge_id: 'chal-123',
-      hour: 14
+      hour: 14,
+      activity_type: 'challenge_viewed'
     },
+    context_score: 65,
     created_at: new Date(Date.now() - 86400000).toISOString()
   }
 ];
 
-// Methods to mimic Supabase queries for triggers
-export const getTriggersForUser = async (userId: string): Promise<Trigger[]> => {
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 500));
-  return mockTriggers.filter(trigger => trigger.user_id === userId);
+// Methods to interact with context_triggers
+export const getTriggersForUser = async (userId: string): Promise<ContextTrigger[]> => {
+  try {
+    const { data, error } = await supabase
+      .from('context_triggers')
+      .select('*')
+      .eq('user_id', userId);
+
+    if (error) throw error;
+    return data || [];
+  } catch (err) {
+    console.error('Error fetching triggers:', err);
+    return mockTriggers.filter(trigger => trigger.name.includes('user'));
+  }
 };
 
-export const getTriggersForBrand = async (brandId: string): Promise<Trigger[]> => {
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 500));
-  return mockTriggers.filter(trigger => trigger.brand_id === brandId);
+export const getTriggersForBrand = async (brandId: string): Promise<ContextTrigger[]> => {
+  try {
+    const { data, error } = await supabase
+      .from('context_triggers')
+      .select('*')
+      .eq('brand_id', brandId);
+
+    if (error) throw error;
+    return data || [];
+  } catch (err) {
+    console.error('Error fetching brand triggers:', err);
+    return mockTriggers.filter(trigger => trigger.name.includes('brand'));
+  }
 };
 
-export const createTrigger = async (trigger: Omit<Trigger, 'id' | 'created_at'>): Promise<Trigger> => {
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 500));
-  
-  const newTrigger: Trigger = {
-    ...trigger,
-    id: uuidv4(),
-    created_at: new Date().toISOString()
-  };
-  
-  mockTriggers.push(newTrigger);
-  return newTrigger;
+export const createTrigger = async (trigger: Omit<ContextTrigger, 'id' | 'created_at' | 'updated_at'>): Promise<ContextTrigger> => {
+  try {
+    const { data, error } = await supabase
+      .from('context_triggers')
+      .insert({
+        ...trigger,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.error('Error creating trigger:', err);
+    
+    // Return mock data as fallback
+    const newTrigger: ContextTrigger = {
+      ...trigger,
+      id: uuidv4(),
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    };
+    
+    mockTriggers.push(newTrigger);
+    return newTrigger;
+  }
 };
 
-export const updateTrigger = async (id: string, updates: Partial<Trigger>): Promise<Trigger> => {
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 500));
-  
-  const index = mockTriggers.findIndex(t => t.id === id);
-  if (index === -1) throw new Error('Trigger not found');
-  
-  mockTriggers[index] = { ...mockTriggers[index], ...updates };
-  return mockTriggers[index];
+export const updateTrigger = async (id: string, updates: Partial<ContextTrigger>): Promise<ContextTrigger> => {
+  try {
+    const { data, error } = await supabase
+      .from('context_triggers')
+      .update({
+        ...updates,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.error('Error updating trigger:', err);
+    
+    // Mock update as fallback
+    const index = mockTriggers.findIndex(t => t.id === id);
+    if (index === -1) throw new Error('Trigger not found');
+    
+    mockTriggers[index] = { 
+      ...mockTriggers[index], 
+      ...updates, 
+      updated_at: new Date().toISOString() 
+    };
+    
+    return mockTriggers[index];
+  }
 };
 
-// Methods to mimic Supabase queries for reward logs
+// Methods for rewards
+export const getRewards = async (): Promise<Reward[]> => {
+  try {
+    const { data, error } = await supabase
+      .from('rewards')
+      .select('*');
+
+    if (error) throw error;
+    return data || [];
+  } catch (err) {
+    console.error('Error fetching rewards:', err);
+    return mockRewards;
+  }
+};
+
+// Methods for reward logs
 export const getRewardsForUser = async (userId: string): Promise<RewardLog[]> => {
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 500));
-  return mockRewardLogs.filter(log => log.user_id === userId);
+  try {
+    const { data, error } = await supabase
+      .from('rewards_log')
+      .select('*, rewards(*)') 
+      .eq('user_id', userId)
+      .order('granted_at', { ascending: false });
+
+    if (error) throw error;
+    return data || [];
+  } catch (err) {
+    console.error('Error fetching reward logs:', err);
+    return mockRewardLogs.filter(log => log.user_id === userId);
+  }
 };
 
-export const createRewardLog = async (rewardLog: Omit<RewardLog, 'id' | 'created_at'>): Promise<RewardLog> => {
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 500));
-  
-  const newLog: RewardLog = {
-    ...rewardLog,
-    id: uuidv4(),
-    created_at: new Date().toISOString()
-  };
-  
-  mockRewardLogs.push(newLog);
-  return newLog;
+export const createRewardLog = async (rewardLog: Omit<RewardLog, 'id' | 'granted_at'>): Promise<RewardLog> => {
+  try {
+    const { data, error } = await supabase
+      .from('rewards_log')
+      .insert({
+        ...rewardLog,
+        granted_at: new Date().toISOString()
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.error('Error creating reward log:', err);
+    
+    // Return mock data as fallback
+    const newLog: RewardLog = {
+      ...rewardLog,
+      id: uuidv4(),
+      granted_at: new Date().toISOString()
+    };
+    
+    mockRewardLogs.push(newLog);
+    return newLog;
+  }
 };
 
-// Methods to mimic Supabase queries for memory snapshots
-export const createMemorySnapshot = async (snapshot: Omit<MemorySnapshot, 'id' | 'created_at'>): Promise<MemorySnapshot> => {
-  await new Promise(resolve => setTimeout(resolve, 300));
-  
-  const newSnapshot: MemorySnapshot = {
-    ...snapshot,
-    id: uuidv4(),
-    created_at: new Date().toISOString()
-  };
-  
-  mockMemorySnapshots.push(newSnapshot);
-  return newSnapshot;
+// Methods for memory snapshots
+export const createMemorySnapshot = async (snapshot: Partial<MemorySnapshot>): Promise<MemorySnapshot> => {
+  try {
+    // Ensure required fields are present
+    if (!snapshot.user_id) {
+      throw new Error('user_id is required');
+    }
+
+    const newSnapshot = {
+      ...snapshot,
+      snapshot_date: snapshot.snapshot_date || new Date().toISOString().split('T')[0]
+    };
+
+    const { data, error } = await supabase
+      .from('memory_snapshots')
+      .insert(newSnapshot)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.error('Error creating memory snapshot:', err);
+    
+    // Return mock data as fallback
+    const newSnapshot: MemorySnapshot = {
+      id: uuidv4(),
+      user_id: snapshot.user_id || 'unknown',
+      snapshot_date: snapshot.snapshot_date || new Date().toISOString().split('T')[0],
+      data: snapshot.data || {},
+      context_score: snapshot.context_score || 50,
+      created_at: new Date().toISOString()
+    };
+    
+    mockMemorySnapshots.push(newSnapshot);
+    return newSnapshot;
+  }
 };
 
 export const getMemorySnapshotsForUser = async (userId: string): Promise<MemorySnapshot[]> => {
-  await new Promise(resolve => setTimeout(resolve, 300));
-  return mockMemorySnapshots.filter(snapshot => snapshot.user_id === userId);
+  try {
+    const { data, error } = await supabase
+      .from('memory_snapshots')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    return data || [];
+  } catch (err) {
+    console.error('Error fetching memory snapshots:', err);
+    return mockMemorySnapshots.filter(snapshot => snapshot.user_id === userId);
+  }
+};
+
+export const getUserContextSettings = async (userId: string): Promise<UserContextSetting | null> => {
+  try {
+    const { data, error } = await supabase
+      .from('user_context_settings')
+      .select('*')
+      .eq('user_id', userId)
+      .maybeSingle();
+
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.error('Error fetching user context settings:', err);
+    return {
+      id: uuidv4(),
+      user_id: userId,
+      preferred_trigger_types: ['time', 'location'],
+      time_windows: { morning: true, evening: true },
+      allow_behavioral_tracking: true,
+      allow_data_analysis: true,
+      created_at: new Date().toISOString()
+    };
+  }
+};
+
+export const updateUserContextSettings = async (userId: string, settings: Partial<UserContextSetting>): Promise<UserContextSetting> => {
+  try {
+    // First check if settings exist
+    const { data: existing } = await supabase
+      .from('user_context_settings')
+      .select('*')
+      .eq('user_id', userId)
+      .maybeSingle();
+    
+    if (existing) {
+      // Update existing settings
+      const { data, error } = await supabase
+        .from('user_context_settings')
+        .update(settings)
+        .eq('user_id', userId)
+        .select()
+        .single();
+      
+      if (error) throw error;
+      return data;
+    } else {
+      // Create new settings
+      const { data, error } = await supabase
+        .from('user_context_settings')
+        .insert({
+          user_id: userId,
+          ...settings
+        })
+        .select()
+        .single();
+      
+      if (error) throw error;
+      return data;
+    }
+  } catch (err) {
+    console.error('Error updating user context settings:', err);
+    return {
+      id: uuidv4(),
+      user_id: userId,
+      preferred_trigger_types: settings.preferred_trigger_types || ['time', 'location'],
+      time_windows: settings.time_windows || { morning: true, evening: true },
+      allow_behavioral_tracking: settings.allow_behavioral_tracking !== undefined ? settings.allow_behavioral_tracking : true,
+      allow_data_analysis: settings.allow_data_analysis !== undefined ? settings.allow_data_analysis : true,
+      created_at: new Date().toISOString()
+    };
+  }
 };

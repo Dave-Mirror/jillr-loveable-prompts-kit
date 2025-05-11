@@ -1,7 +1,6 @@
 
 import { useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { v4 as uuidv4 } from 'uuid';
 import { createMemorySnapshot } from '@/services/mockHypocampusService';
 
 // Activity types
@@ -39,11 +38,14 @@ export const useMemorySnapshots = () => {
         data.hour = new Date().getHours();
       }
       
-      // Create snapshot using our mock service
+      // Create snapshot using our service
       const snapshot = await createMemorySnapshot({
         user_id: user.id,
-        activity_type: activityType,
-        data: data
+        snapshot_date: new Date().toISOString().split('T')[0],
+        data: {
+          ...data,
+          activity_type: activityType
+        }
       });
       
       console.log('Memory snapshot captured:', snapshot);

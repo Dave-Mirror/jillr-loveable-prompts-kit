@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
-import { createTrigger } from '@/services/mockHypocampusService';
-import { TriggerCondition, TriggerAction } from '@/types/hypocampus';
+import { createTrigger, getRewards } from '@/services/mockHypocampusService';
+import { ContextTrigger, Reward } from '@/types/hypocampus';
 
 // Trigger condition options
 const whenOptions = [
@@ -42,9 +43,24 @@ const TriggerConfigurator: React.FC = () => {
   const [triggerAction, setTriggerAction] = useState('');
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [rewards, setRewards] = useState<Reward[]>([]);
   
   const { toast } = useToast();
   const { user } = useAuth();
+
+  useEffect(() => {
+    // Load available rewards
+    const loadRewards = async () => {
+      try {
+        const rewardsData = await getRewards();
+        setRewards(rewardsData);
+      } catch (err) {
+        console.error('Failed to load rewards:', err);
+      }
+    };
+    
+    loadRewards();
+  }, []);
 
   const handleSaveTrigger = async () => {
     if (!triggerCondition || !triggerAction) {
@@ -71,30 +87,39 @@ const TriggerConfigurator: React.FC = () => {
       // Parse the condition type and value
       const [conditionType, conditionValue] = triggerCondition.split('_');
       
-      // Create objects for the condition and action
-      const conditionObject: TriggerCondition = {
-        type: conditionType,
-        value: conditionValue,
-        original: triggerCondition
-      };
-      
+      // Parse action type and potential reward
       const [actionType, actionValue, actionAmount] = triggerAction.split('_');
-      const actionObject: TriggerAction = {
-        type: actionType,
-        value: actionValue,
-        amount: actionAmount || null,
-        original: triggerAction
+      
+      // Find matching reward if this is a reward action
+      let rewardId: string | undefined;
+      if (actionType === 'reward') {
+        const matchingReward = rewards.find(r => 
+          r.reward_type === 'xp' && 
+          ((actionValue === 'xp_small' && r.value === 25) ||
+           (actionValue === 'xp_medium' && r.value === 50) ||
+           (actionValue === 'xp_large' && r.value === 100))
+        );
+        rewardId = matchingReward?.id;
+      }
+      
+      // Prepare trigger object
+      const newTrigger: Omit<ContextTrigger, 'id' | 'created_at' | 'updated_at'> = {
+        user_id: user.id,
+        name: description || `${getConditionLabel(triggerCondition)} → ${getActionLabel(triggerAction)}`,
+        description: description || `Auto-generated trigger for ${conditionType} ${conditionValue}`,
+        category: conditionType,
+        condition_type: triggerCondition,
+        target_value: { 
+          type: conditionType,
+          value: conditionValue
+        },
+        action_type: triggerAction,
+        reward_id: rewardId,
+        active: true
       };
 
-      // Save trigger using our mock service
-      await createTrigger({
-        user_id: user.id,
-        created_by: 'user',
-        trigger_condition: conditionObject,
-        trigger_action: actionObject,
-        description: description || `${getConditionLabel(triggerCondition)} → ${getActionLabel(triggerAction)}`,
-        active: true
-      });
+      // Save trigger using our service
+      await createTrigger(newTrigger);
 
       toast({
         title: "Trigger gespeichert",

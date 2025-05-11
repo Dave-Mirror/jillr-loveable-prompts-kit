@@ -3,8 +3,8 @@ import { useEffect } from 'react';
 import useMemorySnapshots from './useMemorySnapshots';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
-import { v4 as uuidv4 } from 'uuid';
-import { createRewardLog } from '@/services/mockHypocampusService';
+import { createRewardLog, getRewards } from '@/services/mockHypocampusService';
+import { processTriggers } from '@/services/triggerProcessingService';
 
 export const useHypocampusSystem = () => {
   const { captureSnapshot } = useMemorySnapshots();
@@ -48,25 +48,48 @@ export const useHypocampusSystem = () => {
           activity: window.location.pathname.split('/')[1] || 'home'
         };
         
-        // Mock processing triggers
-        // In a real implementation, this would call the Supabase function
+        // Process triggers using the service
+        const matchedTriggers = await processTriggers(user.id, context);
         
-        // Simulate a reward occasionally (10% chance when on hypocampus page)
-        if (context.screen === '/hypocampus' && Math.random() < 0.1) {
-          const mockReward = {
-            user_id: user.id,
-            trigger_id: uuidv4(),
-            reward_type: 'xp',
-            xp_earned: 25,
-            description: 'Hypocampus-System erkundet'
-          };
+        // If we have any matching triggers, process their actions
+        if (matchedTriggers.length > 0) {
+          // Get available rewards
+          const rewards = await getRewards();
           
-          await createRewardLog(mockReward);
-          
-          toast({
-            title: "Trigger aktiviert!",
-            description: `Du hast ${mockReward.xp_earned} XP verdient!`,
-          });
+          // Process each matched trigger
+          for (const trigger of matchedTriggers) {
+            if (trigger.action_type.startsWith('reward_')) {
+              // Find the appropriate reward based on the action type
+              const rewardType = trigger.action_type.split('_')[1];
+              const rewardSize = trigger.action_type.split('_')[2];
+              
+              let xpValue = 25; // Default to small reward
+              
+              if (rewardSize === 'medium') xpValue = 50;
+              if (rewardSize === 'large') xpValue = 100;
+              
+              // Find matching reward in the rewards table
+              const matchingReward = rewards.find(r => 
+                r.reward_type === rewardType && r.value === xpValue
+              );
+              
+              if (matchingReward) {
+                // Log the reward
+                await createRewardLog({
+                  user_id: user.id,
+                  reward_id: matchingReward.id,
+                  trigger_id: trigger.id,
+                  status: 'granted'
+                });
+                
+                // Notify the user
+                toast({
+                  title: "Trigger aktiviert!",
+                  description: `Du hast ${xpValue} XP verdient!`,
+                });
+              }
+            }
+          }
         }
       } catch (err) {
         console.error('Error checking triggers:', err);
