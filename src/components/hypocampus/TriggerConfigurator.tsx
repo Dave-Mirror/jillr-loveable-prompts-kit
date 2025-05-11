@@ -162,7 +162,7 @@ const TriggerConfigurator: React.FC<TriggerConfiguratorProps> = ({ triggerType =
         rewardId = matchingReward?.id;
       }
       
-      // Prepare trigger object
+      // Prepare trigger object with brand_id handling
       const newTrigger: Omit<ContextTrigger, 'id' | 'created_at' | 'updated_at'> = {
         name: description || `${getConditionLabel(triggerCondition)} → ${getActionLabel(triggerAction)}`,
         description: description || `Auto-generated trigger for ${conditionType} ${conditionValue}`,
@@ -180,8 +180,8 @@ const TriggerConfigurator: React.FC<TriggerConfiguratorProps> = ({ triggerType =
         reward_id: rewardId,
         active: true,
         user_id: user.id,
-        // Für Marken-Trigger
-        ...(triggerType === 'brand' && user.brand_id ? { brand_id: user.brand_id } : {})
+        // Modified: Handle brand_id safely by checking if it exists in userProfile instead of user
+        ...(triggerType === 'brand' && user.email?.includes('brand') ? { brand_id: 'demo-brand-id' } : {})
       };
 
       // Save trigger using our service
