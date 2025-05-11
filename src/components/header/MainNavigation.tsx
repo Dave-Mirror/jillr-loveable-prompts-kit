@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { Compass, Zap, MapPin, User, ShoppingBag, Award, Brain, Map } from 'lucide-react';
+import { Compass, Zap, MapPin, User, ShoppingBag, Award, Brain, Map, Video, City } from 'lucide-react';
 
 interface NavItemProps {
   to: string;
@@ -38,10 +38,11 @@ export const MainNavigation = () => {
       <NavItem to="/explore" label="Entdecken" icon={<Compass className="w-4 h-4" />} />
       <NavItem to="/feed" label="Feed" icon={<Zap className="w-4 h-4" />} />
       <NavItem to="/map" label="Karte" icon={<MapPin className="w-4 h-4" />} />
-      <NavItem to="/city-clash" label="City Clash" icon={<Map className="w-4 h-4" />} />
+      <NavItem to="/city-clash" label="City Clash" icon={<City className="w-4 h-4" />} />
       <NavItem to="/shop" label="Shop" icon={<ShoppingBag className="w-4 h-4" />} />
       <NavItem to="/leaderboard" label="Rangliste" icon={<Award className="w-4 h-4" />} />
       <NavItem to="/hypocampus" label="Trigger" icon={<Brain className="w-4 h-4" />} />
+      <NavItem to="/creator-marketplace" label="Creator" icon={<Video className="w-4 h-4" />} />
       <NavItem to="/profile" label="Profil" icon={<User className="w-4 h-4" />} />
     </nav>
   );

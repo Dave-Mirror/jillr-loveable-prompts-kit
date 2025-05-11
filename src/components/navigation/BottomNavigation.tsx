@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   Home, Search, Trophy, Wallet, User, Map, Zap, ShoppingBag, Menu,
-  BarChart, Video, Settings, Bell, Heart, Database, Edit, Compass, Users
+  BarChart, Video, Settings, Bell, Heart, Database, Edit, Compass, Users, City
 } from 'lucide-react';
 import { 
   Sheet,
@@ -23,8 +23,8 @@ const BottomNavigation = () => {
   const mainNavItems = [
     { icon: Home, path: '/', label: 'Home' },
     { icon: Zap, path: '/explore', label: 'Entdecken' },
-    { icon: Compass, path: '/challenge-feed', label: 'Feed' },
-    { icon: Users, path: '/creator-marketplace', label: 'Creator' },
+    { icon: Compass, path: '/feed', label: 'Feed' },
+    { icon: City, path: '/city-clash', label: 'City Clash' },
     { icon: User, path: '/profile', label: 'Profil' }
   ];
   
@@ -39,12 +39,13 @@ const BottomNavigation = () => {
     ],
     'Entdecken': [
       { icon: Zap, path: '/explore', label: 'Entdecken' },
-      { icon: Map, path: '/livemap', label: 'Live Map' },
+      { icon: Map, path: '/map', label: 'Live Map' },
+      { icon: City, path: '/city-clash', label: 'City Clash' },
       { icon: Compass, path: '/dashboard', label: 'Challenge Explorer' },
       { icon: Search, path: '/search', label: 'Suche' }
     ],
     'Content': [
-      { icon: Compass, path: '/challenge-feed', label: 'Feed' },
+      { icon: Compass, path: '/feed', label: 'Feed' },
       { icon: Video, path: '/creator-dashboard', label: 'Creator Studio' },
       { icon: Edit, path: '/content-editor', label: 'Content Editor' },
       { icon: Heart, path: '/favorites', label: 'Favoriten' },

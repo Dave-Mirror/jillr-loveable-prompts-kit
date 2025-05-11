@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
-  Home, Zap, Trophy, Map, ShoppingBag, Menu
+  Home, Zap, Trophy, Map, ShoppingBag, Menu, Compass, City
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -22,9 +22,11 @@ const GuestMobileMenu: React.FC<GuestMobileMenuProps> = ({ mainNavItems }) => {
   const guestNavItems = [
     { name: 'Home', icon: Home, path: '/' },
     { name: 'Explore', icon: Zap, path: '/explore' },
-    { name: 'Live Map', icon: Map, path: '/livemap' },
-    { name: 'Leaderboard', icon: Trophy, path: '/leaderboard' },
-    { name: 'Shop', icon: ShoppingBag, path: '/shop' }
+    { name: 'Feed', icon: Compass, path: '/feed' },
+    { name: 'Live Map', icon: Map, path: '/map' },
+    { name: 'City Clash', icon: City, path: '/city-clash' },
+    { name: 'Shop', icon: ShoppingBag, path: '/shop' },
+    { name: 'Leaderboard', icon: Trophy, path: '/leaderboard' }
   ];
 
   return (
