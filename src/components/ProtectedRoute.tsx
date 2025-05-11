@@ -5,11 +5,11 @@ import { useAuth } from '@/hooks/useAuth';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
-  roleRequired?: string;
+  roleRequired?: 'user' | 'creator' | 'brand' | 'enterprise';
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, roleRequired }) => {
-  const { user, isLoading, session } = useAuth();
+  const { user, isLoading, session, userProfile } = useAuth();
   const location = useLocation();
 
   // Special case for wallet, profile, and hypocampus pages - allow access without authentication
@@ -34,19 +34,35 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, roleRequired 
     return <Navigate to="/auth" state={{ from: location }} replace />;
   }
 
-  // Role-based access control
-  if (roleRequired && user.role !== roleRequired) {
-    return (
-      <div className="container py-8">
-        <div className="bg-destructive/10 border border-destructive text-destructive p-4 rounded-md">
-          <h2 className="text-xl font-bold mb-2">Access Denied</h2>
-          <p>You need {roleRequired} permissions to access this page.</p>
+  // Role-based access control wenn eine Rolle erforderlich ist
+  if (roleRequired) {
+    const userRole = getUserRole(userProfile);
+    
+    // Prüfe, ob der Benutzer die erforderliche Rolle hat
+    if (roleRequired !== userRole) {
+      return (
+        <div className="container py-8">
+          <div className="bg-destructive/10 border border-destructive text-destructive p-4 rounded-md">
+            <h2 className="text-xl font-bold mb-2">Zugriff verweigert</h2>
+            <p>Du benötigst {roleRequired}-Berechtigungen, um auf diese Seite zuzugreifen.</p>
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
   }
 
   return <>{children}</>;
 };
+
+// Bestimmt die Rolle des Benutzers basierend auf dem Profil
+function getUserRole(userProfile: any): 'user' | 'creator' | 'brand' | 'enterprise' {
+  if (!userProfile) return 'user';
+  
+  if (userProfile.isEnterprise) return 'enterprise';
+  if (userProfile.email?.includes('brand') || userProfile.accountType === 'brand') return 'brand';
+  if (userProfile.isCreator) return 'creator';
+  
+  return 'user';
+}
 
 export default ProtectedRoute;

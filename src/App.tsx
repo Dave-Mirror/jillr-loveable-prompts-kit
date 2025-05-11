@@ -72,10 +72,22 @@ const App = () => (
                       <Route path="/city-clash" element={<CityClashPage />} />
                       <Route path="/challenge/:id" element={<ChallengeDetail />} />
                       
-                      {/* Erstellen-Kategorie */}
-                      <Route path="/dashboard" element={<Dashboard />} />
-                      <Route path="/content-editor" element={<ContentEditor />} />
-                      <Route path="/challenge-editor" element={<ChallengeEditor />} />
+                      {/* Erstellen-Kategorie - mit Rollenbeschränkungen */}
+                      <Route path="/dashboard" element={
+                        <ProtectedRoute>
+                          <Dashboard />
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/content-editor" element={
+                        <ProtectedRoute>
+                          <ContentEditor />
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/challenge-editor" element={
+                        <ProtectedRoute roleRequired="creator">
+                          <ChallengeEditor />
+                        </ProtectedRoute>
+                      } />
                       <Route path="/upload/:id" element={
                         <ProtectedRoute>
                           <Upload />
@@ -91,14 +103,34 @@ const App = () => (
                       <Route path="/profile" element={<Profile />} />
                       <Route path="/wallet" element={<Wallet />} />
                       
-                      {/* System-Seiten */}
-                      <Route path="/hypocampus" element={<HypocampusPage />} />
-                      <Route path="/trigger-management" element={<TriggerManagementPage />} />
+                      {/* System-Seiten - mit Rollenbeschränkungen */}
+                      <Route path="/hypocampus" element={
+                        <ProtectedRoute roleRequired="brand">
+                          <HypocampusPage />
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/trigger-management" element={
+                        <ProtectedRoute roleRequired="brand">
+                          <TriggerManagementPage />
+                        </ProtectedRoute>
+                      } />
 
                       {/* Umleitungen für alte Routen */}
-                      <Route path="/creator-dashboard" element={<Dashboard />} />
-                      <Route path="/brand-dashboard" element={<Dashboard />} />
-                      <Route path="/enterprise" element={<Dashboard />} />
+                      <Route path="/creator-dashboard" element={
+                        <ProtectedRoute>
+                          <Dashboard />
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/brand-dashboard" element={
+                        <ProtectedRoute roleRequired="brand">
+                          <Dashboard />
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/enterprise" element={
+                        <ProtectedRoute roleRequired="enterprise">
+                          <Dashboard />
+                        </ProtectedRoute>
+                      } />
                       <Route path="/livemap" element={<LiveMap />} />
                       <Route path="/challenge-feed" element={<ChallengeFeed />} />
 

@@ -18,31 +18,11 @@ interface MobileMenuProps {
 const MobileMenu: React.FC<MobileMenuProps> = ({ user, userProfile, onSignOut }) => {
   const location = useLocation();
   
-  // Main navigation items - grouped by category
-  const mainNavItems = [
-    { category: 'Entdecken', items: [
-      { name: 'Home', icon: Home, path: '/' },
-      { name: 'Explore', icon: Compass, path: '/explore' },
-      { name: 'Feed', icon: Zap, path: '/feed' },
-      { name: 'Live Map', icon: Map, path: '/map' },
-      { name: 'City Clash', icon: Building, path: '/city-clash' },
-    ]},
-    { category: 'Erstellen', items: [
-      { name: 'Dashboard', icon: Video, path: '/dashboard' },
-      { name: 'Content Editor', icon: Edit, path: '/content-editor' },
-      { name: 'Challenge Editor', icon: Edit, path: '/challenge-editor' },
-    ]},
-    { category: 'Community', items: [
-      { name: 'Leaderboard', icon: Award, path: '/leaderboard' },
-      { name: 'Creator', icon: Users, path: '/creator-marketplace' },
-      { name: 'Shop', icon: ShoppingBag, path: '/shop' },
-    ]},
-    { category: 'Persönlich', items: [
-      { name: 'Profil', icon: User, path: '/profile' },
-      { name: 'Wallet', icon: Wallet, path: '/wallet' },
-      { name: 'Einstellungen', icon: Settings, path: '/settings' },
-    ]}
-  ];
+  // Bestimme die Rolle des Benutzers
+  const userRole = getUserRole(userProfile);
+  
+  // Hole die rollenspezifischen Menüpunkte
+  const mainNavItems = getNavItemsForRole(userRole);
 
   return (
     <Sheet>
@@ -111,5 +91,74 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ user, userProfile, onSignOut })
     </Sheet>
   );
 };
+
+// Bestimmt die Rolle des Benutzers basierend auf dem Profil
+function getUserRole(userProfile: any): 'user' | 'creator' | 'brand' | 'enterprise' {
+  if (!userProfile) return 'user';
+  
+  if (userProfile.isEnterprise) return 'enterprise';
+  if (userProfile.email?.includes('brand') || userProfile.accountType === 'brand') return 'brand';
+  if (userProfile.isCreator) return 'creator';
+  
+  return 'user';
+}
+
+// Gibt rollenspezifische Navigationsitems zurück
+function getNavItemsForRole(role: string) {
+  // Basis-Navigation für alle Benutzerrollen
+  const navItems = [
+    { 
+      category: 'Entdecken', 
+      items: [
+        { name: 'Home', icon: Home, path: '/' },
+        { name: 'Explore', icon: Compass, path: '/explore' },
+        { name: 'Feed', icon: Zap, path: '/feed' },
+        { name: 'Live Map', icon: Map, path: '/map' },
+        { name: 'City Clash', icon: Building, path: '/city-clash' },
+      ]
+    },
+    { 
+      category: 'Community', 
+      items: [
+        { name: 'Leaderboard', icon: Award, path: '/leaderboard' },
+        { name: 'Creator', icon: Users, path: '/creator-marketplace' },
+        { name: 'Shop', icon: ShoppingBag, path: '/shop' },
+      ]
+    },
+    { 
+      category: 'Persönlich', 
+      items: [
+        { name: 'Profil', icon: User, path: '/profile' },
+        { name: 'Wallet', icon: Wallet, path: '/wallet' },
+        { name: 'Einstellungen', icon: Settings, path: '/settings' },
+      ]
+    }
+  ];
+
+  // Füge rollenspezifische Menüpunkte hinzu
+  if (role === 'creator' || role === 'brand' || role === 'enterprise') {
+    navItems.splice(1, 0, {
+      category: 'Erstellen',
+      items: [
+        { name: 'Dashboard', icon: Video, path: '/dashboard' },
+        { name: 'Content Editor', icon: Edit, path: '/content-editor' },
+        { name: 'Challenge Editor', icon: Edit, path: '/challenge-editor' },
+      ]
+    });
+  }
+
+  // Spezielle Menüpunkte für Brands und Enterprises
+  if (role === 'brand' || role === 'enterprise') {
+    navItems.splice(2, 0, {
+      category: 'Marketing',
+      items: [
+        { name: 'Hypocampus', icon: Zap, path: '/hypocampus' },
+        { name: 'Trigger Management', icon: Zap, path: '/trigger-management' },
+      ]
+    });
+  }
+
+  return navItems;
+}
 
 export default MobileMenu;
