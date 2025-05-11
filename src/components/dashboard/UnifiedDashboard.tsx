@@ -38,6 +38,11 @@ const UnifiedDashboard = ({ initialActiveTab = 'user' }: UnifiedDashboardProps) 
     }
   };
 
+  // Navigation handler for creating triggers
+  const handleCreateTrigger = () => {
+    navigate('/trigger-management', { state: { initialTab: 'create' } });
+  };
+
   return (
     <div>
       <div className="flex flex-wrap gap-2 mb-6">
@@ -47,6 +52,13 @@ const UnifiedDashboard = ({ initialActiveTab = 'user' }: UnifiedDashboardProps) 
           className="flex items-center gap-2"
         >
           <Video className="h-4 w-4" /> Challenge erstellen
+        </Button>
+        <Button 
+          variant="outline" 
+          onClick={handleCreateTrigger}
+          className="flex items-center gap-2"
+        >
+          <Zap className="h-4 w-4" /> Trigger erstellen
         </Button>
       </div>
 

@@ -1,10 +1,11 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Info, Filter, Settings } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
+import { useLocation } from 'react-router-dom';
 import TriggerConfigurator from '@/components/hypocampus/TriggerConfigurator';
 import TriggerFilter from '@/components/hypocampus/trigger-management/TriggerFilter';
 import TriggerDashboard from '@/components/hypocampus/TriggerDashboard';
@@ -14,10 +15,18 @@ import TriggerRecommendations from '@/components/hypocampus/trigger-management/T
 
 const TriggerManagementPage: React.FC = () => {
   const { user } = useAuth();
+  const location = useLocation();
   const [userRole, setUserRole] = useState<'personal' | 'brand'>(
     user?.email?.includes('brand') ? 'brand' : 'personal'
   );
   const [activeTab, setActiveTab] = useState('create');
+
+  // Check if we were navigated here with an initial tab parameter
+  useEffect(() => {
+    if (location.state && location.state.initialTab) {
+      setActiveTab(location.state.initialTab);
+    }
+  }, [location.state]);
 
   return (
     <div className="container mx-auto py-8 px-4 max-w-7xl">

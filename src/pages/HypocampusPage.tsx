@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import TriggerConfigurator from '@/components/hypocampus/TriggerConfigurator';
 import TriggerDashboard from '@/components/hypocampus/TriggerDashboard';
 import TriggerRewardHistory from '@/components/hypocampus/TriggerRewardHistory';
@@ -24,7 +25,12 @@ import {
 
 const HypocampusPage: React.FC = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [activeView, setActiveView] = useState<'personal' | 'brand'>('personal');
+
+  const handleCreateTrigger = () => {
+    navigate('/trigger-management', { state: { initialTab: 'create' } });
+  };
 
   return (
     <div className="container max-w-6xl mx-auto py-8 px-4">
@@ -37,12 +43,13 @@ const HypocampusPage: React.FC = () => {
         </div>
         
         <div className="flex items-center gap-3">
-          <Link to="/trigger-management">
-            <Button className="flex items-center gap-2 bg-jillr-neonPurple hover:bg-jillr-neonPurple/90">
-              <Sliders size={16} />
-              <span>Erweitertes Trigger-Management</span>
-            </Button>
-          </Link>
+          <Button 
+            className="flex items-center gap-2 bg-jillr-neonPurple hover:bg-jillr-neonPurple/90"
+            onClick={handleCreateTrigger}
+          >
+            <Sliders size={16} />
+            <span>Erweitertes Trigger-Management</span>
+          </Button>
           
           <TooltipProvider>
             <Tooltip>

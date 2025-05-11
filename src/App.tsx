@@ -67,7 +67,7 @@ const App = () => (
                 <main className="flex-1 pt-16 md:pb-0 pb-16">
                   <PageTransition>
                     <Routes>
-                      {/* Hauptrouten */}
+                      {/* Hauptrouten - öffentlich zugänglich */}
                       <Route path="/" element={<Index />} />
                       <Route path="/auth" element={<Auth />} />
                       <Route path="/auth/callback" element={<AuthCallback />} />
@@ -79,10 +79,14 @@ const App = () => (
                       <Route path="/city-clash" element={<CityClashPage />} />
                       <Route path="/challenge/:id" element={<ChallengeDetail />} />
                       
-                      {/* Erstellen-Kategorie - ohne Rollenbeschränkungen für Demo */}
+                      {/* Erstellen-Kategorie - rollenspezifisch aber öffentlich für Demo */}
                       <Route path="/dashboard" element={<Dashboard />} />
                       <Route path="/content-editor" element={<ContentEditor />} />
-                      <Route path="/challenge-editor" element={<ChallengeEditor />} />
+                      <Route path="/challenge-editor" element={
+                        <ProtectedRoute roleRequired="creator">
+                          <ChallengeEditor />
+                        </ProtectedRoute>
+                      } />
                       <Route path="/upload/:id" element={
                         <ProtectedRoute>
                           <Upload />
@@ -98,7 +102,7 @@ const App = () => (
                       <Route path="/profile" element={<Profile />} />
                       <Route path="/wallet" element={<Wallet />} />
                       
-                      {/* System-Seiten - ohne Rollenbeschränkungen für Demo */}
+                      {/* System-Seiten - öffentlich zugänglich für Demo, normalerweise rollenspezifisch */}
                       <Route path="/hypocampus" element={<HypocampusPage />} />
                       <Route path="/trigger-management" element={<TriggerManagementPage />} />
 

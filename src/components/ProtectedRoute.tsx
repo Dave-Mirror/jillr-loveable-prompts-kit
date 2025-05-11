@@ -5,7 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
-  roleRequired?: 'user' | 'creator' | 'brand' | 'enterprise';
+  roleRequired?: 'user' | 'creator' | 'brand' | 'enterprise' | 'admin';
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, roleRequired }) => {
@@ -17,8 +17,21 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, roleRequired 
     isLoading, 
     hasUser: !!user, 
     hasSession: !!session,
-    path: location.pathname
+    path: location.pathname,
+    roleRequired
   });
+
+  // Determine the user's role
+  const getUserRole = (): 'user' | 'creator' | 'brand' | 'enterprise' | 'admin' => {
+    if (!userProfile) return 'user';
+    
+    if (userProfile.isAdmin) return 'admin';
+    if (userProfile.isEnterprise) return 'enterprise';
+    if (userProfile.email?.includes('brand') || userProfile.accountType === 'brand') return 'brand';
+    if (userProfile.isCreator) return 'creator';
+    
+    return 'user';
+  };
 
   // Öffentlich zugängliche Routen, die keine Authentifizierung erfordern
   const publicRoutes = [
@@ -32,12 +45,13 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, roleRequired 
     '/leaderboard',
     '/creator-marketplace',
     '/shop',
-    '/dashboard',  // Make dashboard publicly accessible
-    '/content-editor', // Make content editor publicly accessible
-    '/creator-dashboard', // For redirects
-    '/brand-dashboard', // For redirects
-    '/enterprise', // For redirects
-    '/challenge-editor' // Make challenge editor publicly accessible
+    '/dashboard',
+    '/content-editor',
+    '/creator-dashboard',
+    '/brand-dashboard',
+    '/enterprise',
+    '/challenge-editor',
+    '/trigger-management'
   ];
   
   // Prüfen, ob die aktuelle Route öffentlich ist
@@ -58,8 +72,23 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, roleRequired 
     );
   }
 
+  // Role-based protection
+  if (roleRequired && user) {
+    const userRole = getUserRole();
+    
+    // Special case for admin (can access everything)
+    if (userRole === 'admin') {
+      return <>{children}</>;
+    }
+    
+    // Check if user has required role
+    if (userRole !== roleRequired) {
+      console.log(`User role ${userRole} doesn't match required role ${roleRequired}, redirecting to dashboard`);
+      return <Navigate to="/dashboard" replace />;
+    }
+  }
+
   // For demo purposes, bypass authentication checks in development
-  // This is a temporary solution to ensure dashboards are accessible
   console.log("Bypassing auth check for demonstration purposes");
   return <>{children}</>;
 };
