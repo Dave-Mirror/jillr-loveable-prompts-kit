@@ -3,11 +3,12 @@ import React, { useState, useEffect } from 'react';
 import ChallengeGrid from '@/components/explore/ChallengeGrid';
 import ExplorePromoBanner from '@/components/explore/ExplorePromoBanner';
 import PageContainer from '@/components/navigation/PageContainer';
-import ChallengeFilter from '@/components/explore/ChallengeFilter';
+import FilterBar from '@/components/explore/FilterBar';
 import { getChallenges } from '@/utils/challenge/rewards/api';
 import { Challenge, IndustryType, ChallengeType } from '@/utils/challenge/rewards/types';
 import { useToast } from '@/hooks/use-toast';
-import { Sparkles, Filter, Compass } from 'lucide-react';
+import { Sparkles, Compass } from 'lucide-react';
+import EmptyState from '@/components/explore/EmptyState';
 
 const Explore = () => {
   // State für Filter und Challenges
@@ -17,12 +18,24 @@ const Explore = () => {
   const [challenges, setChallenges] = useState<Challenge[]>([]);
   const [filteredChallenges, setFilteredChallenges] = useState<Challenge[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [showFilters, setShowFilters] = useState(false);
   const { toast } = useToast();
   
   // Verfügbare Filter-Optionen
   const [availableIndustries, setAvailableIndustries] = useState<string[]>([]);
   const [availableChallengeTypes, setAvailableChallengeTypes] = useState<string[]>([]);
+  
+  // Zähler für aktive Filter
+  const activeFiltersCount = 
+    (industry !== 'all' ? 1 : 0) + 
+    (challengeType !== 'all' ? 1 : 0) + 
+    (sortBy !== 'latest' ? 1 : 0);
+
+  // Reset-Funktion für alle Filter
+  const resetFilters = () => {
+    setIndustry('all');
+    setChallengeType('all');
+    setSortBy('latest');
+  };
 
   // Laden der Challenges beim ersten Rendering
   useEffect(() => {
@@ -138,28 +151,20 @@ const Explore = () => {
                 Entdecke Challenges
               </span>
             </h1>
-
-            <button 
-              onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-jillr-border bg-jillr-darkAccent hover:bg-jillr-darkLight text-sm font-medium transition-all"
-            >
-              <Filter className="h-4 w-4" />
-              Filter {showFilters ? 'ausblenden' : 'anzeigen'}
-            </button>
           </div>
           
-          {showFilters && (
-            <ChallengeFilter
-              industry={industry}
-              challengeType={challengeType}
-              sortBy={sortBy}
-              setIndustry={setIndustry}
-              setChallengeType={setChallengeType}
-              setSortBy={setSortBy}
-              availableIndustries={availableIndustries}
-              availableChallengeTypes={availableChallengeTypes}
-            />
-          )}
+          <FilterBar
+            industry={industry}
+            challengeType={challengeType}
+            sortBy={sortBy}
+            setIndustry={setIndustry}
+            setChallengeType={setChallengeType}
+            setSortBy={setSortBy}
+            availableIndustries={availableIndustries}
+            availableChallengeTypes={availableChallengeTypes}
+            activeFiltersCount={activeFiltersCount}
+            resetFilters={resetFilters}
+          />
           
           {isLoading ? (
             <div className="text-center py-16">
@@ -180,11 +185,7 @@ const Explore = () => {
                     Mit deinen aktuellen Filtereinstellungen wurden keine Challenges gefunden. Versuche andere Filter oder schau später wieder vorbei.
                   </p>
                   <button 
-                    onClick={() => {
-                      setIndustry('all');
-                      setChallengeType('all');
-                      setSortBy('latest');
-                    }}
+                    onClick={resetFilters}
                     className="px-4 py-2 bg-jillr-neonPurple/20 hover:bg-jillr-neonPurple/30 text-jillr-neonPurple border border-jillr-neonPurple/30 rounded-lg transition-all"
                   >
                     Filter zurücksetzen

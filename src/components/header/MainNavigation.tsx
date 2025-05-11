@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { Compass, Zap, MapPin, User, ShoppingBag, Award, Brain, Map, Video, Building } from 'lucide-react';
+import { Compass, Zap, Map, ShoppingBag, Award, Video, Building } from 'lucide-react';
 
 interface NavItemProps {
   to: string;
@@ -37,12 +37,11 @@ export const MainNavigation = () => {
     <nav className="hidden xs:flex items-center space-x-1">
       <NavItem to="/explore" label="Entdecken" icon={<Compass className="w-4 h-4" />} />
       <NavItem to="/feed" label="Feed" icon={<Zap className="w-4 h-4" />} />
-      <NavItem to="/map" label="Karte" icon={<MapPin className="w-4 h-4" />} />
+      <NavItem to="/map" label="Karte" icon={<Map className="w-4 h-4" />} />
       <NavItem to="/city-clash" label="City Clash" icon={<Building className="w-4 h-4" />} />
       <NavItem to="/shop" label="Shop" icon={<ShoppingBag className="w-4 h-4" />} />
       <NavItem to="/leaderboard" label="Rangliste" icon={<Award className="w-4 h-4" />} />
       <NavItem to="/dashboard" label="Dashboard" icon={<Video className="w-4 h-4" />} />
-      <NavItem to="/profile" label="Profil" icon={<User className="w-4 h-4" />} />
     </nav>
   );
 };

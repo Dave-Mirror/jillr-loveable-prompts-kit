@@ -18,16 +18,15 @@ interface RightSectionProps {
 }
 
 const RightSection: React.FC<RightSectionProps> = ({ user, userProfile, signOut }) => {
-  // Vereinfachte Navigation mit konsolidierten Routen
+  // Navigation-Items für Mobile-Menü
   const mainNavItems = [
     { name: 'Home', icon: Home, path: '/' },
-    { name: 'Explore', icon: Zap, path: '/explore' },
-    { name: 'Feed', icon: Compass, path: '/feed' },
-    { name: 'Live Map', icon: Map, path: '/map' },
+    { name: 'Explore', icon: Compass, path: '/explore' },
+    { name: 'Feed', icon: Zap, path: '/feed' },
+    { name: 'Map', icon: Map, path: '/map' },
     { name: 'City Clash', icon: Building, path: '/city-clash' },
     { name: 'Leaderboard', icon: Trophy, path: '/leaderboard' },
-    { name: 'Shop', icon: ShoppingBag, path: '/shop' },
-    { name: 'Dashboard', icon: Compass, path: '/dashboard' }
+    { name: 'Shop', icon: ShoppingBag, path: '/shop' }
   ];
 
   return (
