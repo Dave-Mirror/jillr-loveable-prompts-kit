@@ -8,29 +8,41 @@ import AuthProvider from "./providers/AuthProvider";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AvatarProvider } from "./contexts/AvatarContext";
 import Header from "./components/Header";
-import Dashboard from "./pages/Dashboard";
-import Profile from "./pages/Profile";
-import Explore from "./pages/Explore";
-import ChallengeDetail from "./pages/ChallengeDetail";
-import Upload from "./pages/Upload";
+import BottomNavigation from "./components/navigation/BottomNavigation";
+import PageTransition from "./components/navigation/PageTransition";
+import HypocampusProvider from "./providers/HypocampusProvider";
+
+// Hauptseiten
+import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import AuthCallback from "./pages/AuthCallback";
 import NotFound from "./pages/NotFound";
-import Wallet from "./pages/Wallet";
-import Shop from "./pages/Shop";
-import Leaderboard from "./pages/Leaderboard";
+
+// Entdecken-Kategorie
+import Explore from "./pages/Explore";
+import ChallengeFeed from "./pages/ChallengeFeed";
 import LiveMap from "./pages/LiveMap";
-import Index from "./pages/Index";
+import CityClashPage from "./pages/CityClashPage";
+import ChallengeDetail from "./pages/ChallengeDetail";
+
+// Erstellen-Kategorie
+import Dashboard from "./pages/Dashboard";
 import ContentEditor from "./pages/ContentEditor";
 import ChallengeEditor from "./pages/ChallengeEditor";
-import BottomNavigation from "./components/navigation/BottomNavigation";
-import PageTransition from "./components/navigation/PageTransition";
+import Upload from "./pages/Upload";
+
+// Community-Kategorie
+import Shop from "./pages/Shop";
+import Leaderboard from "./pages/Leaderboard";
 import CreatorMarketplace from "./pages/CreatorMarketplace";
-import ChallengeFeed from "./pages/ChallengeFeed";
+
+// Persönlich-Kategorie
+import Profile from "./pages/Profile";
+import Wallet from "./pages/Wallet";
+
+// System-Seiten
 import HypocampusPage from "./pages/HypocampusPage";
 import TriggerManagementPage from "./pages/TriggerManagementPage";
-import HypocampusProvider from "./providers/HypocampusProvider";
-import CityClashPage from "./pages/CityClashPage";
 
 const queryClient = new QueryClient();
 
@@ -48,29 +60,40 @@ const App = () => (
                 <main className="flex-1 pt-16 md:pb-0 pb-16">
                   <PageTransition>
                     <Routes>
+                      {/* Hauptrouten */}
                       <Route path="/" element={<Index />} />
-                      <Route path="/dashboard" element={<Dashboard />} />
-                      <Route path="/profile" element={<Profile />} />
+                      <Route path="/auth" element={<Auth />} />
+                      <Route path="/auth/callback" element={<AuthCallback />} />
+                      
+                      {/* Entdecken-Kategorie */}
                       <Route path="/explore" element={<Explore />} />
+                      <Route path="/feed" element={<ChallengeFeed />} />
+                      <Route path="/map" element={<LiveMap />} />
+                      <Route path="/city-clash" element={<CityClashPage />} />
                       <Route path="/challenge/:id" element={<ChallengeDetail />} />
+                      
+                      {/* Erstellen-Kategorie */}
+                      <Route path="/dashboard" element={<Dashboard />} />
+                      <Route path="/content-editor" element={<ContentEditor />} />
+                      <Route path="/challenge-editor" element={<ChallengeEditor />} />
                       <Route path="/upload/:id" element={
                         <ProtectedRoute>
                           <Upload />
                         </ProtectedRoute>
                       } />
-                      <Route path="/wallet" element={<Wallet />} />
+                      
+                      {/* Community-Kategorie */}
                       <Route path="/shop" element={<Shop />} />
-                      <Route path="/map" element={<LiveMap />} />
-                      <Route path="/city-clash" element={<CityClashPage />} />
-                      <Route path="/content-editor" element={<ContentEditor />} />
-                      <Route path="/challenge-editor" element={<ChallengeEditor />} />
-                      <Route path="/creator-marketplace" element={<CreatorMarketplace />} />
-                      <Route path="/feed" element={<ChallengeFeed />} />
                       <Route path="/leaderboard" element={<Leaderboard />} />
+                      <Route path="/creator-marketplace" element={<CreatorMarketplace />} />
+                      
+                      {/* Persönlich-Kategorie */}
+                      <Route path="/profile" element={<Profile />} />
+                      <Route path="/wallet" element={<Wallet />} />
+                      
+                      {/* System-Seiten */}
                       <Route path="/hypocampus" element={<HypocampusPage />} />
                       <Route path="/trigger-management" element={<TriggerManagementPage />} />
-                      <Route path="/auth" element={<Auth />} />
-                      <Route path="/auth/callback" element={<AuthCallback />} />
 
                       {/* Umleitungen für alte Routen */}
                       <Route path="/creator-dashboard" element={<Dashboard />} />
@@ -79,7 +102,7 @@ const App = () => (
                       <Route path="/livemap" element={<LiveMap />} />
                       <Route path="/challenge-feed" element={<ChallengeFeed />} />
 
-                      {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                      {/* 404 Seite */}
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </PageTransition>

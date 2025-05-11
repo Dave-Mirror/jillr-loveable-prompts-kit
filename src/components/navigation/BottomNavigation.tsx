@@ -1,9 +1,9 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
-  Home, Search, Trophy, Wallet, User, Map, Zap, ShoppingBag, Menu,
-  BarChart, Video, Settings, Bell, Heart, Database, Edit, Compass, Users, Building
+  Home, Compass, Users, Map, User, Zap, ShoppingBag, Trophy,
+  Video, Edit, Building
 } from 'lucide-react';
 import { 
   Sheet,
@@ -17,47 +17,42 @@ import { motion } from 'framer-motion';
 
 const BottomNavigation = () => {
   const location = useLocation();
-  const [activeMenu, setActiveMenu] = useState<string | null>(null);
   
   // Hauptnavigationselemente für die untere Leiste - auf 5 Elemente beschränkt
   const mainNavItems = [
     { icon: Home, path: '/', label: 'Home' },
-    { icon: Zap, path: '/explore', label: 'Entdecken' },
-    { icon: Compass, path: '/feed', label: 'Feed' },
-    { icon: Building, path: '/city-clash', label: 'City Clash' },
+    { icon: Compass, path: '/explore', label: 'Entdecken' },
+    { icon: Video, path: '/dashboard', label: 'Dashboard' },
+    { icon: Map, path: '/map', label: 'Karte' },
     { icon: User, path: '/profile', label: 'Profil' }
   ];
   
-  // Zusätzliche Elemente, die in Kategorien angezeigt werden
+  // Kategorisierte Navigation im Einklang mit der Hauptnavigation
   const categorizedItems = {
-    'Persönlich': [
-      { icon: User, path: '/profile', label: 'Profil' },
-      { icon: Wallet, path: '/wallet', label: 'Wallet' },
-      { icon: Trophy, path: '/leaderboard', label: 'Rangliste' },
-      { icon: Database, path: '/profile?tab=data', label: 'Meine Daten' },
-      { icon: Bell, path: '/notifications', label: 'Benachrichtigungen' }
-    ],
     'Entdecken': [
-      { icon: Zap, path: '/explore', label: 'Entdecken' },
+      { icon: Compass, path: '/explore', label: 'Entdecken' },
+      { icon: Zap, path: '/feed', label: 'Feed' },
       { icon: Map, path: '/map', label: 'Live Map' },
       { icon: Building, path: '/city-clash', label: 'City Clash' },
-      { icon: Compass, path: '/dashboard', label: 'Dashboard' },
-      { icon: Search, path: '/search', label: 'Suche' }
     ],
-    'Content': [
-      { icon: Compass, path: '/feed', label: 'Feed' },
-      { icon: Video, path: '/dashboard', label: 'Creator Studio' },
+    'Erstellen': [
+      { icon: Video, path: '/dashboard', label: 'Dashboard' },
       { icon: Edit, path: '/content-editor', label: 'Content Editor' },
-      { icon: Heart, path: '/favorites', label: 'Favoriten' },
-      { icon: Users, path: '/creator-marketplace', label: 'Creator Marketplace' }
+      { icon: Edit, path: '/challenge-editor', label: 'Challenge Editor' }
     ],
-    'Weitere': [
-      { icon: BarChart, path: '/dashboard', label: 'Brand Portal' },
-      { icon: Edit, path: '/challenge-editor', label: 'Challenge Editor' },
+    'Community': [
+      { icon: Trophy, path: '/leaderboard', label: 'Rangliste' },
+      { icon: Users, path: '/creator-marketplace', label: 'Creator' },
       { icon: ShoppingBag, path: '/shop', label: 'Shop' },
-      { icon: Settings, path: '/settings', label: 'Einstellungen' }
+    ],
+    'Persönlich': [
+      { icon: User, path: '/profile', label: 'Profil' },
+      { icon: Home, path: '/wallet', label: 'Wallet' }
     ]
   };
+  
+  // Um Zustand zwischen MenuAbschnitten zu speichern
+  const [activeMenu, setActiveMenu] = React.useState<string | null>(null);
 
   // Funktion zum Umschalten von Menüabschnitten
   const handleMenuClick = (menu: string) => {
@@ -93,7 +88,7 @@ const BottomNavigation = () => {
         })}
       </div>
 
-      {/* Schnellzugriff-Menü */}
+      {/* Kategorisiertes Menu */}
       <Sheet>
         <SheetTrigger asChild className="absolute -top-16 right-4 rounded-full shadow-lg md:hidden">
           <Button
@@ -101,13 +96,13 @@ const BottomNavigation = () => {
             variant="outline"
             className="bg-jillr-darkBlue/80 backdrop-blur-md border border-jillr-neonPurple/30 h-12 w-12 rounded-full shadow-glow"
           >
-            <Menu size={22} className="text-jillr-neonPurple" />
+            <Compass size={22} className="text-jillr-neonPurple" />
           </Button>
         </SheetTrigger>
         <SheetContent side="bottom" className="bg-jillr-darkBlue/95 backdrop-blur-xl border-jillr-neonPurple/20 rounded-t-xl max-h-[85vh] h-auto">
           <div className="pt-2 pb-4">
             <div className="w-12 h-1 bg-white/20 rounded-full mx-auto mb-6" />
-            <h3 className="text-lg font-semibold text-center mb-6">jillr Menu</h3>
+            <h3 className="text-lg font-semibold text-center mb-6">jillr Navigation</h3>
             
             <ScrollArea className="h-[calc(85vh-120px)]">
               {Object.keys(categorizedItems).map((category) => (

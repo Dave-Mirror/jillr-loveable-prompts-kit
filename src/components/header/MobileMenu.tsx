@@ -1,9 +1,10 @@
+
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   Home, Compass, Zap, Trophy, Map, ShoppingBag, 
-  Wallet, Video, LogOut, Menu, Coins, Award, Edit, PenLine,
-  User, Settings, Bell, Heart, Star
+  Wallet, Video, LogOut, Menu, Coins, Award, Edit, 
+  User, Settings, Users, Building
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -19,38 +20,28 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ user, userProfile, onSignOut })
   
   // Main navigation items - grouped by category
   const mainNavItems = [
-    { category: 'Hauptnavigation', items: [
+    { category: 'Entdecken', items: [
       { name: 'Home', icon: Home, path: '/' },
-      { name: 'Explore', icon: Zap, path: '/explore' },
-      { name: 'Feed', icon: Compass, path: '/feed' },
+      { name: 'Explore', icon: Compass, path: '/explore' },
+      { name: 'Feed', icon: Zap, path: '/feed' },
       { name: 'Live Map', icon: Map, path: '/map' },
-      { name: 'City Clash', icon: Trophy, path: '/city-clash' },
+      { name: 'City Clash', icon: Building, path: '/city-clash' },
+    ]},
+    { category: 'Erstellen', items: [
+      { name: 'Dashboard', icon: Video, path: '/dashboard' },
+      { name: 'Content Editor', icon: Edit, path: '/content-editor' },
+      { name: 'Challenge Editor', icon: Edit, path: '/challenge-editor' },
+    ]},
+    { category: 'Community', items: [
+      { name: 'Leaderboard', icon: Award, path: '/leaderboard' },
+      { name: 'Creator', icon: Users, path: '/creator-marketplace' },
       { name: 'Shop', icon: ShoppingBag, path: '/shop' },
-      { name: 'Leaderboard', icon: Award, path: '/leaderboard' }
     ]},
     { category: 'Persönlich', items: [
-      { name: 'Wallet', icon: Wallet, path: '/wallet' },
       { name: 'Profil', icon: User, path: '/profile' },
-      { name: 'Challenge Explorer', icon: Compass, path: '/dashboard' },
+      { name: 'Wallet', icon: Wallet, path: '/wallet' },
       { name: 'Einstellungen', icon: Settings, path: '/settings' },
-      { name: 'Favoriten', icon: Heart, path: '/favorites' }
     ]}
-  ];
-
-  // Special items based on user type
-  const specialNavItems = [
-    ...(user?.email?.includes('brand') ? [
-      { name: 'Brand Portal', icon: Compass, path: '/brand-dashboard' },
-    ] : []),
-    ...(user ? [
-      { name: 'Content Editor', icon: Edit, path: '/content-editor' },
-    ] : []),
-    ...(user?.email?.includes('creator') ? [
-      { name: 'Creator Studio', icon: Video, path: '/creator-dashboard' },
-    ] : []),
-    ...(user?.email?.includes('admin') ? [
-      { name: 'Challenge Editor', icon: Edit, path: '/challenge-editor' },
-    ] : []),
   ];
 
   return (
@@ -106,29 +97,6 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ user, userProfile, onSignOut })
               </nav>
             </div>
           ))}
-          
-          {/* Special Navigation Items */}
-          {specialNavItems.length > 0 && (
-            <div className="space-y-2 mt-4">
-              <p className="text-xs uppercase text-white/50 mx-1 mt-2">Spezialfunktionen</p>
-              <nav className="space-y-1">
-                {specialNavItems.map((item) => (
-                  <Link 
-                    key={item.path} 
-                    to={item.path} 
-                    className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-                      location.pathname === item.path 
-                        ? 'bg-jillr-dark text-jillr-neonPurple' 
-                        : 'hover:bg-jillr-dark/50'
-                    }`}
-                  >
-                    <item.icon size={20} />
-                    <span>{item.name}</span>
-                  </Link>
-                ))}
-              </nav>
-            </div>
-          )}
           
           {/* Logout Button */}
           <button 

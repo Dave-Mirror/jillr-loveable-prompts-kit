@@ -1,26 +1,43 @@
 
 import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
-import Profile from '@/pages/Profile';
-import ChallengeDetail from '@/pages/ChallengeDetail';
-import Auth from '@/pages/Auth';
-import Explore from '@/pages/Explore';
+
+// Hauptseiten
 import Index from '@/pages/Index';
+import Auth from '@/pages/Auth';
 import NotFound from '@/pages/NotFound';
-import Dashboard from '@/pages/Dashboard';
+
+// Entdecken-Kategorie
+import Explore from '@/pages/Explore';
 import ChallengeFeed from '@/pages/ChallengeFeed';
-import ContentEditor from '@/pages/ContentEditor';
-import Upload from '@/pages/Upload';
-import Wallet from '@/pages/Wallet';
 import LiveMap from '@/pages/LiveMap';
-import Shop from '@/pages/Shop';
-import Leaderboard from '@/pages/Leaderboard';
-import ChallengeEditor from '@/pages/ChallengeEditor';
-import HypocampusPage from '@/pages/HypocampusPage';
-import TriggerManagementPage from '@/pages/TriggerManagementPage';
 import CityClashPage from '@/pages/CityClashPage';
 
+// Challenge-spezifisch
+import ChallengeDetail from '@/pages/ChallengeDetail';
+import Upload from '@/pages/Upload';
+
+// Erstellen-Kategorie
+import Dashboard from '@/pages/Dashboard';
+import ContentEditor from '@/pages/ContentEditor';
+import ChallengeEditor from '@/pages/ChallengeEditor';
+
+// Community-Kategorie
+import Shop from '@/pages/Shop';
+import Leaderboard from '@/pages/Leaderboard';
+import CreatorMarketplace from '@/pages/CreatorMarketplace';
+
+// Persönlich-Kategorie
+import Profile from '@/pages/Profile';
+import Wallet from '@/pages/Wallet';
+
+// System-Seiten
+import HypocampusPage from '@/pages/HypocampusPage';
+import TriggerManagementPage from '@/pages/TriggerManagementPage';
+import AuthCallback from '@/pages/AuthCallback';
+
 export const routes = createBrowserRouter([
+  // Hauptrouten
   {
     path: '/',
     element: <Index />,
@@ -30,41 +47,55 @@ export const routes = createBrowserRouter([
     element: <Auth />,
   },
   {
-    path: '/profile',
-    element: <Profile />,
+    path: '/auth/callback',
+    element: <AuthCallback />,
   },
+  
+  // Entdecken-Kategorie
   {
     path: '/explore',
     element: <Explore />,
-  },
-  {
-    path: '/challenge/:challengeId',
-    element: <ChallengeDetail />,
-  },
-  {
-    path: '/dashboard',
-    element: <Dashboard />,
   },
   {
     path: '/feed',
     element: <ChallengeFeed />,
   },
   {
+    path: '/map',
+    element: <LiveMap />,
+  },
+  {
+    path: '/city-clash',
+    element: <CityClashPage />,
+  },
+  {
+    path: '/challenge/:challengeId',
+    element: <ChallengeDetail />,
+  },
+  
+  // Erstellen-Kategorie
+  {
+    path: '/dashboard',
+    element: <Dashboard />,
+  },
+  {
     path: '/editor',
     element: <ContentEditor />,
+  },
+  {
+    path: '/content-editor',
+    element: <ContentEditor />,
+  },
+  {
+    path: '/challenge-editor',
+    element: <ChallengeEditor />,
   },
   {
     path: '/upload/:challengeId',
     element: <Upload />,
   },
-  {
-    path: '/wallet',
-    element: <Wallet />,
-  },
-  {
-    path: '/map',
-    element: <LiveMap />,
-  },
+  
+  // Community-Kategorie
   {
     path: '/shop',
     element: <Shop />,
@@ -74,9 +105,21 @@ export const routes = createBrowserRouter([
     element: <Leaderboard />,
   },
   {
-    path: '/challenge-editor',
-    element: <ChallengeEditor />,
+    path: '/creator-marketplace',
+    element: <CreatorMarketplace />,
   },
+  
+  // Persönlich-Kategorie
+  {
+    path: '/profile',
+    element: <Profile />,
+  },
+  {
+    path: '/wallet',
+    element: <Wallet />,
+  },
+  
+  // System-Seiten
   {
     path: '/hypocampus',
     element: <HypocampusPage />,
@@ -85,12 +128,8 @@ export const routes = createBrowserRouter([
     path: '/trigger-management',
     element: <TriggerManagementPage />,
   },
-  {
-    path: '/city-clash',
-    element: <CityClashPage />,
-  },
   
-  // Leite alte Routen auf neue um
+  // Umleitungen für alte Routen
   {
     path: '/creator-dashboard',
     element: <Dashboard />,
@@ -111,6 +150,8 @@ export const routes = createBrowserRouter([
     path: '/challenge-feed',
     element: <ChallengeFeed />,
   },
+  
+  // 404 Route
   {
     path: '*',
     element: <NotFound />,
