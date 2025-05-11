@@ -27,6 +27,17 @@ const UnifiedDashboard = ({ initialActiveTab = 'user' }: UnifiedDashboardProps) 
     setActiveTab(initialActiveTab);
   }, [initialActiveTab]);
 
+  // Handler for dashboard tab clicks to navigate to profile with appropriate tab
+  const handleDashboardClick = (tabType: string) => {
+    if (tabType === 'user') {
+      navigate('/profile?tab=activity');
+    } else if (tabType === 'creator') {
+      navigate('/profile?tab=community');
+    } else if (tabType === 'brand' || tabType === 'enterprise') {
+      navigate('/profile?tab=statistics');
+    }
+  };
+
   return (
     <div>
       <div className="flex flex-wrap gap-2 mb-6">
@@ -48,18 +59,54 @@ const UnifiedDashboard = ({ initialActiveTab = 'user' }: UnifiedDashboardProps) 
         </TabsList>
 
         <TabsContent value="user">
+          <div className="flex justify-end mb-4">
+            <Button 
+              variant="outline" 
+              onClick={() => handleDashboardClick('user')}
+              className="flex items-center gap-2"
+            >
+              <User className="h-4 w-4" /> Profil Übersicht anzeigen
+            </Button>
+          </div>
           <UserDashboardContent />
         </TabsContent>
 
         <TabsContent value="creator">
+          <div className="flex justify-end mb-4">
+            <Button 
+              variant="outline" 
+              onClick={() => handleDashboardClick('creator')}
+              className="flex items-center gap-2"
+            >
+              <Zap className="h-4 w-4" /> Creator Übersicht anzeigen
+            </Button>
+          </div>
           <CreatorDashboardContent />
         </TabsContent>
 
         <TabsContent value="brand">
+          <div className="flex justify-end mb-4">
+            <Button 
+              variant="outline" 
+              onClick={() => handleDashboardClick('brand')}
+              className="flex items-center gap-2"
+            >
+              <BarChart2 className="h-4 w-4" /> Brand Übersicht anzeigen
+            </Button>
+          </div>
           <BrandDashboardContent />
         </TabsContent>
 
         <TabsContent value="enterprise">
+          <div className="flex justify-end mb-4">
+            <Button 
+              variant="outline" 
+              onClick={() => handleDashboardClick('enterprise')}
+              className="flex items-center gap-2"
+            >
+              <Building2 className="h-4 w-4" /> Enterprise Übersicht anzeigen
+            </Button>
+          </div>
           <EnterpriseDashboardContent />
         </TabsContent>
       </Tabs>

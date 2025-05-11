@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import UnifiedDashboard from '@/components/dashboard/UnifiedDashboard';
 import { toast } from 'sonner';
+import { useLocation } from 'react-router-dom';
 import { 
   Select,
   SelectContent,
@@ -16,6 +17,7 @@ const Dashboard = () => {
   const { user, userProfile, isLoading } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const [selectedRole, setSelectedRole] = useState('user');
+  const location = useLocation();
   
   // Debug info
   useEffect(() => {
@@ -31,9 +33,11 @@ const Dashboard = () => {
     }
   }, [user, userProfile, isLoading]);
 
-  // Set default role based on user profile
+  // Check if initial tab is provided in location state
   useEffect(() => {
-    if (user) {
+    if (location.state?.initialActiveTab) {
+      setSelectedRole(location.state.initialActiveTab);
+    } else if (user) {
       if (user.email?.includes('brand') || userProfile?.accountType === 'brand') {
         setSelectedRole('brand');
       } else if (userProfile?.isCreator) {
@@ -42,7 +46,7 @@ const Dashboard = () => {
         setSelectedRole('enterprise');
       }
     }
-  }, [user, userProfile]);
+  }, [location.state, user, userProfile]);
 
   // Error handling
   useEffect(() => {
@@ -80,7 +84,7 @@ const Dashboard = () => {
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Rolle auswählen" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="bg-jillr-dark border border-jillr-neonPurple/30 z-50">
               <SelectItem value="user" className="flex items-center gap-2">
                 <div className="flex items-center gap-2">
                   <User className="h-4 w-4" />

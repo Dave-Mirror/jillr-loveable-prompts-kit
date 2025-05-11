@@ -17,9 +17,10 @@ interface ProfileTabsProps {
   userProfile: any;
   activeTab: string;
   setActiveTab: (tab: string) => void;
+  userRole?: string;
 }
 
-const ProfileTabs: React.FC<ProfileTabsProps> = ({ userProfile, activeTab, setActiveTab }) => {
+const ProfileTabs: React.FC<ProfileTabsProps> = ({ userProfile, activeTab, setActiveTab, userRole = 'user' }) => {
   const navigate = useNavigate();
   const location = useLocation();
   
@@ -33,17 +34,39 @@ const ProfileTabs: React.FC<ProfileTabsProps> = ({ userProfile, activeTab, setAc
     navigate(`${location.pathname}?${searchParams.toString()}`, { replace: true });
   };
 
-  // Tab options for the dropdown
-  const tabOptions: FilterOption[] = [
-    { value: 'activity', label: 'Aktivität' },
-    { value: 'rewards', label: 'Belohnungen' },
-    { value: 'hypocampus', label: 'Automatisierung' },
-    { value: 'community', label: 'Community' },
-    { value: 'statistics', label: 'Statistiken' },
-    { value: 'social', label: 'Social Media' },
-    { value: 'data', label: 'Meine Daten' },
-    { value: 'settings', label: 'Einstellungen' }
-  ];
+  // Get tab options based on user role
+  const getTabOptions = (): FilterOption[] => {
+    const baseOptions: FilterOption[] = [
+      { value: 'activity', label: 'Aktivität' },
+      { value: 'rewards', label: 'Belohnungen' }
+    ];
+    
+    // Add role-specific tabs
+    if (userRole === 'user') {
+      baseOptions.push({ value: 'hypocampus', label: 'Automatisierung' });
+    } else if (userRole === 'creator') {
+      baseOptions.push(
+        { value: 'community', label: 'Community' },
+        { value: 'statistics', label: 'Statistiken' },
+        { value: 'social', label: 'Social Media' }
+      );
+    } else if (userRole === 'brand' || userRole === 'enterprise') {
+      baseOptions.push(
+        { value: 'statistics', label: 'Statistiken' },
+        { value: 'hypocampus', label: 'Automatisierung' }
+      );
+    }
+    
+    // Common tabs for all roles
+    baseOptions.push(
+      { value: 'data', label: 'Meine Daten' },
+      { value: 'settings', label: 'Einstellungen' }
+    );
+    
+    return baseOptions;
+  };
+
+  const tabOptions = getTabOptions();
 
   // Get icon for the current tab
   const getIcon = () => {
@@ -87,7 +110,7 @@ const ProfileTabs: React.FC<ProfileTabsProps> = ({ userProfile, activeTab, setAc
       
       <div className="w-full px-1">
         <TabsContent value="activity">
-          <ActivityTab userProfile={userProfile} />
+          <ActivityTab userProfile={userProfile} userRole={userRole} />
         </TabsContent>
         
         <TabsContent value="rewards">
@@ -103,7 +126,7 @@ const ProfileTabs: React.FC<ProfileTabsProps> = ({ userProfile, activeTab, setAc
         </TabsContent>
         
         <TabsContent value="statistics">
-          <StatsTab userProfile={userProfile} />
+          <StatsTab userProfile={userProfile} userRole={userRole} />
         </TabsContent>
         
         <TabsContent value="social">
