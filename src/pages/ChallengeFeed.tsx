@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useFeed } from '@/hooks/useFeed';
 import { useFeedInteractions } from '@/hooks/useFeedInteractions';
 import { useVideoPlayback } from '@/hooks/useVideoPlayback';
@@ -23,6 +23,14 @@ const ChallengeFeed = () => {
     handleSortChange 
   } = useFilteredFeed(feedItems);
   
+  // Add state for showing/hiding filters
+  const [showFilters, setShowFilters] = useState(true);
+  
+  // Add toggle function for filters
+  const toggleFilters = () => {
+    setShowFilters(prev => !prev);
+  };
+
   const {
     handleLike,
     handleComment,
@@ -45,6 +53,8 @@ const ChallengeFeed = () => {
         setFilterType={handleFilterChange}
         sortBy={sortBy}
         setSortBy={handleSortChange}
+        showFilters={showFilters}
+        toggleFilters={toggleFilters}
       />
       
       <div ref={feedRef} className="pb-20 scroll-smooth flex-1">
