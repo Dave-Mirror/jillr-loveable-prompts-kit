@@ -101,10 +101,11 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         level: calculateLevel(data.xp_total || 0),
         xp: data.xp_total || 0,
         coins: data.coins_total || 0,
-        // Add role properties for easier access
-        isCreator: userId.includes('creator') || data.is_creator,
-        isEnterprise: userId.includes('enterprise') || data.is_enterprise,
-        accountType: userId.includes('brand') ? 'brand' : (data.account_type || 'user')
+        // Add role properties for easier access - using userId for role determination
+        // since the wallet data doesn't contain these fields
+        isCreator: userId.includes('creator'),
+        isEnterprise: userId.includes('enterprise'),
+        accountType: userId.includes('brand') ? 'brand' : 'user'
       };
       
       console.log("Fetched profile data:", profileData);
