@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 export type ChallengeTab = 'basics' | 'content' | 'kpis' | 'audience' | 'rewards' | 'timing' | 'automation' | 'advanced' | 'preview';
 
-interface TabConfig {
+export interface TabConfig {
   id: ChallengeTab;
   label: string;
   description: string;
