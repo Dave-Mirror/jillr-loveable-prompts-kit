@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
@@ -23,11 +22,11 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ user, userProfile, onSignOut })
     { category: 'Hauptnavigation', items: [
       { name: 'Home', icon: Home, path: '/' },
       { name: 'Explore', icon: Zap, path: '/explore' },
-      { name: 'Feed', icon: Compass, path: '/challenge-feed' },
-      { name: 'Live Map', icon: Map, path: '/livemap' },
+      { name: 'Feed', icon: Compass, path: '/feed' },
+      { name: 'Live Map', icon: Map, path: '/map' },
       { name: 'City Clash', icon: Trophy, path: '/city-clash' },
       { name: 'Shop', icon: ShoppingBag, path: '/shop' },
-      { name: 'Leaderboard', icon: Trophy, path: '/leaderboard' }
+      { name: 'Leaderboard', icon: Award, path: '/leaderboard' }
     ]},
     { category: 'Persönlich', items: [
       { name: 'Wallet', icon: Wallet, path: '/wallet' },

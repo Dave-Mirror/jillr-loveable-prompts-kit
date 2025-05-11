@@ -32,6 +32,7 @@ import ChallengeFeed from "./pages/ChallengeFeed";
 import HypocampusPage from "./pages/HypocampusPage";
 import TriggerManagementPage from "./pages/TriggerManagementPage";
 import HypocampusProvider from "./providers/HypocampusProvider";
+import CityClashPage from "./pages/CityClashPage";
 
 const queryClient = new QueryClient();
 
@@ -65,10 +66,13 @@ const App = () => (
                       <Route path="/leaderboard" element={<Leaderboard />} />
                       <Route path="/shop" element={<Shop />} />
                       <Route path="/livemap" element={<LiveMap />} />
+                      <Route path="/map" element={<LiveMap />} />
+                      <Route path="/city-clash" element={<CityClashPage />} />
                       <Route path="/content-editor" element={<ContentEditor />} />
                       <Route path="/challenge-editor" element={<ChallengeEditor />} />
                       <Route path="/creator-marketplace" element={<CreatorMarketplace />} />
                       <Route path="/challenge-feed" element={<ChallengeFeed />} />
+                      <Route path="/feed" element={<ChallengeFeed />} />
                       <Route path="/hypocampus" element={<HypocampusPage />} />
                       <Route path="/trigger-management" element={<TriggerManagementPage />} />
                       <Route path="/auth" element={<Auth />} />

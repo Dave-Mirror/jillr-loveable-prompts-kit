@@ -2,10 +2,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Logo: React.FC = () => {
+const Logo = () => {
   return (
-    <Link to="/" className="flex items-center gap-2">
-      <span className="text-2xl font-bold neon-text">jillr</span>
+    <Link to="/" className="font-bold text-xl relative text-white hover:opacity-80 transition">
+      <span className="text-jillr-neonPurple">jillr</span>
     </Link>
   );
 };
