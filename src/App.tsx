@@ -30,6 +30,7 @@ import PageTransition from "./components/navigation/PageTransition";
 import CreatorMarketplace from "./pages/CreatorMarketplace";
 import ChallengeFeed from "./pages/ChallengeFeed";
 import HypocampusPage from "./pages/HypocampusPage";
+import HypocampusProvider from "./providers/HypocampusProvider";
 
 const queryClient = new QueryClient();
 
@@ -37,51 +38,53 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
       <AvatarProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <div className="min-h-screen flex flex-col">
-              <Header />
-              <main className="flex-1 pt-16 md:pb-0 pb-16">
-                <PageTransition>
-                  <Routes>
-                    <Route path="/" element={<Index />} />
-                    <Route path="/dashboard" element={<Dashboard />} />
-                    <Route path="/profile" element={
-                      <ProtectedRoute>
-                        <Profile />
-                      </ProtectedRoute>
-                    } />
-                    <Route path="/explore" element={<Explore />} />
-                    <Route path="/challenge/:id" element={<ChallengeDetail />} />
-                    <Route path="/upload/:id" element={
-                      <ProtectedRoute>
-                        <Upload />
-                      </ProtectedRoute>
-                    } />
-                    <Route path="/wallet" element={<Wallet />} />
-                    <Route path="/creator-dashboard" element={<CreatorDashboard />} />
-                    <Route path="/brand-dashboard" element={<BrandDashboard />} />
-                    <Route path="/leaderboard" element={<Leaderboard />} />
-                    <Route path="/shop" element={<Shop />} />
-                    <Route path="/livemap" element={<LiveMap />} />
-                    <Route path="/content-editor" element={<ContentEditor />} />
-                    <Route path="/challenge-editor" element={<ChallengeEditor />} />
-                    <Route path="/creator-marketplace" element={<CreatorMarketplace />} />
-                    <Route path="/challenge-feed" element={<ChallengeFeed />} />
-                    <Route path="/hypocampus" element={<HypocampusPage />} />
-                    <Route path="/auth" element={<Auth />} />
-                    <Route path="/auth/callback" element={<AuthCallback />} />
-                    {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </PageTransition>
-              </main>
-              <BottomNavigation />
-            </div>
-          </BrowserRouter>
-        </TooltipProvider>
+        <HypocampusProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <div className="min-h-screen flex flex-col">
+                <Header />
+                <main className="flex-1 pt-16 md:pb-0 pb-16">
+                  <PageTransition>
+                    <Routes>
+                      <Route path="/" element={<Index />} />
+                      <Route path="/dashboard" element={<Dashboard />} />
+                      <Route path="/profile" element={
+                        <ProtectedRoute>
+                          <Profile />
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/explore" element={<Explore />} />
+                      <Route path="/challenge/:id" element={<ChallengeDetail />} />
+                      <Route path="/upload/:id" element={
+                        <ProtectedRoute>
+                          <Upload />
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/wallet" element={<Wallet />} />
+                      <Route path="/creator-dashboard" element={<CreatorDashboard />} />
+                      <Route path="/brand-dashboard" element={<BrandDashboard />} />
+                      <Route path="/leaderboard" element={<Leaderboard />} />
+                      <Route path="/shop" element={<Shop />} />
+                      <Route path="/livemap" element={<LiveMap />} />
+                      <Route path="/content-editor" element={<ContentEditor />} />
+                      <Route path="/challenge-editor" element={<ChallengeEditor />} />
+                      <Route path="/creator-marketplace" element={<CreatorMarketplace />} />
+                      <Route path="/challenge-feed" element={<ChallengeFeed />} />
+                      <Route path="/hypocampus" element={<HypocampusPage />} />
+                      <Route path="/auth" element={<Auth />} />
+                      <Route path="/auth/callback" element={<AuthCallback />} />
+                      {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </PageTransition>
+                </main>
+                <BottomNavigation />
+              </div>
+            </BrowserRouter>
+          </TooltipProvider>
+        </HypocampusProvider>
       </AvatarProvider>
     </AuthProvider>
   </QueryClientProvider>

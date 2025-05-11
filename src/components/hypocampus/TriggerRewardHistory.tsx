@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
@@ -6,7 +5,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/hooks/useAuth';
 import { Award, Clock } from 'lucide-react';
-import { getRewardsForUser } from '@/services/mockHypocampusService';
+import { getRewardsForUser } from '@/services/hypocampus/rewardService';
 import { RewardLog, Reward } from '@/types/hypocampus';
 
 interface ChartData {
