@@ -7,12 +7,14 @@ import {
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
+interface NavItem {
+  name: string;
+  icon: React.ElementType;
+  path: string;
+}
+
 interface GuestMobileMenuProps {
-  mainNavItems: Array<{
-    name: string;
-    icon: React.ElementType;
-    path: string;
-  }>;
+  mainNavItems: NavItem[];
 }
 
 const GuestMobileMenu: React.FC<GuestMobileMenuProps> = ({ mainNavItems }) => {

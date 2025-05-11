@@ -18,12 +18,27 @@ interface RightSectionProps {
   signOut: () => Promise<void>;
 }
 
+// Define the NavItem interface to ensure type safety
+interface NavItem {
+  name: string;
+  icon: React.ElementType;
+  path: string;
+}
+
+// Define the type for categorized navigation items
+interface CategorizedNavItems {
+  [category: string]: NavItem[];
+}
+
 const RightSection: React.FC<RightSectionProps> = ({ user, userProfile, signOut }) => {
   // Bestimme die Rolle des Benutzers
   const userRole = getUserRole(userProfile);
   
   // Navigation-Items nach Kategorien und Rollen
   const categorizedNavItems = getCategorizedNavItems(userRole);
+
+  // Extract all nav items for guest mobile menu
+  const allNavItems: NavItem[] = Object.values(categorizedNavItems).flat() as NavItem[];
 
   return (
     <div className="flex items-center gap-3">
@@ -39,7 +54,7 @@ const RightSection: React.FC<RightSectionProps> = ({ user, userProfile, signOut 
       ) : (
         <>
           <AuthButtons />
-          <GuestMobileMenu mainNavItems={Object.values(categorizedNavItems).flat()} />
+          <GuestMobileMenu mainNavItems={allNavItems} />
         </>
       )}
     </div>
@@ -58,9 +73,9 @@ function getUserRole(userProfile: any): 'user' | 'creator' | 'brand' | 'enterpri
 }
 
 // Gibt rollenspezifische Navigationsitems zurück
-function getCategorizedNavItems(role: string) {
+function getCategorizedNavItems(role: string): CategorizedNavItems {
   // Basis-Navigation für alle Benutzerrollen
-  const baseItems = {
+  const baseItems: CategorizedNavItems = {
     'Entdecken': [
       { name: 'Home', icon: Home, path: '/' },
       { name: 'Explore', icon: Compass, path: '/explore' },
@@ -76,7 +91,7 @@ function getCategorizedNavItems(role: string) {
   };
 
   // Rollenspezifische Navigation
-  const roleBasedItems: Record<string, any> = {
+  const roleBasedItems: Record<string, CategorizedNavItems> = {
     'user': {
       'Erstellen': [
         { name: 'Content Editor', icon: Edit, path: '/content-editor' },
