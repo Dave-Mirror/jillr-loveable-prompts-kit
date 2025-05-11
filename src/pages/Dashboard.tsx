@@ -1,10 +1,35 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import UnifiedDashboard from '@/components/dashboard/UnifiedDashboard';
+import { toast } from 'sonner';
 
 const Dashboard = () => {
   const { user, userProfile, isLoading } = useAuth();
+  const [error, setError] = useState<string | null>(null);
+  
+  // Debug info
+  useEffect(() => {
+    console.log("Dashboard component - Auth state:", {
+      isLoading,
+      hasUser: !!user,
+      userProfile
+    });
+    
+    // Simulate successful loading for demonstration
+    if (!user && !isLoading) {
+      console.log("No user detected but proceeding for demo purposes");
+    }
+  }, [user, userProfile, isLoading]);
+
+  // Error handling
+  useEffect(() => {
+    if (error) {
+      toast.error("Fehler beim Laden des Dashboards", {
+        description: error
+      });
+    }
+  }, [error]);
   
   if (isLoading) {
     return (
@@ -19,6 +44,7 @@ const Dashboard = () => {
     );
   }
 
+  // Always render the dashboard, even if user is not logged in (for demo purposes)
   return <UnifiedDashboard />;
 };
 

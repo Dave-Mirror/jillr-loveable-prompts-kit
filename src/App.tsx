@@ -44,7 +44,14 @@ import Wallet from "./pages/Wallet";
 import HypocampusPage from "./pages/HypocampusPage";
 import TriggerManagementPage from "./pages/TriggerManagementPage";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -72,22 +79,10 @@ const App = () => (
                       <Route path="/city-clash" element={<CityClashPage />} />
                       <Route path="/challenge/:id" element={<ChallengeDetail />} />
                       
-                      {/* Erstellen-Kategorie - mit Rollenbeschränkungen */}
-                      <Route path="/dashboard" element={
-                        <ProtectedRoute>
-                          <Dashboard />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/content-editor" element={
-                        <ProtectedRoute>
-                          <ContentEditor />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/challenge-editor" element={
-                        <ProtectedRoute roleRequired="creator">
-                          <ChallengeEditor />
-                        </ProtectedRoute>
-                      } />
+                      {/* Erstellen-Kategorie - ohne Rollenbeschränkungen für Demo */}
+                      <Route path="/dashboard" element={<Dashboard />} />
+                      <Route path="/content-editor" element={<ContentEditor />} />
+                      <Route path="/challenge-editor" element={<ChallengeEditor />} />
                       <Route path="/upload/:id" element={
                         <ProtectedRoute>
                           <Upload />
@@ -103,30 +98,14 @@ const App = () => (
                       <Route path="/profile" element={<Profile />} />
                       <Route path="/wallet" element={<Wallet />} />
                       
-                      {/* System-Seiten - mit Rollenbeschränkungen */}
+                      {/* System-Seiten - ohne Rollenbeschränkungen für Demo */}
                       <Route path="/hypocampus" element={<HypocampusPage />} />
-                      <Route path="/trigger-management" element={
-                        <ProtectedRoute roleRequired="brand">
-                          <TriggerManagementPage />
-                        </ProtectedRoute>
-                      } />
+                      <Route path="/trigger-management" element={<TriggerManagementPage />} />
 
                       {/* Umleitungen für alte Routen */}
-                      <Route path="/creator-dashboard" element={
-                        <ProtectedRoute>
-                          <Dashboard />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/brand-dashboard" element={
-                        <ProtectedRoute roleRequired="brand">
-                          <Dashboard />
-                        </ProtectedRoute>
-                      } />
-                      <Route path="/enterprise" element={
-                        <ProtectedRoute roleRequired="enterprise">
-                          <Dashboard />
-                        </ProtectedRoute>
-                      } />
+                      <Route path="/creator-dashboard" element={<Dashboard />} />
+                      <Route path="/brand-dashboard" element={<Dashboard />} />
+                      <Route path="/enterprise" element={<Dashboard />} />
                       <Route path="/livemap" element={<LiveMap />} />
                       <Route path="/challenge-feed" element={<ChallengeFeed />} />
 

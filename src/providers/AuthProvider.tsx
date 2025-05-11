@@ -32,7 +32,10 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             await fetchUserProfile(session.user.id);
           }, 0);
         } else {
-          setUserProfile(null);
+          // Create a demo profile for non-authenticated users
+          const demoProfile = createDemoProfile();
+          console.log("Created demo profile for unauthenticated session:", demoProfile);
+          setUserProfile(demoProfile);
         }
         
         setIsLoading(false);
@@ -47,12 +50,20 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       
       if (session?.user) {
         await fetchUserProfile(session.user.id);
+      } else {
+        // Create a demo profile for non-authenticated users
+        const demoProfile = createDemoProfile();
+        console.log("Created demo profile for initial state:", demoProfile);
+        setUserProfile(demoProfile);
       }
       
       setIsLoading(false);
     })
     .catch(err => {
       console.error("Error checking session:", err);
+      // Create a demo profile for error cases
+      const demoProfile = createDemoProfile();
+      setUserProfile(demoProfile);
       setIsLoading(false);
     });
 
@@ -61,6 +72,22 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       subscription.unsubscribe();
     };
   }, []);
+
+  // Creates a demo profile for non-authenticated sessions
+  const createDemoProfile = () => {
+    // For demonstration purposes - provide a default profile
+    return {
+      id: 'demo-user',
+      active_challenges: 5,
+      level: 3,
+      xp: 2500,
+      coins: 750,
+      // Add role properties for easier access
+      isCreator: true,
+      isEnterprise: false,
+      accountType: 'user'
+    };
+  };
 
   const fetchUserProfile = async (userId: string) => {
     try {
@@ -84,7 +111,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           level: 1,
           xp: 0,
           coins: 0,
-          // Add role properties for easier access
+          // Add role properties for easier access - derive from user ID for testing
           isCreator: userId.includes('creator'),
           isEnterprise: userId.includes('enterprise'),
           accountType: userId.includes('brand') ? 'brand' : 'user'
@@ -102,7 +129,6 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         xp: data.xp_total || 0,
         coins: data.coins_total || 0,
         // Add role properties for easier access - using userId for role determination
-        // since the wallet data doesn't contain these fields
         isCreator: userId.includes('creator'),
         isEnterprise: userId.includes('enterprise'),
         accountType: userId.includes('brand') ? 'brand' : 'user'
@@ -119,7 +145,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         level: 1,
         xp: 0,
         coins: 0,
-        // Assume some role based on user ID for testing
+        // Derive roles from user ID for testing
         isCreator: userId.includes('creator'),
         isEnterprise: userId.includes('enterprise'),
         accountType: userId.includes('brand') ? 'brand' : 'user'
