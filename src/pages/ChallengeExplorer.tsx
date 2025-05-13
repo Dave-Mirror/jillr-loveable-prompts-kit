@@ -9,7 +9,7 @@ import { LiveMapProvider } from '@/contexts/LiveMapContext';
 
 // Import the components we'll create
 import ExplorerMap from '@/components/challenge-explorer/ExplorerMap';
-import FilterBar from '@/components/challenge-explorer/filter-bar'; // Updated import path
+import FilterBar from '@/components/challenge-explorer/FilterBar';
 import ChallengeSidepanel from '@/components/challenge-explorer/ChallengeSidepanel';
 import UgcFeed from '@/components/challenge-explorer/UgcFeed';
 import FloatingControls from '@/components/challenge-explorer/FloatingControls';
