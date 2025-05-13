@@ -10,7 +10,9 @@ import ChallengeExplorer from './ChallengeExplorer';
 import React from 'react';
 
 // Placeholder for pages that aren't implemented yet
-const Placeholder = () => <NotFound message="This page is under construction" />;
+const Placeholder: React.FC<{message?: string}> = ({message}) => (
+  <NotFound message={message || "This page is under construction"} />
+);
 
 export {
   Dashboard,
