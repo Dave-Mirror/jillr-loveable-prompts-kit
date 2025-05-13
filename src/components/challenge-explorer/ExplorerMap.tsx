@@ -1,7 +1,6 @@
-
 import React, { useEffect, useState, useCallback } from 'react';
 import { GoogleMap, useJsApiLoader, Marker, InfoWindow } from '@react-google-maps/api';
-import { MapPin, Camera, Shoe, Clock, Glasses, Egg } from 'lucide-react';
+import { MapPin, Camera, Clock, Glasses, Egg, Footprints } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { ChallengeCategory, BrandFilter, LocationFilter, TimeFilter, MapMode } from '@/pages/ChallengeExplorer';
 
@@ -298,7 +297,7 @@ const ExplorerMap: React.FC<ExplorerMapProps> = ({
       case 'video':
         return <Camera className="text-jillr-neonPink" />;
       case 'fitness':
-        return <Shoe className="text-jillr-neonGreen" />;
+        return <Footprints className="text-jillr-neonGreen" />;
       case 'ar':
         return <Glasses className="text-jillr-neonBlue" />;
       case 'easter-egg':

@@ -3,7 +3,7 @@ import Dashboard from './Dashboard';
 import LiveMap from './LiveMap';
 import Profile from './Profile';
 import NotFound from './NotFound';
-import ChallengeDetails from './ChallengeDetails';
+import ChallengeDetails from './ChallengeDetail'; // Fixed path
 import CompanyProfile from './CompanyProfile';
 import MapExperience from './MapExperience';
 import ChallengeExplorer from './ChallengeExplorer';

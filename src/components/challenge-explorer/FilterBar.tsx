@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Camera, Shoe, Glasses, MapPin, Clock, Filter, ChevronDown, Search } from 'lucide-react';
+import { Camera, Footprints, Glasses, MapPin, Clock, Filter, ChevronDown, Search } from 'lucide-react';
 import { ChallengeCategory, BrandFilter, LocationFilter, TimeFilter } from '@/pages/ChallengeExplorer';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -227,7 +227,7 @@ const FilterBar: React.FC<FilterBarProps> = ({
           className="cursor-pointer whitespace-nowrap"
           onClick={() => setCategoryFilter('fitness')}
         >
-          <Shoe className="mr-1 h-3 w-3" /> Fitness
+          <Footprints className="mr-1 h-3 w-3" /> Fitness
         </Badge>
         <Badge 
           variant={categoryFilter === 'ar' ? 'default' : 'outline'}
