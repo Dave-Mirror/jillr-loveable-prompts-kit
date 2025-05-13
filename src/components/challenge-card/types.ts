@@ -1,37 +1,23 @@
 
-export interface ChallengeCardProps {
+export interface Challenge {
   id: string;
   title: string;
   description: string;
   type: string;
-  hashtags: string[];
-  xpReward: number;
-  endDate: string | Date;
   imageUrl?: string;
-  videoUrl?: string;
-  mediaType?: 'image' | 'video';
+  reward?: string;
+  expiresIn?: string;
+  coordinates?: {
+    lat: number;
+    lng: number;
+  };
+  challengeId?: string;
 }
 
-// Challenge type icons mapping
-export const typeIcons: Record<string, string> = {
-  'photo': '📸',
-  'video': '🎥',
-  'ar': '🥽',
-  'geofencing': '📍',
-  'fitness': '💪',
-  'wearable': '⌚',
-  'schnitzeljagd': '🔍',
-  'community': '👥',
-  'battle': '⚔️',
-  'review': '⭐',
-  'fashion': '👕',
-  'beauty': '💄',
-  'sport': '🏆',
-  'food': '🍔',
-  'travel': '✈️',
-  'gaming': '🎮',
-  'mobility': '🚗',
-  'sustainability': '♻️',
-  'entertainment': '🎭',
-  'education': '📚',
-};
+export interface ChallengeCardProps {
+  challenge: Challenge;
+  className?: string;
+  size?: "default" | "compact" | "large";
+  onClick?: (id: string) => void;
+  onJoinClick?: (id: string) => void;
+}

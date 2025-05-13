@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Label } from '@/components/ui/label';
 
 interface FilterCheckboxItemProps {
   id: string;
@@ -11,24 +10,28 @@ interface FilterCheckboxItemProps {
   icon?: React.ReactNode;
 }
 
-const FilterCheckboxItem: React.FC<FilterCheckboxItemProps> = ({ 
-  id, 
-  label, 
-  checked, 
-  onChange, 
-  icon 
+const FilterCheckboxItem: React.FC<FilterCheckboxItemProps> = ({
+  id,
+  label,
+  checked,
+  onChange,
+  icon
 }) => {
   return (
     <div className="flex items-center space-x-2">
       <Checkbox 
         id={id} 
-        checked={checked}
-        onCheckedChange={onChange}
+        checked={checked} 
+        onCheckedChange={onChange} 
+        className="data-[state=checked]:bg-jillr-neonPurple data-[state=checked]:border-jillr-neonPurple" 
       />
-      <Label htmlFor={id} className="flex items-center">
-        {icon && <span className="mr-2">{icon}</span>}
+      <label 
+        htmlFor={id} 
+        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-2 cursor-pointer"
+      >
+        {icon && icon}
         {label}
-      </Label>
+      </label>
     </div>
   );
 };

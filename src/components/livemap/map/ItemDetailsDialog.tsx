@@ -1,111 +1,107 @@
 
 import React from 'react';
+import { MapElement } from '@/types/livemap';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Gift, Package, Target, Users, MapPin, Trophy, Coins, Clock } from 'lucide-react';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { Clock, Target, Trophy, MapPin, Gift, Users } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
-interface ItemDetailsProps {
-  selectedItem: {
-    id: string;
-    type: string;
-    title: string;
-    description: string;
-    challengeId?: string;
-  } | null;
+interface ItemDetailsDialogProps {
+  selectedItem: MapElement | null;
   onClose: () => void;
-  onAction: () => void;
+  onAction?: () => void;
 }
 
-const ItemDetailsDialog: React.FC<ItemDetailsProps> = ({ 
+const ItemDetailsDialog: React.FC<ItemDetailsDialogProps> = ({ 
   selectedItem, 
   onClose,
   onAction
 }) => {
   if (!selectedItem) return null;
 
-  const getActionText = () => {
-    switch (selectedItem.type) {
-      case 'easteregg': return 'Collect Easter Egg';
-      case 'drop': return 'Claim Product Drop';
-      case 'challenge': return 'Join Challenge';
-      case 'teamevent': return 'Join Team Event';
-      default: return 'View Details';
-    }
-  };
-
   const getIcon = () => {
     switch (selectedItem.type) {
-      case 'easteregg': return <Gift className="h-6 w-6 text-yellow-500" />;
-      case 'drop': return <Package className="h-6 w-6 text-blue-500" />;
-      case 'challenge': return <Target className="h-6 w-6 text-red-500" />;
-      case 'teamevent': return <Users className="h-6 w-6 text-purple-500" />;
-      default: return <MapPin className="h-6 w-6" />;
+      case 'easteregg': return <Gift className="h-5 w-5 text-yellow-500" />;
+      case 'drop': return <Target className="h-5 w-5 text-blue-500" />;
+      case 'challenge': return <Trophy className="h-5 w-5 text-red-500" />;
+      case 'teamevent': return <Users className="h-5 w-5 text-purple-500" />;
+      default: return <MapPin className="h-5 w-5" />;
     }
   };
 
-  const getReward = () => {
+  const getActionButton = () => {
     switch (selectedItem.type) {
-      case 'easteregg': return { type: 'XP', amount: 25 };
-      case 'drop': return { type: 'Coins', amount: 50 };
-      case 'challenge': return { type: 'XP', amount: 100 };
-      case 'teamevent': return { type: 'XP & Coins', amount: '75 + 25' };
-      default: return null;
+      case 'easteregg': 
+        return <Button onClick={onAction}>Collect Easter Egg</Button>;
+      case 'drop': 
+        return <Button onClick={onAction}>Claim Drop</Button>;
+      case 'challenge': 
+        return <Button onClick={onAction}>Join Challenge</Button>;
+      case 'teamevent': 
+        return <Button onClick={onAction}>Join Event</Button>;
+      default: 
+        return <Button onClick={onAction}>View Details</Button>;
     }
   };
 
-  const reward = getReward();
+  const getTypeLabel = () => {
+    switch (selectedItem.type) {
+      case 'easteregg': return 'Easter Egg';
+      case 'drop': return 'Product Drop';
+      case 'challenge': return 'Challenge';
+      case 'teamevent': return 'Team Event';
+      default: return 'Map Item';
+    }
+  };
 
   return (
-    <Dialog open={Boolean(selectedItem)} onOpenChange={() => onClose()}>
-      <DialogContent className="sm:max-w-md">
+    <Dialog open={Boolean(selectedItem)} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="sm:max-w-lg bg-jillr-dark border-jillr-border">
         <DialogHeader>
           <div className="flex items-center gap-2">
             {getIcon()}
-            <DialogTitle>{selectedItem.title}</DialogTitle>
+            <DialogTitle className="text-lg">{selectedItem.title}</DialogTitle>
           </div>
+          <Badge variant="outline" className="self-start mt-1">
+            {getTypeLabel()}
+          </Badge>
+        </DialogHeader>
+        
+        <div className="space-y-4">
+          <AspectRatio ratio={16/9} className="bg-jillr-darkAccent rounded-md overflow-hidden">
+            <img 
+              src={`/assets/onboarding-${selectedItem.type === 'easteregg' ? 'rewards' : 
+                selectedItem.type === 'challenge' ? 'intro' : 'map'}.webp`} 
+              alt={selectedItem.title} 
+              className="w-full h-full object-cover"
+            />
+          </AspectRatio>
+          
           <DialogDescription>
             {selectedItem.description}
           </DialogDescription>
-        </DialogHeader>
-
-        <div className="space-y-4 py-2">
-          {reward && (
-            <div className="flex items-center justify-between p-3 bg-background/80 rounded-lg border">
-              <div className="flex items-center gap-2">
-                {reward.type.includes('XP') && <Trophy className="h-5 w-5 text-yellow-500" />}
-                {reward.type.includes('Coins') && <Coins className="h-5 w-5 text-blue-500" />}
-                <span className="font-medium">Reward</span>
-              </div>
-              <div className="text-sm font-semibold">
-                +{reward.amount} {reward.type}
-              </div>
-            </div>
-          )}
-
-          {selectedItem.type === 'challenge' && (
-            <div className="flex items-center justify-between p-3 bg-background/80 rounded-lg border">
-              <div className="flex items-center gap-2">
-                <Clock className="h-5 w-5 text-green-500" />
-                <span className="font-medium">Duration</span>
-              </div>
-              <div className="text-sm">7 days</div>
-            </div>
-          )}
           
-          {selectedItem.type === 'easteregg' && (
-            <div className="text-center p-3 bg-green-500/10 rounded-lg border border-green-500/20">
-              <p className="text-sm font-medium text-green-600">First to find! +10 bonus XP</p>
-            </div>
-          )}
+          <div className="grid grid-cols-2 gap-2 text-sm">
+            {selectedItem.reward && (
+              <div className="flex items-center gap-2 p-2 rounded-md bg-jillr-darkAccent">
+                <Trophy className="h-4 w-4 text-jillr-neonGreen" />
+                <span>{selectedItem.reward}</span>
+              </div>
+            )}
+            
+            {selectedItem.expiresIn && (
+              <div className="flex items-center gap-2 p-2 rounded-md bg-jillr-darkAccent">
+                <Clock className="h-4 w-4 text-jillr-neonPink" />
+                <span>Expires in {selectedItem.expiresIn}</span>
+              </div>
+            )}
+          </div>
         </div>
-
+        
         <DialogFooter className="sm:justify-between">
-          <Button variant="outline" onClick={onClose}>
-            Close
-          </Button>
-          <Button onClick={onAction}>
-            {getActionText()}
-          </Button>
+          <Button variant="outline" onClick={onClose}>Close</Button>
+          {getActionButton()}
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -1,81 +1,103 @@
 
-import React, { useRef, useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import ChallengeMedia from './ChallengeMedia';
-import ChallengeBadges from './ChallengeBadges';
-import ChallengeStats from './ChallengeStats';
+import React from 'react';
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { MapPin, Clock, Award, Trophy } from "lucide-react";
 import { ChallengeCardProps } from './types';
+import { cn } from '@/lib/utils';
 
-const ChallengeCard: React.FC<ChallengeCardProps> = ({
-  id,
-  title,
-  description,
-  type,
-  hashtags,
-  xpReward,
-  endDate,
-  imageUrl = '/placeholder.svg',
-  videoUrl,
-  mediaType = 'image',
-}) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const cardRef = useRef<HTMLDivElement>(null);
-  
-  // Use Intersection Observer to detect when card is visible
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          setIsVisible(entry.isIntersecting);
-        });
-      },
-      {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.5, // Card is 50% visible
-      }
-    );
+const ChallengeCard = ({
+  challenge,
+  className,
+  size = "default",
+  onClick,
+  onJoinClick
+}: ChallengeCardProps) => {
+  const handleJoinClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (onJoinClick) onJoinClick(challenge.id);
+  };
 
-    if (cardRef.current) {
-      observer.observe(cardRef.current);
-    }
-
-    return () => {
-      if (cardRef.current) {
-        observer.unobserve(cardRef.current);
-      }
-    };
-  }, []);
-  
   return (
-    <Link to={`/challenge/${id}`} className="block w-full transition-transform hover:scale-[1.02] focus:scale-[1.02]">
-      <div ref={cardRef} className="challenge-card h-full flex flex-col bg-jillr-dark border border-jillr-border/30 rounded-lg overflow-hidden shadow-lg shadow-jillr-dark/50">
-        <div className="relative">
-          <ChallengeMedia 
-            mediaType={mediaType}
-            imageUrl={imageUrl}
-            videoUrl={videoUrl}
-            title={title}
-            isVisible={isVisible}
-          />
-          
-          <ChallengeBadges 
-            type={type}
-            endDate={endDate}
-            hashtags={hashtags}
-          />
+    <div 
+      onClick={() => onClick?.(challenge.id)}
+      className={cn(
+        "bg-jillr-dark border border-jillr-border rounded-lg overflow-hidden transition-all duration-300 hover:shadow-neon",
+        "group cursor-pointer hover:scale-[1.02]",
+        size === "compact" ? "w-full" : "w-full max-w-sm",
+        className
+      )}
+    >
+      <div className="relative">
+        <AspectRatio ratio={16/9}>
+          <div className="w-full h-full bg-jillr-darkAccent">
+            {challenge.imageUrl && (
+              <img 
+                src={challenge.imageUrl} 
+                alt={challenge.title} 
+                className="w-full h-full object-cover"
+              />
+            )}
+          </div>
+        </AspectRatio>
+        
+        <div className="absolute top-2 right-2 flex gap-1">
+          <Badge variant="premium" className="z-10">
+            {challenge.type}
+          </Badge>
         </div>
         
-        <div className="p-4 flex flex-col flex-grow">
-          <h3 className="text-lg font-bold mb-1.5 line-clamp-1 text-white">{title}</h3>
-          <p className="text-sm text-gray-300 mb-3 line-clamp-2">{description}</p>
+        {challenge.expiresIn && (
+          <div className="absolute bottom-2 left-2 flex items-center gap-1 bg-jillr-dark/80 text-white text-xs px-2 py-1 rounded-full z-10">
+            <Clock className="h-3 w-3" />
+            <span>{challenge.expiresIn}</span>
+          </div>
+        )}
+      </div>
+      
+      <div className="p-3">
+        <h3 className="font-semibold text-white mb-1 group-hover:text-jillr-neonPurple transition-colors">
+          {challenge.title}
+        </h3>
+        
+        <p className="text-sm text-gray-300 line-clamp-2 mb-2">
+          {challenge.description}
+        </p>
+        
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 text-xs text-gray-400">
+            <div className="flex items-center gap-1">
+              <MapPin className="h-3 w-3 text-jillr-neonPink" />
+              <span>1.2 km</span>
+            </div>
+            
+            {challenge.reward && (
+              <div className="flex items-center gap-1">
+                <Award className="h-3 w-3 text-jillr-neonBlue" />
+                <span>{challenge.reward}</span>
+              </div>
+            )}
+          </div>
           
-          <div className="mt-auto">
-            <ChallengeStats xpReward={xpReward} />
+          <div className="flex items-center gap-1">
+            <Trophy className="h-4 w-4 text-jillr-neonGreen" />
+            <span className="text-jillr-neonGreen text-xs font-semibold">
+              +100 XP
+            </span>
           </div>
         </div>
+        
+        <Button 
+          variant="default" 
+          size="sm" 
+          className="w-full mt-3"
+          onClick={handleJoinClick}
+        >
+          {challenge.challengeId ? "Jetzt teilnehmen" : "Details anzeigen"}
+        </Button>
       </div>
-    </Link>
+    </div>
   );
 };
 

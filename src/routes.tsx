@@ -1,161 +1,121 @@
+import { ChallengeFeed, CityClash, Community, CreateChallenge, Dashboard, Explore, Home, LandingPage, Legal, LiveMap, Login, NotFound, Onboarding, Profile, Register, Settings, ChallengeDetails } from "@/pages";
+import { ChallengeFeed as ChallengeFeedIcon, Compass, Home as HomeIcon, LayoutDashboard, LucideIcon, MapPin, Settings as SettingsIcon, User, Users } from "lucide-react";
+import { Challenge } from "./components/challenge/types";
 
-import React from 'react';
-import { createBrowserRouter } from 'react-router-dom';
+interface Route {
+  path: string;
+  element: React.ComponentType<any>;
+  label?: string;
+  icon?: LucideIcon;
+  children?: Route[];
+  sidebar?: boolean;
+  protected?: boolean;
+}
 
-// Hauptseiten
-import Index from '@/pages/Index';
-import Auth from '@/pages/Auth';
-import NotFound from '@/pages/NotFound';
+export const protectedRoutes = ['/dashboard', '/profile', '/settings', '/create-challenge', '/community', '/city-clash'];
 
-// Entdecken-Kategorie
-import Explore from '@/pages/Explore';
-import ChallengeFeed from '@/pages/ChallengeFeed';
-import LiveMap from '@/pages/LiveMap';
-import CityClashPage from '@/pages/CityClashPage';
-
-// Challenge-spezifisch
-import ChallengeDetail from '@/pages/ChallengeDetail';
-import Upload from '@/pages/Upload';
-
-// Erstellen-Kategorie
-import Dashboard from '@/pages/Dashboard';
-import ContentEditor from '@/pages/ContentEditor';
-import ChallengeEditor from '@/pages/ChallengeEditor';
-
-// Community-Kategorie
-import Shop from '@/pages/Shop';
-import Leaderboard from '@/pages/Leaderboard';
-import CreatorMarketplace from '@/pages/CreatorMarketplace';
-
-// Persönlich-Kategorie
-import Profile from '@/pages/Profile';
-import Wallet from '@/pages/Wallet';
-
-// System-Seiten
-import HypocampusPage from '@/pages/HypocampusPage';
-import TriggerManagementPage from '@/pages/TriggerManagementPage';
-import AuthCallback from '@/pages/AuthCallback';
-
-export const routes = createBrowserRouter([
-  // Hauptrouten
+const routes: Route[] = [
   {
     path: '/',
-    element: <Index />,
+    element: LandingPage,
+    label: 'Home',
+    icon: HomeIcon,
+    sidebar: true,
   },
   {
-    path: '/auth',
-    element: <Auth />,
+    path: '/home',
+    element: Home,
   },
   {
-    path: '/auth/callback',
-    element: <AuthCallback />,
-  },
-  
-  // Entdecken-Kategorie
-  {
-    path: '/explore',
-    element: <Explore />,
+    path: '/login',
+    element: Login,
   },
   {
-    path: '/feed',
-    element: <ChallengeFeed />,
+    path: '/register',
+    element: Register,
   },
   {
-    path: '/map',
-    element: <LiveMap />,
+    path: '/onboarding',
+    element: Onboarding,
   },
-  {
-    path: '/city-clash',
-    element: <CityClashPage />,
-  },
-  {
-    path: '/challenge/:challengeId',
-    element: <ChallengeDetail />,
-  },
-  
-  // Erstellen-Kategorie
   {
     path: '/dashboard',
-    element: <Dashboard />,
+    element: Dashboard,
+    label: 'Dashboard',
+    icon: LayoutDashboard,
+    sidebar: true,
+    protected: true,
   },
-  {
-    path: '/editor',
-    element: <ContentEditor />,
-  },
-  {
-    path: '/content-editor',
-    element: <ContentEditor />,
-  },
-  {
-    path: '/challenge-editor',
-    element: <ChallengeEditor />,
-  },
-  {
-    path: '/upload/:challengeId',
-    element: <Upload />,
-  },
-  
-  // Community-Kategorie
-  {
-    path: '/shop',
-    element: <Shop />,
-  },
-  {
-    path: '/leaderboard',
-    element: <Leaderboard />,
-  },
-  {
-    path: '/creator-marketplace',
-    element: <CreatorMarketplace />,
-  },
-  
-  // Persönlich-Kategorie
   {
     path: '/profile',
-    element: <Profile />,
+    element: Profile,
+    label: 'Profile',
+    icon: User,
+    sidebar: true,
+    protected: true,
   },
   {
-    path: '/wallet',
-    element: <Wallet />,
-  },
-  
-  // System-Seiten
-  {
-    path: '/hypocampus',
-    element: <HypocampusPage />,
+    path: '/settings',
+    element: Settings,
+    label: 'Settings',
+    icon: SettingsIcon,
+    sidebar: true,
+    protected: true,
   },
   {
-    path: '/trigger-management',
-    element: <TriggerManagementPage />,
-  },
-  
-  // Umleitungen für alte Routen
-  {
-    path: '/creator-dashboard',
-    element: <Dashboard />,
-  },
-  {
-    path: '/brand-dashboard',
-    element: <Dashboard />,
-  },
-  {
-    path: '/enterprise',
-    element: <Dashboard />,
-  },
-  {
-    path: '/livemap',
-    element: <LiveMap />,
+    path: '/legal',
+    element: Legal,
   },
   {
     path: '/challenge-feed',
-    element: <ChallengeFeed />,
+    element: ChallengeFeed,
+    label: 'Challenge Feed',
+    icon: ChallengeFeedIcon,
+    sidebar: true,
   },
-  
-  // 404 Route
+  {
+    path: '/explore',
+    element: Explore,
+    label: 'Explore',
+    icon: Compass,
+    sidebar: true,
+  },
+  {
+    path: '/create-challenge',
+    element: CreateChallenge,
+    label: 'Create Challenge',
+    icon: MapPin,
+    sidebar: true,
+    protected: true,
+  },
+  {
+    path: '/community',
+    element: Community,
+    label: 'Community',
+    icon: Users,
+    sidebar: true,
+    protected: true,
+  },
+  {
+    path: '/city-clash',
+    element: CityClash,
+    label: 'City Clash',
+    icon: Users,
+    sidebar: true,
+    protected: true,
+  },
+  {
+    path: '/challenge/:challengeId',
+    element: ChallengeDetails,
+  },
+  {
+    path: '/livemap',
+    element: LiveMap,
+  },
   {
     path: '*',
-    element: <NotFound />,
+    element: NotFound,
   },
-]);
+];
 
 export default routes;

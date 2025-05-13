@@ -1,191 +1,79 @@
 
-import React, { useState } from 'react';
-import { Badge } from '@/components/ui/badge';
+import React from 'react';
+import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { SlidersHorizontal, X } from 'lucide-react';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose } from '@/components/ui/sheet';
+import { MapFilters } from '@/types/livemap';
 import MapElementsFilter from './filters/MapElementsFilter';
-import RewardsFilter from './filters/RewardsFilter';
 import EasterEggTypesFilter from './filters/EasterEggTypesFilter';
 import LocationFilter from './filters/LocationFilter';
-import { MapFilters } from '@/types/livemap';
+import RewardsFilter from './filters/RewardsFilter';
 
-const LiveMapFilters = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState('elements');
-  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
-  
-  // Create full filters state
-  const [filters, setFilters] = useState<MapFilters>({
-    mapElements: ['easteregg', 'drop', 'challenge', 'teamevent'],
-    easterEggTypes: [],
-    radius: 5,
-    locationFilters: ['nearby'],
-    rewardFilters: []
-  });
+interface LiveMapFiltersProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  filters: MapFilters;
+  onFilterChange: (category: string, value: string) => void;
+  onRadiusChange: (value: number[]) => void;
+  onResetFilters: () => void;
+}
 
-  const toggleFilter = (filterId: string) => {
-    setSelectedFilters(prev => 
-      prev.includes(filterId) 
-        ? prev.filter(id => id !== filterId)
-        : [...prev, filterId]
-    );
-  };
-
-  const clearAllFilters = () => {
-    setSelectedFilters([]);
-    setFilters({
-      mapElements: ['easteregg', 'drop', 'challenge', 'teamevent'],
-      easterEggTypes: [],
-      radius: 5,
-      locationFilters: ['nearby'],
-      rewardFilters: []
-    });
-  };
-
-  const handleFilterChange = (category: string, value: string) => {
-    setFilters(prev => {
-      const currentValues = prev[category as keyof MapFilters] as string[];
-      
-      // Toggle the value in the array
-      const newValues = currentValues.includes(value)
-        ? currentValues.filter(item => item !== value)
-        : [...currentValues, value];
-      
-      return {
-        ...prev,
-        [category]: newValues
-      };
-    });
-    
-    // Update selected filters for badge display
-    toggleFilter(value);
-  };
-
-  const handleRadiusChange = (value: number[]) => {
-    if (value.length > 0) {
-      setFilters(prev => ({
-        ...prev,
-        radius: value[0]
-      }));
-    }
-  };
-
+const LiveMapFilters: React.FC<LiveMapFiltersProps> = ({ 
+  open, 
+  onOpenChange,
+  filters,
+  onFilterChange,
+  onRadiusChange,
+  onResetFilters
+}) => {
   return (
-    <div className="w-full">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-semibold text-white">LiveMap</h2>
-        
-        <Dialog open={isOpen} onOpenChange={setIsOpen}>
-          <DialogTrigger asChild>
-            <Button 
-              variant="outline" 
-              size="sm"
-              className="flex items-center gap-2"
-            >
-              <SlidersHorizontal size={16} />
-              <span>Filter</span>
-              {selectedFilters.length > 0 && (
-                <Badge variant="secondary" className="ml-1 bg-jillr-neonPurple text-white">
-                  {selectedFilters.length}
-                </Badge>
-              )}
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px] max-h-[80vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle className="flex items-center justify-between">
-                <span>LiveMap Filter</span>
-                {selectedFilters.length > 0 && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={clearAllFilters}
-                    className="text-sm text-muted-foreground hover:text-foreground"
-                  >
-                    Alle zurücksetzen
-                  </Button>
-                )}
-              </DialogTitle>
-            </DialogHeader>
-            
-            <Tabs defaultValue="elements" value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="grid grid-cols-4 mb-4">
-                <TabsTrigger value="elements">Elemente</TabsTrigger>
-                <TabsTrigger value="rewards">Rewards</TabsTrigger>
-                <TabsTrigger value="easter-eggs">Easter Eggs</TabsTrigger>
-                <TabsTrigger value="location">Standort</TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="elements">
-                <MapElementsFilter 
-                  filters={filters}
-                  onChange={handleFilterChange}
-                />
-              </TabsContent>
-              
-              <TabsContent value="rewards">
-                <RewardsFilter
-                  filters={filters}
-                  onChange={handleFilterChange}
-                />
-              </TabsContent>
-              
-              <TabsContent value="easter-eggs">
-                <EasterEggTypesFilter 
-                  filters={filters}
-                  onChange={handleFilterChange}
-                />
-              </TabsContent>
-              
-              <TabsContent value="location">
-                <LocationFilter 
-                  filters={filters}
-                  onChange={handleFilterChange}
-                  onRadiusChange={handleRadiusChange}
-                />
-              </TabsContent>
-            </Tabs>
-            
-            <div className="flex justify-between mt-4">
-              <Button variant="outline" size="sm" onClick={() => setIsOpen(false)}>
-                <X size={16} className="mr-2" />
-                Close
+    <Sheet open={open} onOpenChange={onOpenChange}>
+      <SheetContent side="right" className="w-[320px] sm:w-[400px] bg-jillr-dark border-jillr-border">
+        <SheetHeader className="border-b border-jillr-border pb-4">
+          <div className="flex justify-between items-center">
+            <SheetTitle className="text-white">Filter Map</SheetTitle>
+            <SheetClose asChild>
+              <Button variant="ghost" size="icon" className="h-7 w-7">
+                <X className="h-4 w-4" />
               </Button>
-              <Button onClick={() => setIsOpen(false)}>Apply Filters</Button>
-            </div>
-          </DialogContent>
-        </Dialog>
-      </div>
-      
-      {selectedFilters.length > 0 && (
-        <div className="flex flex-wrap gap-2 mb-4">
-          {selectedFilters.map(filter => (
-            <Badge 
-              key={filter} 
-              variant="outline"
-              className="flex items-center gap-1 bg-jillr-darkBlue px-2 py-1"
-            >
-              <span>{filter}</span>
-              <X 
-                size={14} 
-                className="cursor-pointer ml-1" 
-                onClick={() => toggleFilter(filter)}
-              />
-            </Badge>
-          ))}
+            </SheetClose>
+          </div>
+        </SheetHeader>
+        
+        <div className="py-6 space-y-6 max-h-[calc(100vh-10rem)] overflow-y-auto">
+          <MapElementsFilter 
+            filters={filters} 
+            onChange={onFilterChange} 
+          />
+          
+          <EasterEggTypesFilter 
+            filters={filters} 
+            onChange={onFilterChange} 
+          />
+          
+          <LocationFilter 
+            filters={filters} 
+            onChange={onFilterChange}
+            onRadiusChange={onRadiusChange}
+          />
+          
+          <RewardsFilter 
+            filters={filters} 
+            onChange={onFilterChange} 
+          />
+        </div>
+        
+        <div className="absolute bottom-0 left-0 right-0 border-t border-jillr-border p-4 bg-jillr-dark">
           <Button 
-            variant="ghost" 
-            size="sm" 
-            onClick={clearAllFilters}
-            className="text-xs text-muted-foreground hover:text-white"
+            onClick={onResetFilters} 
+            variant="outline" 
+            className="w-full"
           >
-            Clear All
+            Filter zurücksetzen
           </Button>
         </div>
-      )}
-    </div>
+      </SheetContent>
+    </Sheet>
   );
 };
 

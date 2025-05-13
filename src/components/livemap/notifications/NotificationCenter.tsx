@@ -1,33 +1,24 @@
 
-import React from 'react';
-import { useLiveMap } from '@/hooks/useLiveMap';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
+import React, { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
-import { Gift, Package, Target, Users } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Bell, Clock, Trash2, BellOff, BellRing } from 'lucide-react';
+import { Notification, NotificationSettings } from '@/types/livemap';
+import { useLiveMap } from '@/hooks/useLiveMap';
+import { Badge } from '@/components/ui/badge';
+import { format, formatDistanceToNow } from 'date-fns';
+import { cn } from '@/lib/utils';
+import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
 
-const NotificationCenter = () => {
-  const { 
-    notifications, 
-    clearNotification, 
-    notificationSettings, 
-    updateNotificationSettings 
-  } = useLiveMap();
+const NotificationCenter: React.FC = () => {
+  const { notifications, clearNotification, notificationSettings, updateNotificationSettings } = useLiveMap();
+  const { toast } = useToast();
   const navigate = useNavigate();
+  const [view, setView] = useState<'notifications' | 'settings'>('notifications');
 
-  const getIconForType = (type: string) => {
-    switch (type) {
-      case 'easteregg': return <Gift className="h-5 w-5 text-yellow-500" />;
-      case 'drop': return <Package className="h-5 w-5 text-blue-500" />;
-      case 'challenge': return <Target className="h-5 w-5 text-red-500" />;
-      case 'teamevent': return <Users className="h-5 w-5 text-purple-500" />;
-      default: return <Gift className="h-5 w-5" />;
-    }
-  };
-
-  const handleNotificationAction = (notification: any) => {
+  const handleNotificationAction = (notification: Notification) => {
     if (notification.navigateTo) {
       navigate(notification.navigateTo);
     } else if (notification.challengeId) {
@@ -36,128 +27,175 @@ const NotificationCenter = () => {
     clearNotification(notification.id);
   };
 
-  const formatTime = (timeString: string) => {
-    const date = new Date(timeString);
-    const now = new Date();
-    const diffMs = now.getTime() - date.getTime();
-    
-    // Less than a minute
-    if (diffMs < 60000) {
-      return 'Just now';
+  const handleClearAll = () => {
+    notifications.forEach(notification => {
+      clearNotification(notification.id);
+    });
+    toast({
+      title: "Alle Benachrichtigungen gelöscht",
+      description: "Deine Benachrichtigungsliste wurde geleert.",
+    });
+  };
+
+  const getNotificationIcon = (type: string) => {
+    switch (type) {
+      case 'drop': return <Badge variant="default" className="bg-blue-500">Drop</Badge>;
+      case 'challenge': return <Badge variant="default" className="bg-red-500">Challenge</Badge>;
+      case 'easteregg': return <Badge variant="default" className="bg-yellow-500">Easter Egg</Badge>;
+      case 'teamevent': return <Badge variant="default" className="bg-purple-500">Team Event</Badge>;
+      default: return <Badge variant="default" className="bg-jillr-neonPurple">Jillr</Badge>;
     }
-    
-    // Less than an hour
-    if (diffMs < 3600000) {
-      const minutes = Math.floor(diffMs / 60000);
-      return `${minutes} ${minutes === 1 ? 'minute' : 'minutes'} ago`;
-    }
-    
-    // Less than a day
-    if (diffMs < 86400000) {
-      const hours = Math.floor(diffMs / 3600000);
-      return `${hours} ${hours === 1 ? 'hour' : 'hours'} ago`;
-    }
-    
-    // Default to date
-    return date.toLocaleDateString();
   };
 
   return (
-    <div className="space-y-6 py-4">
-      <div>
-        <h3 className="text-lg font-semibold mb-2">Notifications</h3>
-        <div className="space-y-4">
-          {notifications.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
-              <p>No new notifications</p>
-              <p className="text-sm">Check back later for updates!</p>
-            </div>
-          ) : (
-            notifications.map((notification) => (
-              <div key={notification.id} className="p-3 bg-muted/20 rounded-lg border border-border">
-                <div className="flex items-start gap-3">
-                  <div className="mt-0.5">
-                    {getIconForType(notification.type)}
-                  </div>
-                  <div className="flex-grow">
-                    <h4 className="font-medium">{notification.title}</h4>
-                    <p className="text-sm text-muted-foreground">{notification.message}</p>
-                    <div className="flex justify-between items-center mt-2">
-                      <span className="text-xs text-muted-foreground">
-                        {formatTime(notification.time)}
-                      </span>
+    <Card className="bg-jillr-dark border-jillr-border">
+      <CardHeader className="pb-2 flex flex-row items-center justify-between">
+        <CardTitle className="text-lg flex items-center gap-2">
+          <Bell className="h-5 w-5 text-jillr-neonPurple" />
+          Benachrichtigungen
+        </CardTitle>
+        
+        <div className="flex gap-2">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className={cn("text-sm", view === 'notifications' && "bg-jillr-darkAccent")}
+            onClick={() => setView('notifications')}
+          >
+            <BellRing className="h-4 w-4 mr-1" />
+            Mitteilungen
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className={cn("text-sm", view === 'settings' && "bg-jillr-darkAccent")}
+            onClick={() => setView('settings')}
+          >
+            <BellOff className="h-4 w-4 mr-1" />
+            Einstellungen
+          </Button>
+        </div>
+      </CardHeader>
+      
+      <CardContent className="pt-4">
+        {view === 'notifications' ? (
+          <>
+            {notifications.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-8 text-center">
+                <Bell className="h-12 w-12 text-muted-foreground mb-2 opacity-20" />
+                <p className="text-muted-foreground">
+                  Keine Benachrichtigungen vorhanden
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-3 max-h-[400px] overflow-y-auto pr-1">
+                {notifications.map((notification) => (
+                  <div key={notification.id} className="relative bg-jillr-darkAccent p-3 rounded-lg">
+                    <div className="flex justify-between items-start gap-2">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          {getNotificationIcon(notification.type)}
+                          <h4 className="font-semibold">{notification.title}</h4>
+                        </div>
+                        <p className="text-sm mt-1 text-gray-300">{notification.message}</p>
+                        <div className="flex justify-between items-center mt-2">
+                          <span className="text-xs text-muted-foreground flex items-center">
+                            <Clock className="h-3 w-3 mr-1" />
+                            {formatDistanceToNow(new Date(notification.time), { addSuffix: true })}
+                          </span>
+                          <Button 
+                            variant="default" 
+                            size="sm" 
+                            onClick={() => handleNotificationAction(notification)}
+                            className="text-xs"
+                          >
+                            {notification.actionText}
+                          </Button>
+                        </div>
+                      </div>
                       <Button 
-                        variant="link" 
-                        size="sm" 
-                        className="h-auto p-0"
-                        onClick={() => handleNotificationAction(notification)}
+                        variant="ghost" 
+                        size="icon" 
+                        className="h-6 w-6 absolute top-2 right-2"
+                        onClick={() => clearNotification(notification.id)}
                       >
-                        {notification.actionText}
+                        <Trash2 className="h-3 w-3" />
                       </Button>
                     </div>
                   </div>
-                </div>
+                ))}
               </div>
-            ))
-          )}
-        </div>
-      </div>
+            )}
+          </>
+        ) : (
+          <div className="space-y-4">
+            <p className="text-sm text-muted-foreground mb-4">
+              Passe deine Benachrichtigungseinstellungen an, um nur für dich relevante Mitteilungen zu erhalten.
+            </p>
+            
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <label className="text-sm flex items-center gap-2">
+                  <Badge variant="default" className="bg-blue-500 h-5">Drop</Badge>
+                  Neue Product Drops
+                </label>
+                <Switch 
+                  checked={notificationSettings.newDrops}
+                  onCheckedChange={(checked) => updateNotificationSettings('newDrops', checked)}
+                />
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <label className="text-sm flex items-center gap-2">
+                  <Badge variant="default" className="bg-red-500 h-5">Challenge</Badge>
+                  Neue Challenges
+                </label>
+                <Switch 
+                  checked={notificationSettings.newChallenges}
+                  onCheckedChange={(checked) => updateNotificationSettings('newChallenges', checked)}
+                />
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <label className="text-sm flex items-center gap-2">
+                  <Badge variant="default" className="bg-yellow-500 h-5">Easter Egg</Badge>
+                  Easter Eggs in der Nähe
+                </label>
+                <Switch 
+                  checked={notificationSettings.nearbyEasterEggs}
+                  onCheckedChange={(checked) => updateNotificationSettings('nearbyEasterEggs', checked)}
+                />
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <label className="text-sm flex items-center gap-2">
+                  <Badge variant="default" className="bg-purple-500 h-5">Team</Badge>
+                  Team Events
+                </label>
+                <Switch 
+                  checked={notificationSettings.teamEvents}
+                  onCheckedChange={(checked) => updateNotificationSettings('teamEvents', checked)}
+                />
+              </div>
+            </div>
+          </div>
+        )}
+      </CardContent>
       
-      <Separator />
-      
-      <div>
-        <h3 className="text-lg font-semibold mb-2">Notification Settings</h3>
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
-              <Label htmlFor="new-drops">New Product Drops</Label>
-              <p className="text-xs text-muted-foreground">Notify when new product drops are available</p>
-            </div>
-            <Switch 
-              id="new-drops"
-              checked={notificationSettings.newDrops}
-              onCheckedChange={(checked) => updateNotificationSettings('newDrops', checked)}
-            />
-          </div>
-          
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
-              <Label htmlFor="new-challenges">New Challenges</Label>
-              <p className="text-xs text-muted-foreground">Notify when new challenges are posted</p>
-            </div>
-            <Switch 
-              id="new-challenges"
-              checked={notificationSettings.newChallenges}
-              onCheckedChange={(checked) => updateNotificationSettings('newChallenges', checked)}
-            />
-          </div>
-          
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
-              <Label htmlFor="nearby-eggs">Nearby Easter Eggs</Label>
-              <p className="text-xs text-muted-foreground">Notify when easter eggs are nearby</p>
-            </div>
-            <Switch 
-              id="nearby-eggs"
-              checked={notificationSettings.nearbyEasterEggs}
-              onCheckedChange={(checked) => updateNotificationSettings('nearbyEasterEggs', checked)}
-            />
-          </div>
-          
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
-              <Label htmlFor="team-events">Team Events</Label>
-              <p className="text-xs text-muted-foreground">Notify about upcoming team events</p>
-            </div>
-            <Switch 
-              id="team-events"
-              checked={notificationSettings.teamEvents}
-              onCheckedChange={(checked) => updateNotificationSettings('teamEvents', checked)}
-            />
-          </div>
-        </div>
-      </div>
-    </div>
+      {view === 'notifications' && notifications.length > 0 && (
+        <CardFooter className="border-t border-jillr-border pt-4">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="w-full"
+            onClick={handleClearAll}
+          >
+            <Trash2 className="h-3 w-3 mr-2" />
+            Alle löschen
+          </Button>
+        </CardFooter>
+      )}
+    </Card>
   );
 };
 

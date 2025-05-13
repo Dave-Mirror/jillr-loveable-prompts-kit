@@ -1,12 +1,8 @@
 
 import React from 'react';
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
-import { Filter, Search, MapPin, Bell, Scan } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import LiveMapFilters from '../LiveMapFilters';
-import NotificationCenter from '../notifications/NotificationCenter';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { Filter, MapPin, Scan, Search } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import FilterDropdown from '@/components/ui/filter-dropdown';
 
 interface MapLayoutProps {
   children: React.ReactNode;
@@ -15,6 +11,7 @@ interface MapLayoutProps {
   handleSearch: (e: React.FormEvent) => void;
   handleLocationClick: () => void;
   handleScanClick: () => void;
+  handleFilterClick?: () => void;
 }
 
 const MapLayout: React.FC<MapLayoutProps> = ({
@@ -23,73 +20,64 @@ const MapLayout: React.FC<MapLayoutProps> = ({
   setSearchQuery,
   handleSearch,
   handleLocationClick,
-  handleScanClick
+  handleScanClick,
+  handleFilterClick
 }) => {
-  const isMobile = useIsMobile();
-
   return (
-    <div className="flex flex-col space-y-4">
-      <div className="glassmorphism p-2 md:p-3 rounded-lg">
-        <form onSubmit={handleSearch} className={`flex items-center ${isMobile ? 'flex-col gap-2' : 'space-x-2'}`}>
-          <div className="flex items-center gap-2 flex-grow w-full">
-            <Search className="h-5 w-5 text-muted-foreground flex-shrink-0" />
-            <input
-              type="text"
-              placeholder="Search challenges, brands, or locations..."
-              className="flex-grow bg-transparent border-none focus:outline-none placeholder:text-muted-foreground w-full"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-          
-          <div className={`flex items-center gap-2 ${isMobile ? 'w-full justify-between' : ''}`}>
-            {!isMobile && <Button type="submit" variant="secondary" size="sm">Search</Button>}
-            
-            <Button 
-              variant="outline" 
-              size="icon" 
-              onClick={handleScanClick}
-              title="Scan AR/QR"
-              className="text-jillr-neonPurple"
-            >
-              <Scan className="h-5 w-5" />
-            </Button>
-            
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="outline" size="icon" title="Filter Map">
-                  <Filter className="h-5 w-5" />
-                </Button>
-              </SheetTrigger>
-              <SheetContent>
-                <LiveMapFilters />
-              </SheetContent>
-            </Sheet>
-            
-            <Button 
-              variant="outline" 
-              size="icon" 
-              onClick={handleLocationClick} 
-              title="My Location"
-              className="text-jillr-neonBlue"
-            >
-              <MapPin className="h-5 w-5" />
-            </Button>
-            
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="outline" size="icon" title="Notifications">
-                  <Bell className="h-5 w-5" />
-                </Button>
-              </SheetTrigger>
-              <SheetContent>
-                <NotificationCenter />
-              </SheetContent>
-            </Sheet>
-            
-            {isMobile && <Button type="submit" variant="secondary" size="sm" className="ml-auto">Search</Button>}
-          </div>
+    <div className="w-full space-y-4">
+      <div className="flex flex-col sm:flex-row gap-2">
+        <form onSubmit={handleSearch} className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <input
+            type="text"
+            placeholder="Suche nach Challenges, Orten, Marken..."
+            className="w-full py-2 pl-10 pr-4 bg-jillr-dark border border-jillr-border rounded-lg focus:outline-none focus:ring-2 focus:ring-jillr-neonPurple focus:border-transparent"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
         </form>
+        
+        <div className="flex gap-2">
+          <Button 
+            variant="outline" 
+            size="icon"
+            onClick={handleLocationClick}
+            className="h-10 w-10"
+          >
+            <MapPin className="h-4 w-4" />
+          </Button>
+          
+          <Button 
+            variant="outline" 
+            size="icon"
+            onClick={handleScanClick}
+            className="h-10 w-10"
+          >
+            <Scan className="h-4 w-4" />
+          </Button>
+          
+          <Button 
+            variant="outline" 
+            size="icon"
+            onClick={handleFilterClick}
+            className="h-10 w-10"
+          >
+            <Filter className="h-4 w-4" />
+          </Button>
+          
+          <FilterDropdown
+            options={[
+              { value: 'all', label: 'Alle' },
+              { value: 'easteregg', label: 'Easter Eggs' },
+              { value: 'drop', label: 'Drops' },
+              { value: 'challenge', label: 'Challenges' }
+            ]}
+            activeValue="all"
+            onSelect={() => {}}
+            label="Art"
+            className="hidden sm:flex h-10"
+          />
+        </div>
       </div>
       
       {children}
