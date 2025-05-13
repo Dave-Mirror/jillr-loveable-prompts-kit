@@ -3,3 +3,6 @@ project_id = "xwljcyqphvoblvdircur"
 
 [functions.process-snapshots]
 verify_jwt = true
+
+[functions.update-map-data]
+verify_jwt = true

@@ -1,13 +1,13 @@
 
-import { MapExperience, Dashboard, LiveMap, Profile, NotFound, ChallengeDetails } from "@/pages";
-import { Compass, Home, LayoutDashboard, LucideIcon, MapPin, Settings as SettingsIcon, User, Users, Map } from "lucide-react";
+import { MapExperience, Dashboard, LiveMap, Profile, NotFound, ChallengeDetails, ChallengeExplorer } from "@/pages";
+import { Compass, Home, LayoutDashboard, Map, MapPin, Settings as SettingsIcon, User, Users } from "lucide-react";
 import { Challenge } from "./components/challenge/types";
 
 interface Route {
   path: string;
   element: React.ComponentType<any>;
   label?: string;
-  icon?: LucideIcon;
+  icon?: React.ComponentType<any>;
   children?: Route[];
   sidebar?: boolean;
   protected?: boolean;
@@ -18,22 +18,22 @@ export const protectedRoutes = ['/dashboard', '/profile', '/settings', '/create-
 const routes: Route[] = [
   {
     path: '/',
-    element: MapExperience, // Wechsle zu MapExperience für die Startseite
+    element: MapExperience,
     label: 'Home',
     icon: Home,
     sidebar: true,
   },
   {
     path: '/login',
-    element: NotFound, // Temporär NotFound verwenden, bis Login implementiert ist
+    element: NotFound,
   },
   {
     path: '/register',
-    element: NotFound, // Temporär NotFound verwenden, bis Register implementiert ist
+    element: NotFound,
   },
   {
     path: '/onboarding',
-    element: MapExperience, // Wechsle zu MapExperience für Onboarding
+    element: MapExperience,
   },
   {
     path: '/dashboard',
@@ -53,7 +53,7 @@ const routes: Route[] = [
   },
   {
     path: '/settings',
-    element: Profile, // Verwende vorübergehend Profile anstelle von Settings
+    element: Profile,
     label: 'Settings',
     icon: SettingsIcon,
     sidebar: true,
@@ -68,14 +68,14 @@ const routes: Route[] = [
   },
   {
     path: '/explore',
-    element: MapExperience,
-    label: 'Explore',
+    element: ChallengeExplorer,
+    label: 'Challenge Explorer',
     icon: Compass,
     sidebar: true,
   },
   {
     path: '/community',
-    element: NotFound, // Temporär NotFound verwenden, bis Community implementiert ist
+    element: NotFound,
     label: 'Community',
     icon: Users,
     sidebar: true,
