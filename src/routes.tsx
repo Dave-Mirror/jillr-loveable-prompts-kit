@@ -1,5 +1,6 @@
-import { ChallengeFeed, CityClash, Community, CreateChallenge, Dashboard, Explore, Home, LandingPage, Legal, LiveMap, Login, NotFound, Onboarding, Profile, Register, Settings, ChallengeDetails } from "@/pages";
-import { ChallengeFeed as ChallengeFeedIcon, Compass, Home as HomeIcon, LayoutDashboard, LucideIcon, MapPin, Settings as SettingsIcon, User, Users } from "lucide-react";
+
+import { Community, Settings, Dashboard, LiveMap, Login, NotFound, Onboarding, Profile, Register, ChallengeDetails, MapExperience } from "@/pages";
+import { Compass, Home, LayoutDashboard, LucideIcon, MapPin, Settings as SettingsIcon, User, Users, Map } from "lucide-react";
 import { Challenge } from "./components/challenge/types";
 
 interface Route {
@@ -17,14 +18,10 @@ export const protectedRoutes = ['/dashboard', '/profile', '/settings', '/create-
 const routes: Route[] = [
   {
     path: '/',
-    element: LandingPage,
+    element: Onboarding,
     label: 'Home',
-    icon: HomeIcon,
+    icon: Home,
     sidebar: true,
-  },
-  {
-    path: '/home',
-    element: Home,
   },
   {
     path: '/login',
@@ -63,43 +60,23 @@ const routes: Route[] = [
     protected: true,
   },
   {
-    path: '/legal',
-    element: Legal,
-  },
-  {
-    path: '/challenge-feed',
-    element: ChallengeFeed,
-    label: 'Challenge Feed',
-    icon: ChallengeFeedIcon,
+    path: '/map',
+    element: MapExperience,
+    label: 'Jillr Map',
+    icon: Map,
     sidebar: true,
   },
   {
     path: '/explore',
-    element: Explore,
+    element: MapExperience, // Ersetzt Explore durch MapExperience
     label: 'Explore',
     icon: Compass,
     sidebar: true,
   },
   {
-    path: '/create-challenge',
-    element: CreateChallenge,
-    label: 'Create Challenge',
-    icon: MapPin,
-    sidebar: true,
-    protected: true,
-  },
-  {
     path: '/community',
     element: Community,
     label: 'Community',
-    icon: Users,
-    sidebar: true,
-    protected: true,
-  },
-  {
-    path: '/city-clash',
-    element: CityClash,
-    label: 'City Clash',
     icon: Users,
     sidebar: true,
     protected: true,
