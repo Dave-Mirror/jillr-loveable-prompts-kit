@@ -43,7 +43,7 @@ const ChallengeCard = ({
         </AspectRatio>
         
         <div className="absolute top-2 right-2 flex gap-1">
-          <Badge variant="premium" className="z-10">
+          <Badge variant="secondary" className="z-10">
             {challenge.type}
           </Badge>
         </div>

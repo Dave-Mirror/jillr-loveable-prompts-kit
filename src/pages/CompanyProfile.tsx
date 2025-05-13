@@ -1,11 +1,10 @@
-
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import PageContainer from '@/components/navigation/PageContainer';
 import CompanyProfileComponent from '@/components/company/CompanyProfile';
 import { Globe, MapPin, Users, Target, Palette, Package, Layout } from 'lucide-react';
 import { Company, Challenge } from '@/utils/challenge/rewards/types';
-import ChallengeCard from '@/components/ChallengeCard';
+import { ChallengeCard } from '@/components/challenge-card';
 
 // Mock-Daten für die Firmendetails (in Produktion würde dies von einer API kommen)
 const mockCompany: Company = {
@@ -196,14 +195,15 @@ const CompanyProfile = () => {
             {challenges.map(challenge => (
               <ChallengeCard
                 key={challenge.id}
-                id={challenge.id}
-                title={challenge.title}
-                description={challenge.description}
-                type={challenge.type}
-                hashtags={challenge.hashtags}
-                xpReward={challenge.xpReward}
-                endDate={challenge.endDate}
-                imageUrl={challenge.imageUrl}
+                challenge={{
+                  id: challenge.id,
+                  title: challenge.title,
+                  description: challenge.description,
+                  type: challenge.type,
+                  imageUrl: challenge.imageUrl,
+                  reward: `${challenge.xpReward} XP`,
+                  expiresIn: new Date(challenge.endDate).toLocaleDateString()
+                }}
               />
             ))}
           </div>

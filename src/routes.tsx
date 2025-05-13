@@ -1,5 +1,5 @@
 
-import { Community, Settings, Dashboard, LiveMap, Login, NotFound, Onboarding, Profile, Register, ChallengeDetails, MapExperience } from "@/pages";
+import { MapExperience, Dashboard, LiveMap, Profile, NotFound, ChallengeDetails } from "@/pages";
 import { Compass, Home, LayoutDashboard, LucideIcon, MapPin, Settings as SettingsIcon, User, Users, Map } from "lucide-react";
 import { Challenge } from "./components/challenge/types";
 
@@ -18,22 +18,22 @@ export const protectedRoutes = ['/dashboard', '/profile', '/settings', '/create-
 const routes: Route[] = [
   {
     path: '/',
-    element: Onboarding,
+    element: MapExperience, // Wechsle zu MapExperience für die Startseite
     label: 'Home',
     icon: Home,
     sidebar: true,
   },
   {
     path: '/login',
-    element: Login,
+    element: NotFound, // Temporär NotFound verwenden, bis Login implementiert ist
   },
   {
     path: '/register',
-    element: Register,
+    element: NotFound, // Temporär NotFound verwenden, bis Register implementiert ist
   },
   {
     path: '/onboarding',
-    element: Onboarding,
+    element: MapExperience, // Wechsle zu MapExperience für Onboarding
   },
   {
     path: '/dashboard',
@@ -53,7 +53,7 @@ const routes: Route[] = [
   },
   {
     path: '/settings',
-    element: Settings,
+    element: Profile, // Verwende vorübergehend Profile anstelle von Settings
     label: 'Settings',
     icon: SettingsIcon,
     sidebar: true,
@@ -68,14 +68,14 @@ const routes: Route[] = [
   },
   {
     path: '/explore',
-    element: MapExperience, // Ersetzt Explore durch MapExperience
+    element: MapExperience,
     label: 'Explore',
     icon: Compass,
     sidebar: true,
   },
   {
     path: '/community',
-    element: Community,
+    element: NotFound, // Temporär NotFound verwenden, bis Community implementiert ist
     label: 'Community',
     icon: Users,
     sidebar: true,
