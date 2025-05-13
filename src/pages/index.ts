@@ -7,6 +7,7 @@ import ChallengeDetails from './ChallengeDetails';
 import CompanyProfile from './CompanyProfile';
 import MapExperience from './MapExperience';
 import ChallengeExplorer from './ChallengeExplorer';
+import React from 'react';
 
 // Placeholder for pages that aren't implemented yet
 const Placeholder = () => <NotFound message="This page is under construction" />;
