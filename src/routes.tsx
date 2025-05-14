@@ -1,5 +1,16 @@
 
-import { MapExperience, Dashboard, LiveMap, Profile, NotFound, ChallengeDetails, ChallengeExplorer } from "@/pages";
+import { 
+  UnifiedMap, 
+  Dashboard, 
+  Profile, 
+  NotFound, 
+  ChallengeDetails, 
+  ChallengeExplorer,
+  LiveMap,
+  ChallengeFeed,
+  CityClashPage,
+  MapExperience 
+} from "@/pages";
 import { Compass, Home, LayoutDashboard, Map, MapPin, Settings as SettingsIcon, User, Users } from "lucide-react";
 import { Challenge } from "./components/challenge/types";
 
@@ -18,9 +29,9 @@ export const protectedRoutes = ['/dashboard', '/profile', '/settings', '/create-
 const routes: Route[] = [
   {
     path: '/',
-    element: MapExperience,
-    label: 'Home',
-    icon: Home,
+    element: UnifiedMap,
+    label: 'Karte',
+    icon: Map,
     sidebar: true,
   },
   {
@@ -33,7 +44,7 @@ const routes: Route[] = [
   },
   {
     path: '/onboarding',
-    element: MapExperience,
+    element: UnifiedMap,
   },
   {
     path: '/dashboard',
@@ -74,6 +85,20 @@ const routes: Route[] = [
     sidebar: true,
   },
   {
+    path: '/feed',
+    element: ChallengeFeed,
+    label: 'Challenge Feed',
+    icon: Compass,
+    sidebar: false,
+  },
+  {
+    path: '/city-clash',
+    element: CityClashPage,
+    label: 'City Clash',
+    icon: Users,
+    sidebar: false,
+  },
+  {
     path: '/community',
     element: NotFound,
     label: 'Community',
@@ -88,6 +113,13 @@ const routes: Route[] = [
   {
     path: '/livemap',
     element: LiveMap,
+  },
+  {
+    path: '/unified-map',
+    element: UnifiedMap,
+    label: 'Entdecken',
+    icon: Compass,
+    sidebar: true,
   },
   {
     path: '*',

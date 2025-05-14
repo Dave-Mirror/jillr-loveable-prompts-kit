@@ -1,15 +1,15 @@
 
-import React, { useState } from 'react';
-import { MapPin, Trophy, Map, Moon, Glasses, Plus, X } from 'lucide-react';
+import React from 'react';
 import { Button } from '@/components/ui/button';
-import { MapMode } from '@/pages/ChallengeExplorer';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { MapPin, Trophy, Moon, Sun, MoonStar, Filter } from 'lucide-react';
+
+type MapModeType = 'standard' | 'satellite' | 'night' | 'ar';
 
 interface FloatingControlsProps {
   onLocationClick: () => void;
   onLeaderboardClick: () => void;
-  onMapModeChange: (mode: MapMode) => void;
-  currentMode: MapMode;
+  onMapModeChange: (mode: MapModeType) => void;
+  currentMode: MapModeType;
 }
 
 const FloatingControls: React.FC<FloatingControlsProps> = ({
@@ -18,68 +18,48 @@ const FloatingControls: React.FC<FloatingControlsProps> = ({
   onMapModeChange,
   currentMode
 }) => {
-  const [showExpanded, setShowExpanded] = useState(false);
-
   return (
-    <div className="flex flex-col gap-3">
-      {/* Map Mode Toggle buttons */}
-      {showExpanded && (
-        <div className="grid gap-2">
-          <Button 
-            variant={currentMode === 'standard' ? 'default' : 'outline'} 
-            size="icon"
-            onClick={() => onMapModeChange('standard')}
-            className="h-10 w-10 rounded-full shadow-neon bg-opacity-80"
-          >
-            <Map className="h-5 w-5" />
-          </Button>
-          
-          <Button 
-            variant={currentMode === 'night' ? 'default' : 'outline'} 
-            size="icon"
-            onClick={() => onMapModeChange('night')}
-            className="h-10 w-10 rounded-full shadow-neon bg-opacity-80"
-          >
-            <Moon className="h-5 w-5" />
-          </Button>
-          
-          <Button 
-            variant={currentMode === 'ar' ? 'default' : 'outline'} 
-            size="icon"
-            onClick={() => onMapModeChange('ar')}
-            className="h-10 w-10 rounded-full shadow-neon bg-opacity-80"
-          >
-            <Glasses className="h-5 w-5" />
-          </Button>
-          
-          <Button 
-            variant={currentMode === 'leaderboard' ? 'default' : 'outline'} 
-            size="icon"
-            onClick={onLeaderboardClick}
-            className="h-10 w-10 rounded-full shadow-neon bg-opacity-80"
-          >
-            <Trophy className="h-5 w-5" />
-          </Button>
-          
-          <Button 
-            variant="outline" 
-            size="icon"
-            onClick={onLocationClick}
-            className="h-10 w-10 rounded-full shadow-neon bg-opacity-80"
-          >
-            <MapPin className="h-5 w-5" />
-          </Button>
-        </div>
-      )}
-      
-      {/* Main toggle button */}
+    <div className="flex flex-col space-y-2">
       <Button 
-        variant={showExpanded ? "secondary" : "default"} 
-        size="icon"
-        onClick={() => setShowExpanded(!showExpanded)}
-        className="h-12 w-12 rounded-full shadow-neonStrong"
+        variant="outline" 
+        size="icon" 
+        className="h-10 w-10 rounded-full bg-jillr-dark/90 border-jillr-border shadow-lg backdrop-blur-sm"
+        onClick={onLocationClick}
       >
-        {showExpanded ? <X className="h-6 w-6" /> : <Plus className="h-6 w-6" />}
+        <MapPin className="h-5 w-5" />
+      </Button>
+      
+      <Button 
+        variant="outline" 
+        size="icon" 
+        className="h-10 w-10 rounded-full bg-jillr-dark/90 border-jillr-border shadow-lg backdrop-blur-sm"
+        onClick={onLeaderboardClick}
+      >
+        <Trophy className="h-5 w-5" />
+      </Button>
+
+      <Button 
+        variant="outline" 
+        size="icon" 
+        className={`h-10 w-10 rounded-full bg-jillr-dark/90 border-jillr-border shadow-lg backdrop-blur-sm ${
+          currentMode === 'night' ? 'bg-jillr-neonPurple/20 border-jillr-neonPurple' : ''
+        }`}
+        onClick={() => onMapModeChange(currentMode === 'night' ? 'standard' : 'night')}
+      >
+        {currentMode === 'night' ? (
+          <MoonStar className="h-5 w-5" />
+        ) : (
+          <Sun className="h-5 w-5" />
+        )}
+      </Button>
+
+      <Button 
+        variant="outline" 
+        size="icon" 
+        className="h-10 w-10 rounded-full bg-jillr-dark/90 border-jillr-border shadow-lg backdrop-blur-sm"
+        onClick={() => {}}
+      >
+        <Filter className="h-5 w-5" />
       </Button>
     </div>
   );
