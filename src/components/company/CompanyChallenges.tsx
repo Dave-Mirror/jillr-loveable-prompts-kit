@@ -37,11 +37,11 @@ const CompanyChallenges: React.FC<CompanyChallengesProps> = ({ challenges }) => 
             challenge={{
               id: challenge.id,
               title: challenge.title,
-              description: challenge.description,
-              type: challenge.type,
+              description: challenge.description || '',
+              type: challenge.type || 'Challenge',
               imageUrl: challenge.imageUrl || '/placeholder.svg',
               reward: `${challenge.xpReward} XP`,
-              expiresIn: new Date(challenge.endDate).toLocaleDateString(),
+              expiresIn: challenge.endDate ? new Date(challenge.endDate).toLocaleDateString() : 'Aktiv',
             }}
             onClick={handleChallengeClick}
           />

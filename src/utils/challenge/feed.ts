@@ -1,5 +1,6 @@
 
 import { toast } from '@/hooks/use-toast';
+import { FeedItem as FeedItemType } from '@/components/challenge-feed/types';
 
 export interface Comment {
   id: string;
@@ -11,44 +12,11 @@ export interface Comment {
   likes: number;
 }
 
-export interface FeedItem {
-  id: string;
-  user: {
-    id: string;
-    name: string;
-    username: string;
-    avatar: string;
-    verified: boolean;
-  };
-  content: {
-    type: 'video' | 'image';
-    url: string;
-  };
-  caption: string;
-  hashtags: string[];
-  timestamp: string;
-  likes: number;
-  comments: number;
-  commentsList?: Comment[];  // Add commentsList to store actual comments
-  shares: number;
-  impactPoints: number;
-  liked: boolean;
-  challenge: {
-    id: string;
-    title: string;
-    icon: string;
-  };
-  location?: string;
-  achievements?: {
-    id: string;
-    name: string;
-    icon: string;
-    description: string;
-  }[];
-}
+// Using the type from challenge-feed/types.ts to avoid duplicates
+export type { FeedItemType as FeedItem };
 
 // Sample feed data
-export const fetchFeedData = async (): Promise<FeedItem[]> => {
+export const fetchFeedData = async (): Promise<FeedItemType[]> => {
   // In a real application, this would be an API call
   // Here we'll return mock data
   
@@ -58,187 +26,126 @@ export const fetchFeedData = async (): Promise<FeedItem[]> => {
   return [
     {
       id: 'feed-1',
-      user: {
-        id: 'user-1',
-        name: 'Sarah M.',
-        username: '@sarahmcreates',
-        avatar: '/placeholder.svg',
-        verified: true
-      },
-      content: {
-        type: 'video',
-        url: '/placeholder.svg'
-      },
+      userId: 'user-1',
+      username: 'Sarah M.',
+      userAvatar: '/placeholder.svg',
       caption: '✨ Meine Entdeckung dieses Cafés war super! #BaristaArt #CoffeeTime',
-      hashtags: ['BaristaArt', 'CoffeeTime', 'Berlin'],
-      timestamp: '2h',
+      mediaUrl: '/placeholder.svg',
+      mediaType: 'video',
+      liked: false,
       likes: 423,
-      comments: 57,
-      commentsList: [
+      views: 1200,
+      commentCount: 57,
+      comments: [
         {
           id: 'comment-1',
-          userId: 'user-2',
           username: 'Kaffeeliebhaber',
-          userAvatar: '/placeholder.svg',
           text: 'Wow, das sieht toll aus! In welchem Café war das?',
-          timestamp: '1h',
-          likes: 5
+          timestamp: '1h'
         },
         {
           id: 'comment-2',
-          userId: 'user-3',
           username: 'BerlinFoodie',
-          userAvatar: '/placeholder.svg',
           text: 'Ich muss das unbedingt ausprobieren!',
-          timestamp: '30m',
-          likes: 2
+          timestamp: '30m'
         }
       ],
-      shares: 12,
-      impactPoints: 120,
-      liked: false,
-      challenge: {
-        id: 'challenge-coffee',
+      hashtags: ['BaristaArt', 'CoffeeTime', 'Berlin'],
+      type: 'challenge',
+      challengeInfo: {
         title: 'Coffee Culture',
-        icon: '☕'
+        reward: '120 XP',
       },
+      postedAt: '2h',
       location: 'Kreuzberg, Berlin',
-      achievements: [
-        {
-          id: 'achieve-1',
-          name: 'Coffee Explorer',
-          icon: '🥇',
-          description: 'Besuche 5 verschiedene Cafés'
-        }
-      ]
+      challengeId: 'challenge-coffee'
     },
     {
       id: 'feed-2',
-      user: {
-        id: 'user-2',
-        name: 'Max T.',
-        username: '@max_travel',
-        avatar: '/placeholder.svg',
-        verified: false
-      },
-      content: {
-        type: 'image',
-        url: '/placeholder.svg'
-      },
+      userId: 'user-2',
+      username: 'Max T.',
+      userAvatar: '/placeholder.svg',
       caption: 'Mein Besuch im neuen Tech Museum war absolut inspirierend! Danke @TechWorldBerlin für die Einladung. #TechInnovation #MuseumsTag',
-      hashtags: ['TechInnovation', 'MuseumsTag', 'Berlin', 'Digital'],
-      timestamp: '5h',
+      mediaUrl: '/placeholder.svg',
+      mediaType: 'image',
+      liked: false,
       likes: 256,
-      comments: 34,
-      commentsList: [
+      views: 800,
+      commentCount: 34,
+      comments: [
         {
           id: 'comment-3',
-          userId: 'user-5',
           username: 'TechFan',
-          userAvatar: '/placeholder.svg',
           text: 'Ich war letzte Woche dort! Die VR-Ausstellung ist fantastisch!',
-          timestamp: '4h',
-          likes: 8
+          timestamp: '4h'
         }
       ],
-      shares: 8,
-      impactPoints: 75,
-      liked: false,
-      challenge: {
-        id: 'challenge-museum',
+      hashtags: ['TechInnovation', 'MuseumsTag', 'Berlin', 'Digital'],
+      type: 'challenge',
+      challengeInfo: {
         title: 'Museum Challenge',
-        icon: '🏛️'
-      }
+        reward: '75 XP',
+      },
+      postedAt: '5h',
+      challengeId: 'challenge-museum'
     },
     {
       id: 'feed-3',
-      user: {
-        id: 'user-3',
-        name: 'Laura K.',
-        username: '@laurasustainable',
-        avatar: '/placeholder.svg',
-        verified: true
-      },
-      content: {
-        type: 'video',
-        url: '/placeholder.svg'
-      },
+      userId: 'user-3',
+      username: 'Laura K.',
+      userAvatar: '/placeholder.svg',
       caption: 'Ich nehme an der Sustainability Challenge teil! Hier ist mein erster Tag mit Zero Waste Einkauf 🌱 #Nachhaltigkeit #ZeroWaste',
-      hashtags: ['Nachhaltigkeit', 'ZeroWaste', 'EcoFriendly'],
-      timestamp: '1d',
+      mediaUrl: '/placeholder.svg',
+      mediaType: 'video',
+      liked: false,
       likes: 892,
-      comments: 103,
-      commentsList: [
+      views: 2500,
+      commentCount: 103,
+      comments: [
         {
           id: 'comment-4',
-          userId: 'user-6',
           username: 'EcoWarrior',
-          userAvatar: '/placeholder.svg',
           text: 'Du inspirierst mich! Welchen Laden kannst du empfehlen?',
-          timestamp: '23h',
-          likes: 12
+          timestamp: '23h'
         },
         {
           id: 'comment-5',
-          userId: 'user-7',
           username: 'GreenLife',
-          userAvatar: '/placeholder.svg',
           text: 'Tolle Initiative! Machst du mit bei der Clean-Up Aktion nächste Woche?',
-          timestamp: '20h',
-          likes: 6
+          timestamp: '20h'
         }
       ],
-      shares: 45,
-      impactPoints: 210,
-      liked: false,
-      challenge: {
-        id: 'challenge-sustainability',
+      hashtags: ['Nachhaltigkeit', 'ZeroWaste', 'EcoFriendly'],
+      type: 'challenge',
+      challengeInfo: {
         title: 'Sustainability Challenge',
-        icon: '♻️'
+        reward: '210 XP',
       },
-      achievements: [
-        {
-          id: 'achieve-2',
-          name: 'Eco Warrior',
-          icon: '🌱',
-          description: 'Nimm an 3 Umweltschutz-Challenges teil'
-        },
-        {
-          id: 'achieve-3',
-          name: 'Influencer',
-          icon: '🌟',
-          description: 'Erreiche 500+ Likes auf einem Nachhaltigkeits-Post'
-        }
-      ]
+      postedAt: '1d',
+      challengeId: 'challenge-sustainability'
     },
     {
       id: 'feed-4',
-      user: {
-        id: 'user-4',
-        name: 'Kai Z.',
-        username: '@kaithefoodie',
-        avatar: '/placeholder.svg',
-        verified: false
-      },
-      content: {
-        type: 'image',
-        url: '/placeholder.svg'
-      },
+      userId: 'user-4',
+      username: 'Kai Z.',
+      userAvatar: '/placeholder.svg',
       caption: 'Habe heute das neue Restaurant in der Kastanienallee ausprobiert. Die veganen Optionen sind fantastisch! 🍽️ #FoodLover #VeganFood',
-      hashtags: ['FoodLover', 'VeganFood', 'BerlinFood'],
-      timestamp: '2d',
-      likes: 341,
-      comments: 29,
-      commentsList: [],
-      shares: 6,
-      impactPoints: 65,
+      mediaUrl: '/placeholder.svg',
+      mediaType: 'image',
       liked: false,
-      challenge: {
-        id: 'challenge-food',
+      likes: 341,
+      views: 950,
+      commentCount: 29,
+      comments: [],
+      hashtags: ['FoodLover', 'VeganFood', 'BerlinFood'],
+      type: 'challenge',
+      challengeInfo: {
         title: 'Food Explorer Challenge',
-        icon: '🍔'
+        reward: '65 XP',
       },
-      location: 'Kastanienallee, Berlin'
+      postedAt: '2d',
+      location: 'Kastanienallee, Berlin',
+      challengeId: 'challenge-food'
     }
   ];
 };

@@ -4,8 +4,20 @@ import { useNavigate } from 'react-router-dom';
 import ChallengeCard from '../ChallengeCard';
 import { Challenge } from '@/utils/challenge/rewards/types';
 
+// Define an adapter interface for city challenges
+interface CityChallenge {
+  id: string;
+  title: string;
+  description: string;
+  type?: string;
+  imageUrl?: string;
+  xpReward?: number;
+  endDate?: string;
+  // Additional city-specific fields can be added here
+}
+
 interface CityClashChallengeGridProps {
-  challenges: Challenge[];
+  challenges: CityChallenge[];
 }
 
 const CityClashChallengeGrid: React.FC<CityClashChallengeGridProps> = ({ challenges }) => {
