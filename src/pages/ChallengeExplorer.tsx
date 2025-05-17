@@ -17,11 +17,12 @@ import AvatarHub from '@/components/challenge-explorer/AvatarHub';
 import LeaderboardOverlay from '@/components/challenge-explorer/LeaderboardOverlay';
 
 // Map filter types
-export type ChallengeCategory = 'all' | 'video' | 'fitness' | 'ar' | 'social' | 'geofencing' | 'easter-egg';
+export type ChallengeCategory = 'all' | 'video' | 'photo' | 'fitness' | 'ar' | 'social' | 'geofencing' | 'easter-egg';
 export type BrandFilter = 'all' | string;
 export type LocationFilter = 'current' | 'city' | 'global';
 export type TimeFilter = 'now' | 'today' | 'week' | 'all';
-export type MapMode = 'standard' | 'ar' | 'night' | 'leaderboard';
+export type MapMode = 'standard' | 'ar' | 'night' | 'satellite' | 'leaderboard';
+export type MapModeType = 'standard' | 'satellite' | 'night' | 'ar';
 
 const ChallengeExplorer = () => {
   const { toast } = useToast();
@@ -73,6 +74,15 @@ const ChallengeExplorer = () => {
     }
   };
 
+  // Create wrapper functions to fix type issues
+  const handleCategoryFilterChange = (value: ChallengeCategory) => {
+    setCategoryFilter(value);
+  };
+
+  const handleMapModeChange = (mode: MapModeType) => {
+    setMapMode(mode);
+  };
+
   return (
     <LiveMapProvider>
       <div className="relative h-screen w-full overflow-hidden bg-jillr-dark">
@@ -97,7 +107,7 @@ const ChallengeExplorer = () => {
         <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-20 w-auto max-w-4xl px-4">
           <FilterBar 
             categoryFilter={categoryFilter}
-            setCategoryFilter={setCategoryFilter}
+            setCategoryFilter={handleCategoryFilterChange}
             brandFilter={brandFilter}
             setBrandFilter={setBrandFilter}
             locationFilter={locationFilter}
@@ -127,8 +137,8 @@ const ChallengeExplorer = () => {
           <FloatingControls 
             onLocationClick={handleTrackLocation}
             onLeaderboardClick={toggleLeaderboard}
-            onMapModeChange={setMapMode}
-            currentMode={mapMode}
+            onMapModeChange={handleMapModeChange}
+            currentMode={mapMode as MapModeType}
           />
         </div>
 

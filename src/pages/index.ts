@@ -2,7 +2,7 @@
 export { default as Dashboard } from './Dashboard';
 export { default as Profile } from './Profile';
 export { default as NotFound } from './NotFound';
-export { default as ChallengeDetails } from './ChallengeDetails';
+export { default as ChallengeDetails } from './ChallengeDetail'; // Changed to correct path
 export { default as ChallengeExplorer } from './ChallengeExplorer';
 export { default as LiveMap } from './LiveMap';
 export { default as ChallengeFeed } from './ChallengeFeed';

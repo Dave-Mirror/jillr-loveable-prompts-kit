@@ -10,22 +10,22 @@ import FilterBar from '@/components/challenge-explorer/filter-bar';
 import UGCFeed from '@/components/map-experience/UGCFeed';
 import FloatingControls from '@/components/challenge-explorer/FloatingControls';
 import CityClashOverlay from '@/components/map-experience/CityClashOverlay';
+import { ChallengeCategory, BrandFilter, LocationFilter, TimeFilter } from '@/components/challenge-explorer/filter-bar/types';
 
 // Map modes and types
 export type MapMode = 'all' | 'challenges' | 'eastereggs' | 'photo-video' | 'cityclash' | 'ar';
 export type CategoryFilter = 'all' | 'video' | 'fitness' | 'ar' | 'social' | 'geofencing' | 'easter-egg';
-export type BrandFilter = 'all' | string;
-export type LocationFilter = 'current' | 'city' | 'global';
-export type TimeFilter = 'now' | 'today' | 'week' | 'all';
+export type MapModeType = 'standard' | 'satellite' | 'night' | 'ar';
 
 const UnifiedMapView: React.FC = () => {
   // State management for map and filters
   const [mapMode, setMapMode] = useState<MapMode>('all');
-  const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>('all');
+  const [categoryFilter, setCategoryFilter] = useState<ChallengeCategory>('all');
   const [brandFilter, setBrandFilter] = useState<BrandFilter>('all');
   const [locationFilter, setLocationFilter] = useState<LocationFilter>('city');
   const [timeFilter, setTimeFilter] = useState<TimeFilter>('all');
   const [showUGCFeed, setShowUGCFeed] = useState(false);
+  const [mapVisualMode, setMapVisualMode] = useState<MapModeType>('standard');
   
   // Handle mode/category changes
   const handleModeChange = (mode: MapMode) => {
@@ -53,6 +53,15 @@ const UnifiedMapView: React.FC = () => {
     }
   };
 
+  // Wrapper functions to fix the type issues
+  const handleCategoryFilterChange = (value: ChallengeCategory) => {
+    setCategoryFilter(value);
+  };
+
+  const handleMapModeChange = (mode: MapModeType) => {
+    setMapVisualMode(mode);
+  };
+
   // Map challenge category to visual indicator
   const getCategoryIcon = (category: string) => {
     switch(category) {
@@ -75,7 +84,7 @@ const UnifiedMapView: React.FC = () => {
           {/* Filter bar for all challenge types */}
           <FilterBar 
             categoryFilter={categoryFilter}
-            setCategoryFilter={setCategoryFilter}
+            setCategoryFilter={handleCategoryFilterChange}
             brandFilter={brandFilter}
             setBrandFilter={setBrandFilter}
             locationFilter={locationFilter}
@@ -161,8 +170,8 @@ const UnifiedMapView: React.FC = () => {
           <FloatingControls 
             onLocationClick={() => {}} // Add location handling
             onLeaderboardClick={() => {}} // Add leaderboard handling
-            onMapModeChange={(mode) => {}} // Add map visual mode handling
-            currentMode="standard"
+            onMapModeChange={handleMapModeChange} 
+            currentMode={mapVisualMode}
           />
         </div>
       </div>
