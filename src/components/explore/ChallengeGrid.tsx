@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import ChallengeCard from '../ChallengeCard';
 
 interface Challenge {
@@ -18,6 +19,12 @@ interface ChallengeGridProps {
 }
 
 const ChallengeGrid: React.FC<ChallengeGridProps> = ({ challenges }) => {
+  const navigate = useNavigate();
+  
+  const handleChallengeClick = (id: string) => {
+    navigate(`/challenge/${id}`);
+  };
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {challenges.length === 0 ? (
@@ -38,6 +45,7 @@ const ChallengeGrid: React.FC<ChallengeGridProps> = ({ challenges }) => {
               reward: `${challenge.xpReward} XP`,
               expiresIn: new Date(challenge.endDate).toLocaleDateString(),
             }}
+            onClick={handleChallengeClick}
           />
         ))
       )}

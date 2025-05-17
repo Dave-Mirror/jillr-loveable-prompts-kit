@@ -6,6 +6,7 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { MapPin, Clock, Award, Trophy } from "lucide-react";
 import { ChallengeCardProps } from './types';
 import { cn } from '@/lib/utils';
+import { useNavigate } from 'react-router-dom';
 
 const ChallengeCard = ({
   challenge,
@@ -14,6 +15,18 @@ const ChallengeCard = ({
   onClick,
   onJoinClick
 }: ChallengeCardProps) => {
+  const navigate = useNavigate();
+  
+  const handleCardClick = () => {
+    // Wenn eine onClick-Funktion übergeben wurde, rufe diese auf
+    if (onClick) {
+      onClick(challenge.id);
+    } else {
+      // Ansonsten navigiere direkt zur Challenge-Detailseite
+      navigate(`/challenge/${challenge.id}`);
+    }
+  };
+
   const handleJoinClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (onJoinClick) onJoinClick(challenge.id);
@@ -21,7 +34,7 @@ const ChallengeCard = ({
 
   return (
     <div 
-      onClick={() => onClick?.(challenge.id)}
+      onClick={handleCardClick}
       className={cn(
         "bg-jillr-dark border border-jillr-border rounded-lg overflow-hidden transition-all duration-300 hover:shadow-neon",
         "group cursor-pointer hover:scale-[1.02]",

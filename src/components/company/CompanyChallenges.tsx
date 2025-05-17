@@ -3,12 +3,19 @@ import React from 'react';
 import { Layout, Users } from 'lucide-react';
 import { Challenge } from '@/utils/challenge/rewards/types';
 import ChallengeCard from '@/components/challenge-card/ChallengeCard';
+import { useNavigate } from 'react-router-dom';
 
 interface CompanyChallengesProps {
   challenges: Challenge[];
 }
 
 const CompanyChallenges: React.FC<CompanyChallengesProps> = ({ challenges }) => {
+  const navigate = useNavigate();
+  
+  const handleChallengeClick = (id: string) => {
+    navigate(`/challenge/${id}`);
+  };
+
   return (
     <div className="mb-10">
       <div className="flex items-center justify-between mb-5">
@@ -36,6 +43,7 @@ const CompanyChallenges: React.FC<CompanyChallengesProps> = ({ challenges }) => 
               reward: `${challenge.xpReward} XP`,
               expiresIn: new Date(challenge.endDate).toLocaleDateString(),
             }}
+            onClick={handleChallengeClick}
           />
         ))}
       </div>

@@ -1,68 +1,81 @@
 
-import { useState } from 'react';
-import { toast } from '@/hooks/use-toast';
-import { FeedItem } from '@/utils/challenge/feed';
-import { joinChallenge } from '@/utils/challenge/feed';
-
-interface Comment {
-  id: string;
-  userId: string;
-  username: string;
-  userAvatar: string;
-  text: string;
-  timestamp: string;
-  likes: number;
-}
+import { useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from './use-toast';
+import { FeedItem } from '@/components/challenge-feed/types';
 
 export const useFeedInteractions = (
   feedItems: FeedItem[],
   setFeedItems: React.Dispatch<React.SetStateAction<FeedItem[]>>
 ) => {
-  // Track which feed item's comments are currently open
+  const navigate = useNavigate();
   const [activeComments, setActiveComments] = useState<string | null>(null);
 
-  // Handle like interaction
-  const handleLike = (id: string) => {
-    setFeedItems(items => 
-      items.map(item => 
-        item.id === id 
-          ? { 
-              ...item, 
-              liked: !item.liked, 
-              likes: item.liked ? item.likes - 1 : item.likes + 1,
-              impactPoints: item.liked ? item.impactPoints - 2 : item.impactPoints + 2
-            } 
+  const handleLike = useCallback((itemId: string) => {
+    setFeedItems(prev => 
+      prev.map(item => 
+        item.id === itemId 
+          ? { ...item, liked: !item.liked, likes: item.liked ? item.likes - 1 : item.likes + 1 } 
           : item
       )
     );
-  };
-
-  // Handle comment interaction
-  const handleComment = (id: string) => {
-    // Toggle comments view
-    setActiveComments(activeComments === id ? null : id);
-  };
-
-  // Add a comment to a feed item
-  const addComment = (feedItemId: string, commentText: string) => {
-    const now = new Date();
-    const newComment: Comment = {
-      id: `comment-${Date.now()}`,
-      userId: 'current-user',
-      username: 'Du',
-      userAvatar: '/placeholder.svg',
-      text: commentText,
-      timestamp: now.toLocaleTimeString(),
-      likes: 0
-    };
     
-    setFeedItems(items => 
-      items.map(item => 
-        item.id === feedItemId 
+    toast({
+      title: "Like gespeichert",
+      description: "Dein Like wurde erfolgreich gespeichert."
+    });
+  }, [setFeedItems]);
+
+  const handleComment = useCallback((itemId: string) => {
+    setActiveComments(prev => prev === itemId ? null : itemId);
+  }, []);
+
+  const handleShare = useCallback((itemId: string) => {
+    if (navigator.share) {
+      navigator.share({
+        title: 'Teile diesen Inhalt',
+        text: 'Schau dir das an!',
+        url: `${window.location.origin}/feed/${itemId}`,
+      }).catch(console.error);
+    } else {
+      navigator.clipboard.writeText(`${window.location.origin}/feed/${itemId}`);
+      toast({
+        title: "Link kopiert",
+        description: "Link wurde in die Zwischenablage kopiert."
+      });
+    }
+  }, []);
+
+  const handleSupportCause = useCallback((itemId: string) => {
+    toast({
+      title: "Cause unterstützt!",
+      description: "Vielen Dank für deine Unterstützung."
+    });
+  }, []);
+
+  const handleJoinChallenge = useCallback((challengeId: string) => {
+    // Navigiere zur Challenge-Detailseite
+    navigate(`/challenge/${challengeId}`);
+  }, [navigate]);
+
+  const addComment = useCallback((itemId: string, comment: string) => {
+    if (!comment.trim()) return;
+    
+    setFeedItems(prev => 
+      prev.map(item => 
+        item.id === itemId 
           ? { 
               ...item, 
-              comments: item.comments + 1,
-              commentsList: [...(item.commentsList || []), newComment]
+              comments: [
+                { 
+                  id: `comment-${Date.now()}`, 
+                  username: 'Du', 
+                  text: comment, 
+                  timestamp: new Date().toISOString() 
+                },
+                ...item.comments
+              ],
+              commentCount: item.commentCount + 1
             } 
           : item
       )
@@ -70,61 +83,9 @@ export const useFeedInteractions = (
     
     toast({
       title: "Kommentar hinzugefügt",
-      description: "Dein Kommentar wurde erfolgreich gepostet.",
+      description: "Dein Kommentar wurde erfolgreich hinzugefügt."
     });
-  };
-
-  // Handle share interaction
-  const handleShare = (id: string) => {
-    toast({
-      title: "Share",
-      description: "Share feature coming soon!",
-    });
-    
-    setFeedItems(items => 
-      items.map(item => 
-        item.id === id 
-          ? { ...item, shares: item.shares + 1, impactPoints: item.impactPoints + 5 }
-          : item
-      )
-    );
-  };
-
-  // Show unique feature: Support the cause
-  const handleSupportCause = (id: string) => {
-    toast({
-      title: "Impact Made!",
-      description: "Thank you for supporting this cause! +25 impact points awarded.",
-      className: "bg-jillr-neonGreen/20"
-    });
-    
-    setFeedItems(items => 
-      items.map(item => 
-        item.id === id 
-          ? { ...item, impactPoints: item.impactPoints + 25 }
-          : item
-      )
-    );
-  };
-
-  // Handle join challenge action
-  const handleJoinChallenge = async (challengeId: string, challengeTitle: string) => {
-    try {
-      await joinChallenge(challengeId);
-      toast({
-        title: "Challenge beigetreten",
-        description: `Du nimmst jetzt an der Challenge "${challengeTitle}" teil!`,
-        variant: "default"
-      });
-    } catch (error) {
-      console.error('Failed to join challenge:', error);
-      toast({
-        title: "Fehler",
-        description: "Beitritt zur Challenge fehlgeschlagen.",
-        variant: "destructive"
-      });
-    }
-  };
+  }, [setFeedItems]);
 
   return {
     handleLike,
@@ -137,3 +98,5 @@ export const useFeedInteractions = (
     setActiveComments,
   };
 };
+
+export default useFeedInteractions;

@@ -1,27 +1,44 @@
 
 import React from 'react';
-import { CityChallenge } from '@/hooks/useCityClashData';
-import CityClashCard from './CityClashCard';
+import { useNavigate } from 'react-router-dom';
+import ChallengeCard from '../ChallengeCard';
+import { Challenge } from '@/utils/challenge/rewards/types';
 
 interface CityClashChallengeGridProps {
-  challenges: CityChallenge[];
+  challenges: Challenge[];
 }
 
 const CityClashChallengeGrid: React.FC<CityClashChallengeGridProps> = ({ challenges }) => {
-  if (challenges.length === 0) {
-    return (
-      <div className="text-center py-12 bg-jillr-dark/50 border border-jillr-border rounded-lg">
-        <p className="text-lg text-gray-400">Keine City Clash Challenges gefunden</p>
-        <p className="text-sm text-gray-500 mt-2">Versuche es später noch einmal oder wechsle zu einem anderen Bereich.</p>
-      </div>
-    );
-  }
+  const navigate = useNavigate();
+  
+  const handleChallengeClick = (id: string) => {
+    navigate(`/challenge/${id}`);
+  };
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {challenges.map((challenge) => (
-        <CityClashCard key={challenge.id} challenge={challenge} />
-      ))}
+      {challenges.length === 0 ? (
+        <div className="col-span-full text-center py-12">
+          <p className="text-lg text-muted-foreground">Keine City Clash Challenges gefunden.</p>
+          <p className="text-sm text-muted-foreground mt-2">Versuche einen anderen Stadtteil auszuwählen.</p>
+        </div>
+      ) : (
+        challenges.map(challenge => (
+          <ChallengeCard
+            key={challenge.id}
+            challenge={{
+              id: challenge.id,
+              title: challenge.title,
+              description: challenge.description,
+              type: challenge.type || 'City Challenge',
+              imageUrl: challenge.imageUrl || '/placeholder.svg',
+              reward: `${challenge.xpReward || 100} XP`,
+              expiresIn: challenge.endDate ? new Date(challenge.endDate).toLocaleDateString() : 'Aktiv',
+            }}
+            onClick={handleChallengeClick}
+          />
+        ))
+      )}
     </div>
   );
 };
