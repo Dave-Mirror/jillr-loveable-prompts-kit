@@ -1,31 +1,11 @@
 
-import Dashboard from './Dashboard';
-import LiveMap from './LiveMap';
-import Profile from './Profile';
-import NotFound from './NotFound';
-import ChallengeDetails from './ChallengeDetail'; // Fixed path
-import CompanyProfile from './CompanyProfile';
-import MapExperience from './MapExperience';
-import ChallengeExplorer from './ChallengeExplorer';
-import React from 'react';
-
-// Placeholder for pages that aren't implemented yet
-const Placeholder: React.FC<{message?: string}> = function Placeholder(props) {
-  return React.createElement(NotFound, { message: props.message || "This page is under construction" });
-};
-
-export {
-  Dashboard,
-  LiveMap,
-  Profile,
-  ChallengeDetails,
-  CompanyProfile,
-  MapExperience,
-  ChallengeExplorer,
-  NotFound,
-  Placeholder as Login,
-  Placeholder as Register,
-  Placeholder as Onboarding,
-  Placeholder as Settings,
-  Placeholder as Community
-};
+export { default as Dashboard } from './Dashboard';
+export { default as Profile } from './Profile';
+export { default as NotFound } from './NotFound';
+export { default as ChallengeDetails } from './ChallengeDetails';
+export { default as ChallengeExplorer } from './ChallengeExplorer';
+export { default as LiveMap } from './LiveMap';
+export { default as ChallengeFeed } from './ChallengeFeed';
+export { default as CityClashPage } from './CityClashPage';
+export { default as MapExperience } from './MapExperience';
+export { default as UnifiedMap } from './UnifiedMap';
