@@ -135,7 +135,18 @@ const CompanyProfile = () => {
           {challenges.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {formattedChallenges.map(challenge => (
-                <ChallengeCard key={challenge.id} {...challenge} />
+                <ChallengeCard 
+                  key={challenge.id} 
+                  challenge={{
+                    id: challenge.id,
+                    title: challenge.title,
+                    description: challenge.description,
+                    type: challenge.type,
+                    imageUrl: challenge.imageUrl || '/placeholder.svg',
+                    reward: `${challenge.xpReward} XP`,
+                    expiresIn: new Date(challenge.endDate).toLocaleDateString(),
+                  }}
+                />
               ))}
             </div>
           ) : (

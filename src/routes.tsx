@@ -1,5 +1,6 @@
-import { ChallengeFeed, CityClash, Community, CreateChallenge, Dashboard, Explore, Home, LandingPage, Legal, LiveMap, Login, NotFound, Onboarding, Profile, Register, Settings, ChallengeDetails } from "@/pages";
-import { ChallengeFeed as ChallengeFeedIcon, Compass, Home as HomeIcon, LayoutDashboard, LucideIcon, MapPin, Settings as SettingsIcon, User, Users } from "lucide-react";
+
+import { ChallengeFeed, CityClash, Community, CreateChallenge, Dashboard, Explore, Home, LandingPage, Legal, LiveMap, Login, NotFound, Onboarding, Profile, Register, Settings, ChallengeDetail } from "@/pages";
+import { Compass, Home as HomeIcon, LayoutDashboard, LucideIcon, MapPin, Settings as SettingsIcon, User, Users } from "lucide-react";
 import { Challenge } from "./components/challenge/types";
 
 interface Route {
@@ -70,7 +71,6 @@ const routes: Route[] = [
     path: '/challenge-feed',
     element: ChallengeFeed,
     label: 'Challenge Feed',
-    icon: ChallengeFeedIcon,
     sidebar: true,
   },
   {
@@ -106,7 +106,7 @@ const routes: Route[] = [
   },
   {
     path: '/challenge/:challengeId',
-    element: ChallengeDetails,
+    element: ChallengeDetail,
   },
   {
     path: '/livemap',

@@ -21,3 +21,24 @@ export interface ChallengeCardProps {
   onClick?: (id: string) => void;
   onJoinClick?: (id: string) => void;
 }
+
+// Challenge type icons mapping
+export const typeIcons: Record<string, string> = {
+  'photo': '📸',
+  'video': '🎬',
+  'photo & video': '📸',
+  'ar': '🥽',
+  'geofencing': '📍',
+  'fitness': '💪',
+  'sustainability': '♻️',
+  'gamification': '🎮',
+  'community': '👥',
+  'battle': '⚔️',
+  'review': '⭐',
+  'travel': '✈️',
+  'food': '🍔',
+  'fashion': '👕',
+  'beauty': '💄',
+  'dance': '💃',
+  'sport': '🏆'
+};
