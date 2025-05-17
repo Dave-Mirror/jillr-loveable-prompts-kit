@@ -22,11 +22,11 @@ const CompanyProfile = () => {
       
       setIsLoading(true);
       try {
-        // Lade die Unternehmensdaten
+        // Load company data
         const companyData = await getCompany(id);
         setCompany(companyData);
         
-        // Lade die zugehörigen Challenges
+        // Load associated challenges
         if (companyData && companyData.challenges.length > 0) {
           const challengePromises = companyData.challenges.map(challengeId => 
             getChallenge(challengeId)
@@ -37,10 +37,10 @@ const CompanyProfile = () => {
           setChallenges(validChallenges);
         }
       } catch (error) {
-        console.error('Fehler beim Laden der Unternehmensdaten:', error);
+        console.error('Error loading company data:', error);
         toast({
-          title: 'Fehler beim Laden',
-          description: 'Die Unternehmensdaten konnten nicht geladen werden.',
+          title: 'Error loading',
+          description: 'The company data could not be loaded.',
           variant: 'destructive'
         });
       } finally {
@@ -51,23 +51,22 @@ const CompanyProfile = () => {
     fetchCompanyData();
   }, [id, toast]);
 
-  // Formatieren der Challenges für die ChallengeCard-Komponente
+  // Format challenges for the ChallengeCard component
   const formattedChallenges = challenges.map(challenge => ({
     id: challenge.id,
     title: challenge.title,
     description: challenge.description,
     type: challenge.type,
-    hashtags: challenge.hashtags,
-    xpReward: challenge.xpReward,
-    endDate: challenge.endDate,
-    imageUrl: challenge.imageUrl
+    imageUrl: challenge.imageUrl || '/placeholder.svg',
+    reward: `${challenge.xpReward} XP`,
+    expiresIn: new Date(challenge.endDate).toLocaleDateString(),
   }));
 
   if (isLoading) {
     return (
       <div className="container mx-auto max-w-6xl py-12 text-center">
         <div className="w-12 h-12 border-4 border-jillr-neonPurple border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-        <p className="text-muted-foreground">Unternehmensdaten werden geladen...</p>
+        <p className="text-muted-foreground">Loading company data...</p>
       </div>
     );
   }
@@ -75,15 +74,15 @@ const CompanyProfile = () => {
   if (!company) {
     return (
       <div className="container mx-auto max-w-6xl py-12 text-center">
-        <h2 className="text-2xl font-bold mb-4">Unternehmen nicht gefunden</h2>
-        <p className="text-muted-foreground">Das gesuchte Unternehmen konnte nicht gefunden werden.</p>
+        <h2 className="text-2xl font-bold mb-4">Company not found</h2>
+        <p className="text-muted-foreground">The requested company could not be found.</p>
       </div>
     );
   }
 
   return (
     <div className="container mx-auto max-w-6xl py-12">
-      {/* Header mit Logo und Informationen */}
+      {/* Header with logo and information */}
       <div className="flex flex-col md:flex-row gap-8 mb-12">
         <div className="flex-shrink-0">
           <img 
@@ -118,40 +117,32 @@ const CompanyProfile = () => {
             rel="noopener noreferrer" 
             className="inline-flex items-center text-jillr-neonBlue hover:underline"
           >
-            Website besuchen
+            Visit website
           </a>
         </div>
       </div>
       
-      {/* Tabs mit Challenges, Belohnungen usw. */}
+      {/* Tabs with Challenges, Rewards etc. */}
       <Tabs defaultValue="challenges">
         <TabsList>
           <TabsTrigger value="challenges">Challenges</TabsTrigger>
-          <TabsTrigger value="rewards">Belohnungen</TabsTrigger>
-          <TabsTrigger value="about">Über uns</TabsTrigger>
+          <TabsTrigger value="rewards">Rewards</TabsTrigger>
+          <TabsTrigger value="about">About us</TabsTrigger>
         </TabsList>
         
         <TabsContent value="challenges" className="pt-6">
-          {challenges.length > 0 ? (
+          {formattedChallenges.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {formattedChallenges.map(challenge => (
                 <ChallengeCard 
                   key={challenge.id} 
-                  challenge={{
-                    id: challenge.id,
-                    title: challenge.title,
-                    description: challenge.description,
-                    type: challenge.type,
-                    imageUrl: challenge.imageUrl || '/placeholder.svg',
-                    reward: `${challenge.xpReward} XP`,
-                    expiresIn: new Date(challenge.endDate).toLocaleDateString(),
-                  }}
+                  challenge={challenge}
                 />
               ))}
             </div>
           ) : (
             <div className="text-center py-12">
-              <p className="text-muted-foreground">Keine aktiven Challenges verfügbar.</p>
+              <p className="text-muted-foreground">No active challenges available.</p>
             </div>
           )}
         </TabsContent>
@@ -161,7 +152,7 @@ const CompanyProfile = () => {
             {company.availableResources.map((resource, index) => (
               <Card key={index}>
                 <CardHeader>
-                  <CardTitle>Verfügbare Ressource</CardTitle>
+                  <CardTitle>Available Resource</CardTitle>
                   <CardDescription>{resource}</CardDescription>
                 </CardHeader>
               </Card>
@@ -172,22 +163,22 @@ const CompanyProfile = () => {
         <TabsContent value="about" className="pt-6">
           <Card>
             <CardHeader>
-              <CardTitle>Über {company.name}</CardTitle>
+              <CardTitle>About {company.name}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-lg font-medium mb-1">Beschreibung</h3>
+                  <h3 className="text-lg font-medium mb-1">Description</h3>
                   <p>{company.description}</p>
                 </div>
                 
                 <div>
-                  <h3 className="text-lg font-medium mb-1">Tonalität</h3>
+                  <h3 className="text-lg font-medium mb-1">Tone</h3>
                   <p>{company.tone}</p>
                 </div>
                 
                 <div>
-                  <h3 className="text-lg font-medium mb-1">Zielgruppe</h3>
+                  <h3 className="text-lg font-medium mb-1">Target Audience</h3>
                   <ul className="list-disc pl-5">
                     {company.targetAudience.map((audience, index) => (
                       <li key={index}>{audience}</li>
@@ -196,7 +187,7 @@ const CompanyProfile = () => {
                 </div>
                 
                 <div>
-                  <h3 className="text-lg font-medium mb-1">Verfügbare Ressourcen</h3>
+                  <h3 className="text-lg font-medium mb-1">Available Resources</h3>
                   <ul className="list-disc pl-5">
                     {company.availableResources.map((resource, index) => (
                       <li key={index}>{resource}</li>
@@ -205,7 +196,7 @@ const CompanyProfile = () => {
                 </div>
                 
                 <div>
-                  <h3 className="text-lg font-medium mb-1">Markenfarben</h3>
+                  <h3 className="text-lg font-medium mb-1">Brand Colors</h3>
                   <div className="flex gap-2 mt-2">
                     {company.colorPalette.map((color, index) => (
                       <div 

@@ -1,5 +1,23 @@
 
-import { ChallengeFeed, CityClash, Community, CreateChallenge, Dashboard, Explore, Home, LandingPage, Legal, LiveMap, Login, NotFound, Onboarding, Profile, Register, Settings, ChallengeDetail } from "@/pages";
+import { 
+  ChallengeFeed, 
+  CityClash, 
+  Community, 
+  CreateChallenge, 
+  Dashboard, 
+  Explore, 
+  Home, 
+  LandingPage, 
+  Legal, 
+  LiveMap, 
+  Login, 
+  NotFound, 
+  Onboarding, 
+  Profile, 
+  Register, 
+  Settings, 
+  ChallengeDetail 
+} from "@/pages";
 import { Compass, Home as HomeIcon, LayoutDashboard, LucideIcon, MapPin, Settings as SettingsIcon, User, Users } from "lucide-react";
 import { Challenge } from "./components/challenge/types";
 
