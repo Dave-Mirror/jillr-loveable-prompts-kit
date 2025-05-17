@@ -10,27 +10,26 @@ interface FilterCheckboxItemProps {
   icon?: React.ReactNode;
 }
 
-const FilterCheckboxItem: React.FC<FilterCheckboxItemProps> = ({
-  id,
-  label,
-  checked,
+const FilterCheckboxItem: React.FC<FilterCheckboxItemProps> = ({ 
+  id, 
+  label, 
+  checked, 
   onChange,
-  icon
+  icon 
 }) => {
   return (
     <div className="flex items-center space-x-2">
       <Checkbox 
         id={id} 
         checked={checked} 
-        onCheckedChange={onChange} 
-        className="data-[state=checked]:bg-jillr-neonPurple data-[state=checked]:border-jillr-neonPurple" 
+        onCheckedChange={onChange}
       />
       <label 
-        htmlFor={id} 
-        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-2 cursor-pointer"
+        htmlFor={id}
+        className="text-sm flex items-center space-x-2 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
       >
-        {icon && icon}
-        {label}
+        {icon && <span className="mr-2">{icon}</span>}
+        <span>{label}</span>
       </label>
     </div>
   );

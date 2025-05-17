@@ -8,12 +8,16 @@ import MapLayout from '@/components/livemap/layout/MapLayout';
 import LiveMapView from '@/components/livemap/map/LiveMapView';
 import EventCalendar from '@/components/livemap/calendar/EventCalendar';
 import ARScanner from '@/components/livemap/scanner/ARScanner';
+import LiveMapFilters from '@/components/livemap/LiveMapFilters';
+import { useLiveMap } from '@/hooks/useLiveMap';
 
 const LiveMap = () => {
   const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState('');
   const [showScanner, setShowScanner] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
   const [activeTab, setActiveTab] = useState('map');
+  const { filters, setFilters, resetFilters } = useLiveMap();
   
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,6 +63,30 @@ const LiveMap = () => {
     console.log("Scan result:", result);
   };
 
+  const handleFilterChange = (category: string, value: string) => {
+    setFilters(prev => {
+      const currentArray = prev[category as keyof typeof prev] as string[];
+      if (currentArray.includes(value)) {
+        return {
+          ...prev,
+          [category]: currentArray.filter(item => item !== value)
+        };
+      } else {
+        return {
+          ...prev,
+          [category]: [...currentArray, value]
+        };
+      }
+    });
+  };
+
+  const handleRadiusChange = (value: number[]) => {
+    setFilters(prev => ({
+      ...prev,
+      radius: value[0]
+    }));
+  };
+
   return (
     <LiveMapProvider>
       <div className="container max-w-7xl mx-auto px-4 py-4">
@@ -80,6 +108,7 @@ const LiveMap = () => {
             handleSearch={handleSearch}
             handleLocationClick={handleLocationClick}
             handleScanClick={() => setShowScanner(true)}
+            handleFilterClick={() => setShowFilters(true)}
           >
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
               <TabsContent value="map" className="mt-0">
@@ -98,6 +127,15 @@ const LiveMap = () => {
           onScanComplete={handleScanComplete}
           title="Scan Easter Egg"
           description="Point your camera at the QR code or AR marker to discover hidden Easter eggs, challenges, or exclusive drops!"
+        />
+
+        <LiveMapFilters 
+          open={showFilters} 
+          onOpenChange={setShowFilters}
+          filters={filters}
+          onFilterChange={handleFilterChange}
+          onRadiusChange={handleRadiusChange}
+          onResetFilters={resetFilters}
         />
       </div>
     </LiveMapProvider>

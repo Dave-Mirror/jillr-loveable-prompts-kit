@@ -34,4 +34,17 @@ export interface FeedItem {
   };
   postedAt: string;
   location?: string;
+  // Zusätzliche Felder zur Behebung der Build-Fehler
+  achievements?: any[];
+  content?: any;
+  shares?: number;
+  impactPoints?: number;
+  user?: {
+    id: string;
+    name: string;
+    username: string;
+    avatar: string;
+  };
+  challenge?: any;
+  commentsList?: Comment[];
 }
