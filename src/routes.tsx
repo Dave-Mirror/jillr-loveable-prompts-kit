@@ -1,4 +1,3 @@
-
 import { 
   Compass, 
   Home as HomeIcon, 
@@ -9,23 +8,23 @@ import {
   Users 
 } from "lucide-react";
 
-// Import pages individually instead of from '@/pages'
+// Import pages individually
 import Explore from "@/pages/Explore";
 import ChallengeFeed from "@/pages/ChallengeFeed";
-import CityClash from "@/pages/CityClash";
-import Community from "@/pages/Community";
-import CreateChallenge from "@/pages/CreateChallenge";
+import CityClashPage from "@/pages/CityClashPage";
+import Community from "@/pages/NotFound";
+import CreateChallenge from "@/pages/ChallengeEditor";
 import Dashboard from "@/pages/Dashboard";
-import Home from "@/pages/Home";
+import Home from "@/pages/Index";
 import LandingPage from "@/pages/Index";
-import Legal from "@/pages/Legal";
+import Legal from "@/pages/NotFound";
 import LiveMap from "@/pages/LiveMap";
 import Login from "@/pages/Auth";
 import NotFound from "@/pages/NotFound";
-import Onboarding from "@/pages/Onboarding";
+import Onboarding from "@/pages/NotFound";
 import Profile from "@/pages/Profile";
 import Register from "@/pages/Auth";
-import Settings from "@/pages/Settings";
+import Settings from "@/pages/NotFound";
 import ChallengeDetail from "@/pages/ChallengeDetail";
 import CompanyProfile from "@/pages/CompanyProfile";
 
@@ -127,7 +126,7 @@ const routes: Route[] = [
   },
   {
     path: '/city-clash',
-    element: CityClash,
+    element: CityClashPage,
     label: 'City Clash',
     icon: Users,
     sidebar: true,
