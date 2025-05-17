@@ -1,11 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
+import { useLiveMap } from '@/hooks/useLiveMap';
 import { ChevronLeft, ChevronRight, Heart, MessageCircle, Share } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
 import { ChallengeCard } from '@/components/challenge-card';
+import { Challenge } from '@/components/challenge-card/types';
 
 // Mock-Daten für den UGC-Feed
-const mockUGCItems = [
+const mockUGCItems: Challenge[] = [
   {
     id: 'ugc-1',
     title: 'Summer Fashion Challenge',
@@ -48,24 +49,9 @@ const mockUGCItems = [
   }
 ];
 
-interface UGCFeedProps {
-  categoryFilter?: string;
-  locationFilter?: string;
-}
-
-const UGCFeed: React.FC<UGCFeedProps> = ({ categoryFilter = 'all', locationFilter = 'global' }) => {
+const UGCFeed: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [ugcItems, setUgcItems] = useState(mockUGCItems);
-  const { toast } = useToast();
-  
-  useEffect(() => {
-    // Filter UGC items based on category if needed
-    if (categoryFilter !== 'all') {
-      setUgcItems(mockUGCItems.filter(item => item.type.includes(categoryFilter)));
-    } else {
-      setUgcItems(mockUGCItems);
-    }
-  }, [categoryFilter]);
+  const [ugcItems, setUgcItems] = useState<Challenge[]>(mockUGCItems);
   
   const handleNextItem = () => {
     if (activeIndex < ugcItems.length - 1) {
@@ -80,86 +66,71 @@ const UGCFeed: React.FC<UGCFeedProps> = ({ categoryFilter = 'all', locationFilte
   };
   
   const handleJoinChallenge = (id: string) => {
-    toast({
-      title: "Challenge beigetreten!",
-      description: `Du nimmst jetzt an der Challenge ${id} teil.`
-    });
+    console.log(`Joining challenge: ${id}`);
   };
-  
-  if (ugcItems.length === 0) {
-    return (
-      <div className="w-full h-full bg-gradient-to-t from-jillr-dark to-transparent p-4 flex items-center justify-center">
-        <p className="text-white text-center">Keine Foto- oder Video-Challenges in dieser Region gefunden.</p>
-      </div>
-    );
-  }
   
   return (
     <div className="w-full h-full bg-gradient-to-t from-jillr-dark to-transparent p-2 pt-6 relative">
-      <div className="absolute top-2 left-0 right-0 flex justify-between items-center px-4 z-10">
-        <h3 className="text-white font-semibold text-sm">Foto & Video Challenges</h3>
-        <div className="flex space-x-1 items-center">
-          <button 
-            className={`w-8 h-8 rounded-full flex items-center justify-center ${activeIndex === 0 ? 'text-gray-500 bg-gray-800/30' : 'text-white bg-gray-800/60'}`}
-            onClick={handlePrevItem}
-            disabled={activeIndex === 0}
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </button>
-          <span className="text-white text-xs">{activeIndex + 1}/{ugcItems.length}</span>
-          <button 
-            className={`w-8 h-8 rounded-full flex items-center justify-center ${activeIndex === ugcItems.length - 1 ? 'text-gray-500 bg-gray-800/30' : 'text-white bg-gray-800/60'}`}
-            onClick={handleNextItem}
-            disabled={activeIndex === ugcItems.length - 1}
-          >
-            <ChevronRight className="h-5 w-5" />
-          </button>
-        </div>
+      <div className="absolute top-1 left-0 right-0 flex items-center justify-center">
+        <div className="w-16 h-1 bg-white/30 rounded-full"></div>
       </div>
       
-      <div className="flex overflow-x-hidden w-full h-full">
-        <div 
-          className="flex transition-transform duration-300 ease-in-out w-full h-full"
-          style={{ transform: `translateX(-${activeIndex * 100}%)` }}
+      <h3 className="text-white text-sm font-semibold mb-2 text-center">UGC Feed</h3>
+      
+      <div className="flex items-center justify-center h-full">
+        <button 
+          onClick={handlePrevItem}
+          disabled={activeIndex === 0}
+          className="p-1 text-white/70 hover:text-white disabled:opacity-30"
         >
-          {ugcItems.map((item) => (
-            <div key={item.id} className="min-w-full px-2 h-full flex items-center justify-center">
-              <div className="bg-jillr-dark/70 rounded-lg shadow-lg p-3 w-full">
-                <div className="flex items-start gap-3">
-                  <div className="w-1/3 aspect-square bg-cover bg-center rounded-md" 
-                       style={{ backgroundImage: `url(${item.imageUrl})` }} />
-                  <div className="flex-1">
-                    <h4 className="font-bold text-sm">{item.title}</h4>
-                    <p className="text-xs text-gray-300 mt-1">{item.description}</p>
-                    <div className="flex items-center mt-2 text-xs text-gray-400">
-                      <span className="mr-3">{item.reward}</span>
-                      <span>{item.expiresIn}</span>
-                    </div>
-                    <div className="flex justify-between mt-3">
-                      <div className="flex space-x-3">
-                        <button className="text-gray-300 hover:text-white">
-                          <Heart className="h-4 w-4" />
-                        </button>
-                        <button className="text-gray-300 hover:text-white">
-                          <MessageCircle className="h-4 w-4" />
-                        </button>
-                        <button className="text-gray-300 hover:text-white">
-                          <Share className="h-4 w-4" />
-                        </button>
-                      </div>
-                      <button 
-                        className="text-xs bg-jillr-neonPurple text-white px-3 py-1 rounded-full"
-                        onClick={() => handleJoinChallenge(item.challengeId)}
-                      >
-                        Mitmachen
-                      </button>
-                    </div>
+          <ChevronLeft />
+        </button>
+        
+        <div className="flex-1 max-w-xs h-full overflow-hidden relative">
+          {ugcItems.length > 0 ? (
+            <div 
+              className="flex transition-transform duration-300 h-full" 
+              style={{ transform: `translateX(-${activeIndex * 100}%)` }}
+            >
+              {ugcItems.map((item) => (
+                <div key={item.id} className="min-w-full h-full px-1">
+                  <div className="relative h-full rounded-lg overflow-hidden flex flex-col">
+                    <ChallengeCard 
+                      challenge={item} 
+                      size="compact"
+                      onJoinClick={handleJoinChallenge}
+                    />
                   </div>
                 </div>
-              </div>
+              ))}
             </div>
-          ))}
+          ) : (
+            <div className="flex items-center justify-center h-full text-center">
+              <p className="text-white/70">Keine UGC-Inhalte verfügbar</p>
+            </div>
+          )}
         </div>
+        
+        <button 
+          onClick={handleNextItem}
+          disabled={activeIndex === ugcItems.length - 1}
+          className="p-1 text-white/70 hover:text-white disabled:opacity-30"
+        >
+          <ChevronRight />
+        </button>
+      </div>
+      
+      {/* Navigation Dots */}
+      <div className="absolute bottom-1 left-0 right-0 flex items-center justify-center gap-1">
+        {ugcItems.map((_, index) => (
+          <button
+            key={index}
+            className={`w-1.5 h-1.5 rounded-full ${
+              index === activeIndex ? 'bg-jillr-neonPurple' : 'bg-white/30'
+            }`}
+            onClick={() => setActiveIndex(index)}
+          />
+        ))}
       </div>
     </div>
   );
