@@ -5,16 +5,7 @@ import { Avatar } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
 import { X, Send, MessageSquare } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-
-interface Comment {
-  id: string;
-  userId: string;
-  username: string;
-  userAvatar: string;
-  text: string;
-  timestamp: string;
-  likes: number;
-}
+import { Comment } from '@/components/challenge-feed/types';
 
 interface CommentSectionProps {
   feedItemId: string;
@@ -66,7 +57,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
               comments.map((comment) => (
                 <div key={comment.id} className="flex gap-3">
                   <Avatar className="h-8 w-8">
-                    <img src={comment.userAvatar} alt={comment.username} />
+                    <img src={comment.userAvatar || "/placeholder.svg"} alt={comment.username} />
                   </Avatar>
                   <div className="flex-1 bg-jillr-darkBlue/30 rounded-xl p-3">
                     <div className="flex justify-between items-start">

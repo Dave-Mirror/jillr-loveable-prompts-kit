@@ -1,6 +1,6 @@
 
 import { useState, useMemo } from 'react';
-import { FeedItem } from '@/utils/challenge/feed';
+import { FeedItem } from '@/components/challenge-feed/types';
 
 export type FilterType = 'all' | 'video' | 'photo' | 'ar' | 'geofencing' | 'city_clash' | 'team_battle';
 export type SortType = 'latest' | 'popular' | 'trending';
@@ -17,7 +17,7 @@ export const useFilteredFeed = (feedItems: FeedItem[]) => {
     if (filterType !== 'all') {
       filtered = filtered.filter(item => {
         // Check both challenge types and hashtags
-        const challengeType = item.challenge.title.toLowerCase();
+        const challengeType = item.challenge?.title?.toLowerCase() || '';
         const hashtags = item.hashtags.map(tag => tag.toLowerCase());
         
         // Special handling for city_clash and team_battle
@@ -45,9 +45,9 @@ export const useFilteredFeed = (feedItems: FeedItem[]) => {
           // Sort by likes count
           return b.likes - a.likes;
         case 'trending':
-          // Sort by engagement (likes + comments + shares)
-          const engagementA = a.likes + a.comments + a.shares;
-          const engagementB = b.likes + b.comments + b.shares;
+          // Sort by engagement (likes + comments count + shares)
+          const engagementA = a.likes + a.commentCount + (a.shares || 0);
+          const engagementB = b.likes + b.commentCount + (b.shares || 0);
           return engagementB - engagementA;
         case 'latest':
         default:

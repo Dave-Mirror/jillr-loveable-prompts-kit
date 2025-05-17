@@ -1,9 +1,12 @@
 
 export interface Comment {
   id: string;
+  userId?: string;
   username: string;
+  userAvatar?: string;
   text: string;
   timestamp: string;
+  likes?: number;
 }
 
 export interface FeedItem {
@@ -34,7 +37,7 @@ export interface FeedItem {
   };
   postedAt: string;
   location?: string;
-  // Zusätzliche Felder zur Behebung der Build-Fehler
+  // Additional fields for build error fixes
   achievements?: any[];
   content?: any;
   shares?: number;

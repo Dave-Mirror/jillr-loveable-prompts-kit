@@ -2,7 +2,7 @@
 import React from 'react';
 import { Heart, MessageSquare, Share, Flame, Flag, Award, ChevronUp, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { FeedItem } from '@/utils/challenge/feed';
+import { FeedItem } from '@/components/challenge-feed/types';
 
 interface FeedItemActionsProps {
   item: FeedItem;
@@ -48,7 +48,7 @@ const FeedItemActions: React.FC<FeedItemActionsProps> = ({
         >
           <MessageSquare className="h-7 w-7" />
         </Button>
-        <span className="text-white text-xs mt-1">{item.comments}</span>
+        <span className="text-white text-xs mt-1">{item.commentCount}</span>
       </div>
       
       <div className="flex flex-col items-center">
@@ -60,7 +60,7 @@ const FeedItemActions: React.FC<FeedItemActionsProps> = ({
         >
           <Share className="h-7 w-7" />
         </Button>
-        <span className="text-white text-xs mt-1">{item.shares}</span>
+        <span className="text-white text-xs mt-1">{item.shares || 0}</span>
       </div>
       
       {/* Unique Feature: Impact Points */}
@@ -73,7 +73,7 @@ const FeedItemActions: React.FC<FeedItemActionsProps> = ({
         >
           <Flame className="h-7 w-7" />
         </Button>
-        <span className="text-jillr-neonGreen text-xs mt-1">{item.impactPoints} IP</span>
+        <span className="text-jillr-neonGreen text-xs mt-1">{item.impactPoints || 0} IP</span>
       </div>
       
       {/* Challenge Join Button - Side action */}
@@ -82,7 +82,7 @@ const FeedItemActions: React.FC<FeedItemActionsProps> = ({
           variant="ghost" 
           size="icon" 
           className="rounded-full bg-jillr-neonPurple/30 backdrop-blur-md text-white"
-          onClick={() => onJoinChallenge(item.challenge.id, item.challenge.title)}
+          onClick={() => onJoinChallenge(item.challenge?.id, item.challenge?.title)}
         >
           <Flag className="h-7 w-7" />
         </Button>

@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
-import { FeedItem as FeedItemType } from '@/utils/challenge/feed';
+import { FeedItem as FeedItemType } from '@/components/challenge-feed/types';
 import AchievementPanel from './AchievementPanel';
 import FeedItemActions from './FeedItemActions';
 import FeedItemHeader from './FeedItemHeader';
@@ -49,12 +49,12 @@ const FeedItem: React.FC<FeedItemProps> = ({
       className="feed-item relative h-screen w-full flex items-center justify-center bg-black overflow-hidden snap-center"
     >
       {/* Video/Image Content with Fade In Animation */}
-      {item.content.type === 'video' ? (
+      {item.content?.type === 'video' ? (
         <motion.video
           initial={{ opacity: 0.3 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
-          src={item.content.url}
+          src={item.content?.url}
           className="absolute inset-0 w-full h-full object-cover"
           loop
           muted
@@ -67,7 +67,7 @@ const FeedItem: React.FC<FeedItemProps> = ({
           initial={{ opacity: 0.3 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
-          src={item.content.url}
+          src={item.content?.url || item.mediaUrl}
           className="absolute inset-0 w-full h-full object-cover"
           alt={item.caption}
         />
@@ -120,7 +120,7 @@ const FeedItem: React.FC<FeedItemProps> = ({
       {/* Comment section */}
       <CommentSection
         feedItemId={item.id}
-        comments={item.commentsList || []}
+        comments={item.commentsList || item.comments || []}
         isOpen={activeComments === item.id}
         onClose={() => onComment(item.id)}
         onAddComment={onAddComment}
@@ -157,8 +157,8 @@ const FeedItem: React.FC<FeedItemProps> = ({
         }}
       >
         <JoinChallengeButton 
-          challengeId={item.challenge.id} 
-          challengeTitle={item.challenge.title} 
+          challengeId={item.challenge?.id || item.challengeId || ''} 
+          challengeTitle={item.challenge?.title || item.challengeInfo?.title || ''} 
           onJoinChallenge={onJoinChallenge} 
         />
       </motion.div>
