@@ -6,7 +6,7 @@ export interface Coordinates {
 
 export interface MapElement {
   id: string;
-  type: 'easteregg' | 'drop' | 'challenge' | 'teamevent' | 'brand' | 'ugc' | 'user';
+  type: 'easteregg' | 'drop' | 'challenge' | 'teamevent';
   title: string;
   description: string;
   position: { x: number; y: number };
@@ -14,10 +14,6 @@ export interface MapElement {
   reward?: string;
   expiresIn?: string;
   challengeId?: string;
-  imageUrl?: string;
-  brandId?: string;
-  userId?: string;
-  videoUrl?: string;
 }
 
 export interface Event {
@@ -26,7 +22,7 @@ export interface Event {
   description: string;
   date: string;
   location?: string;
-  type: 'easteregg' | 'drop' | 'challenge' | 'teamevent' | 'brand' | 'ugc';
+  type: 'easteregg' | 'drop' | 'challenge' | 'teamevent';
   challengeId?: string;
 }
 
@@ -49,7 +45,7 @@ export interface NotificationSettings {
 }
 
 export interface MapFilters {
-  mapElements: ('easteregg' | 'drop' | 'challenge' | 'teamevent' | 'brand' | 'ugc' | 'user')[];
+  mapElements: ('easteregg' | 'drop' | 'challenge' | 'teamevent')[];
   easterEggTypes: string[];
   radius: number;
   locationFilters: string[];
@@ -59,7 +55,7 @@ export interface MapFilters {
 // Updated LiveMapMarker interface that is compatible with MapElement
 export interface LiveMapMarker {
   id: string;
-  type: 'easteregg' | 'drop' | 'challenge' | 'teamevent' | 'brand' | 'ugc' | 'user';
+  type: 'easteregg' | 'drop' | 'challenge' | 'teamevent';
   title: string;
   description: string;
   position: Coordinates; // Using Coordinates instead of {x,y}
@@ -67,19 +63,6 @@ export interface LiveMapMarker {
   reward?: string;
   expiresIn?: string;
   challengeId?: string;
-  imageUrl?: string;
-  brandId?: string;
-  userId?: string;
-  videoUrl?: string;
-}
-
-export interface CityClashDistrict {
-  id: string;
-  name: string;
-  controlledBy: string | null;
-  controlledByName?: string;
-  points: number;
-  challenges: number;
 }
 
 export interface LiveMapContextProps {

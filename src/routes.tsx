@@ -1,24 +1,12 @@
-
-import { 
-  UnifiedMap, 
-  Dashboard, 
-  Profile, 
-  NotFound, 
-  ChallengeDetails, 
-  ChallengeExplorer,
-  LiveMap,
-  ChallengeFeed,
-  CityClashPage,
-  MapExperience 
-} from "@/pages";
-import { Compass, Home, LayoutDashboard, Map, MapPin, Settings as SettingsIcon, User, Users } from "lucide-react";
+import { ChallengeFeed, CityClash, Community, CreateChallenge, Dashboard, Explore, Home, LandingPage, Legal, LiveMap, Login, NotFound, Onboarding, Profile, Register, Settings, ChallengeDetails } from "@/pages";
+import { ChallengeFeed as ChallengeFeedIcon, Compass, Home as HomeIcon, LayoutDashboard, LucideIcon, MapPin, Settings as SettingsIcon, User, Users } from "lucide-react";
 import { Challenge } from "./components/challenge/types";
 
 interface Route {
   path: string;
   element: React.ComponentType<any>;
   label?: string;
-  icon?: React.ComponentType<any>;
+  icon?: LucideIcon;
   children?: Route[];
   sidebar?: boolean;
   protected?: boolean;
@@ -29,22 +17,26 @@ export const protectedRoutes = ['/dashboard', '/profile', '/settings', '/create-
 const routes: Route[] = [
   {
     path: '/',
-    element: UnifiedMap,
-    label: 'Karte',
-    icon: Map,
+    element: LandingPage,
+    label: 'Home',
+    icon: HomeIcon,
     sidebar: true,
   },
   {
+    path: '/home',
+    element: Home,
+  },
+  {
     path: '/login',
-    element: NotFound,
+    element: Login,
   },
   {
     path: '/register',
-    element: NotFound,
+    element: Register,
   },
   {
     path: '/onboarding',
-    element: UnifiedMap,
+    element: Onboarding,
   },
   {
     path: '/dashboard',
@@ -64,44 +56,50 @@ const routes: Route[] = [
   },
   {
     path: '/settings',
-    element: Profile,
+    element: Settings,
     label: 'Settings',
     icon: SettingsIcon,
     sidebar: true,
     protected: true,
   },
   {
-    path: '/map',
-    element: MapExperience,
-    label: 'Jillr Map',
-    icon: Map,
+    path: '/legal',
+    element: Legal,
+  },
+  {
+    path: '/challenge-feed',
+    element: ChallengeFeed,
+    label: 'Challenge Feed',
+    icon: ChallengeFeedIcon,
     sidebar: true,
   },
   {
     path: '/explore',
-    element: ChallengeExplorer,
-    label: 'Challenge Explorer',
+    element: Explore,
+    label: 'Explore',
     icon: Compass,
     sidebar: true,
   },
   {
-    path: '/feed',
-    element: ChallengeFeed,
-    label: 'Challenge Feed',
-    icon: Compass,
-    sidebar: false,
-  },
-  {
-    path: '/city-clash',
-    element: CityClashPage,
-    label: 'City Clash',
-    icon: Users,
-    sidebar: false,
+    path: '/create-challenge',
+    element: CreateChallenge,
+    label: 'Create Challenge',
+    icon: MapPin,
+    sidebar: true,
+    protected: true,
   },
   {
     path: '/community',
-    element: NotFound,
+    element: Community,
     label: 'Community',
+    icon: Users,
+    sidebar: true,
+    protected: true,
+  },
+  {
+    path: '/city-clash',
+    element: CityClash,
+    label: 'City Clash',
     icon: Users,
     sidebar: true,
     protected: true,
@@ -113,13 +111,6 @@ const routes: Route[] = [
   {
     path: '/livemap',
     element: LiveMap,
-  },
-  {
-    path: '/unified-map',
-    element: UnifiedMap,
-    label: 'Entdecken',
-    icon: Compass,
-    sidebar: true,
   },
   {
     path: '*',

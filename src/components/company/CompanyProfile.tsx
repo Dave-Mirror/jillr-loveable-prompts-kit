@@ -6,7 +6,7 @@ import { Challenge, Company } from '@/utils/challenge/rewards/types';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
-import { ChallengeCard } from '@/components/challenge-card';
+import ChallengeCard from '@/components/ChallengeCard';
 import { industryIcons } from '@/utils/challenge/rewards/mockData';
 
 const CompanyProfile = () => {
@@ -57,9 +57,10 @@ const CompanyProfile = () => {
     title: challenge.title,
     description: challenge.description,
     type: challenge.type,
-    imageUrl: challenge.imageUrl,
-    reward: `${challenge.xpReward} XP`,
-    expiresIn: new Date(challenge.endDate).toLocaleDateString()
+    hashtags: challenge.hashtags,
+    xpReward: challenge.xpReward,
+    endDate: challenge.endDate,
+    imageUrl: challenge.imageUrl
   }));
 
   if (isLoading) {
@@ -134,10 +135,7 @@ const CompanyProfile = () => {
           {challenges.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {formattedChallenges.map(challenge => (
-                <ChallengeCard 
-                  key={challenge.id} 
-                  challenge={challenge}
-                />
+                <ChallengeCard key={challenge.id} {...challenge} />
               ))}
             </div>
           ) : (

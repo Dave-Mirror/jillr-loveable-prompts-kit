@@ -1,54 +1,58 @@
 
-import React from 'react';
-import { Gift, Package, Target, Users, Camera, MapPin } from 'lucide-react';
+import React, { useState } from 'react';
+import { HelpCircle, ChevronUp, ChevronDown, Gift, Target, Users, Map } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
-type MapMode = 'all' | 'challenges' | 'eastereggs' | 'ugc' | 'cityclash';
-
-interface MapLegendProps {
-  mode?: MapMode;
-}
-
-const MapLegend: React.FC<MapLegendProps> = ({ mode = 'all' }) => {
-  // Bestimme die anzuzeigenden Legendenelemente basierend auf dem Modus
-  const getLegendItems = () => {
-    switch(mode) {
-      case 'challenges':
-        return [
-          { icon: <Target className="h-4 w-4 text-red-500" />, label: 'Challenges' },
-        ];
-      case 'eastereggs':
-        return [
-          { icon: <Gift className="h-4 w-4 text-yellow-500" />, label: 'Easter Eggs' },
-        ];
-      case 'ugc':
-        return [
-          { icon: <Camera className="h-4 w-4 text-blue-500" />, label: 'UGC Content' },
-          { icon: <MapPin className="h-4 w-4 text-purple-500" />, label: 'Brands' },
-        ];
-      case 'cityclash':
-        return [
-          { icon: <Users className="h-4 w-4 text-purple-500" />, label: 'City Clash' },
-        ];
-      default:
-        return [
-          { icon: <Gift className="h-4 w-4 text-yellow-500" />, label: 'Easter Eggs' },
-          { icon: <Package className="h-4 w-4 text-blue-500" />, label: 'Drops' },
-          { icon: <Target className="h-4 w-4 text-red-500" />, label: 'Challenges' },
-          { icon: <Users className="h-4 w-4 text-purple-500" />, label: 'Team Events' },
-          { icon: <Camera className="h-4 w-4 text-green-500" />, label: 'UGC' },
-        ];
-    }
-  };
-
+const MapLegend: React.FC = () => {
+  const [expanded, setExpanded] = useState(false);
+  
   return (
-    <div className="absolute bottom-3 left-3 bg-jillr-dark/80 backdrop-blur-sm border border-jillr-border p-2 rounded-lg">
-      <div className="flex flex-col gap-1.5 text-xs">
-        {getLegendItems().map((item, index) => (
-          <div key={index} className="flex items-center gap-1.5">
-            {item.icon}
-            <span className="text-white">{item.label}</span>
+    <div className="absolute bottom-4 left-4 max-w-xs z-10">
+      <div className="bg-jillr-dark/90 border border-jillr-border rounded-lg shadow-lg overflow-hidden">
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          className="flex justify-between items-center w-full p-2 h-auto"
+          onClick={() => setExpanded(!expanded)}
+        >
+          <div className="flex items-center gap-2">
+            <HelpCircle className="h-4 w-4 text-jillr-neonBlue" />
+            <span className="text-sm font-medium">Map Legend</span>
           </div>
-        ))}
+          {expanded ? <ChevronDown className="h-4 w-4" /> : <ChevronUp className="h-4 w-4" />}
+        </Button>
+        
+        {expanded && (
+          <div className="p-3 grid grid-cols-2 gap-3 text-xs">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+              <span className="flex items-center gap-1">
+                <Gift className="h-3 w-3" /> Easter Eggs
+              </span>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+              <span className="flex items-center gap-1">
+                <Target className="h-3 w-3" /> Drops
+              </span>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-red-500"></div>
+              <span className="flex items-center gap-1">
+                <Map className="h-3 w-3" /> Challenges
+              </span>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-purple-500"></div>
+              <span className="flex items-center gap-1">
+                <Users className="h-3 w-3" /> Team Events
+              </span>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

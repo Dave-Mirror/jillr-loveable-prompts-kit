@@ -21,28 +21,3 @@ export interface ChallengeCardProps {
   onClick?: (id: string) => void;
   onJoinClick?: (id: string) => void;
 }
-
-// Exportiere die typeIcons Map für ChallengeBadges.tsx
-export const typeIcons: Record<string, string> = {
-  'video': '🎬',
-  'photo': '📸',
-  'ar': '🥽',
-  'geofencing': '📍',
-  'fitness': '💪',
-  'fashion': '👗',
-  'sport': '🏆',
-  'beauty': '💄',
-  'travel': '✈️',
-  'food': '🍔',
-  'dance': '💃',
-  'sustainability': '♻️',
-  'gamification': '🎮',
-  'community': '👥',
-  'battle': '⚔️',
-  'review': '⭐',
-  'liveparty': '🎉',
-  'zerowaste': '♻️',
-  'teambattle': '👥⚔️',
-  'easteregg': '🥚',
-  'lastminute': '⏱️'
-};

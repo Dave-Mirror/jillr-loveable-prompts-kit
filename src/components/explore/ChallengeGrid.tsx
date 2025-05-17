@@ -1,33 +1,23 @@
 
 import React from 'react';
-import { ChallengeCard } from '../challenge-card';
-import { Challenge } from '@/components/challenge-card/types';
+import ChallengeCard from '../ChallengeCard';
+
+interface Challenge {
+  id: string;
+  title: string;
+  description: string;
+  type: string;
+  hashtags: string[];
+  xpReward: number;
+  endDate: string;
+  imageUrl: string;
+}
 
 interface ChallengeGridProps {
-  challenges: {
-    id: string;
-    title: string;
-    description: string;
-    type: string;
-    hashtags: string[];
-    xpReward: number;
-    endDate: string;
-    imageUrl: string;
-  }[];
+  challenges: Challenge[];
 }
 
 const ChallengeGrid: React.FC<ChallengeGridProps> = ({ challenges }) => {
-  // Konvertiere die Challenge-Daten in das Format, das von ChallengeCard erwartet wird
-  const formattedChallenges = challenges.map(challenge => ({
-    id: challenge.id,
-    title: challenge.title,
-    description: challenge.description,
-    type: challenge.type,
-    reward: `${challenge.xpReward} XP`,
-    expiresIn: new Date(challenge.endDate).toLocaleDateString(),
-    imageUrl: challenge.imageUrl
-  }));
-
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {challenges.length === 0 ? (
@@ -36,10 +26,17 @@ const ChallengeGrid: React.FC<ChallengeGridProps> = ({ challenges }) => {
           <p className="text-sm text-muted-foreground mt-2">Versuche, andere Filter auszuwählen.</p>
         </div>
       ) : (
-        formattedChallenges.map(challenge => (
+        challenges.map(challenge => (
           <ChallengeCard
             key={challenge.id}
-            challenge={challenge}
+            id={challenge.id}
+            title={challenge.title}
+            description={challenge.description}
+            type={challenge.type}
+            hashtags={challenge.hashtags}
+            xpReward={challenge.xpReward}
+            endDate={challenge.endDate}
+            imageUrl={challenge.imageUrl}
           />
         ))
       )}
