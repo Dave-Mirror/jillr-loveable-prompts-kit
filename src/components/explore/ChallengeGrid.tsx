@@ -29,14 +29,15 @@ const ChallengeGrid: React.FC<ChallengeGridProps> = ({ challenges }) => {
         challenges.map(challenge => (
           <ChallengeCard
             key={challenge.id}
-            id={challenge.id}
-            title={challenge.title}
-            description={challenge.description}
-            type={challenge.type}
-            hashtags={challenge.hashtags}
-            xpReward={challenge.xpReward}
-            endDate={challenge.endDate}
-            imageUrl={challenge.imageUrl}
+            challenge={{
+              id: challenge.id,
+              title: challenge.title,
+              description: challenge.description,
+              type: challenge.type,
+              imageUrl: challenge.imageUrl || '/placeholder.svg',
+              reward: `${challenge.xpReward} XP`,
+              expiresIn: new Date(challenge.endDate).toLocaleDateString(),
+            }}
           />
         ))
       )}

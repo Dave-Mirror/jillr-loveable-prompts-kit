@@ -8,7 +8,6 @@ import { getChallenges } from '@/utils/challenge/rewards/api';
 import { Challenge, IndustryType, ChallengeType } from '@/utils/challenge/rewards/types';
 import { useToast } from '@/hooks/use-toast';
 import { Sparkles, Compass } from 'lucide-react';
-import EmptyState from '@/components/explore/EmptyState';
 
 const Explore = () => {
   // State für Filter und Challenges
