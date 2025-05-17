@@ -1,58 +1,40 @@
 
 import React from 'react';
-import { Badge } from '@/components/ui/badge';
-import { Clock, Hash } from 'lucide-react';
-import CountdownTimer from '@/components/CountdownTimer';
-import { typeIcons } from './types';
+import { Badge } from "@/components/ui/badge";
+import { ChallengeType } from '@/utils/challenge/rewards/types';
+import { Camera, Video, MapPin, Dumbbell, Users, Star } from 'lucide-react';
+
+// Define typeIcons here instead of importing it
+export const typeIcons: Record<string, React.ReactNode> = {
+  photo: <Camera className="h-3 w-3 mr-1" />,
+  video: <Video className="h-3 w-3 mr-1" />,
+  geofencing: <MapPin className="h-3 w-3 mr-1" />,
+  fitness: <Dumbbell className="h-3 w-3 mr-1" />,
+  community: <Users className="h-3 w-3 mr-1" />,
+  default: <Star className="h-3 w-3 mr-1" />
+};
 
 interface ChallengeBadgesProps {
-  type: string;
-  endDate: string | Date;
-  hashtags: string[];
+  type: ChallengeType;
+  hashtags?: string[];
 }
 
-const ChallengeBadges: React.FC<ChallengeBadgesProps> = ({ 
-  type,
-  endDate, 
-  hashtags
-}) => {
-  // Ensure typeIcon always has a value
-  const typeIcon = typeIcons[type.toLowerCase()] || '🎯';
-
+const ChallengeBadges: React.FC<ChallengeBadgesProps> = ({ type, hashtags = [] }) => {
+  const icon = typeIcons[type] || typeIcons.default;
+  
   return (
-    <>
-      {/* Type badge */}
-      <div className="absolute top-3 left-3">
-        <Badge className="bg-gradient-to-r from-jillr-neonPurple to-jillr-neonPurpleDark border-0 text-white px-2.5 py-1.5 text-xs font-medium flex items-center gap-1.5">
-          <span className="text-base">{typeIcon}</span> {type}
+    <div className="flex flex-wrap gap-1">
+      <Badge variant="secondary" className="flex items-center">
+        {icon}
+        {type}
+      </Badge>
+      
+      {hashtags.slice(0, 2).map(tag => (
+        <Badge key={tag} variant="outline" className="text-jillr-neonBlue border-jillr-neonBlue/30">
+          #{tag}
         </Badge>
-      </div>
-      
-      {/* Timer badge */}
-      <div className="absolute bottom-3 right-3">
-        <div className="flex items-center gap-2">
-          <Badge variant="outline" className="bg-jillr-dark/80 backdrop-blur-sm border-jillr-neonPurple/30 flex items-center gap-1">
-            <Clock className="h-3.5 w-3.5 text-jillr-neonPurple" />
-            <CountdownTimer endDate={endDate} />
-          </Badge>
-        </div>
-      </div>
-      
-      {/* Hashtags */}
-      <div className="flex flex-wrap gap-1.5 mb-3">
-        {hashtags && hashtags.slice(0, 3).map((tag, index) => (
-          <div key={index} className="flex items-center text-xs px-2 py-1 rounded-full bg-jillr-darkBlue text-jillr-neonBlue">
-            <Hash size={10} className="mr-0.5" />
-            {tag}
-          </div>
-        ))}
-        {hashtags && hashtags.length > 3 && (
-          <div className="text-xs px-2 py-1 rounded-full bg-jillr-darkBlue text-gray-400">
-            +{hashtags.length - 3}
-          </div>
-        )}
-      </div>
-    </>
+      ))}
+    </div>
   );
 };
 

@@ -1,24 +1,35 @@
 
 import { 
-  ChallengeFeed, 
-  CityClash, 
-  Community, 
-  CreateChallenge, 
-  Dashboard, 
-  Explore, 
-  Home, 
-  LandingPage, 
-  Legal, 
-  LiveMap, 
-  Login, 
-  NotFound, 
-  Onboarding, 
-  Profile, 
-  Register, 
-  Settings, 
-  ChallengeDetail 
-} from "@/pages";
-import { Compass, Home as HomeIcon, LayoutDashboard, LucideIcon, MapPin, Settings as SettingsIcon, User, Users } from "lucide-react";
+  Compass, 
+  Home as HomeIcon, 
+  LayoutDashboard, 
+  MapPin, 
+  Settings as SettingsIcon, 
+  User, 
+  Users 
+} from "lucide-react";
+
+// Import pages individually instead of from '@/pages'
+import Explore from "@/pages/Explore";
+import ChallengeFeed from "@/pages/ChallengeFeed";
+import CityClash from "@/pages/CityClash";
+import Community from "@/pages/Community";
+import CreateChallenge from "@/pages/CreateChallenge";
+import Dashboard from "@/pages/Dashboard";
+import Home from "@/pages/Home";
+import LandingPage from "@/pages/Index";
+import Legal from "@/pages/Legal";
+import LiveMap from "@/pages/LiveMap";
+import Login from "@/pages/Auth";
+import NotFound from "@/pages/NotFound";
+import Onboarding from "@/pages/Onboarding";
+import Profile from "@/pages/Profile";
+import Register from "@/pages/Auth";
+import Settings from "@/pages/Settings";
+import ChallengeDetail from "@/pages/ChallengeDetail";
+import CompanyProfile from "@/pages/CompanyProfile";
+
+import { LucideIcon } from "lucide-react";
 import { Challenge } from "./components/challenge/types";
 
 interface Route {
@@ -125,6 +136,10 @@ const routes: Route[] = [
   {
     path: '/challenge/:challengeId',
     element: ChallengeDetail,
+  },
+  {
+    path: '/company/:id',
+    element: CompanyProfile,
   },
   {
     path: '/livemap',

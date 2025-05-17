@@ -2,10 +2,11 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import PageContainer from '@/components/navigation/PageContainer';
-import CompanyProfileComponent from '@/components/company/CompanyProfile';
-import { Globe, MapPin, Users, Target, Palette, Package, Layout } from 'lucide-react';
 import { Company, Challenge } from '@/utils/challenge/rewards/types';
-import ChallengeCard from '@/components/ChallengeCard';
+import { CompanyHeader } from '@/components/company/CompanyHeader';
+import CompanyChallenges from '@/components/company/CompanyChallenges';
+import LoadingState from '@/components/company/LoadingState';
+import NotFoundState from '@/components/company/NotFoundState';
 
 // Mock-Daten für die Firmendetails (in Produktion würde dies von einer API kommen)
 const mockCompany: Company = {
@@ -63,7 +64,7 @@ const mockChallenges: Challenge[] = [
   }
 ];
 
-const CompanyProfile = () => {
+const CompanyProfile: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [company, setCompany] = useState<Company | null>(null);
   const [challenges, setChallenges] = useState<Challenge[]>([]);
@@ -82,11 +83,7 @@ const CompanyProfile = () => {
   if (loading) {
     return (
       <PageContainer previousPage="/explore" nextPage="/wallet">
-        <div className="container mx-auto max-w-5xl py-12 px-4">
-          <div className="flex justify-center">
-            <div className="w-12 h-12 border-4 border-jillr-neonPurple border-t-transparent rounded-full animate-spin"></div>
-          </div>
-        </div>
+        <LoadingState />
       </PageContainer>
     );
   }
@@ -94,10 +91,7 @@ const CompanyProfile = () => {
   if (!company) {
     return (
       <PageContainer previousPage="/explore" nextPage="/wallet">
-        <div className="container mx-auto max-w-5xl py-12 px-4 text-center">
-          <h2 className="text-2xl font-bold text-white mb-4">Unternehmen nicht gefunden</h2>
-          <p className="text-gray-400">Das gesuchte Unternehmen konnte nicht gefunden werden.</p>
-        </div>
+        <NotFoundState />
       </PageContainer>
     );
   }
@@ -105,110 +99,8 @@ const CompanyProfile = () => {
   return (
     <PageContainer previousPage="/explore" nextPage="/wallet">
       <div className="container mx-auto max-w-5xl py-8 px-4">
-        <div className="glassmorphism p-6 mb-8">
-          <div className="flex flex-col md:flex-row items-start gap-6">
-            <div className="w-32 h-32 rounded-lg overflow-hidden bg-white p-4 flex items-center justify-center">
-              <img 
-                src={company.logoUrl} 
-                alt={`${company.name} Logo`} 
-                className="w-full h-auto object-contain"
-              />
-            </div>
-            
-            <div className="flex-1">
-              <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-3">
-                <div>
-                  <h1 className="text-3xl font-bold text-white mb-1">{company.name}</h1>
-                  <div className="flex items-center text-sm text-jillr-neonPurple">
-                    <Globe className="h-4 w-4 mr-1.5" />
-                    <a href={company.website} target="_blank" rel="noopener noreferrer" className="hover:underline">
-                      {company.website.replace(/(^\w+:|^)\/\//, '')}
-                    </a>
-                  </div>
-                </div>
-                
-                <div className="inline-flex px-3 py-1 rounded-full text-sm font-medium bg-gradient-to-r from-jillr-neonPurple/30 to-jillr-neonPurple/10 border border-jillr-neonPurple/30 text-jillr-neonPurple">
-                  {company.industry.charAt(0).toUpperCase() + company.industry.slice(1)}
-                </div>
-              </div>
-              
-              <p className="text-gray-300 mb-6">{company.description}</p>
-              
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 text-sm">
-                <div className="flex items-start gap-2">
-                  <Target className="h-5 w-5 text-jillr-neonGreen mt-0.5" />
-                  <div>
-                    <div className="font-medium text-white mb-1">Zielgruppe</div>
-                    <div className="text-gray-400">
-                      {company.targetAudience.join(', ')}
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-2">
-                  <Palette className="h-5 w-5 text-jillr-neonPink mt-0.5" />
-                  <div>
-                    <div className="font-medium text-white mb-1">Marken-Tonalität</div>
-                    <div className="text-gray-400">
-                      {company.tone}
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-2">
-                  <Package className="h-5 w-5 text-jillr-neonBlue mt-0.5" />
-                  <div>
-                    <div className="font-medium text-white mb-1">Verfügbare Ressourcen</div>
-                    <div className="text-gray-400">
-                      {company.availableResources.join(', ')}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="flex flex-wrap gap-2 mt-2">
-                <div className="flex items-center gap-1.5">
-                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: company.colorPalette[0] }}></div>
-                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: company.colorPalette[1] }}></div>
-                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: company.colorPalette[2] }}></div>
-                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: company.colorPalette[3] }}></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        {/* Aktive Challenges */}
-        <div className="mb-10">
-          <div className="flex items-center justify-between mb-5">
-            <h2 className="text-xl md:text-2xl font-bold text-white flex items-center gap-2">
-              <Layout className="h-6 w-6 text-jillr-neonBlue" />
-              Aktive Challenges
-            </h2>
-            
-            <div className="inline-flex items-center gap-2 text-sm text-gray-400">
-              <Users className="h-4 w-4" />
-              <span>{challenges.length} aktive Challenges</span>
-            </div>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {challenges.map(challenge => (
-              <ChallengeCard
-                key={challenge.id}
-                challenge={{
-                  id: challenge.id,
-                  title: challenge.title,
-                  description: challenge.description,
-                  type: challenge.type,
-                  imageUrl: challenge.imageUrl || '/placeholder.svg',
-                  reward: `${challenge.xpReward} XP`,
-                  expiresIn: new Date(challenge.endDate).toLocaleDateString(),
-                }}
-              />
-            ))}
-          </div>
-        </div>
+        <CompanyHeader company={company} />
+        <CompanyChallenges challenges={challenges} />
       </div>
     </PageContainer>
   );
