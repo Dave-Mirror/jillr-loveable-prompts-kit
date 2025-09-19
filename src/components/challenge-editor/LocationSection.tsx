@@ -30,6 +30,11 @@ const defaultCenter = {
 };
 
 const LocationSection: React.FC<LocationSectionProps> = ({ data, onChange }) => {
+  // Guard against undefined data with proper defaults
+  const safeData = {
+    location_required: data?.location_required || false,
+    locations: data?.locations || []
+  };
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [searchValue, setSearchValue] = useState('');
   const [geocoder, setGeocoder] = useState<google.maps.Geocoder | null>(null);
@@ -80,7 +85,7 @@ const LocationSection: React.FC<LocationSectionProps> = ({ data, onChange }) => 
     
     const newLocation: ChallengeLocation = {
       id: `location-${Date.now()}`,
-      label: `Location ${data.locations.length + 1}`,
+      label: `Location ${safeData.locations.length + 1}`,
       address,
       lat,
       lng,
@@ -88,8 +93,8 @@ const LocationSection: React.FC<LocationSectionProps> = ({ data, onChange }) => 
     };
 
     onChange({
-      ...data,
-      locations: [...data.locations, newLocation]
+      ...safeData,
+      locations: [...safeData.locations, newLocation]
     });
 
     toast.success('Location added!');
@@ -102,33 +107,33 @@ const LocationSection: React.FC<LocationSectionProps> = ({ data, onChange }) => 
     const lng = event.latLng.lng();
     const address = await reverseGeocode(lat, lng);
     
-    const updatedLocations = data.locations.map(loc => 
+    const updatedLocations = safeData.locations.map(loc => 
       loc.id === locationId 
         ? { ...loc, lat, lng, address }
         : loc
     );
     
     onChange({
-      ...data,
+      ...safeData,
       locations: updatedLocations
     });
   };
 
   const updateLocation = (locationId: string, updates: Partial<ChallengeLocation>) => {
-    const updatedLocations = data.locations.map(loc =>
+    const updatedLocations = safeData.locations.map(loc =>
       loc.id === locationId ? { ...loc, ...updates } : loc
     );
     
     onChange({
-      ...data,
+      ...safeData,
       locations: updatedLocations
     });
   };
 
   const removeLocation = (locationId: string) => {
-    const updatedLocations = data.locations.filter(loc => loc.id !== locationId);
+    const updatedLocations = safeData.locations.filter(loc => loc.id !== locationId);
     onChange({
-      ...data,
+      ...safeData,
       locations: updatedLocations
     });
     toast.success('Location removed');
@@ -172,8 +177,8 @@ const LocationSection: React.FC<LocationSectionProps> = ({ data, onChange }) => 
         };
 
         onChange({
-          ...data,
-          locations: [...data.locations, newLocation]
+          ...safeData,
+          locations: [...safeData.locations, newLocation]
         });
 
         if (map) {
@@ -201,12 +206,12 @@ const LocationSection: React.FC<LocationSectionProps> = ({ data, onChange }) => 
             </p>
           </div>
           <Switch
-            checked={data.location_required}
-            onCheckedChange={(location_required) => onChange({ ...data, location_required })}
+            checked={safeData.location_required}
+            onCheckedChange={(location_required) => onChange({ ...safeData, location_required })}
           />
         </div>
         
-        {data.location_required && (
+        {safeData.location_required && (
           <Card className="border-destructive">
             <CardContent className="p-4">
               <div className="flex items-center space-x-2 text-destructive">
@@ -236,11 +241,11 @@ const LocationSection: React.FC<LocationSectionProps> = ({ data, onChange }) => 
             </p>
           </div>
           <Switch
-            checked={data.location_required}
-            onCheckedChange={(location_required) => onChange({ ...data, location_required })}
+            checked={safeData.location_required}
+            onCheckedChange={(location_required) => onChange({ ...safeData, location_required })}
           />
         </div>
-        {data.location_required && (
+        {safeData.location_required && (
           <div className="animate-pulse">
             <div className="h-80 bg-muted rounded-lg"></div>
           </div>
@@ -259,12 +264,12 @@ const LocationSection: React.FC<LocationSectionProps> = ({ data, onChange }) => 
           </p>
         </div>
         <Switch
-          checked={data.location_required}
-          onCheckedChange={(location_required) => onChange({ ...data, location_required })}
+          checked={safeData.location_required}
+          onCheckedChange={(location_required) => onChange({ ...safeData, location_required })}
         />
       </div>
 
-      {data.location_required && (
+      {safeData.location_required && (
         <>
           <div className="space-y-4">
             <div className="relative">
@@ -297,11 +302,11 @@ const LocationSection: React.FC<LocationSectionProps> = ({ data, onChange }) => 
           <div className="space-y-4">
             <GoogleMap
               mapContainerStyle={mapContainerStyle}
-              center={data.locations.length > 0 
-                ? { lat: data.locations[0].lat, lng: data.locations[0].lng }
+              center={safeData.locations.length > 0 
+                ? { lat: safeData.locations[0].lat, lng: safeData.locations[0].lng }
                 : defaultCenter
               }
-              zoom={data.locations.length > 0 ? 15 : 10}
+              zoom={safeData.locations.length > 0 ? 15 : 10}
               onLoad={onMapLoad}
               onUnmount={onMapUnmount}
               onClick={handleMapClick}
@@ -311,7 +316,7 @@ const LocationSection: React.FC<LocationSectionProps> = ({ data, onChange }) => 
                 fullscreenControl: false
               }}
             >
-              {data.locations.map((location) => (
+              {safeData.locations.map((location) => (
                 <React.Fragment key={location.id}>
                   <Marker
                     position={{ lat: location.lat, lng: location.lng }}
@@ -338,10 +343,10 @@ const LocationSection: React.FC<LocationSectionProps> = ({ data, onChange }) => 
             </div>
           </div>
 
-          {data.locations.length > 0 && (
+          {safeData.locations.length > 0 && (
             <div className="space-y-4">
-              <h4 className="font-medium">Locations ({data.locations.length})</h4>
-              {data.locations.map((location) => (
+              <h4 className="font-medium">Locations ({safeData.locations.length})</h4>
+              {safeData.locations.map((location) => (
                 <Card key={location.id} className="p-4">
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
@@ -421,7 +426,7 @@ const LocationSection: React.FC<LocationSectionProps> = ({ data, onChange }) => 
             </div>
           )}
 
-          {data.location_required && (
+          {safeData.location_required && (
             <div className="bg-muted/50 border border-muted rounded-lg p-4">
               <div className="flex items-start space-x-2">
                 <MapPin className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
