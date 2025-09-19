@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 
-export type ChallengeTab = 'basics' | 'content' | 'kpis' | 'audience' | 'rewards' | 'timing' | 'automation' | 'advanced' | 'preview';
+export type ChallengeTab = 'basics' | 'location' | 'content' | 'kpis' | 'audience' | 'rewards' | 'timing' | 'automation' | 'advanced' | 'preview';
 
 export interface TabConfig {
   id: ChallengeTab;
@@ -17,6 +17,11 @@ export const useChallengeTabs = () => {
       id: 'basics',
       label: 'Basics',
       description: 'Challenge Grundlagen'
+    },
+    {
+      id: 'location',
+      label: 'Location',
+      description: 'Standort & Geofencing'
     },
     {
       id: 'content',

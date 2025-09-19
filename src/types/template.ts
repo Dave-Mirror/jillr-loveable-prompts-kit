@@ -1,3 +1,5 @@
+import { LocationData } from './location';
+
 export interface ChallengeTemplate {
   id: string;
   title: string;
@@ -12,6 +14,8 @@ export interface ChallengeTemplate {
     type: string[];
     title: string;
     description: string;
+    // Location data
+    location?: LocationData;
     // Content requirements
     contentFormats: string[];
     platforms: string[];

@@ -1,6 +1,7 @@
 
 import React from 'react';
 import ChallengeBasics from './ChallengeBasics';
+import LocationSection from './LocationSection';
 import ContentRequirements from './ContentRequirements';
 import KpiSettings from './KpiSettings';
 import TargetAudience from './TargetAudience';
@@ -29,6 +30,8 @@ const ChallengeTabContent: React.FC<ChallengeTabContentProps> = ({
   switch (activeTab) {
     case 'basics':
       return <ChallengeBasics data={data} onChange={handleSectionChange} />;
+    case 'location':
+      return <LocationSection data={data} onChange={handleSectionChange} />;
     case 'content':
       return <ContentRequirements data={data} onChange={handleSectionChange} />;
     case 'kpis':

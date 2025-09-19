@@ -46,6 +46,12 @@ export const challengeTemplates: ChallengeTemplate[] = [
       type: ['photo'],
       title: 'Eco Hero Challenge',
       description: 'Be an environmental champion! Share photos of your trash collection efforts and inspire others to protect our planet.',
+      location: {
+        enabled: true,
+        allowMultipleLocations: false,
+        locations: [],
+        required: false
+      },
       contentFormats: ['photo'],
       platforms: ['instagram', 'tiktok', 'facebook'],
       hashtags: ['EcoHero', 'TrashCollection', 'SaveThePlanet', 'GreenChallenge'],
@@ -118,6 +124,12 @@ export const challengeTemplates: ChallengeTemplate[] = [
       type: ['ar_quest'],
       title: 'Urban Sprint Challenge',
       description: 'Race through the city streets in this thrilling AR adventure! Collect virtual items, solve clues, and climb the leaderboard.',
+      location: {
+        enabled: true,
+        allowMultipleLocations: true,
+        locations: [],
+        required: true
+      },
       contentFormats: ['photo', 'video'],
       platforms: ['jillr', 'instagram'],
       hashtags: ['UrbanSprint', 'ARQuest', 'CityChallenge', 'LeaderboardRace'],
@@ -190,6 +202,12 @@ export const challengeTemplates: ChallengeTemplate[] = [
       type: ['video'],
       title: 'Ultimate Unboxing Experience',
       description: 'Share the excitement of unboxing your favorite products! Create engaging videos that showcase the unboxing experience.',
+      location: {
+        enabled: true,
+        allowMultipleLocations: true,
+        locations: [],
+        required: false
+      },
       contentFormats: ['video', 'reels'],
       platforms: ['tiktok', 'youtube', 'instagram'],
       hashtags: ['UnboxingExperience', 'ProductReview', 'RetailTherapy', 'UnboxingFun'],

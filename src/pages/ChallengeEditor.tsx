@@ -9,6 +9,7 @@ import ChallengeTabContent from '@/components/challenge-editor/ChallengeTabConte
 import ChallengeTabNavigation from '@/components/challenge-editor/ChallengeTabNavigation';
 import ChallengeNavButtons from '@/components/challenge-editor/ChallengeNavButtons';
 import TemplateSelector from '@/components/challenge-editor/templates/TemplateSelector';
+import { DEFAULT_LOCATION_DATA } from '@/types/location';
 import { ChallengeTemplate } from '@/types/template';
 import { toast } from 'sonner';
 
@@ -23,6 +24,8 @@ const ChallengeEditor = () => {
     // Preview media
     previewMediaType: 'image',
     previewMediaUrl: '',
+    // Location data
+    location: DEFAULT_LOCATION_DATA,
     // Content requirements
     contentFormats: [],
     platforms: [],
@@ -38,7 +41,7 @@ const ChallengeEditor = () => {
     // Target audience
     ageRange: [18, 65],
     gender: [],
-    location: '',
+    targetLocation: '',
     language: '',
     levelRestriction: 'open',
     // Rewards
