@@ -8,9 +8,13 @@ import ChallengeHeader from '@/components/challenge-editor/ChallengeHeader';
 import ChallengeTabContent from '@/components/challenge-editor/ChallengeTabContent';
 import ChallengeTabNavigation from '@/components/challenge-editor/ChallengeTabNavigation';
 import ChallengeNavButtons from '@/components/challenge-editor/ChallengeNavButtons';
+import TemplateSelector from '@/components/challenge-editor/templates/TemplateSelector';
+import { ChallengeTemplate } from '@/types/template';
+import { toast } from 'sonner';
 
 const ChallengeEditor = () => {
   const { activeTab, tabsConfig, navigateTab, setActiveTab } = useChallengeTabs();
+  const [showTemplateSelector, setShowTemplateSelector] = useState(false);
   const [challengeData, setChallengeData] = useState({
     // Challenge basics
     type: [],
@@ -80,9 +84,31 @@ const ChallengeEditor = () => {
     setActiveTab(tab as ChallengeTab);
   };
 
+  const handleTemplateSelect = (template: ChallengeTemplate) => {
+    // Calculate end date based on template duration
+    const endDate = new Date();
+    endDate.setDate(endDate.getDate() + template.duration);
+
+    // Apply template data to challenge
+    setChallengeData(prev => ({
+      ...prev,
+      ...template.data,
+      endDate
+    }));
+
+    setShowTemplateSelector(false);
+    toast.success(`Applied template: ${template.title}`);
+    
+    // Navigate to basics tab to review the applied template
+    setActiveTab('basics');
+  };
+
   return (
     <div className="container py-8 max-w-5xl">
-      <ChallengeHeader onSaveDraft={handleSaveDraft} />
+      <ChallengeHeader 
+        onSaveDraft={handleSaveDraft} 
+        onUseTemplate={() => setShowTemplateSelector(true)}
+      />
 
       <Card>
         <CardHeader>
@@ -112,6 +138,13 @@ const ChallengeEditor = () => {
           </FormProvider>
         </CardContent>
       </Card>
+
+      {showTemplateSelector && (
+        <TemplateSelector
+          onTemplateSelect={handleTemplateSelect}
+          onClose={() => setShowTemplateSelector(false)}
+        />
+      )}
     </div>
   );
 };
