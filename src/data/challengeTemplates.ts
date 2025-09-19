@@ -47,10 +47,8 @@ export const challengeTemplates: ChallengeTemplate[] = [
       title: 'Eco Hero Challenge',
       description: 'Be an environmental champion! Share photos of your trash collection efforts and inspire others to protect our planet.',
       location: {
-        enabled: true,
-        allowMultipleLocations: false,
-        locations: [],
-        required: false
+        location_required: false,
+        locations: []
       },
       contentFormats: ['photo'],
       platforms: ['instagram', 'tiktok', 'facebook'],
@@ -125,10 +123,8 @@ export const challengeTemplates: ChallengeTemplate[] = [
       title: 'Urban Sprint Challenge',
       description: 'Race through the city streets in this thrilling AR adventure! Collect virtual items, solve clues, and climb the leaderboard.',
       location: {
-        enabled: true,
-        allowMultipleLocations: true,
-        locations: [],
-        required: true
+        location_required: true,
+        locations: []
       },
       contentFormats: ['photo', 'video'],
       platforms: ['jillr', 'instagram'],
@@ -203,10 +199,8 @@ export const challengeTemplates: ChallengeTemplate[] = [
       title: 'Ultimate Unboxing Experience',
       description: 'Share the excitement of unboxing your favorite products! Create engaging videos that showcase the unboxing experience.',
       location: {
-        enabled: true,
-        allowMultipleLocations: true,
-        locations: [],
-        required: false
+        location_required: false,
+        locations: []
       },
       contentFormats: ['video', 'reels'],
       platforms: ['tiktok', 'youtube', 'instagram'],

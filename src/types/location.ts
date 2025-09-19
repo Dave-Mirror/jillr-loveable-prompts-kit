@@ -1,24 +1,20 @@
 export interface ChallengeLocation {
   id: string;
-  name: string;
-  latitude: number;
-  longitude: number;
+  label: string;
   address: string;
-  radius: number; // in meters
+  lat: number;
+  lng: number;
+  radius_m: number;
 }
 
-export interface LocationData {
-  enabled: boolean;
-  allowMultipleLocations: boolean;
+export interface LocationState {
+  location_required: boolean;
   locations: ChallengeLocation[];
-  required: boolean;
 }
 
-export const DEFAULT_LOCATION_DATA: LocationData = {
-  enabled: false,
-  allowMultipleLocations: false,
-  locations: [],
-  required: false
+export const DEFAULT_LOCATION_STATE: LocationState = {
+  location_required: false,
+  locations: []
 };
 
 export const RADIUS_LIMITS = {

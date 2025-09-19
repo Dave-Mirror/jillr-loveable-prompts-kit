@@ -9,7 +9,7 @@ import ChallengeTabContent from '@/components/challenge-editor/ChallengeTabConte
 import ChallengeTabNavigation from '@/components/challenge-editor/ChallengeTabNavigation';
 import ChallengeNavButtons from '@/components/challenge-editor/ChallengeNavButtons';
 import TemplateSelector from '@/components/challenge-editor/templates/TemplateSelector';
-import { DEFAULT_LOCATION_DATA } from '@/types/location';
+import { DEFAULT_LOCATION_STATE } from '@/types/location';
 import { ChallengeTemplate } from '@/types/template';
 import { toast } from 'sonner';
 
@@ -25,7 +25,7 @@ const ChallengeEditor = () => {
     previewMediaType: 'image',
     previewMediaUrl: '',
     // Location data
-    location: DEFAULT_LOCATION_DATA,
+    location: DEFAULT_LOCATION_STATE,
     // Content requirements
     contentFormats: [],
     platforms: [],

@@ -1,25 +1,26 @@
-import React, { useState, useCallback, useRef, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { GoogleMap, useJsApiLoader, Marker, Circle } from '@react-google-maps/api';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { MapPin, Plus, Trash2, Search } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { MapPin, Trash2, Search, AlertTriangle } from 'lucide-react';
 import { toast } from 'sonner';
-import { ChallengeLocation, LocationData, RADIUS_LIMITS } from '@/types/location';
+import { ChallengeLocation, LocationState, RADIUS_LIMITS } from '@/types/location';
 
 interface LocationSectionProps {
-  data: LocationData;
-  onChange: (data: LocationData) => void;
+  data: LocationState;
+  onChange: (data: LocationState) => void;
 }
 
 const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || 'AIzaSyBv7DcTYmXv8u_l6pI7oPq4BXzR5tF8nGk';
 
 const mapContainerStyle = {
   width: '100%',
-  height: '400px',
+  height: '320px',
+  minHeight: '320px',
   borderRadius: '8px'
 };
 
@@ -35,7 +36,7 @@ const LocationSection: React.FC<LocationSectionProps> = ({ data, onChange }) => 
   const [autocompleteService, setAutocompleteService] = useState<google.maps.places.AutocompleteService | null>(null);
   const [suggestions, setSuggestions] = useState<google.maps.places.AutocompletePrediction[]>([]);
   
-  const { isLoaded } = useJsApiLoader({
+  const { isLoaded, loadError } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: GOOGLE_MAPS_API_KEY,
     libraries: ['places']
@@ -79,24 +80,17 @@ const LocationSection: React.FC<LocationSectionProps> = ({ data, onChange }) => 
     
     const newLocation: ChallengeLocation = {
       id: `location-${Date.now()}`,
-      name: `Location ${data.locations.length + 1}`,
-      latitude: lat,
-      longitude: lng,
+      label: `Location ${data.locations.length + 1}`,
       address,
-      radius: RADIUS_LIMITS.default
+      lat,
+      lng,
+      radius_m: RADIUS_LIMITS.default
     };
 
-    if (data.allowMultipleLocations) {
-      onChange({
-        ...data,
-        locations: [...data.locations, newLocation]
-      });
-    } else {
-      onChange({
-        ...data,
-        locations: [newLocation]
-      });
-    }
+    onChange({
+      ...data,
+      locations: [...data.locations, newLocation]
+    });
 
     toast.success('Location added!');
   };
@@ -110,7 +104,7 @@ const LocationSection: React.FC<LocationSectionProps> = ({ data, onChange }) => 
     
     const updatedLocations = data.locations.map(loc => 
       loc.id === locationId 
-        ? { ...loc, latitude: lat, longitude: lng, address }
+        ? { ...loc, lat, lng, address }
         : loc
     );
     
@@ -170,24 +164,17 @@ const LocationSection: React.FC<LocationSectionProps> = ({ data, onChange }) => 
         
         const newLocation: ChallengeLocation = {
           id: `location-${Date.now()}`,
-          name: description.split(',')[0],
-          latitude: lat,
-          longitude: lng,
+          label: description.split(',')[0],
           address: description,
-          radius: RADIUS_LIMITS.default
+          lat,
+          lng,
+          radius_m: RADIUS_LIMITS.default
         };
 
-        if (data.allowMultipleLocations) {
-          onChange({
-            ...data,
-            locations: [...data.locations, newLocation]
-          });
-        } else {
-          onChange({
-            ...data,
-            locations: [newLocation]
-          });
-        }
+        onChange({
+          ...data,
+          locations: [...data.locations, newLocation]
+        });
 
         if (map) {
           map.panTo({ lat, lng });
@@ -203,8 +190,63 @@ const LocationSection: React.FC<LocationSectionProps> = ({ data, onChange }) => 
     }
   };
 
+  if (loadError || !GOOGLE_MAPS_API_KEY || GOOGLE_MAPS_API_KEY === 'AIzaSyBv7DcTYmXv8u_l6pI7oPq4BXzR5tF8nGk') {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-lg font-medium">Location Settings</h3>
+            <p className="text-sm text-muted-foreground">
+              Configure location-based requirements for your challenge
+            </p>
+          </div>
+          <Switch
+            checked={data.location_required}
+            onCheckedChange={(location_required) => onChange({ ...data, location_required })}
+          />
+        </div>
+        
+        {data.location_required && (
+          <Card className="border-destructive">
+            <CardContent className="p-4">
+              <div className="flex items-center space-x-2 text-destructive">
+                <AlertTriangle className="h-4 w-4" />
+                <div>
+                  <p className="text-sm font-medium">Map unavailable</p>
+                  <p className="text-xs text-muted-foreground">
+                    Add GOOGLE_MAPS_API_KEY and enable Maps + Places APIs.
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+      </div>
+    );
+  }
+
   if (!isLoaded) {
-    return <div className="text-center p-8">Loading map...</div>;
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-lg font-medium">Location Settings</h3>
+            <p className="text-sm text-muted-foreground">
+              Configure location-based requirements for your challenge
+            </p>
+          </div>
+          <Switch
+            checked={data.location_required}
+            onCheckedChange={(location_required) => onChange({ ...data, location_required })}
+          />
+        </div>
+        {data.location_required && (
+          <div className="animate-pulse">
+            <div className="h-80 bg-muted rounded-lg"></div>
+          </div>
+        )}
+      </div>
+    );
   }
 
   return (
@@ -217,66 +259,38 @@ const LocationSection: React.FC<LocationSectionProps> = ({ data, onChange }) => 
           </p>
         </div>
         <Switch
-          checked={data.enabled}
-          onCheckedChange={(enabled) => onChange({ ...data, enabled })}
+          checked={data.location_required}
+          onCheckedChange={(location_required) => onChange({ ...data, location_required })}
         />
       </div>
 
-      {data.enabled && (
+      {data.location_required && (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-4">
-              <div className="flex items-center space-x-2">
-                <Switch
-                  id="multiple-locations"
-                  checked={data.allowMultipleLocations}
-                  onCheckedChange={(allowMultipleLocations) => 
-                    onChange({ ...data, allowMultipleLocations })
-                  }
-                />
-                <Label htmlFor="multiple-locations">Allow Multiple Locations</Label>
-              </div>
-
-              <div className="flex items-center space-x-2">
-                <Switch
-                  id="location-required"
-                  checked={data.required}
-                  onCheckedChange={(required) => onChange({ ...data, required })}
-                />
-                <Label htmlFor="location-required">Location Required</Label>
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <div className="relative">
-                <div className="flex space-x-2">
-                  <div className="relative flex-1">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      placeholder="Search for a place..."
-                      value={searchValue}
-                      onChange={(e) => {
-                        setSearchValue(e.target.value);
-                        handleSearch(e.target.value);
-                      }}
-                      className="pl-10"
-                    />
-                    {suggestions.length > 0 && (
-                      <div className="absolute top-full left-0 right-0 bg-background border rounded-md shadow-lg z-10 mt-1 max-h-60 overflow-y-auto">
-                        {suggestions.map((suggestion) => (
-                          <button
-                            key={suggestion.place_id}
-                            className="w-full text-left px-3 py-2 hover:bg-muted text-sm"
-                            onClick={() => selectSuggestion(suggestion.place_id!, suggestion.description)}
-                          >
-                            {suggestion.description}
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                  </div>
+          <div className="space-y-4">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search for a place..."
+                value={searchValue}
+                onChange={(e) => {
+                  setSearchValue(e.target.value);
+                  handleSearch(e.target.value);
+                }}
+                className="pl-10"
+              />
+              {suggestions.length > 0 && (
+                <div className="absolute top-full left-0 right-0 bg-background border rounded-md shadow-lg z-10 mt-1 max-h-60 overflow-y-auto">
+                  {suggestions.map((suggestion) => (
+                    <button
+                      key={suggestion.place_id}
+                      className="w-full text-left px-3 py-2 hover:bg-muted text-sm"
+                      onClick={() => selectSuggestion(suggestion.place_id!, suggestion.description)}
+                    >
+                      {suggestion.description}
+                    </button>
+                  ))}
                 </div>
-              </div>
+              )}
             </div>
           </div>
 
@@ -284,7 +298,7 @@ const LocationSection: React.FC<LocationSectionProps> = ({ data, onChange }) => 
             <GoogleMap
               mapContainerStyle={mapContainerStyle}
               center={data.locations.length > 0 
-                ? { lat: data.locations[0].latitude, lng: data.locations[0].longitude }
+                ? { lat: data.locations[0].lat, lng: data.locations[0].lng }
                 : defaultCenter
               }
               zoom={data.locations.length > 0 ? 15 : 10}
@@ -300,13 +314,13 @@ const LocationSection: React.FC<LocationSectionProps> = ({ data, onChange }) => 
               {data.locations.map((location) => (
                 <React.Fragment key={location.id}>
                   <Marker
-                    position={{ lat: location.latitude, lng: location.longitude }}
+                    position={{ lat: location.lat, lng: location.lng }}
                     draggable
                     onDragEnd={(event) => handleMarkerDragEnd(location.id, event)}
                   />
                   <Circle
-                    center={{ lat: location.latitude, lng: location.longitude }}
-                    radius={location.radius}
+                    center={{ lat: location.lat, lng: location.lng }}
+                    radius={location.radius_m}
                     options={{
                       fillColor: 'hsl(var(--primary))',
                       fillOpacity: 0.2,
@@ -334,8 +348,8 @@ const LocationSection: React.FC<LocationSectionProps> = ({ data, onChange }) => 
                       <div className="flex items-center space-x-2">
                         <MapPin className="h-4 w-4 text-primary" />
                         <Input
-                          value={location.name}
-                          onChange={(e) => updateLocation(location.id, { name: e.target.value })}
+                          value={location.label}
+                          onChange={(e) => updateLocation(location.id, { label: e.target.value })}
                           className="font-medium"
                           placeholder="Location name"
                         />
@@ -353,7 +367,7 @@ const LocationSection: React.FC<LocationSectionProps> = ({ data, onChange }) => 
                       <div>
                         <Label className="text-xs">Latitude (read-only)</Label>
                         <Input
-                          value={location.latitude.toFixed(6)}
+                          value={location.lat.toFixed(6)}
                           readOnly
                           className="text-xs bg-muted"
                         />
@@ -361,7 +375,7 @@ const LocationSection: React.FC<LocationSectionProps> = ({ data, onChange }) => 
                       <div>
                         <Label className="text-xs">Longitude (read-only)</Label>
                         <Input
-                          value={location.longitude.toFixed(6)}
+                          value={location.lng.toFixed(6)}
                           readOnly
                           className="text-xs bg-muted"
                         />
@@ -379,13 +393,13 @@ const LocationSection: React.FC<LocationSectionProps> = ({ data, onChange }) => 
 
                     <div>
                       <div className="flex justify-between mb-2">
-                        <Label className="text-xs">Radius: {location.radius}m</Label>
+                        <Label className="text-xs">Radius: {location.radius_m}m</Label>
                         <Input
                           type="number"
-                          value={location.radius}
+                          value={location.radius_m}
                           onChange={(e) => {
                             const value = Math.max(RADIUS_LIMITS.min, Math.min(RADIUS_LIMITS.max, parseInt(e.target.value) || RADIUS_LIMITS.default));
-                            updateLocation(location.id, { radius: value });
+                            updateLocation(location.id, { radius_m: value });
                           }}
                           className="w-20 h-6 text-xs"
                           min={RADIUS_LIMITS.min}
@@ -393,8 +407,8 @@ const LocationSection: React.FC<LocationSectionProps> = ({ data, onChange }) => 
                         />
                       </div>
                       <Slider
-                        value={[location.radius]}
-                        onValueChange={([value]) => updateLocation(location.id, { radius: value })}
+                        value={[location.radius_m]}
+                        onValueChange={([value]) => updateLocation(location.id, { radius_m: value })}
                         max={RADIUS_LIMITS.max}
                         min={RADIUS_LIMITS.min}
                         step={25}
@@ -407,7 +421,7 @@ const LocationSection: React.FC<LocationSectionProps> = ({ data, onChange }) => 
             </div>
           )}
 
-          {data.enabled && (
+          {data.location_required && (
             <div className="bg-muted/50 border border-muted rounded-lg p-4">
               <div className="flex items-start space-x-2">
                 <MapPin className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />

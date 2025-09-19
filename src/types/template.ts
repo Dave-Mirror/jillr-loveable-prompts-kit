@@ -1,4 +1,4 @@
-import { LocationData } from './location';
+import { LocationState } from './location';
 
 export interface ChallengeTemplate {
   id: string;
@@ -15,7 +15,7 @@ export interface ChallengeTemplate {
     title: string;
     description: string;
     // Location data
-    location?: LocationData;
+    location?: LocationState;
     // Content requirements
     contentFormats: string[];
     platforms: string[];
