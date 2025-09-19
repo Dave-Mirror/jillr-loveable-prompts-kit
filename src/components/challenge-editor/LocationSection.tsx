@@ -217,9 +217,9 @@ const LocationSection: React.FC<LocationSectionProps> = ({ data, onChange }) => 
               <div className="flex items-center space-x-2 text-destructive">
                 <AlertTriangle className="h-4 w-4" />
                 <div>
-                  <p className="text-sm font-medium">Map unavailable</p>
+                  <p className="text-sm font-medium">⚠️ Google Maps API key not set</p>
                   <p className="text-xs text-muted-foreground">
-                    Add VITE_GOOGLE_MAPS_API_KEY and enable Maps + Places APIs.
+                    Please configure VITE_GOOGLE_MAPS_API_KEY to enable location features.
                   </p>
                 </div>
               </div>
