@@ -1,11 +1,19 @@
 import { ChallengeTemplate, TemplateCategory } from '@/types/template';
+import ootdFashionImage from '@/assets/templates/ootd-fashion.jpg';
+import ecoHeroImage from '@/assets/templates/eco-hero.jpg';
+import tacoTuesdayImage from '@/assets/templates/taco-tuesday.jpg';
+import styleShowdownImage from '@/assets/templates/style-showdown.jpg';
+import urbanSprintImage from '@/assets/templates/urban-sprint.jpg';
+import fitnessTransformationImage from '@/assets/templates/fitness-transformation.jpg';
+import travelWanderlustImage from '@/assets/templates/travel-wanderlust.jpg';
+import retailUnboxingImage from '@/assets/templates/retail-unboxing.jpg';
 
 export const challengeTemplates: ChallengeTemplate[] = [
   {
     id: 'ootd-fashion',
     title: 'Outfit of the Day',
     description: 'Share your daily style inspiration and connect with fashion enthusiasts',
-    image: '/api/placeholder/400/200',
+    image: ootdFashionImage,
     industry: 'Fashion',
     challengeType: 'Photo Upload',
     duration: 7,
@@ -29,7 +37,7 @@ export const challengeTemplates: ChallengeTemplate[] = [
     id: 'eco-hero',
     title: 'Eco Hero Challenge',
     description: 'Make a positive environmental impact by collecting trash in your community',
-    image: '/api/placeholder/400/200',
+    image: ecoHeroImage,
     industry: 'Sustainability',
     challengeType: 'Photo Upload',
     duration: 7,
@@ -53,7 +61,7 @@ export const challengeTemplates: ChallengeTemplate[] = [
     id: 'taco-tuesday',
     title: 'Taco Tuesday',
     description: 'Celebrate the ultimate food day with your favorite taco creations',
-    image: '/api/placeholder/400/200',
+    image: tacoTuesdayImage,
     industry: 'Food',
     challengeType: 'Photo Upload',
     duration: 7,
@@ -77,7 +85,7 @@ export const challengeTemplates: ChallengeTemplate[] = [
     id: 'style-showdown',
     title: 'Style Showdown',
     description: 'Compete in the ultimate fashion battle with video submissions and community voting',
-    image: '/api/placeholder/400/200',
+    image: styleShowdownImage,
     industry: 'Fashion',
     challengeType: 'Video Upload',
     duration: 5,
@@ -101,7 +109,7 @@ export const challengeTemplates: ChallengeTemplate[] = [
     id: 'urban-sprint',
     title: 'Urban Sprint',
     description: 'Navigate the city in an exciting AR scavenger hunt collecting virtual items',
-    image: '/api/placeholder/400/200',
+    image: urbanSprintImage,
     industry: 'City',
     challengeType: 'AR Quest',
     duration: 3,
@@ -125,7 +133,7 @@ export const challengeTemplates: ChallengeTemplate[] = [
     id: 'fitness-transformation',
     title: 'Fitness Transformation',
     description: '30-day fitness journey with progress tracking and community motivation',
-    image: '/api/placeholder/400/200',
+    image: fitnessTransformationImage,
     industry: 'Fitness',
     challengeType: 'Photo Upload',
     duration: 30,
@@ -149,7 +157,7 @@ export const challengeTemplates: ChallengeTemplate[] = [
     id: 'travel-wanderlust',
     title: 'Wanderlust Adventures',
     description: 'Share your travel experiences and discover hidden gems around the world',
-    image: '/api/placeholder/400/200',
+    image: travelWanderlustImage,
     industry: 'Travel',
     challengeType: 'Photo Upload',
     duration: 14,
@@ -173,7 +181,7 @@ export const challengeTemplates: ChallengeTemplate[] = [
     id: 'retail-unboxing',
     title: 'Retail Unboxing Experience',
     description: 'Create exciting unboxing videos of your favorite retail products',
-    image: '/api/placeholder/400/200',
+    image: retailUnboxingImage,
     industry: 'Retail',
     challengeType: 'Video Upload',
     duration: 10,

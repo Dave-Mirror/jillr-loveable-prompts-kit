@@ -38,8 +38,12 @@ const TemplateCard: React.FC<TemplateCardProps> = ({ template, onSelect }) => {
   return (
     <Card className="hover:shadow-lg transition-shadow cursor-pointer group">
       <CardHeader className="pb-3">
-        <div className="aspect-video bg-gradient-to-br from-primary/20 to-secondary/20 rounded-lg mb-3 flex items-center justify-center">
-          <Play className="h-8 w-8 text-primary/60" />
+        <div className="aspect-video rounded-lg mb-3 overflow-hidden">
+          <img 
+            src={template.image} 
+            alt={template.title}
+            className="w-full h-full object-cover"
+          />
         </div>
         <CardTitle className="text-lg">{template.title}</CardTitle>
         <p className="text-sm text-muted-foreground line-clamp-2">
