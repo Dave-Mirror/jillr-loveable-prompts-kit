@@ -15,7 +15,7 @@ interface LocationSectionProps {
   onChange: (data: LocationState) => void;
 }
 
-const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || 'AIzaSyBv7DcTYmXv8u_l6pI7oPq4BXzR5tF8nGk';
+const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || import.meta.env.GOOGLE_MAPS_API_KEY;
 
 const mapContainerStyle = {
   width: '100%',
@@ -38,7 +38,7 @@ const LocationSection: React.FC<LocationSectionProps> = ({ data, onChange }) => 
   
   const { isLoaded, loadError } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: GOOGLE_MAPS_API_KEY,
+    googleMapsApiKey: apiKey || '',
     libraries: ['places']
   });
 
@@ -190,7 +190,7 @@ const LocationSection: React.FC<LocationSectionProps> = ({ data, onChange }) => 
     }
   };
 
-  if (loadError || !GOOGLE_MAPS_API_KEY || GOOGLE_MAPS_API_KEY === 'AIzaSyBv7DcTYmXv8u_l6pI7oPq4BXzR5tF8nGk') {
+  if (loadError || !apiKey) {
     return (
       <div className="space-y-6">
         <div className="flex items-center justify-between">
@@ -214,7 +214,7 @@ const LocationSection: React.FC<LocationSectionProps> = ({ data, onChange }) => 
                 <div>
                   <p className="text-sm font-medium">Map unavailable</p>
                   <p className="text-xs text-muted-foreground">
-                    Add GOOGLE_MAPS_API_KEY and enable Maps + Places APIs.
+                    Add VITE_GOOGLE_MAPS_API_KEY and enable Maps + Places APIs.
                   </p>
                 </div>
               </div>
