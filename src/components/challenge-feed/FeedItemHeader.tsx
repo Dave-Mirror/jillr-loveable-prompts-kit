@@ -12,16 +12,16 @@ const FeedItemHeader: React.FC<FeedItemHeaderProps> = ({ item }) => {
   return (
     <div className="absolute top-4 left-4 flex items-center">
       <Avatar className="h-10 w-10 border-2 border-white">
-        <AvatarImage src={item.user.avatar} alt={item.user.name} />
-        <AvatarFallback>{item.user.name.charAt(0)}</AvatarFallback>
+        <AvatarImage src={item.userAvatar} alt={item.username} />
+        <AvatarFallback>{item.username.charAt(0)}</AvatarFallback>
       </Avatar>
       <div className="ml-2">
-        <p className="font-semibold text-white">{item.user.name}</p>
-        <p className="text-xs text-gray-300">@{item.user.username}</p>
+        <p className="font-semibold text-white">{item.username}</p>
+        <p className="text-xs text-gray-300">@{item.username}</p>
       </div>
       
-      <Badge className="ml-2 bg-jillr-neonPurple/80 hover:bg-jillr-neonPurple">
-        {item.challenge.title}
+      <Badge className="ml-2">
+        {item.challengeInfo?.title || 'Challenge'}
       </Badge>
     </div>
   );
