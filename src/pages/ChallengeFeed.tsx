@@ -17,6 +17,7 @@ const ChallengeFeed = () => {
   const { feedItems, setFeedItems, loading } = useFeed();
   const { activeIndex, feedRef } = useVideoPlayback();
   const { showAchievement, toggleAchievement } = useAchievementManager();
+  const { setChallenges } = useChallengeStore();
   const { 
     filterType, 
     sortBy, 
