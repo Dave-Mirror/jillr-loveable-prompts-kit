@@ -10,7 +10,7 @@ import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { Trash2, Plus, Eye, Sparkles, Target, Filter } from 'lucide-react';
+import { Trash2, Plus, Eye, Sparkles, Target, Filter, Edit } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface TriggerCondition {
@@ -105,6 +105,7 @@ const TriggersTargeting: React.FC<TriggersTargetingProps> = ({ data, onChange })
   const [effectiveness, setEffectiveness] = useState([30]);
   const [category, setCategory] = useState('Alle Kategorien');
   const [audience, setAudience] = useState('Alle Zielgruppen');
+  const [activeSubNav, setActiveSubNav] = useState<'create' | 'manage' | 'analyze'>('create');
 
   const triggers = data?.triggers || [];
   const audienceMatch = data?.audience_match || mockAudienceData;
@@ -197,16 +198,67 @@ const TriggersTargeting: React.FC<TriggersTargetingProps> = ({ data, onChange })
 
   const estimatedReach = Math.floor(12400 * (effectiveness[0] / 100));
 
+  const toggleTrigger = (triggerId: string) => {
+    const updatedTriggers = triggers.map((trigger: Trigger) => 
+      trigger.id === triggerId ? { ...trigger, active: !trigger.active } : trigger
+    );
+    onChange({ ...data, triggers: updatedTriggers });
+  };
+
+  const deleteTrigger = (triggerId: string) => {
+    const updatedTriggers = triggers.filter((trigger: Trigger) => trigger.id !== triggerId);
+    onChange({ ...data, triggers: updatedTriggers });
+    toast({
+      title: "Trigger gelöscht",
+      description: "Der Trigger wurde erfolgreich entfernt."
+    });
+  };
+
   return (
     <div className="space-y-6">
-      {/* Section A: Trigger Management */}
-      <Card className="bg-background/5 border-border/20 backdrop-blur-xl">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-primary" />
-            Trigger erstellen und verwalten
-          </CardTitle>
-        </CardHeader>
+      {/* Sub-navigation */}
+      <div className="flex gap-1 p-1 bg-background/10 rounded-full backdrop-blur-sm border border-border/20">
+        <button
+          onClick={() => setActiveSubNav('create')}
+          className={`flex-1 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+            activeSubNav === 'create'
+              ? 'bg-gradient-to-r from-primary/20 to-secondary/20 border border-primary/30 text-primary shadow-sm'
+              : 'text-muted-foreground hover:text-foreground'
+          }`}
+        >
+          Trigger erstellen
+        </button>
+        <button
+          onClick={() => setActiveSubNav('manage')}
+          className={`flex-1 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+            activeSubNav === 'manage'
+              ? 'bg-gradient-to-r from-primary/20 to-secondary/20 border border-primary/30 text-primary shadow-sm'
+              : 'text-muted-foreground hover:text-foreground'
+          }`}
+        >
+          Meine Trigger
+        </button>
+        <button
+          onClick={() => setActiveSubNav('analyze')}
+          className={`flex-1 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+            activeSubNav === 'analyze'
+              ? 'bg-gradient-to-r from-primary/20 to-secondary/20 border border-primary/30 text-primary shadow-sm'
+              : 'text-muted-foreground hover:text-foreground'
+          }`}
+        >
+          Analyse & Optimierung
+        </button>
+      </div>
+
+      {/* Trigger Creation View */}
+      {activeSubNav === 'create' && (
+        <Card className="bg-background/5 border-border/20 backdrop-blur-xl">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-primary" />
+              Trigger erstellen und verwalten
+            </CardTitle>
+          </CardHeader>
         <CardContent className="space-y-6">
           <Tabs value={triggerMode} onValueChange={(v) => setTriggerMode(v as 'basic' | 'advanced')}>
             <TabsList className="grid w-full grid-cols-2">
@@ -374,23 +426,138 @@ const TriggersTargeting: React.FC<TriggersTargetingProps> = ({ data, onChange })
             </TabsContent>
           </Tabs>
 
-          {/* Existing Triggers */}
-          {triggers.length > 0 && (
-            <div className="space-y-2">
-              <Label className="text-lg font-semibold">Meine Trigger</Label>
-              {triggers.map((trigger: Trigger) => (
-                <div key={trigger.id} className="flex items-center justify-between p-3 rounded-lg bg-background/10">
-                  <div>
-                    <p className="font-medium">{trigger.name}</p>
-                    <p className="text-sm text-muted-foreground">{trigger.description}</p>
-                  </div>
-                  <Switch checked={trigger.active} />
-                </div>
-              ))}
-            </div>
-          )}
         </CardContent>
       </Card>
+      )}
+
+      {/* Trigger Management View */}
+      {activeSubNav === 'manage' && (
+        <Card className="bg-background/5 border-border/20 backdrop-blur-xl">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Target className="w-5 h-5 text-primary" />
+              Meine Trigger
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {triggers.length === 0 ? (
+              <div className="text-center py-12">
+                <Sparkles className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                <h3 className="text-lg font-medium mb-2">Keine Trigger vorhanden</h3>
+                <p className="text-muted-foreground mb-4">
+                  Erstellen Sie Ihren ersten Trigger, um automatisierte Aktionen zu definieren.
+                </p>
+                <Button onClick={() => setActiveSubNav('create')}>
+                  Neuen Trigger erstellen
+                </Button>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div className="grid grid-cols-6 gap-4 text-sm font-medium text-muted-foreground border-b pb-2">
+                  <div>Name</div>
+                  <div>Bedingungen</div>
+                  <div>Aktionen</div>
+                  <div>Aktiv</div>
+                  <div>Zuletzt ausgelöst</div>
+                  <div>Aktionen</div>
+                </div>
+                {triggers.map((trigger: Trigger) => (
+                  <div key={trigger.id} className="grid grid-cols-6 gap-4 items-center p-3 rounded-lg bg-background/10">
+                    <div>
+                      <p className="font-medium">{trigger.name}</p>
+                      <p className="text-xs text-muted-foreground truncate">{trigger.description}</p>
+                    </div>
+                    <div className="text-sm">
+                      <Badge variant="outline">{trigger.if.length}</Badge>
+                    </div>
+                    <div className="text-sm">
+                      <Badge variant="outline">{trigger.then.length}</Badge>
+                    </div>
+                    <div>
+                      <Switch 
+                        checked={trigger.active} 
+                        onCheckedChange={() => toggleTrigger(trigger.id)}
+                      />
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      vor 2 Std.
+                    </div>
+                    <div className="flex gap-1">
+                      <Button variant="ghost" size="sm" onClick={() => setActiveSubNav('create')}>
+                        <Edit className="w-4 h-4" />
+                      </Button>
+                      <Button variant="ghost" size="sm" onClick={() => deleteTrigger(trigger.id)}>
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Analytics View */}
+      {activeSubNav === 'analyze' && (
+        <Card className="bg-background/5 border-border/20 backdrop-blur-xl">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Target className="w-5 h-5 text-primary" />
+              Analyse & Optimierung
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-6 md:grid-cols-3">
+              <div className="text-center p-6 rounded-lg bg-background/10">
+                <div className="text-2xl font-bold text-primary">1,247</div>
+                <div className="text-sm text-muted-foreground">Ausführungen (7T)</div>
+              </div>
+              <div className="text-center p-6 rounded-lg bg-background/10">
+                <div className="text-2xl font-bold text-primary">23.4%</div>
+                <div className="text-sm text-muted-foreground">Click-Through-Rate</div>
+              </div>
+              <div className="text-center p-6 rounded-lg bg-background/10">
+                <div className="text-2xl font-bold text-primary">8.7%</div>
+                <div className="text-sm text-muted-foreground">Conversion Rate</div>
+              </div>
+            </div>
+            
+            <div className="mt-6 space-y-4">
+              <h3 className="font-medium">Top Performing Trigger</h3>
+              {triggers.length > 0 ? (
+                <div className="p-4 rounded-lg bg-background/10">
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <p className="font-medium">{triggers[0].name}</p>
+                      <p className="text-sm text-muted-foreground">{triggers[0].description}</p>
+                    </div>
+                    <Badge className="bg-primary/20 text-primary border-primary/30">
+                      Top Performer
+                    </Badge>
+                  </div>
+                  <div className="grid grid-cols-3 gap-4 text-sm mt-3">
+                    <div>
+                      <div className="font-medium">467</div>
+                      <div className="text-muted-foreground">Ausführungen</div>
+                    </div>
+                    <div>
+                      <div className="font-medium">31.2%</div>
+                      <div className="text-muted-foreground">CTR</div>
+                    </div>
+                    <div>
+                      <div className="font-medium">12.1%</div>
+                      <div className="text-muted-foreground">Conversion</div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <p className="text-muted-foreground">Keine Daten verfügbar. Erstellen Sie erst einen Trigger.</p>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Section B: Audience Matching */}
       <Card className="bg-background/5 border-border/20 backdrop-blur-xl">
