@@ -15,139 +15,161 @@ export interface Comment {
 // Using the type from challenge-feed/types.ts to avoid duplicates
 export type { FeedItemType as FeedItem };
 
-// Sample feed data
+// Curated seed challenges data
+const seedChallenges = [
+  {
+    id: "scan-and-win",
+    title: "Scan & Win",
+    description: "Scanne QR-Codes bei Partner-Locations & unlocke Belohnungen.",
+    category: "city-clash",
+    xp: 500,
+    tags: ["QR", "Retail", "CityClash"],
+    thumbnailUrl: "https://images.unsplash.com/photo-1558898499-98b1b19b1c36?auto=format&q=80&w=1600",
+    thumbnailAlt: "Person scannt QR-Code an einer Location"
+  },
+  {
+    id: "outfit-reel",
+    title: "Outfit Reel Challenge",
+    description: "Teile dein Outfit-Video & sammle Likes für Coins & exklusive Drops.",
+    category: "video",
+    xp: 400,
+    tags: ["UGC", "Fashion"],
+    thumbnailUrl: "https://images.unsplash.com/photo-1520975916090-3105956dac38?auto=format&q=80&w=1600",
+    thumbnailAlt: "Streetwear Portrait mit Smartphone"
+  },
+  {
+    id: "capture-the-flag",
+    title: "Capture the Flag",
+    description: "Finde digitale Flaggen in deiner Zone & poste den Beweis.",
+    category: "city-clash",
+    xp: 450,
+    tags: ["Clan", "Battle"],
+    thumbnailUrl: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&q=80&w=1600",
+    thumbnailAlt: "Neon Flagge in der Stadt"
+  },
+  {
+    id: "eco-hero",
+    title: "Eco Hero",
+    description: "Sammle Müll in deiner Zone & poste den Beweis.",
+    category: "sustainability",
+    xp: 350,
+    tags: ["PhotoUpload", "CleanUp"],
+    thumbnailUrl: "https://images.unsplash.com/photo-1520975682036-4a1c1b87d4e6?auto=format&q=80&w=1600",
+    thumbnailAlt: "Person hebt Müll in der Nachtstadt auf"
+  },
+  {
+    id: "urban-detective",
+    title: "Urban Detective",
+    description: "Löse Rätsel & finde versteckte Orte in deiner Stadt.",
+    category: "mystery",
+    xp: 420,
+    tags: ["Checkpoint", "Riddle"],
+    thumbnailUrl: "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&q=80&w=1600",
+    thumbnailAlt: "Neon-Lupe über Stadtkarte"
+  },
+  {
+    id: "beat-the-clock",
+    title: "Beat the Clock",
+    description: "Erledige Missionen gegen die Zeit & steig' im Level auf.",
+    category: "fitness",
+    xp: 300,
+    tags: ["Timer", "SpeedRun"],
+    thumbnailUrl: "https://images.unsplash.com/photo-1526403226897-1f30ed4c1b39?auto=format&q=80&w=1600",
+    thumbnailAlt: "Neon Stoppuhr"
+  },
+  {
+    id: "check-in",
+    title: "Check-in Challenge",
+    description: "Checke bei Partnerstores ein, erhalte XP & Rabatte via Geofencing.",
+    category: "geo",
+    xp: 250,
+    tags: ["Store", "GeoFence"],
+    thumbnailUrl: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&q=80&w=1600",
+    thumbnailAlt: "Städtischer Store mit Neonlicht"
+  },
+  {
+    id: "selfie-landmark",
+    title: "Selfie @ Landmark",
+    description: "Kreatives Selfie an einem Wahrzeichen & Hashtags posten.",
+    category: "photo",
+    xp: 280,
+    tags: ["Tour", "UGC"],
+    thumbnailUrl: "https://images.unsplash.com/photo-1541534401786-2077eed87a74?auto=format&q=80&w=1600",
+    thumbnailAlt: "Selfie in Neon-Stadt"
+  },
+  {
+    id: "food-quest",
+    title: "Mystery Menu Hunt",
+    description: "Finde das versteckte Pop-Up & poste dein Lieblingsgericht.",
+    category: "city-clash",
+    xp: 320,
+    tags: ["Food", "Rally"],
+    thumbnailUrl: "https://images.unsplash.com/photo-1526312426976-593c2b999a20?auto=format&q=80&w=1600",
+    thumbnailAlt: "Neon Food Szene"
+  },
+  {
+    id: "night-run",
+    title: "Neon Night Run",
+    description: "5 km Night-Run Track – teile dein Finish-Foto.",
+    category: "fitness",
+    xp: 380,
+    tags: ["Run", "City"],
+    thumbnailUrl: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&q=80&w=1600",
+    thumbnailAlt: "Läufer bei Nacht"
+  },
+  {
+    id: "street-art",
+    title: "Street Art Bingo",
+    description: "Finde 5 Murals, fotografiere & poste ein Collage-Reel.",
+    category: "photo",
+    xp: 360,
+    tags: ["Art", "Hunt"],
+    thumbnailUrl: "https://images.unsplash.com/photo-1508182311256-e3f9f49427b1?auto=format&q=80&w=1600",
+    thumbnailAlt: "Neon Street Art"
+  },
+  {
+    id: "ar-treasure",
+    title: "AR Treasure Hunt",
+    description: "Suche AR-Kisten auf der Map & sammle Tickets.",
+    category: "ar",
+    xp: 420,
+    tags: ["AR", "Map"],
+    thumbnailUrl: "https://images.unsplash.com/photo-1520975916090-3105956dac38?auto=format&q=80&w=1600",
+    thumbnailAlt: "AR-Overlay in Stadt"
+  }
+];
+
+// Sample feed data - convert seed challenges to feed items
 export const fetchFeedData = async (): Promise<FeedItemType[]> => {
   // In a real application, this would be an API call
-  // Here we'll return mock data
+  // Here we'll return mock data based on seed challenges
   
   // Simulate network delay
   await new Promise(resolve => setTimeout(resolve, 1000));
   
-  return [
-    {
-      id: 'feed-1',
-      userId: 'user-1',
-      username: 'Sarah M.',
-      userAvatar: '/placeholder.svg',
-      caption: '✨ Meine Entdeckung dieses Cafés war super! #BaristaArt #CoffeeTime',
-      mediaUrl: '/placeholder.svg',
-      mediaType: 'video',
-      liked: false,
-      likes: 423,
-      views: 1200,
-      commentCount: 57,
-      comments: [
-        {
-          id: 'comment-1',
-          username: 'Kaffeeliebhaber',
-          text: 'Wow, das sieht toll aus! In welchem Café war das?',
-          timestamp: '1h'
-        },
-        {
-          id: 'comment-2',
-          username: 'BerlinFoodie',
-          text: 'Ich muss das unbedingt ausprobieren!',
-          timestamp: '30m'
-        }
-      ],
-      hashtags: ['BaristaArt', 'CoffeeTime', 'Berlin'],
-      type: 'challenge',
-      challengeInfo: {
-        title: 'Coffee Culture',
-        reward: '120 XP',
-      },
-      postedAt: '2h',
-      location: 'Kreuzberg, Berlin',
-      challengeId: 'challenge-coffee'
+  return seedChallenges.map((challenge, index) => ({
+    id: `feed-${challenge.id}`,
+    userId: `user-${index + 1}`,
+    username: `Challenger ${index + 1}`,
+    userAvatar: '/placeholder.svg',
+    caption: challenge.description,
+    mediaUrl: challenge.thumbnailUrl || '/placeholder.svg',
+    mediaType: challenge.category === 'video' ? 'video' : 'image',
+    liked: false,
+    likes: Math.floor(Math.random() * 500) + 100,
+    views: Math.floor(Math.random() * 2000) + 500,
+    commentCount: Math.floor(Math.random() * 50) + 10,
+    comments: [],
+    hashtags: challenge.tags || [],
+    type: 'challenge',
+    challengeInfo: {
+      title: challenge.title,
+      reward: `${challenge.xp} XP`,
     },
-    {
-      id: 'feed-2',
-      userId: 'user-2',
-      username: 'Max T.',
-      userAvatar: '/placeholder.svg',
-      caption: 'Mein Besuch im neuen Tech Museum war absolut inspirierend! Danke @TechWorldBerlin für die Einladung. #TechInnovation #MuseumsTag',
-      mediaUrl: '/placeholder.svg',
-      mediaType: 'image',
-      liked: false,
-      likes: 256,
-      views: 800,
-      commentCount: 34,
-      comments: [
-        {
-          id: 'comment-3',
-          username: 'TechFan',
-          text: 'Ich war letzte Woche dort! Die VR-Ausstellung ist fantastisch!',
-          timestamp: '4h'
-        }
-      ],
-      hashtags: ['TechInnovation', 'MuseumsTag', 'Berlin', 'Digital'],
-      type: 'challenge',
-      challengeInfo: {
-        title: 'Museum Challenge',
-        reward: '75 XP',
-      },
-      postedAt: '5h',
-      challengeId: 'challenge-museum'
-    },
-    {
-      id: 'feed-3',
-      userId: 'user-3',
-      username: 'Laura K.',
-      userAvatar: '/placeholder.svg',
-      caption: 'Ich nehme an der Sustainability Challenge teil! Hier ist mein erster Tag mit Zero Waste Einkauf 🌱 #Nachhaltigkeit #ZeroWaste',
-      mediaUrl: '/placeholder.svg',
-      mediaType: 'video',
-      liked: false,
-      likes: 892,
-      views: 2500,
-      commentCount: 103,
-      comments: [
-        {
-          id: 'comment-4',
-          username: 'EcoWarrior',
-          text: 'Du inspirierst mich! Welchen Laden kannst du empfehlen?',
-          timestamp: '23h'
-        },
-        {
-          id: 'comment-5',
-          username: 'GreenLife',
-          text: 'Tolle Initiative! Machst du mit bei der Clean-Up Aktion nächste Woche?',
-          timestamp: '20h'
-        }
-      ],
-      hashtags: ['Nachhaltigkeit', 'ZeroWaste', 'EcoFriendly'],
-      type: 'challenge',
-      challengeInfo: {
-        title: 'Sustainability Challenge',
-        reward: '210 XP',
-      },
-      postedAt: '1d',
-      challengeId: 'challenge-sustainability'
-    },
-    {
-      id: 'feed-4',
-      userId: 'user-4',
-      username: 'Kai Z.',
-      userAvatar: '/placeholder.svg',
-      caption: 'Habe heute das neue Restaurant in der Kastanienallee ausprobiert. Die veganen Optionen sind fantastisch! 🍽️ #FoodLover #VeganFood',
-      mediaUrl: '/placeholder.svg',
-      mediaType: 'image',
-      liked: false,
-      likes: 341,
-      views: 950,
-      commentCount: 29,
-      comments: [],
-      hashtags: ['FoodLover', 'VeganFood', 'BerlinFood'],
-      type: 'challenge',
-      challengeInfo: {
-        title: 'Food Explorer Challenge',
-        reward: '65 XP',
-      },
-      postedAt: '2d',
-      location: 'Kastanienallee, Berlin',
-      challengeId: 'challenge-food'
-    }
-  ];
+    postedAt: `${index + 1}h`,
+    location: 'Berlin',
+    challengeId: challenge.id
+  }));
 };
 
 // Function to join a challenge

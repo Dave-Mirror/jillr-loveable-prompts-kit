@@ -4,7 +4,12 @@ export interface Challenge {
   title: string;
   description: string;
   type: string;
+  category?: "city-clash" | "video" | "photo" | "ar" | "geo" | "mystery" | "fitness" | "sustainability";
+  xp?: number;
+  tags?: string[];
   imageUrl?: string;
+  thumbnailUrl?: string;
+  thumbnailAlt?: string;
   reward?: string;
   expiresIn?: string;
   coordinates?: {

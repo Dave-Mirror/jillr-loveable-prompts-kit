@@ -47,18 +47,19 @@ const ChallengeCard = ({
     >
         {/* Image Preview with Hologram Overlay */}
         <div className="relative">
-          <div className="w-full h-56 rounded-t-2xl overflow-hidden">
-            {challenge.imageUrl ? (
+          <div className="w-full aspect-video rounded-t-2xl overflow-hidden">
+            {(challenge.thumbnailUrl || challenge.imageUrl) ? (
               <img 
-                src={challenge.imageUrl} 
-                alt={challenge.title} 
+                src={challenge.thumbnailUrl || challenge.imageUrl} 
+                alt={challenge.thumbnailAlt || challenge.title} 
+                loading="lazy"
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
             ) : (
               // Hologram gradient placeholder instead of gray
               <div className="w-full h-full bg-gradient-to-br from-jillr-neonCyan/20 via-jillr-neonPurple/20 to-jillr-neonPink/20 flex items-center justify-center">
                 <div className="text-white/60 text-4xl">
-                  {challenge.type === 'video' ? '🎬' : '📸'}
+                  {challenge.category === 'video' ? '🎬' : challenge.category === 'ar' ? '🥽' : '📸'}
                 </div>
               </div>
             )}
@@ -72,7 +73,7 @@ const ChallengeCard = ({
             variant="hologram" 
             className="bg-gradient-to-r from-jillr-neonCyan to-jillr-neonPurple text-white font-medium border-0 shadow-glow-cyan"
           >
-            {challenge.type}
+            {challenge.category || challenge.type}
           </Badge>
         </div>
         
@@ -80,7 +81,7 @@ const ChallengeCard = ({
         <div className="absolute top-3 right-3">
           <div className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-gradient-to-r from-jillr-neonPurple to-jillr-neonPink text-white text-xs font-bold shadow-glow-purple border border-white/30">
             <Zap className="h-3 w-3" />
-            <span>+100 XP</span>
+            <span>+{challenge.xp || 100} XP</span>
           </div>
         </div>
         
