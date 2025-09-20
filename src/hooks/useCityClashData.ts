@@ -259,7 +259,7 @@ export const useCityClashData = () => {
             startDate: '2025-05-15T10:00:00Z',
             endDate: '2025-05-15T18:00:00Z',
             imageUrl: '/placeholder.svg',
-            thumbnailUrl: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=225&fit=crop',
+            thumbnailUrl: 'https://picsum.photos/400/225?random=1',
             thumbnailAlt: 'Person running through urban environment with sneakers'
           },
           {
@@ -280,7 +280,7 @@ export const useCityClashData = () => {
             startDate: '2025-05-14T08:00:00Z',
             endDate: '2025-05-17T23:59:59Z',
             imageUrl: '/placeholder.svg',
-            thumbnailUrl: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=225&fit=crop',
+            thumbnailUrl: 'https://picsum.photos/400/225?random=2',
             thumbnailAlt: 'Digital lock and security code interface'
           },
           {
@@ -304,7 +304,7 @@ export const useCityClashData = () => {
             startDate: '2025-05-17T20:00:00Z',
             endDate: '2025-05-19T04:00:00Z',
             imageUrl: '/placeholder.svg',
-            thumbnailUrl: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&h=225&fit=crop',
+            thumbnailUrl: 'https://picsum.photos/400/225?random=3',
             thumbnailAlt: 'Night club with neon lights and party atmosphere'
           },
           {
@@ -330,7 +330,7 @@ export const useCityClashData = () => {
             startDate: '2025-05-10T10:00:00Z',
             endDate: '2025-05-17T22:00:00Z',
             imageUrl: '/placeholder.svg',
-            thumbnailUrl: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=225&fit=crop',
+            thumbnailUrl: 'https://picsum.photos/400/225?random=4',
             thumbnailAlt: 'Mystery trading cards spread on dark surface'
           },
           {
@@ -351,7 +351,7 @@ export const useCityClashData = () => {
             startDate: '2025-05-13T12:00:00Z',
             endDate: '2025-05-18T12:00:00Z',
             imageUrl: '/placeholder.svg',
-            thumbnailUrl: 'https://images.unsplash.com/photo-1556075798-4825dfaaf498?w=400&h=225&fit=crop',
+            thumbnailUrl: 'https://picsum.photos/400/225?random=5',
             thumbnailAlt: 'Team battle scene with neon city background'
           },
           {
@@ -372,7 +372,7 @@ export const useCityClashData = () => {
             startDate: '2025-05-01T00:00:00Z',
             endDate: '2025-06-01T23:59:59Z',
             imageUrl: '/placeholder.svg',
-            thumbnailUrl: 'https://images.unsplash.com/photo-1580712647692-2230e826d76d?w=400&h=225&fit=crop',
+            thumbnailUrl: 'https://picsum.photos/400/225?random=6',
             thumbnailAlt: 'Secret society symbols and QR codes'
           },
           {
@@ -396,7 +396,7 @@ export const useCityClashData = () => {
             startDate: '2025-05-05T09:00:00Z',
             endDate: '2025-06-05T18:00:00Z',
             imageUrl: '/placeholder.svg',
-            thumbnailUrl: 'https://images.unsplash.com/photo-1528892677828-8862216dc4c4?w=400&h=225&fit=crop',
+            thumbnailUrl: 'https://picsum.photos/400/225?random=7',
             thumbnailAlt: 'Urban legends and historical city architecture'
           },
           // New challenges based on the document
@@ -418,7 +418,7 @@ export const useCityClashData = () => {
             startDate: '2025-05-20T09:00:00Z',
             endDate: '2025-05-20T18:00:00Z',
             imageUrl: '/placeholder.svg',
-            thumbnailUrl: 'https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?w=400&h=225&fit=crop',
+            thumbnailUrl: 'https://picsum.photos/400/225?random=8',
             thumbnailAlt: 'Eco-friendly waste collection and recycling'
           },
           {
@@ -442,7 +442,7 @@ export const useCityClashData = () => {
             startDate: '2025-05-10T00:00:00Z',
             endDate: '2025-05-17T23:59:59Z',
             imageUrl: '/placeholder.svg',
-            thumbnailUrl: 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=400&h=225&fit=crop',
+            thumbnailUrl: 'https://picsum.photos/400/225?random=9',
             thumbnailAlt: 'TikTok video creation with neon effects'
           },
           {
@@ -465,7 +465,7 @@ export const useCityClashData = () => {
             startDate: '2025-05-18T12:00:00Z',
             endDate: '2025-05-21T12:00:00Z',
             imageUrl: '/placeholder.svg',
-            thumbnailUrl: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=225&fit=crop',
+            thumbnailUrl: 'https://picsum.photos/400/225?random=10',
             thumbnailAlt: 'Digital street art and graffiti with neon colors'
           },
           {
@@ -489,7 +489,7 @@ export const useCityClashData = () => {
             startDate: '2025-05-15T00:00:00Z',
             endDate: '2025-05-22T23:59:59Z',
             imageUrl: '/placeholder.svg',
-            thumbnailUrl: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=225&fit=crop',
+            thumbnailUrl: 'https://picsum.photos/400/225?random=11',
             thumbnailAlt: 'Eco-friendly cycling through green city environment'
           },
           {
@@ -510,7 +510,7 @@ export const useCityClashData = () => {
             startDate: '2025-05-16T14:00:00Z',
             endDate: '2025-05-16T20:00:00Z',
             imageUrl: '/placeholder.svg',
-            thumbnailUrl: 'https://images.unsplash.com/photo-1548092372-0d1bd40894a3?w=400&h=225&fit=crop',
+            thumbnailUrl: 'https://picsum.photos/400/225?random=12',
             thumbnailAlt: 'Person scanning QR code at urban checkpoint'
           },
           // Standortbasierte Missionen & Geofencing Challenges
@@ -532,7 +532,7 @@ export const useCityClashData = () => {
             startDate: '2025-05-22T16:00:00Z',
             endDate: '2025-05-22T20:00:00Z',
             imageUrl: '/placeholder.svg',
-            thumbnailUrl: 'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1f?w=400&h=225&fit=crop',
+            thumbnailUrl: 'https://picsum.photos/400/225?random=13',
             thumbnailAlt: 'GPS location tracking with city map overlay'
           },
           {
@@ -553,7 +553,7 @@ export const useCityClashData = () => {
             startDate: '2025-05-25T10:00:00Z',
             endDate: '2025-05-25T22:00:00Z',
             imageUrl: '/placeholder.svg',
-            thumbnailUrl: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=400&h=225&fit=crop',
+            thumbnailUrl: 'https://picsum.photos/400/225?random=14',
             thumbnailAlt: 'Hidden urban location with compass and map'
           },
           // Social Media & UGC Challenges
@@ -575,7 +575,7 @@ export const useCityClashData = () => {
             startDate: '2025-05-20T08:00:00Z',
             endDate: '2025-05-23T20:00:00Z',
             imageUrl: '/placeholder.svg',
-            thumbnailUrl: 'https://images.unsplash.com/photo-1611162616475-46b635cb6868?w=400&h=225&fit=crop',
+            thumbnailUrl: 'https://picsum.photos/400/225?random=15',
             thumbnailAlt: 'Person creating Instagram content with smartphone'
           },
           {
@@ -597,7 +597,7 @@ export const useCityClashData = () => {
             startDate: '2025-05-18T00:00:00Z',
             endDate: '2025-05-25T23:59:59Z',
             imageUrl: '/placeholder.svg',
-            thumbnailUrl: 'https://images.unsplash.com/photo-1493612276216-ee3925520721?w=400&h=225&fit=crop',
+            thumbnailUrl: 'https://picsum.photos/400/225?random=16',
             thumbnailAlt: 'User-generated content creation with social media interface'
           },
           // Team-Challenges & City Takeover Battles
@@ -620,7 +620,7 @@ export const useCityClashData = () => {
             startDate: '2025-05-26T12:00:00Z',
             endDate: '2025-06-02T12:00:00Z',
             imageUrl: '/placeholder.svg',
-            thumbnailUrl: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400&h=225&fit=crop',
+            thumbnailUrl: 'https://picsum.photos/400/225?random=17',
             thumbnailAlt: 'Team battle with city skyline and strategic planning'
           },
           {
@@ -641,7 +641,7 @@ export const useCityClashData = () => {
             startDate: '2025-05-28T15:00:00Z',
             endDate: '2025-06-02T15:00:00Z',
             imageUrl: '/placeholder.svg',
-            thumbnailUrl: 'https://images.unsplash.com/photo-1556075798-4825dfaaf498?w=400&h=225&fit=crop',
+            thumbnailUrl: 'https://picsum.photos/400/225?random=18',
             thumbnailAlt: 'Team alliance meeting with city tactics and strategy'
           },
           // Nachhaltigkeits- & Umwelt-Challenges
@@ -664,7 +664,7 @@ export const useCityClashData = () => {
             startDate: '2025-05-24T00:00:00Z',
             endDate: '2025-05-31T23:59:59Z',
             imageUrl: '/placeholder.svg',
-            thumbnailUrl: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=400&h=225&fit=crop',
+            thumbnailUrl: 'https://picsum.photos/400/225?random=19',
             thumbnailAlt: 'Zero waste lifestyle with reusable containers and eco-friendly products'
           },
           {
@@ -686,7 +686,7 @@ export const useCityClashData = () => {
             startDate: '2025-05-15T09:00:00Z',
             endDate: '2025-05-29T18:00:00Z',
             imageUrl: '/placeholder.svg',
-            thumbnailUrl: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400&h=225&fit=crop',
+            thumbnailUrl: 'https://picsum.photos/400/225?random=20',
             thumbnailAlt: 'Urban gardening with plants growing in city environment'
           }
         ];
