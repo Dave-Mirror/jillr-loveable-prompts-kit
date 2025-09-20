@@ -113,34 +113,32 @@ const ChallengeEditor = () => {
         onUseTemplate={() => setShowTemplateSelector(true)}
       />
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Create Your Challenge</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <FormProvider {...methods}>
-            <ChallengeTabNavigation 
+      <FormProvider {...methods}>
+        <ChallengeTabNavigation 
+          activeTab={activeTab}
+          setActiveTab={handleTabChange}
+          tabsConfig={tabsConfig}
+        />
+
+        <Card className="mt-6">
+          <CardHeader>
+            <CardTitle>Create Your Challenge</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ChallengeTabContent 
               activeTab={activeTab}
-              setActiveTab={handleTabChange}
-              tabsConfig={tabsConfig}
+              data={challengeData}
+              onChange={handleDataChange}
             />
-            
-            <div className="mt-6">
-              <ChallengeTabContent 
-                activeTab={activeTab}
-                data={challengeData}
-                onChange={handleDataChange}
-              />
-            </div>
             
             <ChallengeNavButtons 
               activeTab={activeTab}
               navigateTab={navigateTab}
               challengeData={challengeData}
             />
-          </FormProvider>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </FormProvider>
 
       {showTemplateSelector && (
         <TemplateSelector
