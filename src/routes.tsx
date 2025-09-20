@@ -96,12 +96,6 @@ const routes: Route[] = [
     element: Legal,
   },
   {
-    path: '/challenge-feed',
-    element: ChallengeFeed,
-    label: 'Challenge Feed',
-    sidebar: true,
-  },
-  {
     path: '/explore',
     element: Explore,
     label: 'Explore',
@@ -131,10 +125,6 @@ const routes: Route[] = [
     icon: Users,
     sidebar: true,
     protected: true,
-  },
-  {
-    path: '/challenge/:challengeId',
-    element: ChallengeDetail,
   },
   {
     path: '/company/:id',

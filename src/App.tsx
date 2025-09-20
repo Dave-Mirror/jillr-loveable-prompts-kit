@@ -74,7 +74,7 @@ const App = () => (
                       
                       {/* Entdecken-Kategorie - öffentlich zugänglich */}
                       <Route path="/explore" element={<Explore />} />
-                      <Route path="/feed" element={<ChallengeFeed />} />
+                      <Route path="/challenge-feed" element={<ChallengeFeed />} />
                       <Route path="/map" element={<LiveMap />} />
                       <Route path="/city-clash" element={<CityClashPage />} />
                       <Route path="/challenge/:id" element={<ChallengeDetail />} />
@@ -111,7 +111,7 @@ const App = () => (
                       <Route path="/brand-dashboard" element={<Dashboard />} />
                       <Route path="/enterprise" element={<Dashboard />} />
                       <Route path="/livemap" element={<LiveMap />} />
-                      <Route path="/challenge-feed" element={<ChallengeFeed />} />
+                      <Route path="/feed" element={<ChallengeFeed />} />
 
                       {/* 404 Seite */}
                       <Route path="*" element={<NotFound />} />
