@@ -20,8 +20,8 @@ export default {
 		},
 		extend: {
 			fontFamily: {
-				sans: ['Montserrat', 'sans-serif'],
-				heading: ['Poppins', 'sans-serif'],
+				sans: ['Inter', 'sans-serif'],
+				heading: ['Orbitron', 'sans-serif'],
 				mono: ['Space Mono', 'monospace'],
 			},
 			colors: {
@@ -68,26 +68,33 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
+				// New futuristic neon colors
+				'neon-purple': 'hsl(var(--neon-purple))',
+				'neon-cyan': 'hsl(var(--neon-cyan))',
+				'neon-pink': 'hsl(var(--neon-pink))',
+				'neon-green': 'hsl(var(--neon-green))',
+				'neon-blue': 'hsl(var(--neon-blue))',
 				jillr: {
-					// Hauptfarbpalette für Jillr-Branding
-					neonPurple: '#9b87f5',
-					neonPurpleLight: '#BDB0FB',
-					neonPurpleDark: '#7A69CF',
-					neonPink: '#FF10F0',
-					neonPinkLight: '#FF6AF7',
-					neonPinkDark: '#C400BA',
-					neonBlue: '#0AEFFF',
-					neonBlueLight: '#7AF5FF',
-					neonBlueDark: '#00C4D4',
+					// Updated neon palette with stronger values
+					neonPurple: '#8A2BE2',
+					neonPurpleLight: '#BF7FFF',
+					neonPurpleDark: '#6A1B9A',
+					neonPink: '#FF00FF',
+					neonPinkLight: '#FF6AFF',
+					neonPinkDark: '#CC00CC',
+					neonBlue: '#00FFFF',
+					neonBlueLight: '#7FFFFF',
+					neonBlueDark: '#00CCCC',
 					neonGreen: '#39FF14',
 					neonGreenLight: '#85FF6F',
 					neonGreenDark: '#1ECF00',
-					dark: '#1A1F2C',
-					darkBlue: '#232741',
-					darkAccent: '#2D3348',
-					darkLight: '#374057',
-					glass: 'rgba(26, 31, 44, 0.7)',
-					border: 'rgba(155, 135, 245, 0.2)',
+					// Deep space backgrounds
+					dark: '#0A0A1A',
+					darkBlue: '#151529',
+					darkAccent: '#1F1F35',
+					darkLight: '#2A2A40',
+					glass: 'rgba(10, 10, 26, 0.8)',
+					border: 'rgba(138, 43, 226, 0.3)',
 				}
 			},
 			borderRadius: {
@@ -96,11 +103,14 @@ export default {
 				sm: 'calc(var(--radius) - 4px)'
 			},
 			boxShadow: {
-				neon: '0 0 10px rgba(155, 135, 245, 0.5), 0 0 20px rgba(155, 135, 245, 0.2)',
-				neonStrong: '0 0 15px rgba(155, 135, 245, 0.7), 0 0 30px rgba(155, 135, 245, 0.4)',
-				neonPink: '0 0 15px rgba(255, 16, 240, 0.5), 0 0 30px rgba(255, 16, 240, 0.2)',
-				neonBlue: '0 0 15px rgba(10, 239, 255, 0.5), 0 0 30px rgba(10, 239, 255, 0.2)',
-				neonGreen: '0 0 15px rgba(57, 255, 20, 0.5), 0 0 30px rgba(57, 255, 20, 0.2)',
+				neon: '0 0 20px rgba(138, 43, 226, 0.6), 0 0 40px rgba(138, 43, 226, 0.3)',
+				neonStrong: '0 0 30px rgba(138, 43, 226, 0.8), 0 0 60px rgba(138, 43, 226, 0.5)',
+				neonPink: '0 0 20px rgba(255, 0, 255, 0.6), 0 0 40px rgba(255, 0, 255, 0.3)',
+				neonBlue: '0 0 20px rgba(0, 255, 255, 0.6), 0 0 40px rgba(0, 255, 255, 0.3)',
+				neonGreen: '0 0 20px rgba(57, 255, 20, 0.6), 0 0 40px rgba(57, 255, 20, 0.3)',
+				'glow-sm': '0 0 10px rgba(138, 43, 226, 0.5)',
+				'glow-md': '0 0 20px rgba(138, 43, 226, 0.6)',
+				'glow-lg': '0 0 30px rgba(138, 43, 226, 0.7)',
 			},
 			keyframes: {
 				'accordion-down': {

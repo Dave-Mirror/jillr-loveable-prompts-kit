@@ -6,26 +6,27 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-bold ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        default: "bg-gradient-to-r from-jillr-neonPurple to-jillr-neonPurpleDark text-white hover:shadow-neon transition-all duration-300",
-        destructive: "bg-gradient-to-r from-destructive/90 to-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline: "border border-jillr-border bg-transparent hover:bg-jillr-darkAccent hover:text-foreground",
-        secondary: "bg-jillr-darkAccent text-foreground hover:bg-jillr-darkLight",
-        ghost: "hover:bg-jillr-darkAccent hover:text-foreground",
-        link: "text-jillr-neonBlue underline-offset-4 hover:underline",
-        game: "bg-gradient-to-r from-jillr-neonGreen/90 to-jillr-neonGreen text-black font-bold hover:shadow-neonGreen transition-all duration-300",
-        premium: "bg-gradient-to-r from-jillr-neonPink/90 to-jillr-neonPink text-white hover:shadow-neonPink transition-all duration-300",
-        ocean: "bg-gradient-to-r from-jillr-neonBlue/90 to-jillr-neonBlue text-white hover:shadow-neonBlue transition-all duration-300",
+        default: "bg-gradient-to-r from-primary via-accent to-primary text-primary-foreground hover:shadow-neon hover:scale-105 border border-primary/30",
+        destructive: "bg-gradient-to-r from-destructive/80 to-destructive text-destructive-foreground hover:shadow-glow-md border border-destructive/30",
+        outline: "border-2 border-primary/50 bg-card/30 backdrop-blur-md hover:bg-primary/10 hover:border-primary hover:shadow-glow-sm hover:text-primary",
+        secondary: "bg-gradient-to-r from-secondary/80 to-muted/80 backdrop-blur-md text-foreground hover:shadow-glow-sm border border-border/50",
+        ghost: "hover:bg-primary/10 hover:text-primary hover:shadow-glow-sm backdrop-blur-sm",
+        link: "text-primary underline-offset-4 hover:underline hover:shadow-glow-sm",
+        game: "bg-gradient-to-r from-jillr-neonGreen/90 to-jillr-neonGreen text-black font-bold hover:shadow-neonGreen hover:scale-105 border border-jillr-neonGreen/30",
+        premium: "bg-gradient-to-r from-jillr-neonPink/90 to-jillr-neonPink text-white hover:shadow-neonPink hover:scale-105 border border-jillr-neonPink/30",
+        ocean: "bg-gradient-to-r from-jillr-neonBlue/90 to-jillr-neonBlue text-white hover:shadow-neonBlue hover:scale-105 border border-jillr-neonBlue/30",
+        neon: "bg-gradient-to-r from-primary to-accent text-primary-foreground hover:shadow-neonStrong hover:scale-105 border border-primary/50",
       },
       size: {
-        default: "h-10 px-4 py-2",
-        sm: "h-9 rounded-md px-3",
-        lg: "h-11 rounded-md px-8",
-        xl: "h-12 rounded-md px-10 text-base",
-        icon: "h-10 w-10",
+        default: "h-11 px-6 py-2",
+        sm: "h-9 rounded-lg px-4",
+        lg: "h-12 rounded-xl px-8 text-base",
+        xl: "h-14 rounded-xl px-10 text-lg",
+        icon: "h-11 w-11",
       },
     },
     defaultVariants: {
