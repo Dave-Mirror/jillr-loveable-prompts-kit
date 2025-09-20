@@ -4,6 +4,7 @@ import ChallengeBasics from './ChallengeBasics';
 import LocationSection from './LocationSection';
 import ContentRequirements from './ContentRequirements';
 import KpiSettings from './KpiSettings';
+import TriggersTargeting from './TriggersTargeting';
 import TargetAudience from './TargetAudience';
 import RewardsIncentives from './RewardsIncentives';
 import TimingLimitations from './TimingLimitations';
@@ -36,6 +37,8 @@ const ChallengeTabContent: React.FC<ChallengeTabContentProps> = ({
       return <ContentRequirements data={data} onChange={handleSectionChange} />;
     case 'kpis':
       return <KpiSettings data={data} onChange={handleSectionChange} />;
+    case 'triggers':
+      return <TriggersTargeting data={data} onChange={handleSectionChange} />;
     case 'audience':
       return <TargetAudience data={data} onChange={handleSectionChange} />;
     case 'rewards':

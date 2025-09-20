@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 
-export type ChallengeTab = 'basics' | 'location' | 'content' | 'kpis' | 'audience' | 'rewards' | 'timing' | 'automation' | 'advanced' | 'preview';
+export type ChallengeTab = 'basics' | 'location' | 'content' | 'kpis' | 'triggers' | 'audience' | 'rewards' | 'timing' | 'automation' | 'advanced' | 'preview';
 
 export interface TabConfig {
   id: ChallengeTab;
@@ -32,6 +32,11 @@ export const useChallengeTabs = () => {
       id: 'kpis',
       label: 'KPIs',
       description: 'Leistungskennzahlen'
+    },
+    {
+      id: 'triggers',
+      label: 'Triggers & Targeting',
+      description: 'Zielgruppen & Automatisierung'
     },
     {
       id: 'audience',
