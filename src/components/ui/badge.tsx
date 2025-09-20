@@ -34,13 +34,13 @@ const badgeVariants = cva(
         ],
         coins: [
           "rounded-xl px-3 py-1.5 text-xs font-mono",
-          "bg-gradient-to-r from-[var(--neon-green)] to-green-400",
-          "text-black shadow-[0_0_20px_rgba(57,255,20,0.4)]"
+          "bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-blue)]",
+          "text-white shadow-[0_0_20px_rgba(0,240,255,0.4)]"
         ],
         level: [
           "rounded-xl px-3 py-1.5 text-xs",
-          "bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-purple)] to-[var(--neon-green)]",
-          "shadow-[0_0_22px_rgba(0,255,198,0.35)] animate-aurora-sweep"
+          "bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-purple)] to-[var(--neon-pink)]",
+          "shadow-[0_0_22px_rgba(0,240,255,0.35)] animate-aurora-sweep"
         ]
       },
     },

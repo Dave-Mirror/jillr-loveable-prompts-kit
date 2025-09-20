@@ -68,23 +68,18 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				jillr: {
-					// Jillr Style v2 - Neon Glassmorphism + Hologram
-					neonBlue: '#00f0ff',
-					neonBlueDark: '#0080aa',
-					neonPurple: '#a020f0',
-					neonPurpleDark: '#7a1ab8',
-					neonGreen: '#39ff14',
-					neonGreenDark: '#28cc0a',
-					neonPink: '#ff007f',
-					neonPinkDark: '#cc0066',
-					// Deep space gradient colors
-					spaceDeep: '#0f0c29',
-					spaceMid: '#302b63',
-					spaceDark: '#24243e',
-					// Glass and hologram
-					glass: 'rgba(255, 255, 255, 0.08)',
-					glassBorder: 'rgba(255, 255, 255, 0.2)',
-					glassHover: 'rgba(255, 255, 255, 0.12)',
+					// Jillr Brand Palette - ONLY APPROVED COLORS
+					neonCyan: '#00F0FF',
+					neonPurple: '#9A5BFF', 
+					neonPink: '#FF1AFF',
+					neonBlue: '#1A6DFF',
+					// Typography
+					txt: '#EAF2FF',
+					txtDim: '#9BB3FF',
+					// Glass system
+					glass: 'rgba(255, 255, 255, 0.06)',
+					glassBorder: 'rgba(255, 255, 255, 0.16)',
+					glassHover: 'rgba(255, 255, 255, 0.08)',
 					// Dark variants
 					dark: '#0a0a0f',
 					darkCard: '#1a1a2e',
@@ -185,9 +180,9 @@ export default {
 				'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
 				// Deep space gradients
 				'space-gradient': 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)',
-				'nebula-aurora': 'linear-gradient(45deg, rgba(160, 32, 240, 0.3) 0%, rgba(0, 240, 255, 0.2) 25%, rgba(57, 255, 20, 0.1) 50%, rgba(255, 0, 127, 0.2) 75%, rgba(160, 32, 240, 0.3) 100%)',
-				// Hologram effects
-				'hologram-gradient': 'linear-gradient(135deg, rgba(160, 32, 240, 0.8) 0%, rgba(0, 240, 255, 0.6) 50%, rgba(57, 255, 20, 0.4) 100%)',
+				'nebula-aurora': 'linear-gradient(45deg, rgba(0, 240, 255, 0.3) 0%, rgba(154, 91, 255, 0.2) 25%, rgba(255, 26, 255, 0.1) 50%, rgba(26, 109, 255, 0.2) 75%, rgba(0, 240, 255, 0.3) 100%)',
+				// Hologram effects - Jillr Brand Colors Only
+				'hologram-gradient': 'linear-gradient(135deg, rgba(0, 240, 255, 0.8) 0%, rgba(154, 91, 255, 0.6) 50%, rgba(255, 26, 255, 0.4) 100%)',
 				'aurora-shimmer': 'linear-gradient(110deg, transparent 25%, rgba(255, 255, 255, 0.3) 50%, transparent 75%)',
 				// Glass cards
 				'glass-card': 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)',

@@ -10,7 +10,7 @@ const ChallengeFormSubmit: React.FC<ChallengeFormSubmitProps> = ({ isSubmitting 
   return (
     <Button 
       type="submit" 
-      className="w-full bg-jillr-neonPurple hover:bg-jillr-neonPurple/80"
+      className="w-full"
       disabled={isSubmitting}
     >
       {isSubmitting ? 'Creating...' : 'Create Challenge'}

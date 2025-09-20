@@ -7,17 +7,18 @@
 
 @layer base {
   :root {
-    /* Jillr v2 Color System */
-    --txt: #EAF2FF;
-    --txt-dim: #9BB3FF;
+    /* Jillr v2 Brand Palette - LOCKED TOKENS */
     --neon-cyan: #00F0FF;
     --neon-purple: #9A5BFF;
-    --neon-green: #39FF14;
+    --neon-pink: #FF1AFF;
+    --neon-blue: #1A6DFF;
+    --txt: #EAF2FF;
+    --txt-dim: #9BB3FF;
     --glass-bg: rgba(255,255,255,0.06);
     --glass-border: rgba(255,255,255,0.16);
     --glass-hover: rgba(255,255,255,0.08);
     
-    /* Shadcn tokens mapped to Jillr v2 */
+    /* Shadcn tokens mapped to Jillr Brand Palette */
     --background: 224 24% 6%; /* Deep cosmic dark */
     --foreground: 222 47% 95%; /* Primary text */
 
@@ -112,11 +113,33 @@
   }
 
   *::-webkit-scrollbar-thumb {
-    @apply bg-jillr-neonPurple/40 rounded-full hover:bg-jillr-neonPurple/60 transition-colors;
+    background: rgba(0, 240, 255, 0.4);
+    border-radius: 9999px;
+    transition: background-color 0.3s ease;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 240, 255, 0.6);
   }
 
   input, textarea, select {
-    @apply bg-jillr-glass backdrop-blur-xl border border-jillr-glassBorder focus:border-jillr-neonBlue focus:ring-1 focus:ring-jillr-neonBlue/50 transition-all rounded-xl;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(20px);
+    border-radius: 12px;
+    color: var(--txt);
+    transition: all 300ms ease-out;
+  }
+
+  input::placeholder, textarea::placeholder {
+    color: #7F95D1;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0,240,255,0.45);
+    border-color: var(--neon-cyan);
+    background: var(--glass-hover);
   }
 
   button {
@@ -146,7 +169,7 @@
   }
   
   /* Add additional component styles */
-  .neon-glow-blue {
+  .neon-glow-cyan {
     box-shadow: 0 0 20px rgba(0, 240, 255, 0.5), 0 0 40px rgba(0, 240, 255, 0.2);
   }
   
@@ -154,17 +177,42 @@
     box-shadow: 0 0 20px rgba(154, 91, 255, 0.5), 0 0 40px rgba(154, 91, 255, 0.2);
   }
   
-  .neon-glow-green {
-    box-shadow: 0 0 20px rgba(57, 255, 20, 0.5), 0 0 40px rgba(57, 255, 20, 0.2);
+  .neon-glow-pink {
+    box-shadow: 0 0 20px rgba(255, 26, 255, 0.5), 0 0 40px rgba(255, 26, 255, 0.2);
+  }
+  
+  .neon-glow-blue {
+    box-shadow: 0 0 20px rgba(26, 109, 255, 0.5), 0 0 40px rgba(26, 109, 255, 0.2);
   }
   
   .hologram-text {
-    background: linear-gradient(90deg, var(--neon-cyan) 0%, var(--neon-purple) 50%, var(--neon-green) 100%);
+    background: linear-gradient(90deg, var(--neon-cyan) 0%, var(--neon-purple) 50%, var(--neon-pink) 100%);
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
     animation: aurora-sweep 8s ease-in-out infinite;
     font-weight: bold;
+  }
+
+  /* Social Login Button Styles */
+  .social-google {
+    background: linear-gradient(90deg, var(--neon-cyan) 0%, var(--neon-purple) 100%);
+    box-shadow: 0 0 20px rgba(0,240,255,0.3);
+  }
+
+  .social-facebook {
+    background: linear-gradient(90deg, var(--neon-blue) 0%, var(--neon-cyan) 100%);
+    box-shadow: 0 0 20px rgba(26,109,255,0.3);
+  }
+
+  .social-instagram {
+    background: linear-gradient(90deg, var(--neon-pink) 0%, var(--neon-purple) 100%);
+    box-shadow: 0 0 20px rgba(255,26,255,0.3);
+  }
+
+  .social-tiktok {
+    background: linear-gradient(90deg, var(--neon-cyan) 0%, var(--neon-pink) 100%);
+    box-shadow: 0 0 20px rgba(0,240,255,0.2), 0 0 20px rgba(255,26,255,0.2);
   }
   
   .aurora-border {
@@ -180,8 +228,8 @@
     font-size: 12px;
     font-weight: bold;
     color: white;
-    background: linear-gradient(90deg, var(--neon-cyan) 0%, var(--neon-purple) 50%, var(--neon-green) 100%);
-    box-shadow: 0 0 22px rgba(0,255,198,0.35);
+    background: linear-gradient(90deg, var(--neon-cyan) 0%, var(--neon-purple) 50%, var(--neon-pink) 100%);
+    box-shadow: 0 0 22px rgba(0,240,255,0.35);
     animation: holo-shimmer 3s ease-in-out infinite;
   }
   
@@ -301,15 +349,15 @@
   }
 
   .onboarding-gradient {
-    @apply bg-gradient-to-br from-jillr-neonPurple/10 to-jillr-neonBlue/10;
+    background: linear-gradient(135deg, rgba(0, 240, 255, 0.1) 0%, rgba(154, 91, 255, 0.1) 100%);
   }
 
   .text-shadow {
-    text-shadow: 0 0 10px rgba(155, 135, 245, 0.7);
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.7);
   }
 
   .text-shadow-sm {
-    text-shadow: 0 0 5px rgba(155, 135, 245, 0.5);
+    text-shadow: 0 0 5px rgba(0, 240, 255, 0.5);
   }
 
   .mask-fade-bottom {
