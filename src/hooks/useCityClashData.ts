@@ -34,6 +34,8 @@ export interface CityChallenge {
   startDate: string;
   endDate: string;
   imageUrl: string;
+  thumbnailUrl?: string;
+  thumbnailAlt?: string;
 }
 
 export interface CityDistrict {
@@ -256,7 +258,9 @@ export const useCityClashData = () => {
             participants: 143,
             startDate: '2025-05-15T10:00:00Z',
             endDate: '2025-05-15T18:00:00Z',
-            imageUrl: '/placeholder.svg'
+            imageUrl: '/placeholder.svg',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=225&fit=crop',
+            thumbnailAlt: 'Person running through urban environment with sneakers'
           },
           {
             id: 'challenge-city-2',
@@ -275,7 +279,9 @@ export const useCityClashData = () => {
             participants: 287,
             startDate: '2025-05-14T08:00:00Z',
             endDate: '2025-05-17T23:59:59Z',
-            imageUrl: '/placeholder.svg'
+            imageUrl: '/placeholder.svg',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=225&fit=crop',
+            thumbnailAlt: 'Digital lock and security code interface'
           },
           {
             id: 'challenge-city-3',
@@ -297,7 +303,9 @@ export const useCityClashData = () => {
             participants: 412,
             startDate: '2025-05-17T20:00:00Z',
             endDate: '2025-05-19T04:00:00Z',
-            imageUrl: '/placeholder.svg'
+            imageUrl: '/placeholder.svg',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&h=225&fit=crop',
+            thumbnailAlt: 'Night club with neon lights and party atmosphere'
           },
           {
             id: 'challenge-city-4',
@@ -321,7 +329,9 @@ export const useCityClashData = () => {
             participants: 189,
             startDate: '2025-05-10T10:00:00Z',
             endDate: '2025-05-17T22:00:00Z',
-            imageUrl: '/placeholder.svg'
+            imageUrl: '/placeholder.svg',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=225&fit=crop',
+            thumbnailAlt: 'Mystery trading cards spread on dark surface'
           },
           {
             id: 'challenge-city-5',
@@ -340,7 +350,9 @@ export const useCityClashData = () => {
             participants: 352,
             startDate: '2025-05-13T12:00:00Z',
             endDate: '2025-05-18T12:00:00Z',
-            imageUrl: '/placeholder.svg'
+            imageUrl: '/placeholder.svg',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1556075798-4825dfaaf498?w=400&h=225&fit=crop',
+            thumbnailAlt: 'Team battle scene with neon city background'
           },
           {
             id: 'challenge-city-6',
@@ -359,7 +371,9 @@ export const useCityClashData = () => {
             participants: 78,
             startDate: '2025-05-01T00:00:00Z',
             endDate: '2025-06-01T23:59:59Z',
-            imageUrl: '/placeholder.svg'
+            imageUrl: '/placeholder.svg',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1580712647692-2230e826d76d?w=400&h=225&fit=crop',
+            thumbnailAlt: 'Secret society symbols and QR codes'
           },
           {
             id: 'challenge-city-7',
@@ -381,7 +395,9 @@ export const useCityClashData = () => {
             participants: 231,
             startDate: '2025-05-05T09:00:00Z',
             endDate: '2025-06-05T18:00:00Z',
-            imageUrl: '/placeholder.svg'
+            imageUrl: '/placeholder.svg',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1528892677828-8862216dc4c4?w=400&h=225&fit=crop',
+            thumbnailAlt: 'Urban legends and historical city architecture'
           },
           // New challenges based on the document
           {
@@ -401,7 +417,9 @@ export const useCityClashData = () => {
             participants: 98,
             startDate: '2025-05-20T09:00:00Z',
             endDate: '2025-05-20T18:00:00Z',
-            imageUrl: '/placeholder.svg'
+            imageUrl: '/placeholder.svg',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?w=400&h=225&fit=crop',
+            thumbnailAlt: 'Eco-friendly waste collection and recycling'
           },
           {
             id: 'challenge-city-9',
@@ -423,7 +441,9 @@ export const useCityClashData = () => {
             participants: 256,
             startDate: '2025-05-10T00:00:00Z',
             endDate: '2025-05-17T23:59:59Z',
-            imageUrl: '/placeholder.svg'
+            imageUrl: '/placeholder.svg',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=400&h=225&fit=crop',
+            thumbnailAlt: 'TikTok video creation with neon effects'
           },
           {
             id: 'challenge-city-10',
@@ -444,7 +464,9 @@ export const useCityClashData = () => {
             participants: 147,
             startDate: '2025-05-18T12:00:00Z',
             endDate: '2025-05-21T12:00:00Z',
-            imageUrl: '/placeholder.svg'
+            imageUrl: '/placeholder.svg',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=225&fit=crop',
+            thumbnailAlt: 'Digital street art and graffiti with neon colors'
           },
           {
             id: 'challenge-city-11',
@@ -466,7 +488,9 @@ export const useCityClashData = () => {
             participants: 183,
             startDate: '2025-05-15T00:00:00Z',
             endDate: '2025-05-22T23:59:59Z',
-            imageUrl: '/placeholder.svg'
+            imageUrl: '/placeholder.svg',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=225&fit=crop',
+            thumbnailAlt: 'Eco-friendly cycling through green city environment'
           },
           {
             id: 'challenge-city-12',
@@ -485,7 +509,9 @@ export const useCityClashData = () => {
             participants: 126,
             startDate: '2025-05-25T10:00:00Z',
             endDate: '2025-05-25T14:00:00Z',
-            imageUrl: '/placeholder.svg'
+            imageUrl: '/placeholder.svg',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1563906267088-b029e7101114?w=400&h=225&fit=crop',
+            thumbnailAlt: 'Person scanning QR code with smartphone in urban setting'
           }
         ];
 

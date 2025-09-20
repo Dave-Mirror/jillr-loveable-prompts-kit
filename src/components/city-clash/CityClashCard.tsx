@@ -92,103 +92,100 @@ const CityClashCard: React.FC<CityClashCardProps> = ({ challenge }) => {
   };
   
   return (
-    <Card className="overflow-hidden border border-jillr-border bg-jillr-dark hover:border-jillr-neonPurple/50 transition-all">
+    <Card className="glass-card border border-white/20 rounded-2xl overflow-hidden group cursor-pointer transition-all duration-500 hover:scale-[1.01] hover:shadow-neon-intense hover:border-jillr-neonCyan/60 max-w-sm">
+      {/* Thumbnail Image */}
       <div className="relative">
-        <img 
-          src={challenge.imageUrl} 
-          alt={challenge.title}
-          className="w-full h-48 object-cover"
-        />
+        {challenge.thumbnailUrl ? (
+          <img 
+            src={challenge.thumbnailUrl} 
+            alt={challenge.thumbnailAlt || challenge.title}
+            loading="lazy"
+            className="w-full aspect-video object-cover rounded-t-xl transition-transform duration-500 group-hover:scale-105"
+          />
+        ) : (
+          <div className="w-full aspect-video rounded-t-xl bg-gradient-to-br from-jillr-neonCyan/20 via-jillr-neonPurple/20 to-jillr-neonPink/20 flex items-center justify-center">
+            {getChallengeIcon(challenge.type)}
+          </div>
+        )}
         
-        <div className="absolute top-0 left-0 w-full p-3 flex justify-between">
-          <Badge variant="outline" className="bg-black/60 backdrop-blur-sm border-none text-white">
-            {challenge.districtName}
+        {/* Category Chips - Top Left */}
+        <div className="absolute top-3 left-3 flex flex-wrap gap-1">
+          {challenge.category && (
+            <Badge variant="hologram" className="bg-gradient-to-r from-jillr-neonCyan to-jillr-neonPurple text-white font-medium border-0 shadow-glow-cyan text-xs">
+              {challenge.category.charAt(0).toUpperCase() + challenge.category.slice(1)}
+            </Badge>
+          )}
+          <Badge variant="hologram" className="bg-gradient-to-r from-jillr-neonPurple to-jillr-neonPink text-white font-medium border-0 shadow-glow-purple text-xs">
+            {getChallengeTypeLabel(challenge.type)}
           </Badge>
-          
-          <div className="flex gap-1">
-            <Badge variant="outline" className={`backdrop-blur-sm border-none ${getDifficultyColor(challenge.difficulty)}`}>
-              {challenge.difficulty.charAt(0).toUpperCase() + challenge.difficulty.slice(1)}
-            </Badge>
-            
-            {challenge.category && (
-              <Badge variant="outline" className={`backdrop-blur-sm border-none ${getCategoryColor(challenge.category)}`}>
-                <div className="flex items-center gap-1">
-                  {getCategoryIcon(challenge.category)}
-                  {challenge.category.charAt(0).toUpperCase() + challenge.category.slice(1)}
-                </div>
-              </Badge>
-            )}
-
-            <Badge variant="outline" className="bg-jillr-neonPurple/80 backdrop-blur-sm border-none text-white">
-              <div className="flex items-center gap-1">
-                {getChallengeIcon(challenge.type)}
-                {getChallengeTypeLabel(challenge.type)}
-              </div>
-            </Badge>
+        </div>
+        
+        {/* XP Reward - Top Right */}
+        <div className="absolute top-3 right-3">
+          <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-gradient-to-r from-jillr-neonPurple to-jillr-neonPink text-white text-xs font-bold shadow-glow-purple border border-white/30">
+            <Zap className="h-3 w-3" />
+            <span>+{challenge.reward.xp} XP</span>
           </div>
         </div>
         
-        {challenge.teamName && (
-          <div className="absolute bottom-0 left-0 w-full p-3">
-            <Badge variant="outline" className="bg-black/60 backdrop-blur-sm border-none text-white">
-              Team: {challenge.teamName}
-            </Badge>
-          </div>
-        )}
+        {/* Subtle hologram gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-jillr-neonCyan/5 via-transparent to-jillr-neonPurple/5 opacity-60 group-hover:opacity-80 transition-opacity duration-300 rounded-t-xl" />
       </div>
       
-      <div className="p-4">
-        <h3 className="text-lg font-bold mb-1">{challenge.title}</h3>
-        <p className="text-sm text-gray-400 mb-3 line-clamp-2">{challenge.description}</p>
+      {/* Card Content */}
+      <div className="p-4 space-y-3">
+        {/* Title */}
+        <h3 className="font-bold text-[var(--txt)] text-lg leading-tight group-hover:text-jillr-neonCyan transition-colors duration-300">
+          {challenge.title}
+        </h3>
         
-        <div className="flex flex-wrap gap-y-2 gap-x-3 text-xs text-gray-300 mb-4">
+        {/* Description */}
+        <p className="text-sm text-[var(--txt-dim)] line-clamp-2 leading-relaxed">
+          {challenge.description}
+        </p>
+        
+        {/* Challenge Stats */}
+        <div className="flex flex-wrap gap-2 text-xs text-[var(--txt-dim)]">
           <div className="flex items-center gap-1">
-            <Clock className="h-3.5 w-3.5 text-gray-400" />
-            {challenge.duration}
+            <Clock className="h-3 w-3 text-jillr-neonCyan" />
+            <span>{challenge.duration}</span>
           </div>
-          
           <div className="flex items-center gap-1">
-            <Trophy className="h-3.5 w-3.5 text-yellow-400" />
-            {challenge.reward.xp} XP
+            <MapPin className="h-3 w-3 text-jillr-neonPurple" />
+            <span>{challenge.districtName}</span>
           </div>
-          
-          {challenge.reward.coins && (
-            <div className="flex items-center gap-1">
-              <Zap className="h-3.5 w-3.5 text-blue-400" />
-              {challenge.reward.coins} Coins
-            </div>
-          )}
-          
           <div className="flex items-center gap-1">
-            <Users className="h-3.5 w-3.5 text-gray-400" />
-            {challenge.participants} Teilnehmer
-          </div>
-          
-          <div className="flex items-center gap-1">
-            <MapPin className="h-3.5 w-3.5 text-red-400" />
-            {challenge.districtName}
+            <Users className="h-3 w-3 text-jillr-neonPink" />
+            <span>{challenge.participants}</span>
           </div>
         </div>
         
-        {challenge.brandName && (
-          <div className="flex items-center gap-2 mb-4">
-            <div className="w-6 h-6 rounded-full bg-gray-800 flex items-center justify-center overflow-hidden">
-              {challenge.brandLogo ? (
-                <img src={challenge.brandLogo} alt={challenge.brandName} className="w-full h-full object-cover" />
-              ) : (
-                <span className="text-xs">{challenge.brandName.charAt(0)}</span>
-              )}
+        {/* Footer with CTA and Stats */}
+        <div className="flex items-center justify-between gap-4 pt-2">
+          {/* CTA Button */}
+          <Button 
+            variant="hologram" 
+            size="sm" 
+            className="flex-1"
+            onClick={handleJoinChallenge}
+          >
+            Challenge teilnehmen
+          </Button>
+          
+          {/* Compact Stats */}
+          <div className="flex items-center gap-3 text-xs text-[var(--txt-dim)]">
+            <div className="flex items-center gap-1">
+              <Trophy className="h-3.5 w-3.5 text-jillr-neonPink" />
+              <span>{challenge.reward.xp}</span>
             </div>
-            <span className="text-xs text-gray-400">Gesponsort von {challenge.brandName}</span>
+            {challenge.reward.coins && (
+              <div className="flex items-center gap-1">
+                <Zap className="h-3.5 w-3.5 text-jillr-neonCyan" />
+                <span>{challenge.reward.coins}</span>
+              </div>
+            )}
           </div>
-        )}
-        
-        <Button 
-          onClick={handleJoinChallenge}
-          className="w-full bg-gradient-to-r from-jillr-neonPurple to-jillr-neonPink hover:opacity-90"
-        >
-          Challenge teilnehmen
-        </Button>
+        </div>
       </div>
     </Card>
   );
