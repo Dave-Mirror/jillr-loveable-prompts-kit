@@ -6,19 +6,20 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-bold overflow-hidden transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        default: "bg-gradient-to-r from-jillr-neonPurple to-jillr-neonPurpleDark text-white hover:shadow-neon transition-all duration-300",
-        destructive: "bg-gradient-to-r from-destructive/90 to-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline: "border border-jillr-border bg-transparent hover:bg-jillr-darkAccent hover:text-foreground",
-        secondary: "bg-jillr-darkAccent text-foreground hover:bg-jillr-darkLight",
-        ghost: "hover:bg-jillr-darkAccent hover:text-foreground",
-        link: "text-jillr-neonBlue underline-offset-4 hover:underline",
-        game: "bg-gradient-to-r from-jillr-neonGreen/90 to-jillr-neonGreen text-black font-bold hover:shadow-neonGreen transition-all duration-300",
-        premium: "bg-gradient-to-r from-jillr-neonPink/90 to-jillr-neonPink text-white hover:shadow-neonPink transition-all duration-300",
-        ocean: "bg-gradient-to-r from-jillr-neonBlue/90 to-jillr-neonBlue text-white hover:shadow-neonBlue transition-all duration-300",
+        default: "bg-hologram-gradient text-white shadow-hologram hover:shadow-hologramStrong hover:scale-105 before:content-[''] before:absolute before:top-0 before:left-[-100%] before:w-full before:h-full before:bg-aurora-shimmer before:animate-hologram-shimmer before:z-10",
+        destructive: "bg-gradient-to-r from-red-500 to-red-600 text-white shadow-[0_0_20px_rgba(239,68,68,0.5)] hover:shadow-[0_0_40px_rgba(239,68,68,0.7)] hover:scale-105",
+        outline: "border border-jillr-glassBorder bg-jillr-glass backdrop-blur-xl text-white hover:bg-jillr-glassHover hover:border-jillr-neonBlue/50 hover:shadow-neonBlue",
+        secondary: "bg-jillr-glass backdrop-blur-xl border border-jillr-glassBorder/50 text-white hover:bg-jillr-glassHover hover:shadow-glass",
+        ghost: "text-white hover:bg-jillr-glass hover:backdrop-blur-xl hover:shadow-glass",
+        link: "text-jillr-neonBlue underline-offset-4 hover:underline hover:text-jillr-neonBlue/80",
+        neonGreen: "bg-gradient-to-r from-jillr-neonGreen to-jillr-neonGreenDark text-black font-bold shadow-neonGreen hover:shadow-[0_0_40px_rgba(57,255,20,0.7)] hover:scale-105",
+        neonBlue: "bg-gradient-to-r from-jillr-neonBlue to-jillr-neonBlueDark text-white font-bold shadow-neonBlue hover:shadow-[0_0_40px_rgba(0,240,255,0.7)] hover:scale-105",
+        neonPink: "bg-gradient-to-r from-jillr-neonPink to-jillr-neonPinkDark text-white font-bold shadow-neonPink hover:shadow-[0_0_40px_rgba(255,0,127,0.7)] hover:scale-105",
+        glass: "bg-jillr-glass backdrop-blur-xl border border-jillr-glassBorder text-white hover:bg-jillr-glassHover hover:animate-glass-morph",
       },
       size: {
         default: "h-10 px-4 py-2",

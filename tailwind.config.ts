@@ -20,9 +20,9 @@ export default {
 		},
 		extend: {
 			fontFamily: {
-				sans: ['Montserrat', 'sans-serif'],
-				heading: ['Poppins', 'sans-serif'],
-				mono: ['Space Mono', 'monospace'],
+				sans: ['SF Pro Display', 'Inter', 'system-ui', 'sans-serif'],
+				heading: ['SF Pro Display', 'Inter', 'system-ui', 'sans-serif'],
+				mono: ['JetBrains Mono', 'Monaco', 'Consolas', 'monospace'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
@@ -69,25 +69,27 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				jillr: {
-					// Hauptfarbpalette für Jillr-Branding
-					neonPurple: '#9b87f5',
-					neonPurpleLight: '#BDB0FB',
-					neonPurpleDark: '#7A69CF',
-					neonPink: '#FF10F0',
-					neonPinkLight: '#FF6AF7',
-					neonPinkDark: '#C400BA',
-					neonBlue: '#0AEFFF',
-					neonBlueLight: '#7AF5FF',
-					neonBlueDark: '#00C4D4',
-					neonGreen: '#39FF14',
-					neonGreenLight: '#85FF6F',
-					neonGreenDark: '#1ECF00',
-					dark: '#1A1F2C',
-					darkBlue: '#232741',
-					darkAccent: '#2D3348',
-					darkLight: '#374057',
-					glass: 'rgba(26, 31, 44, 0.7)',
-					border: 'rgba(155, 135, 245, 0.2)',
+					// Jillr Style v2 - Neon Glassmorphism + Hologram
+					neonBlue: '#00f0ff',
+					neonBlueDark: '#0080aa',
+					neonPurple: '#a020f0',
+					neonPurpleDark: '#7a1ab8',
+					neonGreen: '#39ff14',
+					neonGreenDark: '#28cc0a',
+					neonPink: '#ff007f',
+					neonPinkDark: '#cc0066',
+					// Deep space gradient colors
+					spaceDeep: '#0f0c29',
+					spaceMid: '#302b63',
+					spaceDark: '#24243e',
+					// Glass and hologram
+					glass: 'rgba(255, 255, 255, 0.08)',
+					glassBorder: 'rgba(255, 255, 255, 0.2)',
+					glassHover: 'rgba(255, 255, 255, 0.12)',
+					// Dark variants
+					dark: '#0a0a0f',
+					darkCard: '#1a1a2e',
+					darkAccent: '#16213e',
 				}
 			},
 			borderRadius: {
@@ -96,69 +98,91 @@ export default {
 				sm: 'calc(var(--radius) - 4px)'
 			},
 			boxShadow: {
-				neon: '0 0 10px rgba(155, 135, 245, 0.5), 0 0 20px rgba(155, 135, 245, 0.2)',
-				neonStrong: '0 0 15px rgba(155, 135, 245, 0.7), 0 0 30px rgba(155, 135, 245, 0.4)',
-				neonPink: '0 0 15px rgba(255, 16, 240, 0.5), 0 0 30px rgba(255, 16, 240, 0.2)',
-				neonBlue: '0 0 15px rgba(10, 239, 255, 0.5), 0 0 30px rgba(10, 239, 255, 0.2)',
-				neonGreen: '0 0 15px rgba(57, 255, 20, 0.5), 0 0 30px rgba(57, 255, 20, 0.2)',
+				// Glassmorphism shadows
+				glass: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+				glassStrong: '0 12px 40px 0 rgba(31, 38, 135, 0.5)',
+				// Neon glow effects
+				neonBlue: '0 0 20px rgba(0, 240, 255, 0.5), 0 0 40px rgba(0, 240, 255, 0.2)',
+				neonPurple: '0 0 20px rgba(160, 32, 240, 0.5), 0 0 40px rgba(160, 32, 240, 0.2)',
+				neonGreen: '0 0 20px rgba(57, 255, 20, 0.5), 0 0 40px rgba(57, 255, 20, 0.2)',
+				neonPink: '0 0 20px rgba(255, 0, 127, 0.5), 0 0 40px rgba(255, 0, 127, 0.2)',
+				// Hologram effects
+				hologram: '0 0 30px rgba(160, 32, 240, 0.3), 0 0 60px rgba(0, 240, 255, 0.2)',
+				hologramStrong: '0 0 40px rgba(160, 32, 240, 0.5), 0 0 80px rgba(0, 240, 255, 0.3)',
 			},
 			keyframes: {
 				'accordion-down': {
-					from: {
-						height: '0'
-					},
-					to: {
-						height: 'var(--radix-accordion-content-height)'
-					}
+					from: { height: '0' },
+					to: { height: 'var(--radix-accordion-content-height)' }
 				},
 				'accordion-up': {
-					from: {
-						height: 'var(--radix-accordion-content-height)'
-					},
-					to: {
-						height: '0'
-					}
+					from: { height: 'var(--radix-accordion-content-height)' },
+					to: { height: '0' }
 				},
-				'glow': {
+				'glow-pulse': {
 					'0%, 100%': { 
-						'box-shadow': '0 0 5px rgba(155, 135, 245, 0.5), 0 0 10px rgba(155, 135, 245, 0.3)'
+						'box-shadow': '0 0 20px rgba(160, 32, 240, 0.4), 0 0 40px rgba(0, 240, 255, 0.2)'
 					},
 					'50%': { 
-						'box-shadow': '0 0 15px rgba(155, 135, 245, 0.8), 0 0 20px rgba(155, 135, 245, 0.5)' 
+						'box-shadow': '0 0 30px rgba(160, 32, 240, 0.6), 0 0 60px rgba(0, 240, 255, 0.4)' 
 					}
 				},
+				'aurora-sweep': {
+					'0%': { 
+						'background-position': '0% 50%',
+						'background-size': '200% 200%'
+					},
+					'50%': { 
+						'background-position': '100% 50%' 
+					},
+					'100%': { 
+						'background-position': '0% 50%' 
+					}
+				},
+				'hologram-shimmer': {
+					'0%': { 'background-position': '-200% 0' },
+					'100%': { 'background-position': '200% 0' }
+				},
 				'float': {
-					'0%, 100%': { transform: 'translateY(0)' },
-					'50%': { transform: 'translateY(-10px)' }
+					'0%, 100%': { transform: 'translateY(0px)' },
+					'50%': { transform: 'translateY(-6px)' }
 				},
-				'pulse-soft': {
-					'0%, 100%': { opacity: '1' },
-					'50%': { opacity: '0.7' }
-				},
-				'bounce-subtle': {
-					'0%, 100%': { transform: 'translateY(0)' },
-					'50%': { transform: 'translateY(-3px)' }
-				},
-				'rotate-slow': {
-					'0%': { transform: 'rotate(0deg)' },
-					'100%': { transform: 'rotate(360deg)' }
+				'glass-morph': {
+					'0%': { 
+						'backdrop-filter': 'blur(10px)',
+						'background': 'rgba(255, 255, 255, 0.08)'
+					},
+					'50%': { 
+						'backdrop-filter': 'blur(15px)',
+						'background': 'rgba(255, 255, 255, 0.12)'
+					},
+					'100%': { 
+						'backdrop-filter': 'blur(10px)',
+						'background': 'rgba(255, 255, 255, 0.08)'
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
-				'glow': 'glow 2s ease-in-out infinite',
-				'float': 'float 4s ease-in-out infinite',
-				'pulse-soft': 'pulse-soft 3s infinite',
-				'bounce-subtle': 'bounce-subtle 2s ease-in-out infinite',
-				'rotate-slow': 'rotate-slow 8s linear infinite'
+				'glow-pulse': 'glow-pulse 3s ease-in-out infinite',
+				'aurora-sweep': 'aurora-sweep 8s ease-in-out infinite',
+				'hologram-shimmer': 'hologram-shimmer 3s ease-in-out infinite',
+				'float': 'float 6s ease-in-out infinite',
+				'glass-morph': 'glass-morph 4s ease-in-out infinite',
 			},
 			backgroundImage: {
 				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
 				'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-				'neon-glow': 'linear-gradient(to right, rgba(155, 135, 245, 0.5), rgba(10, 239, 255, 0.5))',
-				'challenge-card': 'linear-gradient(to bottom right, rgba(35, 39, 65, 0.8), rgba(26, 31, 44, 0.9))',
-				'game-card': 'linear-gradient(to bottom right, rgba(57, 255, 20, 0.05), rgba(10, 239, 255, 0.05))',
+				// Deep space gradients
+				'space-gradient': 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)',
+				'nebula-aurora': 'linear-gradient(45deg, rgba(160, 32, 240, 0.3) 0%, rgba(0, 240, 255, 0.2) 25%, rgba(57, 255, 20, 0.1) 50%, rgba(255, 0, 127, 0.2) 75%, rgba(160, 32, 240, 0.3) 100%)',
+				// Hologram effects
+				'hologram-gradient': 'linear-gradient(135deg, rgba(160, 32, 240, 0.8) 0%, rgba(0, 240, 255, 0.6) 50%, rgba(57, 255, 20, 0.4) 100%)',
+				'aurora-shimmer': 'linear-gradient(110deg, transparent 25%, rgba(255, 255, 255, 0.3) 50%, transparent 75%)',
+				// Glass cards
+				'glass-card': 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)',
+				'glass-hover': 'linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 100%)',
 			}
 		}
 	},
