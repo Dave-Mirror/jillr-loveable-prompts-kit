@@ -52,7 +52,16 @@ const buttonVariants = cva(
         google: "social-google rounded-full px-6 py-3 text-white font-bold hover:scale-105 transition-all duration-300",
         facebook: "social-facebook rounded-full px-6 py-3 text-white font-bold hover:scale-105 transition-all duration-300",
         instagram: "social-instagram rounded-full px-6 py-3 text-white font-bold hover:scale-105 transition-all duration-300",
-        tiktok: "social-tiktok rounded-full px-6 py-3 text-white font-bold hover:scale-105 transition-all duration-300"
+        tiktok: "social-tiktok rounded-full px-6 py-3 text-white font-bold hover:scale-105 transition-all duration-300",
+        hologram: [
+          "rounded-full px-6 py-3",
+          "bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-purple)] to-[var(--neon-pink)]",
+          "text-white font-bold",
+          "shadow-[0_0_22px_rgba(0,240,255,0.35)]",
+          "hover:shadow-[0_0_30px_rgba(0,240,255,0.5)] hover:scale-105",
+          "before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent",
+          "before:translate-x-[-100%] before:animate-shimmer-sweep before:z-10"
+        ]
       },
       size: {
         default: "h-10 px-4 py-2",

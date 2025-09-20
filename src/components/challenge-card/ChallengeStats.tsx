@@ -10,18 +10,18 @@ interface ChallengeStatsProps {
 const ChallengeStats: React.FC<ChallengeStatsProps> = ({ xpReward }) => {
   return (
     <div className="flex items-center justify-between">
-      <Badge variant="outline" className="bg-jillr-neonPurple/10 border-jillr-neonPurple/30 text-jillr-neonPurple flex items-center gap-1.5 px-2.5 py-1">
+      <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-jillr-neonPurple to-jillr-neonPink text-white text-xs font-bold shadow-glow-purple border border-white/30">
         <Zap className="h-3.5 w-3.5" />
-        <span className="font-medium">{xpReward} XP</span>
-      </Badge>
+        <span>+{xpReward} XP</span>
+      </div>
       
-      <div className="flex items-center gap-2 text-xs text-gray-400">
+      <div className="flex items-center gap-3 text-xs text-[var(--txt-dim)]">
         <div className="flex items-center gap-1">
-          <Users size={12} />
+          <Users size={12} className="text-jillr-neonCyan" />
           <span>124</span>
         </div>
         <div className="flex items-center gap-1">
-          <Star size={12} />
+          <Star size={12} className="text-jillr-neonPink" />
           <span>4.8</span>
         </div>
       </div>

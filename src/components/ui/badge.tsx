@@ -41,6 +41,24 @@ const badgeVariants = cva(
           "rounded-xl px-3 py-1.5 text-xs",
           "bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-purple)] to-[var(--neon-pink)]",
           "shadow-[0_0_22px_rgba(0,240,255,0.35)] animate-aurora-sweep"
+        ],
+        hologram: [
+          "rounded-full px-3 py-1.5 text-xs",
+          "bg-gradient-to-r from-[var(--neon-cyan)]/20 to-[var(--neon-purple)]/20",
+          "border border-white/30 backdrop-blur-sm",
+          "shadow-[0_0_15px_rgba(0,240,255,0.3)]",
+          "hover:from-[var(--neon-cyan)]/30 hover:to-[var(--neon-purple)]/30"
+        ],
+        neon: [
+          "rounded-full px-3 py-1.5 text-xs",
+          "border border-[var(--neon-cyan)]/50 bg-black/40 backdrop-blur-sm",
+          "text-[var(--neon-cyan)]",
+          "hover:bg-[var(--neon-cyan)]/10 hover:shadow-[0_0_15px_rgba(0,240,255,0.4)]"
+        ],
+        category: [
+          "rounded-full px-3 py-1.5 text-xs",
+          "border border-white/30 backdrop-blur-sm text-white font-medium",
+          "shadow-lg"
         ]
       },
     },

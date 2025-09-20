@@ -3,7 +3,7 @@ import React from 'react';
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { MapPin, Clock, Award, Trophy } from "lucide-react";
+import { MapPin, Clock, Award, Trophy, Heart, MessageCircle, Share2, Zap } from "lucide-react";
 import { ChallengeCardProps } from './types';
 import { cn } from '@/lib/utils';
 import { useNavigate } from 'react-router-dom';
@@ -36,78 +36,101 @@ const ChallengeCard = ({
     <div 
       onClick={handleCardClick}
       className={cn(
-        "bg-jillr-dark border border-jillr-border rounded-lg overflow-hidden transition-all duration-300 hover:shadow-neon",
-        "group cursor-pointer hover:scale-[1.02]",
+        // Glassmorphism base
+        "glass-card border border-white/20 rounded-2xl overflow-hidden",
+        "group cursor-pointer transition-all duration-500",
+        // Hover effects
+        "hover:scale-[1.02] hover:shadow-neon-intense hover:border-jillr-neonCyan/60",
         size === "compact" ? "w-full" : "w-full max-w-sm",
         className
       )}
     >
+      {/* Image Preview with Hologram Overlay */}
       <div className="relative">
         <AspectRatio ratio={16/9}>
-          <div className="w-full h-full bg-jillr-darkAccent">
+          <div className="w-full h-full bg-gradient-to-br from-jillr-neonCyan/20 via-jillr-neonPurple/20 to-jillr-neonPink/20">
             {challenge.imageUrl && (
               <img 
                 src={challenge.imageUrl} 
                 alt={challenge.title} 
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
             )}
+            {/* Hologram gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-br from-jillr-neonCyan/10 via-transparent to-jillr-neonPurple/10 opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
           </div>
         </AspectRatio>
         
-        <div className="absolute top-2 right-2 flex gap-1">
-          <Badge variant="secondary" className="z-10">
+        {/* Category Chips */}
+        <div className="absolute top-3 left-3 flex gap-2">
+          <Badge 
+            variant="hologram" 
+            className="bg-gradient-to-r from-jillr-neonCyan to-jillr-neonPurple text-white font-medium border-0 shadow-glow-cyan"
+          >
             {challenge.type}
           </Badge>
         </div>
         
+        {/* XP Reward Pill */}
+        <div className="absolute top-3 right-3">
+          <div className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-gradient-to-r from-jillr-neonPurple to-jillr-neonPink text-white text-xs font-bold shadow-glow-purple border border-white/30">
+            <Zap className="h-3 w-3" />
+            <span>+100 XP</span>
+          </div>
+        </div>
+        
+        {/* Time indicator */}
         {challenge.expiresIn && (
-          <div className="absolute bottom-2 left-2 flex items-center gap-1 bg-jillr-dark/80 text-white text-xs px-2 py-1 rounded-full z-10">
+          <div className="absolute bottom-3 left-3 flex items-center gap-1 bg-black/60 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full border border-white/20">
             <Clock className="h-3 w-3" />
             <span>{challenge.expiresIn}</span>
           </div>
         )}
       </div>
       
-      <div className="p-3">
-        <h3 className="font-semibold text-white mb-1 group-hover:text-jillr-neonPurple transition-colors">
+      {/* Card Content */}
+      <div className="p-4 space-y-3">
+        {/* Title */}
+        <h3 className="font-bold text-[var(--txt)] text-lg leading-tight group-hover:text-jillr-neonCyan transition-colors duration-300">
           {challenge.title}
         </h3>
         
-        <p className="text-sm text-gray-300 line-clamp-2 mb-2">
+        {/* Description */}
+        <p className="text-sm text-[var(--txt-dim)] line-clamp-2 leading-relaxed">
           {challenge.description}
         </p>
         
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-xs text-gray-400">
+        {/* Stats Row */}
+        <div className="flex items-center justify-between text-xs text-[var(--txt-dim)]">
+          <div className="flex items-center gap-3">
             <div className="flex items-center gap-1">
-              <MapPin className="h-3 w-3 text-jillr-neonPink" />
-              <span>1.2 km</span>
+              <Heart className="h-3.5 w-3.5 text-jillr-neonPink" />
+              <span>234</span>
             </div>
-            
-            {challenge.reward && (
-              <div className="flex items-center gap-1">
-                <Award className="h-3 w-3 text-jillr-neonBlue" />
-                <span>{challenge.reward}</span>
-              </div>
-            )}
+            <div className="flex items-center gap-1">
+              <MessageCircle className="h-3.5 w-3.5 text-jillr-neonCyan" />
+              <span>45</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <Share2 className="h-3.5 w-3.5 text-jillr-neonPurple" />
+              <span>12</span>
+            </div>
           </div>
           
           <div className="flex items-center gap-1">
-            <Trophy className="h-4 w-4 text-jillr-neonGreen" />
-            <span className="text-jillr-neonGreen text-xs font-semibold">
-              +100 XP
-            </span>
+            <MapPin className="h-3.5 w-3.5 text-jillr-neonBlue" />
+            <span>1.2 km</span>
           </div>
         </div>
         
+        {/* Participation Button */}
         <Button 
-          variant="default" 
+          variant="hologram" 
           size="sm" 
-          className="w-full mt-3"
+          className="w-full mt-4"
           onClick={handleJoinClick}
         >
-          {challenge.challengeId ? "Jetzt teilnehmen" : "Details anzeigen"}
+          {challenge.challengeId ? "Challenge teilnehmen" : "Details anzeigen"}
         </Button>
       </div>
     </div>

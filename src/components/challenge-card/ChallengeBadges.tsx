@@ -22,15 +22,38 @@ interface ChallengeBadgesProps {
 const ChallengeBadges: React.FC<ChallengeBadgesProps> = ({ type, hashtags = [] }) => {
   const icon = typeIcons[type] || typeIcons.default;
   
+  // Define gradient combinations for different types
+  const getTypeGradient = (challengeType: string) => {
+    switch (challengeType.toLowerCase()) {
+      case 'video':
+        return 'bg-gradient-to-r from-jillr-neonCyan to-jillr-neonPurple shadow-glow-cyan';
+      case 'photo':
+        return 'bg-gradient-to-r from-jillr-neonPink to-jillr-neonPurple shadow-glow-pink';
+      case 'ar':
+        return 'bg-gradient-to-r from-jillr-neonPurple to-jillr-neonBlue shadow-glow-purple';
+      case 'fitness':
+        return 'bg-gradient-to-r from-jillr-neonBlue to-jillr-neonCyan shadow-glow-blue';
+      default:
+        return 'bg-gradient-to-r from-jillr-neonCyan to-jillr-neonPurple shadow-glow-cyan';
+    }
+  };
+  
   return (
-    <div className="flex flex-wrap gap-1">
-      <Badge variant="secondary" className="flex items-center">
+    <div className="flex flex-wrap gap-2">
+      <Badge 
+        variant="category" 
+        className={`flex items-center gap-1.5 px-3 py-1.5 ${getTypeGradient(type)} border border-white/30`}
+      >
         {icon}
-        {type}
+        <span className="capitalize font-medium">{type}</span>
       </Badge>
       
       {hashtags.slice(0, 2).map(tag => (
-        <Badge key={tag} variant="outline" className="text-jillr-neonBlue border-jillr-neonBlue/30">
+        <Badge 
+          key={tag} 
+          variant="neon" 
+          className="border-jillr-neonCyan/50 text-jillr-neonCyan hover:shadow-glow-cyan"
+        >
           #{tag}
         </Badge>
       ))}
