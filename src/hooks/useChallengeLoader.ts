@@ -28,6 +28,24 @@ const normalizeChallenge = (item: any) => {
   const title = item.challengeInfo?.title ?? item.title ?? "Untitled Challenge";
   const slug = item.slug ?? createSlug(title);
   
+  // Determine media type and URLs from legacy fields
+  let mediaType: 'image' | 'video' = 'image';
+  let mediaUrl = '';
+  let posterUrl = null;
+  let thumbnailUrl = '';
+
+  // Handle legacy fields - map image, video, thumbnail_url to new structure
+  if (item.video || item.videoUrl || (item.type === 'video') || (item.category === 'video')) {
+    mediaType = 'video';
+    mediaUrl = item.video || item.videoUrl || item.mediaUrl || '';
+    posterUrl = item.thumbnail || item.thumbnailUrl || item.imageUrl || item.poster || null;
+  } else {
+    mediaType = 'image';
+    mediaUrl = item.image || item.imageUrl || item.mediaUrl || item.thumbnailUrl || '';
+  }
+  
+  thumbnailUrl = item.thumbnail || item.thumbnailUrl || item.imageUrl || mediaUrl || '';
+  
   return {
     id,
     slug,
@@ -36,7 +54,13 @@ const normalizeChallenge = (item: any) => {
     category: item.category ?? (item.type === 'challenge' ? 'city-clash' : item.type) ?? "city-clash",
     type: item.type ?? item.category ?? "challenge", 
     xp: parseInt(item.challengeInfo?.reward?.replace(' XP', '') ?? item.xp ?? '100'),
-    thumbnailUrl: item.mediaUrl ?? item.thumbnailUrl ?? item.imageUrl ?? "",
+    
+    // New media fields
+    mediaType,
+    mediaUrl,
+    posterUrl,
+    thumbnailUrl,
+    
     thumbnailAlt: item.thumbnailAlt ?? title ?? "Challenge thumbnail",
     tags: item.hashtags ?? item.tags ?? [],
     stats: { 
@@ -47,7 +71,10 @@ const normalizeChallenge = (item: any) => {
     challengeId: item.challengeId ?? id,
     reward: item.challengeInfo?.reward ?? `${item.xp ?? 100} XP`,
     expiresIn: item.expiresIn,
-    imageUrl: item.mediaUrl ?? item.thumbnailUrl ?? item.imageUrl ?? "", // Fallback for legacy support
+    
+    // Legacy support - keep these for backward compatibility
+    imageUrl: mediaUrl,
+    
     // Additional challenge detail fields
     start_date: item.start_date ?? new Date().toISOString(),
     end_date: item.end_date ?? new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
@@ -115,14 +142,22 @@ export const useChallengeLoader = (params: LoadChallengeParams): UseChallengeLoa
         // For demo purposes, create mock challenges for all IDs
         if (params.id || params.slug) {
           const challengeId = params.id || params.slug || 'unknown';
+          const isVideo = Math.random() > 0.5; // 50% chance for video
           fetchedChallenge = {
             id: challengeId,
             title: `Challenge ${challengeId}`,
             description: 'Dies ist eine Demo-Challenge für Test-Zwecke. Du kannst hier verschiedene Aktionen durchführen und XP sammeln.',
-            category: 'city-clash',
-            type: 'Community',
+            category: isVideo ? 'video' : 'city-clash',
+            type: isVideo ? 'video' : 'Community',
             xp: Math.floor(Math.random() * 500) + 100,
-            thumbnailUrl: `https://images.unsplash.com/photo-1558898499-98b1b19b1c36?auto=format&q=80&w=1600`,
+            
+            // Use different media based on type
+            mediaUrl: isVideo 
+              ? `https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4`
+              : `https://images.unsplash.com/photo-1558898499-98b1b19b1c36?auto=format&fit=crop&q=80&w=1600&h=900`,
+            thumbnailUrl: `https://images.unsplash.com/photo-1558898499-98b1b19b1c36?auto=format&fit=crop&q=80&w=1600&h=900`,
+            posterUrl: isVideo ? `https://images.unsplash.com/photo-1558898499-98b1b19b1c36?auto=format&fit=crop&q=80&w=1600&h=900` : null,
+            
             thumbnailAlt: `Challenge ${challengeId} thumbnail`,
             stats: { likes: Math.floor(Math.random() * 500), comments: Math.floor(Math.random() * 100), shares: Math.floor(Math.random() * 50) },
             start_date: new Date().toISOString(),

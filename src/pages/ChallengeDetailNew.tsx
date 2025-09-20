@@ -8,6 +8,7 @@ import ChallengeDetailSkeleton from '@/components/challenge/ChallengeDetailSkele
 import ChallengeNotFoundPanel from '@/components/challenge/ChallengeNotFoundPanel';
 import DataPermissionPrompt from '@/components/challenge/DataPermissionPrompt';
 import LiveMapPromotion from '@/components/challenge/LiveMapPromotion';
+import ChallengeMedia from '@/components/challenge-card/ChallengeMedia';
 import { Camera, Map, FileQuestion } from 'lucide-react';
 import { VideoModal } from '@/components/home/VideoModal';
 import { toast } from '@/hooks/use-toast';
@@ -109,7 +110,7 @@ const ChallengeDetailNew: React.FC = () => {
   
   // Use Intersection Observer to detect when video is visible
   useEffect(() => {
-    if (!challenge?.thumbnailUrl || !challenge.thumbnailUrl.includes('video')) return;
+    if (!challenge?.mediaType || challenge.mediaType !== 'video') return;
     
     const observer = new IntersectionObserver(
       (entries) => {
@@ -189,39 +190,22 @@ const ChallengeDetailNew: React.FC = () => {
         getChallengeTypeIcon={renderIcon}
       />
       
-      {/* Preview Media - if available */}
-      {challenge.thumbnailUrl && (
-        <div 
-          ref={videoContainerRef}
-          className="relative aspect-video w-full max-w-4xl mx-auto mt-4 mb-6 rounded-lg overflow-hidden cursor-pointer"
-          onClick={() => setIsVideoModalOpen(true)}
-        >
-          {challenge.category === 'video' ? (
-            <video 
-              ref={videoRef}
-              src={challenge.thumbnailUrl} 
-              className="w-full h-full object-cover"
-              loop
-              muted
-              playsInline
-            />
-          ) : (
-            <img 
-              src={challenge.thumbnailUrl}
-              alt={challenge.thumbnailAlt || challenge.title}
-              className="w-full h-full object-cover"
-            />
-          )}
-          
-          {challenge.category === 'video' && (
-            <div className="absolute inset-0 bg-black/30 opacity-0 hover:opacity-100 flex items-center justify-center transition-opacity">
-              <div className="rounded-full bg-white/80 p-4">
-                <Camera className="h-8 w-8 text-jillr-dark" />
-              </div>
-            </div>
-          )}
-        </div>
-      )}
+      {/* Challenge Media */}
+      <div 
+        ref={videoContainerRef}
+        className="w-full max-w-4xl mx-auto mt-4 mb-6 cursor-pointer"
+        onClick={() => setIsVideoModalOpen(true)}
+      >
+        <ChallengeMedia
+          mediaType={challenge.mediaType}
+          mediaUrl={challenge.mediaUrl}
+          posterUrl={challenge.posterUrl}
+          thumbnailUrl={challenge.thumbnailUrl}
+          title={challenge.title}
+          isVisible={isVideoVisible}
+          className="shadow-[0_0_28px_rgba(0,240,255,0.2)] hover:shadow-[0_0_32px_rgba(0,240,255,0.35)] transition-shadow duration-300"
+        />
+      </div>
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
         <div className="lg:col-span-2">
@@ -265,7 +249,7 @@ const ChallengeDetailNew: React.FC = () => {
         isOpen={isVideoModalOpen}
         onClose={() => setIsVideoModalOpen(false)}
         title={challenge.title}
-        videoUrl={challenge.thumbnailUrl || ''}
+        videoUrl={challenge.mediaUrl || challenge.thumbnailUrl || ''}
       />
     </div>
   );
