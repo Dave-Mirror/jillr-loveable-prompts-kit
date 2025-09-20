@@ -52,7 +52,13 @@
 }
 
 @layer base {
-  * {
+  /* Global overflow prevention */
+  html, body {
+    overflow-x: hidden;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
     @apply border-border;
   }
 
@@ -362,5 +368,12 @@
 
   .mask-fade-bottom {
     mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+  }
+
+  /* Cosmic background utility */
+  .bg-cosmic-dark {
+    background: radial-gradient(1000px 800px at 30% -10%, #1a1b3a 0%, transparent 70%),
+                linear-gradient(140deg, #0b0d1a 0%, #11132a 40%, #0b0d1a 100%);
+    min-height: 100vh;
   }
 }

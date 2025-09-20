@@ -27,10 +27,10 @@ const FeedFilterBar: React.FC<FeedFilterBarProps> = ({
   toggleFilters
 }) => {
   return (
-    <div className="mx-auto px-4 py-4 sticky top-0 bg-jillr-dark z-10 border-b border-jillr-border/50">
+    <div className="w-full py-4">
       <div className="max-w-md mx-auto space-y-3">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-medium">Challenge Feed</h3>
+          <h3 className="text-lg font-medium text-[var(--txt)]">Challenge Feed</h3>
           
           <Button
             variant="outline"
@@ -52,33 +52,34 @@ const FeedFilterBar: React.FC<FeedFilterBarProps> = ({
           >
             <TabsList className={cn(
               "w-full overflow-x-auto flex whitespace-nowrap h-auto py-1 px-1 gap-1",
+              "glass-card bg-[var(--glass-bg)] backdrop-blur-xl",
               "scrollbar-thin scrollbar-thumb-jillr-neonPurple scrollbar-track-transparent"
             )}>
-              <TabsTrigger value="all" className="flex items-center gap-1 rounded-md">
+              <TabsTrigger value="all" className="flex items-center gap-1 rounded-md text-[var(--txt)] hover:text-jillr-neonCyan">
                 <Zap className="h-4 w-4" />
                 <span>Alle</span>
               </TabsTrigger>
-              <TabsTrigger value="video" className="flex items-center gap-1 rounded-md">
+              <TabsTrigger value="video" className="flex items-center gap-1 rounded-md text-[var(--txt)] hover:text-jillr-neonCyan">
                 <Video className="h-4 w-4" />
                 <span>Video</span>
               </TabsTrigger>
-              <TabsTrigger value="photo" className="flex items-center gap-1 rounded-md">
+              <TabsTrigger value="photo" className="flex items-center gap-1 rounded-md text-[var(--txt)] hover:text-jillr-neonCyan">
                 <Camera className="h-4 w-4" />
                 <span>Photo</span>
               </TabsTrigger>
-              <TabsTrigger value="ar" className="flex items-center gap-1 rounded-md">
+              <TabsTrigger value="ar" className="flex items-center gap-1 rounded-md text-[var(--txt)] hover:text-jillr-neonCyan">
                 <Badge className="h-4 w-4" />
                 <span>AR</span>
               </TabsTrigger>
-              <TabsTrigger value="geofencing" className="flex items-center gap-1 rounded-md">
+              <TabsTrigger value="geofencing" className="flex items-center gap-1 rounded-md text-[var(--txt)] hover:text-jillr-neonCyan">
                 <MapPin className="h-4 w-4" />
                 <span>Geo</span>
               </TabsTrigger>
-              <TabsTrigger value="city_clash" className="flex items-center gap-1 rounded-md">
+              <TabsTrigger value="city_clash" className="flex items-center gap-1 rounded-md text-[var(--txt)] hover:text-jillr-neonCyan">
                 <Map className="h-4 w-4" />
                 <span>City Clash</span>
               </TabsTrigger>
-              <TabsTrigger value="team_battle" className="flex items-center gap-1 rounded-md">
+              <TabsTrigger value="team_battle" className="flex items-center gap-1 rounded-md text-[var(--txt)] hover:text-jillr-neonCyan">
                 <Shield className="h-4 w-4" />
                 <span>Team Battle</span>
               </TabsTrigger>
@@ -92,16 +93,16 @@ const FeedFilterBar: React.FC<FeedFilterBarProps> = ({
             value={sortBy} 
             onValueChange={setSortBy}
           >
-            <TabsList className="bg-jillr-darkLight">
-              <TabsTrigger value="latest" className="flex items-center gap-1">
+            <TabsList className="glass-card bg-[var(--glass-bg)] backdrop-blur-xl">
+              <TabsTrigger value="latest" className="flex items-center gap-1 text-[var(--txt)] hover:text-jillr-neonCyan">
                 <Clock className="h-3 w-3" />
                 <span>Neueste</span>
               </TabsTrigger>
-              <TabsTrigger value="popular" className="flex items-center gap-1">
+              <TabsTrigger value="popular" className="flex items-center gap-1 text-[var(--txt)] hover:text-jillr-neonCyan">
                 <Zap className="h-3 w-3" />
                 <span>Beliebt</span>
               </TabsTrigger>
-              <TabsTrigger value="trending" className="flex items-center gap-1">
+              <TabsTrigger value="trending" className="flex items-center gap-1 text-[var(--txt)] hover:text-jillr-neonCyan">
                 <TrendingUp className="h-3 w-3" />
                 <span>Trending</span>
               </TabsTrigger>

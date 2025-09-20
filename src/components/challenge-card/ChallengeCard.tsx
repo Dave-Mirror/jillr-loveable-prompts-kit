@@ -45,21 +45,26 @@ const ChallengeCard = ({
         className
       )}
     >
-      {/* Image Preview with Hologram Overlay */}
-      <div className="relative">
-        <AspectRatio ratio={16/9}>
-          <div className="w-full h-full bg-gradient-to-br from-jillr-neonCyan/20 via-jillr-neonPurple/20 to-jillr-neonPink/20">
-            {challenge.imageUrl && (
+        {/* Image Preview with Hologram Overlay */}
+        <div className="relative">
+          <div className="w-full h-56 rounded-t-2xl overflow-hidden">
+            {challenge.imageUrl ? (
               <img 
                 src={challenge.imageUrl} 
                 alt={challenge.title} 
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
+            ) : (
+              // Hologram gradient placeholder instead of gray
+              <div className="w-full h-full bg-gradient-to-br from-jillr-neonCyan/20 via-jillr-neonPurple/20 to-jillr-neonPink/20 flex items-center justify-center">
+                <div className="text-white/60 text-4xl">
+                  {challenge.type === 'video' ? '🎬' : '📸'}
+                </div>
+              </div>
             )}
-            {/* Hologram gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-br from-jillr-neonCyan/10 via-transparent to-jillr-neonPurple/10 opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
+            {/* Subtle hologram gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-br from-jillr-neonCyan/5 via-transparent to-jillr-neonPurple/5 opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
           </div>
-        </AspectRatio>
         
         {/* Category Chips */}
         <div className="absolute top-3 left-3 flex gap-2">
@@ -100,9 +105,20 @@ const ChallengeCard = ({
           {challenge.description}
         </p>
         
-        {/* Stats Row */}
-        <div className="flex items-center justify-between text-xs text-[var(--txt-dim)]">
-          <div className="flex items-center gap-3">
+        {/* Footer with CTA and Stats */}
+        <div className="flex items-center justify-between gap-4">
+          {/* CTA Button */}
+          <Button 
+            variant="hologram" 
+            size="sm" 
+            className="flex-1"
+            onClick={handleJoinClick}
+          >
+            {challenge.challengeId ? "Teilnehmen" : "Details"}
+          </Button>
+          
+          {/* Compact Stats */}
+          <div className="flex items-center gap-3 text-xs text-[var(--txt-dim)]">
             <div className="flex items-center gap-1">
               <Heart className="h-3.5 w-3.5 text-jillr-neonPink" />
               <span>234</span>
@@ -116,22 +132,7 @@ const ChallengeCard = ({
               <span>12</span>
             </div>
           </div>
-          
-          <div className="flex items-center gap-1">
-            <MapPin className="h-3.5 w-3.5 text-jillr-neonBlue" />
-            <span>1.2 km</span>
-          </div>
         </div>
-        
-        {/* Participation Button */}
-        <Button 
-          variant="hologram" 
-          size="sm" 
-          className="w-full mt-4"
-          onClick={handleJoinClick}
-        >
-          {challenge.challengeId ? "Challenge teilnehmen" : "Details anzeigen"}
-        </Button>
       </div>
     </div>
   );
