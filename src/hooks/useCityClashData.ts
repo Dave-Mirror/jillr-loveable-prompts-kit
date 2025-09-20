@@ -498,20 +498,196 @@ export const useCityClashData = () => {
             description: 'Scanne alle 5 QR-Codes in der Innenstadt so schnell wie möglich und gewinne attraktive Preise.',
             type: 'time_rush',
             category: 'location',
+            difficulty: 'easy',
+            reward: {
+              xp: 300,
+              coins: 120
+            },
+            duration: '2 Stunden',
+            districtId: 'district-4',
+            districtName: 'Haidhausen',
+            participants: 201,
+            startDate: '2025-05-16T14:00:00Z',
+            endDate: '2025-05-16T20:00:00Z',
+            imageUrl: '/placeholder.svg',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1548092372-0d1bd40894a3?w=400&h=225&fit=crop',
+            thumbnailAlt: 'Person scanning QR code at urban checkpoint'
+          },
+          // Standortbasierte Missionen & Geofencing Challenges
+          {
+            id: 'challenge-city-13',
+            title: 'Geofencing Arena Battle',
+            description: 'Kontrolliere strategische Punkte in der Stadt und verteidige sie gegen andere Teams.',
+            type: 'team_battle',
+            category: 'location',
             difficulty: 'hard',
             reward: {
               xp: 800,
               coins: 300
             },
             duration: '4 Stunden',
+            districtId: 'district-1',
+            districtName: 'Schwabing',
+            participants: 89,
+            startDate: '2025-05-22T16:00:00Z',
+            endDate: '2025-05-22T20:00:00Z',
+            imageUrl: '/placeholder.svg',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1f?w=400&h=225&fit=crop',
+            thumbnailAlt: 'GPS location tracking with city map overlay'
+          },
+          {
+            id: 'challenge-city-14',
+            title: 'Hidden Spot Discovery',
+            description: 'Entdecke geheime Locations in München mit Hilfe von GPS-Koordinaten und Rätseln.',
+            type: 'mystery_card',
+            category: 'location',
+            difficulty: 'medium',
+            reward: {
+              xp: 550,
+              coins: 200
+            },
+            duration: '1 Tag',
+            districtId: 'district-3',
+            districtName: 'Glockenbach',
+            participants: 134,
+            startDate: '2025-05-25T10:00:00Z',
+            endDate: '2025-05-25T22:00:00Z',
+            imageUrl: '/placeholder.svg',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=400&h=225&fit=crop',
+            thumbnailAlt: 'Hidden urban location with compass and map'
+          },
+          // Social Media & UGC Challenges
+          {
+            id: 'challenge-city-15',
+            title: 'Instagram Story Challenge',
+            description: 'Erstelle 5 kreative Instagram Stories mit München Hotspots und sammle Likes.',
+            type: 'shadow_quest',
+            category: 'social',
+            difficulty: 'easy',
+            reward: {
+              xp: 400,
+              coins: 150
+            },
+            duration: '3 Tage',
             districtId: 'district-2',
             districtName: 'Maxvorstadt',
-            participants: 126,
-            startDate: '2025-05-25T10:00:00Z',
-            endDate: '2025-05-25T14:00:00Z',
+            participants: 298,
+            startDate: '2025-05-20T08:00:00Z',
+            endDate: '2025-05-23T20:00:00Z',
             imageUrl: '/placeholder.svg',
-            thumbnailUrl: 'https://images.unsplash.com/photo-1563906267088-b029e7101114?w=400&h=225&fit=crop',
-            thumbnailAlt: 'Person scanning QR code with smartphone in urban setting'
+            thumbnailUrl: 'https://images.unsplash.com/photo-1611162616475-46b635cb6868?w=400&h=225&fit=crop',
+            thumbnailAlt: 'Person creating Instagram content with smartphone'
+          },
+          {
+            id: 'challenge-city-16',
+            title: 'User Generated Content Battle',
+            description: 'Teile deine besten München Moments und lass die Community darüber abstimmen.',
+            type: 'team_battle',
+            category: 'social',
+            difficulty: 'medium',
+            reward: {
+              xp: 650,
+              coins: 250,
+              products: [{ name: 'Content Creator Kit', image: '/placeholder.svg' }]
+            },
+            duration: '1 Woche',
+            districtId: 'district-4',
+            districtName: 'Haidhausen',
+            participants: 156,
+            startDate: '2025-05-18T00:00:00Z',
+            endDate: '2025-05-25T23:59:59Z',
+            imageUrl: '/placeholder.svg',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1493612276216-ee3925520721?w=400&h=225&fit=crop',
+            thumbnailAlt: 'User-generated content creation with social media interface'
+          },
+          // Team-Challenges & City Takeover Battles
+          {
+            id: 'challenge-city-17',
+            title: 'District Domination War',
+            description: 'Erobere mit deinem Team ganze Stadtteile und verteidige sie gegen Angreifer.',
+            type: 'team_battle',
+            category: 'team',
+            difficulty: 'expert',
+            reward: {
+              xp: 1200,
+              coins: 500,
+              tickets: [{ name: 'Victory Celebration Pass', event: 'Team Championship', date: '2025-06-01' }]
+            },
+            duration: '7 Tage',
+            districtId: 'district-5',
+            districtName: 'Westend',
+            participants: 78,
+            startDate: '2025-05-26T12:00:00Z',
+            endDate: '2025-06-02T12:00:00Z',
+            imageUrl: '/placeholder.svg',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400&h=225&fit=crop',
+            thumbnailAlt: 'Team battle with city skyline and strategic planning'
+          },
+          {
+            id: 'challenge-city-18',
+            title: 'Alliance Formation Quest',
+            description: 'Bilde Allianzen mit anderen Teams und plant gemeinsame Strategien für die Stadtübernahme.',
+            type: 'secret_society',
+            category: 'team',
+            difficulty: 'hard',
+            reward: {
+              xp: 900,
+              coins: 350
+            },
+            duration: '5 Tage',
+            districtId: 'district-1',
+            districtName: 'Schwabing',
+            participants: 45,
+            startDate: '2025-05-28T15:00:00Z',
+            endDate: '2025-06-02T15:00:00Z',
+            imageUrl: '/placeholder.svg',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1556075798-4825dfaaf498?w=400&h=225&fit=crop',
+            thumbnailAlt: 'Team alliance meeting with city tactics and strategy'
+          },
+          // Nachhaltigkeits- & Umwelt-Challenges
+          {
+            id: 'challenge-city-19',
+            title: 'Zero Waste Week Challenge',
+            description: 'Lebe eine Woche komplett plastikfrei und dokumentiere deine nachhaltigen Alternativen.',
+            type: 'shadow_quest',
+            category: 'eco',
+            difficulty: 'hard',
+            reward: {
+              xp: 750,
+              coins: 300,
+              products: [{ name: 'Sustainable Living Starter Kit', image: '/placeholder.svg' }]
+            },
+            duration: '1 Woche',
+            districtId: 'district-3',
+            districtName: 'Glockenbach',
+            participants: 67,
+            startDate: '2025-05-24T00:00:00Z',
+            endDate: '2025-05-31T23:59:59Z',
+            imageUrl: '/placeholder.svg',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=400&h=225&fit=crop',
+            thumbnailAlt: 'Zero waste lifestyle with reusable containers and eco-friendly products'
+          },
+          {
+            id: 'challenge-city-20',
+            title: 'Urban Gardening Mission',
+            description: 'Pflanze Samen in städtischen Grünflächen und verfolge ihr Wachstum über die App.',
+            type: 'mystery_card',
+            category: 'eco',
+            difficulty: 'medium',
+            reward: {
+              xp: 500,
+              coins: 180,
+              products: [{ name: 'Organic Seed Collection', image: '/placeholder.svg' }]
+            },
+            duration: '2 Wochen',
+            districtId: 'district-2',
+            districtName: 'Maxvorstadt',
+            participants: 112,
+            startDate: '2025-05-15T09:00:00Z',
+            endDate: '2025-05-29T18:00:00Z',
+            imageUrl: '/placeholder.svg',
+            thumbnailUrl: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400&h=225&fit=crop',
+            thumbnailAlt: 'Urban gardening with plants growing in city environment'
           }
         ];
 
