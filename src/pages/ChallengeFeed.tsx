@@ -5,6 +5,7 @@ import { useFeedInteractions } from '@/hooks/useFeedInteractions';
 import { useVideoPlayback } from '@/hooks/useVideoPlayback';
 import { useAchievementManager } from '@/hooks/useAchievementManager';
 import { useFilteredFeed } from '@/hooks/useFilteredFeed';
+import { useChallengeStore, normalizeChallenge } from '@/contexts/ChallengeContext';
 import FeedItem from '@/components/challenge-feed/FeedItem';
 import FeedFooter from '@/components/challenge-feed/FeedFooter';
 import LoadingSpinner from '@/components/challenge-feed/LoadingSpinner';
@@ -43,30 +44,17 @@ const ChallengeFeed = () => {
     setActiveComments,
   } = useFeedInteractions(feedItems, setFeedItems);
 
-  // Normalize data before rendering to ensure consistency
-  const normalizeChallenge = (item: any) => ({
-    id: item.id ?? crypto.randomUUID(),
-    title: item.challengeInfo?.title ?? item.title ?? "Untitled Challenge",
-    description: item.caption ?? item.description ?? "",
-    category: item.category ?? (item.type === 'challenge' ? 'city-clash' : item.type) ?? "city-clash",
-    type: item.type ?? item.category ?? "challenge", 
-    xp: parseInt(item.challengeInfo?.reward?.replace(' XP', '') ?? item.xp ?? '100'),
-    thumbnailUrl: item.mediaUrl ?? item.thumbnailUrl ?? item.imageUrl ?? "",
-    thumbnailAlt: item.thumbnailAlt ?? item.challengeInfo?.title ?? item.title ?? "Challenge thumbnail",
-    tags: item.hashtags ?? item.tags ?? [],
-    stats: { 
-      likes: item.likes ?? 0, 
-      comments: item.commentCount ?? 0, 
-      shares: item.shares ?? 0 
-    },
-    challengeId: item.challengeId ?? item.id,
-    reward: item.challengeInfo?.reward ?? `${item.xp ?? 100} XP`,
-    expiresIn: item.expiresIn,
-    imageUrl: item.mediaUrl ?? item.thumbnailUrl ?? item.imageUrl ?? "" // Fallback for legacy support
-  });
-
-  // Convert feed items to normalized challenge format
-  const normalizedChallenges = filteredItems.map(normalizeChallenge);
+  // Convert feed items to normalized challenges
+  const normalizedChallenges = React.useMemo(() => {
+    return filteredItems.map(normalizeChallenge);
+  }, [filteredItems]);
+  
+  // Ensure we update challenge store with normalized data
+  React.useEffect(() => {
+    if (normalizedChallenges.length > 0) {
+      setChallenges(normalizedChallenges);
+    }
+  }, [normalizedChallenges, setChallenges]);
 
   if (loading) {
     return <LoadingSpinner />;

@@ -1,6 +1,7 @@
 
 export interface Challenge {
   id: string;
+  slug?: string;
   title: string;
   description: string;
   type: string;
@@ -17,6 +18,18 @@ export interface Challenge {
     lng: number;
   };
   challengeId?: string;
+  // Additional fields for challenge details
+  start_date?: string;
+  end_date?: string;
+  coin_reward?: number;
+  xp_reward?: number;
+  brand_name?: string;
+  status?: string;
+  stats?: {
+    likes: number;
+    comments: number;
+    shares: number;
+  };
 }
 
 export interface ChallengeCardProps {

@@ -22,8 +22,9 @@ const ChallengeCard = ({
     if (onClick) {
       onClick(challenge.id);
     } else {
-      // Ansonsten navigiere direkt zur Challenge-Detailseite
-      navigate(`/challenge/${challenge.id}`);
+      // Navigiere zur Challenge-Detailseite mit slug falls verfügbar
+      const route = challenge.slug ? `/challenges/${challenge.slug}` : `/challenge/${challenge.id}`;
+      navigate(route);
     }
   };
 

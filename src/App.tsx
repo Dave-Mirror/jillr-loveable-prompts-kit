@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AuthProvider from "./providers/AuthProvider";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AvatarProvider } from "./contexts/AvatarContext";
+import { ChallengeProvider } from "./contexts/ChallengeContext";
 import Header from "./components/Header";
 import BottomNavigation from "./components/navigation/BottomNavigation";
 import PageTransition from "./components/navigation/PageTransition";
@@ -23,7 +24,7 @@ import Explore from "./pages/Explore";
 import ChallengeFeed from "./pages/ChallengeFeed";
 import LiveMap from "./pages/LiveMap";
 import CityClashPage from "./pages/CityClashPage";
-import ChallengeDetail from "./pages/ChallengeDetail";
+import ChallengeDetail from "./pages/ChallengeDetailNew";
 
 // Erstellen-Kategorie
 import Dashboard from "./pages/Dashboard";
@@ -57,11 +58,12 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
       <AvatarProvider>
-        <HypocampusProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
+        <ChallengeProvider>
+          <HypocampusProvider>
+            <TooltipProvider>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
               <div className="min-h-screen flex flex-col">
                 <Header />
                 <main className="flex-1 pt-16 md:pb-0 pb-16">
@@ -77,6 +79,7 @@ const App = () => (
                       <Route path="/challenge-feed" element={<ChallengeFeed />} />
                       <Route path="/map" element={<LiveMap />} />
                       <Route path="/city-clash" element={<CityClashPage />} />
+                      <Route path="/challenges/:slug" element={<ChallengeDetail />} />
                       <Route path="/challenge/:id" element={<ChallengeDetail />} />
                       
                       {/* Erstellen-Kategorie - rollenspezifisch aber öffentlich für Demo */}
@@ -123,9 +126,10 @@ const App = () => (
             </BrowserRouter>
           </TooltipProvider>
         </HypocampusProvider>
-      </AvatarProvider>
-    </AuthProvider>
-  </QueryClientProvider>
+      </ChallengeProvider>
+    </AvatarProvider>
+  </AuthProvider>
+</QueryClientProvider>
 );
 
 export default App;
