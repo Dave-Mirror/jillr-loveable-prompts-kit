@@ -36,16 +36,15 @@ const ChallengeCard = ({
     <div 
       onClick={handleCardClick}
       className={cn(
-        // Glassmorphism base
-        "glass-card border border-white/20 rounded-2xl overflow-hidden",
-        "group cursor-pointer transition-all duration-500",
-        // Hover effects
-        "hover:scale-[1.02] hover:shadow-neon-intense hover:border-jillr-neonCyan/60",
+        // Enhanced glassmorphism with neon effects - use challenge-card class
+        "challenge-card group cursor-pointer",
+        // Additional hover effects for neon glow
+        "hover:scale-[1.02] hover:shadow-[0_0_28px_rgba(0,240,255,0.35)] hover:border-jillr-neonCyan/60",
         size === "compact" ? "w-full" : "w-full max-w-sm",
         className
       )}
     >
-        {/* Image Preview with Hologram Overlay */}
+        {/* Image Preview with 16:9 Aspect Ratio */}
         <div className="relative">
           <div className="w-full aspect-video rounded-t-2xl overflow-hidden">
             {(challenge.thumbnailUrl || challenge.imageUrl) ? (
@@ -53,11 +52,11 @@ const ChallengeCard = ({
                 src={challenge.thumbnailUrl || challenge.imageUrl} 
                 alt={challenge.thumbnailAlt || challenge.title} 
                 loading="lazy"
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                className="challenge-card-media w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
             ) : (
-              // Hologram gradient placeholder instead of gray
-              <div className="w-full h-full bg-gradient-to-br from-jillr-neonCyan/20 via-jillr-neonPurple/20 to-jillr-neonPink/20 flex items-center justify-center">
+              // Hologram gradient fallback (no gray slab)
+              <div className="challenge-card-media fallback w-full h-full">
                 <div className="text-white/60 text-4xl">
                   {challenge.category === 'video' ? '🎬' : challenge.category === 'ar' ? '🥽' : '📸'}
                 </div>
@@ -108,11 +107,11 @@ const ChallengeCard = ({
         
         {/* Footer with CTA and Stats */}
         <div className="flex items-center justify-between gap-4">
-          {/* CTA Button */}
+          {/* CTA Button - Hologram Glass */}
           <Button 
             variant="hologram" 
             size="sm" 
-            className="flex-1"
+            className="flex-1 bg-gradient-to-r from-jillr-neonCyan/20 to-jillr-neonPurple/20 border border-white/30 backdrop-blur-xl text-white font-semibold hover:from-jillr-neonCyan/30 hover:to-jillr-neonPurple/30"
             onClick={handleJoinClick}
           >
             {challenge.challengeId ? "Teilnehmen" : "Details"}
