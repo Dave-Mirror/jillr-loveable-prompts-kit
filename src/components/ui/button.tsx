@@ -6,26 +6,54 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-bold overflow-hidden transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "relative inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-bold overflow-hidden transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        default: "bg-hologram-gradient text-white shadow-hologram hover:shadow-hologramStrong hover:scale-105 before:content-[''] before:absolute before:top-0 before:left-[-100%] before:w-full before:h-full before:bg-aurora-shimmer before:animate-hologram-shimmer before:z-10",
-        destructive: "bg-gradient-to-r from-red-500 to-red-600 text-white shadow-[0_0_20px_rgba(239,68,68,0.5)] hover:shadow-[0_0_40px_rgba(239,68,68,0.7)] hover:scale-105",
-        outline: "border border-jillr-glassBorder bg-jillr-glass backdrop-blur-xl text-white hover:bg-jillr-glassHover hover:border-jillr-neonBlue/50 hover:shadow-neonBlue",
-        secondary: "bg-jillr-glass backdrop-blur-xl border border-jillr-glassBorder/50 text-white hover:bg-jillr-glassHover hover:shadow-glass",
-        ghost: "text-white hover:bg-jillr-glass hover:backdrop-blur-xl hover:shadow-glass",
-        link: "text-jillr-neonBlue underline-offset-4 hover:underline hover:text-jillr-neonBlue/80",
-        neonGreen: "bg-gradient-to-r from-jillr-neonGreen to-jillr-neonGreenDark text-black font-bold shadow-neonGreen hover:shadow-[0_0_40px_rgba(57,255,20,0.7)] hover:scale-105",
-        neonBlue: "bg-gradient-to-r from-jillr-neonBlue to-jillr-neonBlueDark text-white font-bold shadow-neonBlue hover:shadow-[0_0_40px_rgba(0,240,255,0.7)] hover:scale-105",
-        neonPink: "bg-gradient-to-r from-jillr-neonPink to-jillr-neonPinkDark text-white font-bold shadow-neonPink hover:shadow-[0_0_40px_rgba(255,0,127,0.7)] hover:scale-105",
-        glass: "bg-jillr-glass backdrop-blur-xl border border-jillr-glassBorder text-white hover:bg-jillr-glassHover hover:animate-glass-morph",
+        default: [
+          "rounded-full px-6 py-3",
+          "bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-purple)] to-[var(--neon-green)]",
+          "text-white font-bold",
+          "shadow-[0_0_22px_rgba(0,255,198,0.35)]",
+          "hover:shadow-[0_0_30px_rgba(0,255,198,0.5)] hover:scale-105",
+          "before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent",
+          "before:translate-x-[-100%] before:animate-shimmer-sweep before:z-10"
+        ],
+        destructive: [
+          "rounded-xl",
+          "bg-gradient-to-r from-red-500 to-red-600 text-white",
+          "shadow-[0_0_20px_rgba(239,68,68,0.5)]",
+          "hover:shadow-[0_0_30px_rgba(239,68,68,0.7)] hover:scale-105"
+        ],
+        outline: [
+          "rounded-xl",
+          "bg-[var(--glass-bg)] backdrop-blur-[20px]",
+          "border border-[var(--glass-border)]",
+          "text-[var(--txt)]",
+          "hover:bg-[var(--glass-hover)] hover:shadow-[0_0_20px_rgba(0,240,255,0.3)]"
+        ],
+        secondary: [
+          "rounded-xl",
+          "bg-[var(--glass-bg)] backdrop-blur-[20px]",
+          "border border-[var(--glass-border)]",
+          "text-[var(--txt)]",
+          "hover:bg-[var(--glass-hover)] hover:scale-101"
+        ],
+        ghost: [
+          "rounded-xl",
+          "text-[var(--txt)]",
+          "hover:bg-[var(--glass-bg)] hover:backdrop-blur-[20px]"
+        ],
+        link: [
+          "text-[var(--neon-cyan)] underline-offset-4",
+          "hover:underline hover:opacity-80"
+        ]
       },
       size: {
         default: "h-10 px-4 py-2",
-        sm: "h-9 rounded-md px-3",
-        lg: "h-11 rounded-md px-8",
-        xl: "h-12 rounded-md px-10 text-base",
+        sm: "h-9 px-3 text-xs",
+        lg: "h-11 px-8 text-base",
+        xl: "h-12 px-10 text-lg",
         icon: "h-10 w-10",
       },
     },

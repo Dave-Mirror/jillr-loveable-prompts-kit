@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -121,10 +120,10 @@ export default {
 				},
 				'glow-pulse': {
 					'0%, 100%': { 
-						'box-shadow': '0 0 20px rgba(160, 32, 240, 0.4), 0 0 40px rgba(0, 240, 255, 0.2)'
+						'box-shadow': '0 0 20px rgba(0, 240, 255, 0.4), 0 0 40px rgba(154, 91, 255, 0.2)'
 					},
 					'50%': { 
-						'box-shadow': '0 0 30px rgba(160, 32, 240, 0.6), 0 0 60px rgba(0, 240, 255, 0.4)' 
+						'box-shadow': '0 0 30px rgba(0, 240, 255, 0.6), 0 0 60px rgba(154, 91, 255, 0.4)' 
 					}
 				},
 				'aurora-sweep': {
@@ -139,9 +138,17 @@ export default {
 						'background-position': '0% 50%' 
 					}
 				},
-				'hologram-shimmer': {
-					'0%': { 'background-position': '-200% 0' },
-					'100%': { 'background-position': '200% 0' }
+				'shimmer-sweep': {
+					'0%': { transform: 'translateX(-100%)' },
+					'100%': { transform: 'translateX(100%)' }
+				},
+				'holo-shimmer': {
+					'0%, 100%': { opacity: '0.8' },
+					'50%': { opacity: '1' }
+				},
+				'starfield-twinkle': {
+					'0%, 100%': { opacity: '0.8' },
+					'50%': { opacity: '1' }
 				},
 				'float': {
 					'0%, 100%': { transform: 'translateY(0px)' },
@@ -149,16 +156,16 @@ export default {
 				},
 				'glass-morph': {
 					'0%': { 
-						'backdrop-filter': 'blur(10px)',
-						'background': 'rgba(255, 255, 255, 0.08)'
+						'backdrop-filter': 'blur(20px)',
+						'background': 'var(--glass-bg)'
 					},
 					'50%': { 
-						'backdrop-filter': 'blur(15px)',
-						'background': 'rgba(255, 255, 255, 0.12)'
+						'backdrop-filter': 'blur(25px)',
+						'background': 'var(--glass-hover)'
 					},
 					'100%': { 
-						'backdrop-filter': 'blur(10px)',
-						'background': 'rgba(255, 255, 255, 0.08)'
+						'backdrop-filter': 'blur(20px)',
+						'background': 'var(--glass-bg)'
 					}
 				}
 			},
@@ -167,7 +174,9 @@ export default {
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'glow-pulse': 'glow-pulse 3s ease-in-out infinite',
 				'aurora-sweep': 'aurora-sweep 8s ease-in-out infinite',
-				'hologram-shimmer': 'hologram-shimmer 3s ease-in-out infinite',
+				'shimmer-sweep': 'shimmer-sweep 2.5s ease-in-out infinite',
+				'holo-shimmer': 'holo-shimmer 3s ease-in-out infinite',
+				'starfield-twinkle': 'starfield-twinkle 8s ease-in-out infinite',
 				'float': 'float 6s ease-in-out infinite',
 				'glass-morph': 'glass-morph 4s ease-in-out infinite',
 			},

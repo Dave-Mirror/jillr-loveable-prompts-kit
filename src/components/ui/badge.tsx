@@ -4,17 +4,44 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const badgeVariants = cva(
-  "relative inline-flex items-center rounded-full px-3 py-1.5 text-xs font-bold transition-all duration-300 overflow-hidden",
+  "relative inline-flex items-center transition-all duration-300 overflow-hidden font-bold text-white",
   {
     variants: {
       variant: {
         default: "holo-badge",
-        secondary: "bg-jillr-glass backdrop-blur-xl border border-jillr-glassBorder text-white hover:bg-jillr-glassHover",
-        destructive: "bg-gradient-to-r from-red-500 to-red-600 text-white shadow-[0_0_15px_rgba(239,68,68,0.5)]",
-        outline: "border border-jillr-glassBorder bg-transparent text-white hover:bg-jillr-glass hover:backdrop-blur-xl",
-        xp: "bg-gradient-to-r from-jillr-neonPurple to-jillr-neonBlueDark text-white shadow-neonPurple",
-        coins: "bg-gradient-to-r from-jillr-neonGreen to-jillr-neonGreenDark text-black shadow-neonGreen font-mono",
-        level: "bg-hologram-gradient text-white shadow-hologram animate-aurora-sweep",
+        secondary: [
+          "rounded-xl px-3 py-1.5 text-xs",
+          "bg-[var(--glass-bg)] backdrop-blur-[20px]",
+          "border border-[var(--glass-border)]",
+          "text-[var(--txt)]",
+          "hover:bg-[var(--glass-hover)]"
+        ],
+        destructive: [
+          "rounded-xl px-3 py-1.5 text-xs",
+          "bg-gradient-to-r from-red-500 to-red-600",
+          "shadow-[0_0_15px_rgba(239,68,68,0.5)]"
+        ],
+        outline: [
+          "rounded-xl px-3 py-1.5 text-xs",
+          "border border-[var(--glass-border)]",
+          "bg-transparent text-[var(--txt)]",
+          "hover:bg-[var(--glass-bg)] hover:backdrop-blur-[20px]"
+        ],
+        xp: [
+          "rounded-xl px-3 py-1.5 text-xs",
+          "bg-gradient-to-r from-[var(--neon-purple)] to-[var(--neon-cyan)]",
+          "shadow-[0_0_20px_rgba(154,91,255,0.4)]"
+        ],
+        coins: [
+          "rounded-xl px-3 py-1.5 text-xs font-mono",
+          "bg-gradient-to-r from-[var(--neon-green)] to-green-400",
+          "text-black shadow-[0_0_20px_rgba(57,255,20,0.4)]"
+        ],
+        level: [
+          "rounded-xl px-3 py-1.5 text-xs",
+          "bg-gradient-to-r from-[var(--neon-cyan)] via-[var(--neon-purple)] to-[var(--neon-green)]",
+          "shadow-[0_0_22px_rgba(0,255,198,0.35)] animate-aurora-sweep"
+        ]
       },
     },
     defaultVariants: {
