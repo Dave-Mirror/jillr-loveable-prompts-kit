@@ -29,7 +29,7 @@ const seedChallenges = [
     xp: 250,
     tags: ["CityClash", "QR", "Scan"],
     thumbnailUrl: "https://images.unsplash.com/photo-1617196033578-6e0a2f8f6b32?auto=format&q=80&w=1600",
-    thumbnailAlt: "Smartphone scannt QR-Code im urbanen Umfeld.",
+    thumbnailAlt: "QR-Code Scan in der Stadt",
     status: "published",
     templateCategory: "City Clash"
   },
@@ -173,8 +173,8 @@ const fetchCityChallenges = async (): Promise<CityChallenge[]> => {
       startDate: '2025-05-16T14:00:00Z',
       endDate: '2025-05-16T18:00:00Z',
       imageUrl: '/placeholder.svg',
-      thumbnailUrl: 'https://images.unsplash.com/photo-1558898499-98b1b19b1c36?auto=format&q=80&w=1600',
-      thumbnailAlt: 'QR code scanning in urban environment'
+      thumbnailUrl: 'https://images.unsplash.com/photo-1617196033578-6e0a2f8f6b32?auto=format&q=80&w=1600',
+      thumbnailAlt: 'Smartphone scannt QR-Code'
     },
     {
       id: 'challenge-city-3',

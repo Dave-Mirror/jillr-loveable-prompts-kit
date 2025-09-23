@@ -4,8 +4,10 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
 import { Play, Image, Video, RefreshCw } from 'lucide-react';
 import VideoBackfillManager from '@/components/admin/VideoBackfillManager';
+import ThumbnailBackfillManager from '@/components/admin/ThumbnailBackfillManager';
 import ChallengeCard from '@/components/ChallengeCard';
 import { fetchFeedData } from '@/utils/challenge/feed';
 import { motion } from 'framer-motion';
@@ -127,11 +129,25 @@ const AdminVideoManager: React.FC = () => {
           </Card>
         </div>
 
-        {/* Backfill Manager */}
-        <VideoBackfillManager 
-          items={backfillItems}
-          onUpdate={loadFeedData}
-        />
+        {/* Backfill Managers */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <VideoBackfillManager 
+            items={backfillItems}
+            onUpdate={loadFeedData}
+          />
+          <ThumbnailBackfillManager 
+            items={backfillItems}
+            onUpdate={(updatedItems) => {
+              // Convert back to feed items
+              const updatedFeedItems = feedItems.map(feedItem => {
+                const updated = updatedItems.find(item => item.id === feedItem.id);
+                return updated ? { ...feedItem, ...updated } : feedItem;
+              });
+              setFeedItems(updatedFeedItems);
+            }}
+            title="Backfill Missing Thumbnails"
+          />
+        </div>
 
         {/* Challenge Preview Grid */}
         <Card>

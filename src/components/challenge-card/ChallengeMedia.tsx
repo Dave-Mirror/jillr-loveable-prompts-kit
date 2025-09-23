@@ -2,6 +2,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Play, Camera } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
+import { resolveThumbnailUrl, normalizeMediaFields, ensureHttpsUrl } from '@/utils/media/thumbnailResolver';
 
 interface ChallengeMediaProps {
   mediaType?: 'image' | 'video';
@@ -24,14 +25,25 @@ const ChallengeMedia: React.FC<ChallengeMediaProps> = ({
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [processedMediaUrl, setProcessedMediaUrl] = useState<string>('');
-  const [processedPosterUrl, setProcessedPosterUrl] = useState<string>('');
+  const [displayThumbnail, setDisplayThumbnail] = useState<string>('');
   const [hasError, setHasError] = useState(false);
+
+  // Normalize media fields and resolve thumbnail
+  const normalizedMedia = normalizeMediaFields({
+    mediaType,
+    mediaUrl,
+    posterUrl,
+    thumbnailUrl,
+    title
+  });
+  
+  const resolvedThumbnail = resolveThumbnailUrl(normalizedMedia);
 
   // Process URLs and handle Supabase storage
   useEffect(() => {
     const processUrls = async () => {
       let finalMediaUrl = mediaUrl;
-      let finalPosterUrl = posterUrl || thumbnailUrl || '';
+      let finalThumbnail = resolvedThumbnail;
 
       // Handle Supabase storage URLs
       if (mediaUrl?.startsWith('supabase://')) {
@@ -47,34 +59,40 @@ const ChallengeMedia: React.FC<ChallengeMediaProps> = ({
         }
       }
 
-      if (posterUrl?.startsWith('supabase://')) {
-        const path = posterUrl.replace('supabase://', '');
+      // Handle Supabase storage for thumbnail
+      if (finalThumbnail?.startsWith('supabase://')) {
+        const path = finalThumbnail.replace('supabase://', '');
         const [bucket, ...pathParts] = path.split('/');
         const filePath = pathParts.join('/');
         
         try {
           const { data } = supabase.storage.from(bucket).getPublicUrl(filePath);
-          finalPosterUrl = data.publicUrl;
+          finalThumbnail = data.publicUrl;
         } catch (error) {
-          console.warn('Failed to process Supabase poster URL:', error);
+          console.warn('Failed to process Supabase thumbnail URL:', error);
         }
       }
 
-      // Enforce HTTPS
-      if (finalMediaUrl && !finalMediaUrl.startsWith('https://') && !finalMediaUrl.startsWith('data:')) {
-        if (finalMediaUrl.startsWith('http://')) {
-          console.warn('HTTP media URL detected, showing fallback:', finalMediaUrl);
-          setHasError(true);
-          return;
-        }
+      // Ensure HTTPS
+      finalMediaUrl = await ensureHttpsUrl(finalMediaUrl) || '';
+      finalThumbnail = await ensureHttpsUrl(finalThumbnail) || '';
+
+      if (finalMediaUrl && finalMediaUrl.startsWith('http://')) {
+        console.warn('HTTP media URL detected, showing fallback:', finalMediaUrl);
+        setHasError(true);
+        return;
       }
 
       setProcessedMediaUrl(finalMediaUrl);
-      setProcessedPosterUrl(finalPosterUrl);
+      setDisplayThumbnail(finalThumbnail);
     };
 
     processUrls();
-  }, [mediaUrl, posterUrl, thumbnailUrl]);
+  }, [mediaUrl, resolvedThumbnail]);
+
+  const handleImageError = () => {
+    setHasError(true);
+  };
 
   // Handle video play/pause based on visibility
   useEffect(() => {
@@ -96,10 +114,6 @@ const ChallengeMedia: React.FC<ChallengeMediaProps> = ({
       videoRef.current.pause();
     }
   }, [isVisible, mediaType]);
-
-  const handleImageError = () => {
-    setHasError(true);
-  };
 
   // Fallback component
   const MediaFallback = () => (
@@ -123,7 +137,7 @@ const ChallengeMedia: React.FC<ChallengeMediaProps> = ({
             muted
             playsInline
             preload="metadata"
-            poster={processedPosterUrl}
+            poster={displayThumbnail}
             crossOrigin="anonymous"
             onError={handleImageError}
           >
@@ -138,7 +152,7 @@ const ChallengeMedia: React.FC<ChallengeMediaProps> = ({
         </>
       ) : (
         <img 
-          src={processedMediaUrl} 
+          src={displayThumbnail || processedMediaUrl} 
           alt={`${title} thumbnail`} 
           className="w-full h-full object-cover" 
           loading="eager"

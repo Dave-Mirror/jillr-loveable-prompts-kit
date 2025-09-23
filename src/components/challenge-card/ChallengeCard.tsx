@@ -3,10 +3,11 @@ import React from 'react';
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { MapPin, Clock, Award, Trophy, Heart, MessageCircle, Share2, Zap } from "lucide-react";
+import { MapPin, Clock, Award, Trophy, Heart, MessageCircle, Share2, Zap, Play } from "lucide-react";
 import { ChallengeCardProps } from './types';
 import { cn } from '@/lib/utils';
 import { useNavigate } from 'react-router-dom';
+import { resolveThumbnailUrl, normalizeMediaFields } from '@/utils/media/thumbnailResolver';
 
 const ChallengeCard = ({
   challenge,
@@ -16,6 +17,11 @@ const ChallengeCard = ({
   onJoinClick
 }: ChallengeCardProps) => {
   const navigate = useNavigate();
+  
+  // Normalize media fields for consistent handling
+  const normalizedChallenge = normalizeMediaFields(challenge);
+  const thumbnailUrl = resolveThumbnailUrl(normalizedChallenge);
+  const isVideo = normalizedChallenge.mediaType === 'video';
   
   const handleCardClick = () => {
     // Wenn eine onClick-Funktion übergeben wurde, rufe diese auf
@@ -33,6 +39,20 @@ const ChallengeCard = ({
     if (onJoinClick) onJoinClick(challenge.id);
   };
 
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    // Replace with hologram fallback on error
+    const target = e.currentTarget;
+    const fallbackDiv = document.createElement('div');
+    fallbackDiv.className = 'w-full h-full bg-gradient-to-br from-cyan-400/20 via-purple-500/20 to-pink-500/20 flex items-center justify-center border border-white/10';
+    fallbackDiv.innerHTML = `
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="opacity-80 text-white/60">
+        <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/>
+        <circle cx="12" cy="13" r="3"/>
+      </svg>
+    `;
+    target.parentNode?.replaceChild(fallbackDiv, target);
+  };
+
   return (
     <div 
       onClick={handleCardClick}
@@ -47,48 +67,34 @@ const ChallengeCard = ({
     >
         {/* Media Preview with 16:9 Aspect Ratio */}
         <div className="relative">
-          <div className="w-full aspect-video rounded-t-2xl overflow-hidden">
-            {(() => {
-              // Display order: posterUrl → thumbnailUrl → imageUrl → hologram fallback
-              let displayUrl = '';
-              let isVideo = challenge.mediaType === 'video' || challenge.category === 'video';
-              
-              if (isVideo && challenge.posterUrl) {
-                displayUrl = challenge.posterUrl;
-              } else if (challenge.thumbnailUrl) {
-                displayUrl = challenge.thumbnailUrl;
-              } else if (challenge.imageUrl) {
-                displayUrl = challenge.imageUrl;
-              } else if (challenge.mediaUrl && !isVideo) {
-                displayUrl = challenge.mediaUrl;
-              }
-
-              return displayUrl ? (
-                <div className="relative w-full h-full">
-                  <img 
-                    src={displayUrl}
-                    alt={challenge.thumbnailAlt || challenge.title} 
-                    loading="lazy"
-                    className="challenge-card-media w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                  {/* Video play indicator overlay */}
-                  {isVideo && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <div className="bg-white/90 rounded-full p-3 shadow-glow-cyan">
-                        <div className="w-6 h-6 border-l-8 border-l-jillr-neonCyan border-t-4 border-t-transparent border-b-4 border-b-transparent ml-1" />
-                      </div>
+          <div className="media-slot w-full aspect-video rounded-t-2xl overflow-hidden">
+            {thumbnailUrl ? (
+              <div className="relative w-full h-full">
+                <img 
+                  src={thumbnailUrl}
+                  alt={challenge.thumbnailAlt || `${challenge.title} thumbnail`} 
+                  loading="lazy"
+                  className="challenge-card-media w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  onError={handleImageError}
+                />
+                {/* Video play indicator overlay */}
+                {isVideo && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="bg-white/90 rounded-full p-3 shadow-glow-cyan">
+                      <Play className="w-6 h-6 text-jillr-neonCyan" fill="currentColor" />
                     </div>
-                  )}
-                </div>
-              ) : (
-                // Hologram gradient fallback (no gray slab)
-                <div className="challenge-card-media fallback w-full h-full">
-                  <div className="text-white/60 text-4xl">
-                    {challenge.category === 'video' ? '🎬' : challenge.category === 'ar' ? '🥽' : '📸'}
                   </div>
-                </div>
-              );
-            })()}
+                )}
+              </div>
+            ) : (
+              // Hologram gradient fallback (no gray slab)
+              <div className="w-full h-full bg-gradient-to-br from-cyan-400/20 via-purple-500/20 to-pink-500/20 flex items-center justify-center border border-white/10">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="opacity-80 text-white/60">
+                  <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/>
+                  <circle cx="12" cy="13" r="3"/>
+                </svg>
+              </div>
+            )}
             {/* Subtle hologram gradient overlay */}
             <div className="absolute inset-0 bg-gradient-to-br from-jillr-neonCyan/5 via-transparent to-jillr-neonPurple/5 opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
           </div>
