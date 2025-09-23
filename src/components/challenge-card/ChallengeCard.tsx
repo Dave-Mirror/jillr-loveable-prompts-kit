@@ -45,24 +45,50 @@ const ChallengeCard = ({
         className
       )}
     >
-        {/* Image Preview with 16:9 Aspect Ratio */}
+        {/* Media Preview with 16:9 Aspect Ratio */}
         <div className="relative">
           <div className="w-full aspect-video rounded-t-2xl overflow-hidden">
-            {(challenge.thumbnailUrl || challenge.imageUrl) ? (
-              <img 
-                src={challenge.thumbnailUrl || challenge.imageUrl} 
-                alt={challenge.thumbnailAlt || challenge.title} 
-                loading="lazy"
-                className="challenge-card-media w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-              />
-            ) : (
-              // Hologram gradient fallback (no gray slab)
-              <div className="challenge-card-media fallback w-full h-full">
-                <div className="text-white/60 text-4xl">
-                  {challenge.category === 'video' ? '🎬' : challenge.category === 'ar' ? '🥽' : '📸'}
+            {(() => {
+              // Display order: posterUrl → thumbnailUrl → imageUrl → hologram fallback
+              let displayUrl = '';
+              let isVideo = challenge.mediaType === 'video' || challenge.category === 'video';
+              
+              if (isVideo && challenge.posterUrl) {
+                displayUrl = challenge.posterUrl;
+              } else if (challenge.thumbnailUrl) {
+                displayUrl = challenge.thumbnailUrl;
+              } else if (challenge.imageUrl) {
+                displayUrl = challenge.imageUrl;
+              } else if (challenge.mediaUrl && !isVideo) {
+                displayUrl = challenge.mediaUrl;
+              }
+
+              return displayUrl ? (
+                <div className="relative w-full h-full">
+                  <img 
+                    src={displayUrl}
+                    alt={challenge.thumbnailAlt || challenge.title} 
+                    loading="lazy"
+                    className="challenge-card-media w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  {/* Video play indicator overlay */}
+                  {isVideo && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div className="bg-white/90 rounded-full p-3 shadow-glow-cyan">
+                        <div className="w-6 h-6 border-l-8 border-l-jillr-neonCyan border-t-4 border-t-transparent border-b-4 border-b-transparent ml-1" />
+                      </div>
+                    </div>
+                  )}
                 </div>
-              </div>
-            )}
+              ) : (
+                // Hologram gradient fallback (no gray slab)
+                <div className="challenge-card-media fallback w-full h-full">
+                  <div className="text-white/60 text-4xl">
+                    {challenge.category === 'video' ? '🎬' : challenge.category === 'ar' ? '🥽' : '📸'}
+                  </div>
+                </div>
+              );
+            })()}
             {/* Subtle hologram gradient overlay */}
             <div className="absolute inset-0 bg-gradient-to-br from-jillr-neonCyan/5 via-transparent to-jillr-neonPurple/5 opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
           </div>

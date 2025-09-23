@@ -1,17 +1,20 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Image, Video, Upload } from 'lucide-react';
+import { Image, Video, Upload, RotateCcw, Camera } from 'lucide-react';
 import { toast } from 'sonner';
+import { extractVideoPosterFrame, createLocalUploadHandler } from '@/utils/video/posterGeneration';
 
 interface PreviewMediaProps {
   previewMedia: {
     type: string;
     url: string;
+    posterUrl?: string;
   };
   setPreviewMedia: React.Dispatch<React.SetStateAction<{
     type: string;
     url: string;
+    posterUrl?: string;
   }>>;
   onChange: (data: any) => void;
 }
@@ -21,15 +24,16 @@ const PreviewMedia: React.FC<PreviewMediaProps> = ({
   setPreviewMedia, 
   onChange 
 }) => {
-  const handleMediaUpload = (mediaType: 'image' | 'video') => {
+  const [isGeneratingPoster, setIsGeneratingPoster] = React.useState(false);
+
+  const handleMediaUpload = async (mediaType: 'image' | 'video') => {
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = mediaType === 'image' ? 'image/*' : 'video/*';
     
-    input.onchange = (e) => {
-      // Properly type the event target as HTMLInputElement
+    input.onchange = async (e) => {
       const target = e.target as HTMLInputElement;
-      const file = target.files?.[0]; // Use optional chaining
+      const file = target.files?.[0];
       if (!file) return;
       
       // Check file size (max 50MB for videos, 5MB for images)
@@ -40,15 +44,89 @@ const PreviewMedia: React.FC<PreviewMediaProps> = ({
       }
       
       const url = URL.createObjectURL(file);
-      setPreviewMedia({ type: mediaType, url });
+      const newMediaData: { type: 'image' | 'video'; url: string; posterUrl?: string } = { type: mediaType, url };
       
-      // Update the parent component's data
+      // Auto-generate poster for videos
+      if (mediaType === 'video') {
+        try {
+          setIsGeneratingPoster(true);
+          const uploadHandler = createLocalUploadHandler();
+          const posterBlob = await extractVideoPosterFrame(file, 2);
+          const posterUrl = await uploadHandler(posterBlob, `${file.name}_poster.png`);
+          
+          newMediaData.posterUrl = posterUrl;
+          toast.success('Video hochgeladen und Poster generiert');
+        } catch (error) {
+          console.error('Failed to generate poster:', error);
+          toast.warning('Video hochgeladen, aber Poster-Generierung fehlgeschlagen');
+        } finally {
+          setIsGeneratingPoster(false);
+        }
+      } else {
+        toast.success('Bild erfolgreich hochgeladen');
+      }
+      
+      setPreviewMedia(newMediaData);
+      
+      // Update parent component
       onChange({ 
         previewMediaType: mediaType, 
-        previewMediaUrl: url 
+        previewMediaUrl: url,
+        posterUrl: newMediaData.posterUrl
+      });
+    };
+    
+    input.click();
+  };
+
+  const handleRegeneratePoster = async () => {
+    if (previewMedia.type !== 'video' || !previewMedia.url) return;
+    
+    try {
+      setIsGeneratingPoster(true);
+      const uploadHandler = createLocalUploadHandler();
+      const posterBlob = await extractVideoPosterFrame(previewMedia.url, 2);
+      const posterUrl = await uploadHandler(posterBlob, 'regenerated_poster.png');
+      
+      const updatedMedia = { ...previewMedia, posterUrl };
+      setPreviewMedia(updatedMedia);
+      
+      onChange({ 
+        previewMediaType: previewMedia.type, 
+        previewMediaUrl: previewMedia.url,
+        posterUrl
       });
       
-      toast.success(`${mediaType === 'image' ? 'Bild' : 'Video'} erfolgreich hochgeladen`);
+      toast.success('Poster erfolgreich regeneriert');
+    } catch (error) {
+      console.error('Failed to regenerate poster:', error);
+      toast.error('Poster-Regenerierung fehlgeschlagen');
+    } finally {
+      setIsGeneratingPoster(false);
+    }
+  };
+
+  const handleCustomThumbnailUpload = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    
+    input.onchange = async (e) => {
+      const target = e.target as HTMLInputElement;
+      const file = target.files?.[0];
+      if (!file) return;
+      
+      const thumbnailUrl = URL.createObjectURL(file);
+      const updatedMedia = { ...previewMedia, posterUrl: thumbnailUrl };
+      setPreviewMedia(updatedMedia);
+      
+      onChange({ 
+        previewMediaType: previewMedia.type, 
+        previewMediaUrl: previewMedia.url,
+        posterUrl: thumbnailUrl
+      });
+      
+      toast.success('Custom Thumbnail hochgeladen');
     };
     
     input.click();
@@ -56,14 +134,22 @@ const PreviewMedia: React.FC<PreviewMediaProps> = ({
 
   return (
     <div className="mt-4 mb-4">
-      <div className="aspect-video rounded-md overflow-hidden bg-jillr-darkBlue/30 border border-jillr-border/30">
+      <div className="aspect-video rounded-md overflow-hidden bg-jillr-darkBlue/30 border border-jillr-border/30 relative">
         {previewMedia.url ? (
           previewMedia.type === 'video' ? (
-            <video 
-              src={previewMedia.url}
-              className="w-full h-full object-cover"
-              controls
-            />
+            <>
+              <video 
+                src={previewMedia.url}
+                className="w-full h-full object-cover"
+                controls
+                poster={previewMedia.posterUrl}
+              />
+              {isGeneratingPoster && (
+                <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                  <div className="text-white text-sm">Poster wird generiert...</div>
+                </div>
+              )}
+            </>
           ) : (
             <img 
               src={previewMedia.url}
@@ -78,7 +164,7 @@ const PreviewMedia: React.FC<PreviewMediaProps> = ({
         )}
       </div>
       
-      <div className="flex gap-2 mt-2 justify-center">
+      <div className="flex flex-wrap gap-2 mt-2 justify-center">
         <Button
           type="button"
           size="sm"
@@ -99,7 +185,48 @@ const PreviewMedia: React.FC<PreviewMediaProps> = ({
           <Video className="h-4 w-4" />
           Video hochladen
         </Button>
+        
+        {/* Video-specific controls */}
+        {previewMedia.type === 'video' && previewMedia.url && (
+          <>
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              onClick={handleRegeneratePoster}
+              disabled={isGeneratingPoster}
+              className="flex items-center gap-1"
+            >
+              <RotateCcw className="h-4 w-4" />
+              Poster regenerieren
+            </Button>
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              onClick={handleCustomThumbnailUpload}
+              className="flex items-center gap-1"
+            >
+              <Camera className="h-4 w-4" />
+              Custom Thumbnail
+            </Button>
+          </>
+        )}
       </div>
+      
+      {/* Poster preview for videos */}
+      {previewMedia.type === 'video' && previewMedia.posterUrl && (
+        <div className="mt-3">
+          <p className="text-xs text-muted-foreground mb-2">Generiertes Poster:</p>
+          <div className="w-20 h-12 rounded border overflow-hidden">
+            <img 
+              src={previewMedia.posterUrl} 
+              alt="Generated poster" 
+              className="w-full h-full object-cover"
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

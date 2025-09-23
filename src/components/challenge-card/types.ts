@@ -11,6 +11,10 @@ export interface Challenge {
   imageUrl?: string;
   thumbnailUrl?: string;
   thumbnailAlt?: string;
+  // Video poster frame support
+  mediaType?: 'image' | 'video';
+  mediaUrl?: string;
+  posterUrl?: string;  // Generated from video frame
   reward?: string;
   expiresIn?: string;
   coordinates?: {

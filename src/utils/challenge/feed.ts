@@ -241,7 +241,7 @@ export const fetchFeedData = async (): Promise<FeedItemType[]> => {
   const cityChallenges = await fetchCityChallenges();
   const cityFeedItems = convertCityChallengesToFeedItems(cityChallenges);
   
-  // Convert seed challenges to feed items
+// Convert seed challenges to feed items
   const seedFeedItems = seedChallenges.map((challenge, index) => ({
     id: `feed-${challenge.id}`,
     userId: `user-${index + 1}`,
@@ -250,6 +250,9 @@ export const fetchFeedData = async (): Promise<FeedItemType[]> => {
     caption: challenge.description,
     mediaUrl: challenge.thumbnailUrl || '/placeholder.svg',
     mediaType: challenge.category === 'video' ? 'video' as const : 'image' as const,
+    // Auto-generate poster URLs for video challenges
+    posterUrl: challenge.category === 'video' ? challenge.thumbnailUrl : undefined,
+    thumbnailUrl: challenge.thumbnailUrl,
     liked: false,
     likes: Math.floor(Math.random() * 500) + 100,
     views: Math.floor(Math.random() * 2000) + 500,

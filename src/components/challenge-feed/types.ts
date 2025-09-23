@@ -18,6 +18,9 @@ export interface FeedItem {
   caption: string;
   mediaUrl: string;
   mediaType: 'image' | 'video';
+  // Video poster frame support
+  posterUrl?: string;  // Generated from video frame
+  thumbnailUrl?: string; // For grid display (alias for posterUrl on videos)
   liked: boolean;
   likes: number;
   views: number;

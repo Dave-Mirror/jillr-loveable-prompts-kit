@@ -19,6 +19,8 @@ import Auth from "./pages/Auth";
 import AuthCallback from "./pages/AuthCallback";
 import NotFound from "./pages/NotFound";
 
+import AdminVideoManager from "./pages/AdminVideoManager";
+
 // Entdecken-Kategorie
 import Explore from "./pages/Explore";
 import ChallengeFeed from "./pages/ChallengeFeed";
@@ -116,7 +118,7 @@ const App = () => (
                       <Route path="/livemap" element={<LiveMap />} />
                       <Route path="/feed" element={<ChallengeFeed />} />
 
-                      {/* 404 Seite */}
+                      <Route path="/admin/video-manager" element={<AdminVideoManager />} />
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </PageTransition>
