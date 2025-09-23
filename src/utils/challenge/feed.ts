@@ -261,8 +261,8 @@ const convertCityChallengesToFeedItems = (cityChallenges: CityChallenge[]): Feed
     comments: [],
     hashtags: ['CityClash', challenge.districtName, challenge.type],
     type: 'challenge' as const,
-    // Add category field for City Clash challenges
-    category: 'City Clash',
+    // Normalize category to lowercase kebab-case
+    category: 'city-clash',
     challengeInfo: {
       title: challenge.title,
       reward: `${challenge.reward.xp} XP`,
@@ -302,8 +302,8 @@ export const fetchFeedData = async (): Promise<FeedItemType[]> => {
     comments: [],
     hashtags: challenge.tags || [],
     type: 'challenge' as const,
-    // Map category properly
-    category: challenge.category === 'city-clash' ? 'City Clash' : challenge.category,
+    // Normalize category to lowercase kebab-case
+    category: challenge.category,
     challengeInfo: {
       title: challenge.title,
       reward: `${challenge.xp} XP`,

@@ -2,7 +2,7 @@
 import { useState, useMemo } from 'react';
 import { FeedItem } from '@/components/challenge-feed/types';
 
-export type FilterType = 'all' | 'video' | 'photo' | 'ar' | 'geofencing' | 'city_clash' | 'team_battle';
+export type FilterType = 'all' | 'video' | 'photo' | 'ar' | 'geofencing' | 'city-clash' | 'team_battle';
 export type SortType = 'latest' | 'popular' | 'trending';
 
 export const useFilteredFeed = (feedItems: FeedItem[]) => {
@@ -16,24 +16,34 @@ export const useFilteredFeed = (feedItems: FeedItem[]) => {
     
     if (filterType !== 'all') {
       filtered = filtered.filter(item => {
-        // Check both challenge types and hashtags
+        // Primary filter: check category field first (normalized to lowercase)
+        const itemCategory = item.category?.toLowerCase() || '';
+        
+        // Secondary filters: check challenge title and hashtags
         const challengeType = item.challenge?.title?.toLowerCase() || '';
         const hashtags = item.hashtags.map(tag => tag.toLowerCase());
         
-        // Special handling for city_clash and team_battle
-        if (filterType === 'city_clash') {
-          return challengeType.includes('city') || 
+        // Special handling for city-clash
+        if (filterType === 'city-clash') {
+          return itemCategory === 'city-clash' ||
+                 itemCategory === 'city clash' ||
+                 challengeType.includes('city') || 
                  challengeType.includes('clash') || 
                  hashtags.some(tag => tag.includes('city') || tag.includes('clash'));
         }
         
+        // Special handling for team_battle
         if (filterType === 'team_battle') {
-          return challengeType.includes('team') || 
+          return itemCategory === 'team-battle' ||
+                 itemCategory === 'team battle' ||
+                 challengeType.includes('team') || 
                  challengeType.includes('battle') || 
                  hashtags.some(tag => tag.includes('team') || tag.includes('battle'));
         }
         
-        return challengeType.includes(filterType) || 
+        // Standard filters - check category first, then fallback to title/hashtags
+        return itemCategory.includes(filterType) ||
+               challengeType.includes(filterType) || 
                hashtags.some(tag => tag.includes(filterType));
       });
     }
