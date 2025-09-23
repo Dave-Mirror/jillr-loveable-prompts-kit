@@ -18,125 +18,163 @@ export type { FeedItemType as FeedItem };
 
 // Curated seed challenges data
 const seedChallenges = [
+  // City Clash specific demo challenges
   {
-    id: "scan-and-win",
-    title: "Scan & Win",
-    description: "Scanne QR-Codes bei Partner-Locations & unlocke Belohnungen.",
+    id: "qr-code-scan-challenge",
+    slug: "qr-code-scan-challenge",
+    title: "QR-Code Scan Challenge",
+    description: "Scanne versteckte QR-Codes in der Stadt und sammle Coins.",
     category: "city-clash",
-    xp: 500,
-    tags: ["QR", "Retail", "CityClash"],
+    xp: 300,
+    tags: ["city", "clash"],
     thumbnailUrl: "https://images.unsplash.com/photo-1558898499-98b1b19b1c36?auto=format&q=80&w=1600",
-    thumbnailAlt: "Person scannt QR-Code an einer Location"
+    thumbnailAlt: "Person scanning QR code in urban environment",
+    status: "published"
   },
   {
+    id: "city-checkin-challenge",
+    slug: "city-checkin-challenge", 
+    title: "City Check-in Challenge",
+    description: "Checke an Partner-Locations ein und unlocke Belohnungen.",
+    category: "city-clash",
+    xp: 250,
+    tags: ["city", "clash"],
+    thumbnailUrl: "https://images.unsplash.com/photo-1506377295352-e3154d43ea9b?auto=format&q=80&w=1600",
+    thumbnailAlt: "City location check-in interface",
+    status: "published"
+  },
+  {
+    id: "selfie-spot-challenge",
+    slug: "selfie-spot-challenge",
+    title: "Selfie Spot Challenge", 
+    description: "Mache ein Selfie an markanten Orten und teile es mit der Community.",
+    category: "city-clash",
+    xp: 200,
+    tags: ["city", "clash"],
+    thumbnailUrl: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&q=80&w=1600",
+    thumbnailAlt: "Person taking selfie at landmark",
+    status: "published"
+  },
+  {
+    id: "street-art-hunt",
+    slug: "street-art-hunt",
+    title: "Street Art Hunt",
+    description: "Entdecke Graffiti oder Street Art und lade ein Foto hoch.",
+    category: "city-clash",
+    xp: 280,
+    tags: ["city", "clash"],
+    thumbnailUrl: "https://images.unsplash.com/photo-1508264165352-258859e62245?auto=format&q=80&w=1600",
+    thumbnailAlt: "Street art graffiti on urban wall",
+    status: "published"
+  },
+  {
+    id: "hidden-easter-egg",
+    slug: "hidden-easter-egg",
+    title: "Hidden Easter Egg",
+    description: "Finde versteckte Objekte oder Hinweise in der Stadt.",
+    category: "city-clash", 
+    xp: 320,
+    tags: ["city", "clash"],
+    thumbnailUrl: "https://images.unsplash.com/photo-1522206024047-9c9254216757?auto=format&q=80&w=1600",
+    thumbnailAlt: "Hidden objects and clues in urban environment",
+    status: "published"
+  },
+  // Other category challenges
+  {
     id: "outfit-reel",
+    slug: "outfit-reel",
     title: "Outfit Reel Challenge",
     description: "Teile dein Outfit-Video & sammle Likes für Coins & exklusive Drops.",
     category: "video",
     xp: 400,
     tags: ["UGC", "Fashion"],
     thumbnailUrl: "https://images.unsplash.com/photo-1520975916090-3105956dac38?auto=format&q=80&w=1600",
-    thumbnailAlt: "Streetwear Portrait mit Smartphone"
-  },
-  {
-    id: "capture-the-flag",
-    title: "Capture the Flag",
-    description: "Finde digitale Flaggen in deiner Zone & poste den Beweis.",
-    category: "city-clash",
-    xp: 450,
-    tags: ["Clan", "Battle"],
-    thumbnailUrl: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&q=80&w=1600",
-    thumbnailAlt: "Neon Flagge in der Stadt"
+    thumbnailAlt: "Streetwear Portrait mit Smartphone",
+    status: "published"
   },
   {
     id: "eco-hero",
+    slug: "eco-hero",
     title: "Eco Hero",
     description: "Sammle Müll in deiner Zone & poste den Beweis.",
     category: "sustainability",
     xp: 350,
     tags: ["PhotoUpload", "CleanUp"],
     thumbnailUrl: "https://images.unsplash.com/photo-1520975682036-4a1c1b87d4e6?auto=format&q=80&w=1600",
-    thumbnailAlt: "Person hebt Müll in der Nachtstadt auf"
+    thumbnailAlt: "Person hebt Müll in der Nachtstadt auf",
+    status: "published"
   },
   {
     id: "urban-detective",
+    slug: "urban-detective",
     title: "Urban Detective",
     description: "Löse Rätsel & finde versteckte Orte in deiner Stadt.",
     category: "mystery",
     xp: 420,
     tags: ["Checkpoint", "Riddle"],
     thumbnailUrl: "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&q=80&w=1600",
-    thumbnailAlt: "Neon-Lupe über Stadtkarte"
+    thumbnailAlt: "Neon-Lupe über Stadtkarte",
+    status: "published"
   },
   {
     id: "beat-the-clock",
+    slug: "beat-the-clock",
     title: "Beat the Clock",
     description: "Erledige Missionen gegen die Zeit & steig' im Level auf.",
     category: "fitness",
     xp: 300,
     tags: ["Timer", "SpeedRun"],
     thumbnailUrl: "https://images.unsplash.com/photo-1526403226897-1f30ed4c1b39?auto=format&q=80&w=1600",
-    thumbnailAlt: "Neon Stoppuhr"
+    thumbnailAlt: "Neon Stoppuhr",
+    status: "published"
   },
   {
     id: "check-in",
+    slug: "check-in",
     title: "Check-in Challenge",
     description: "Checke bei Partnerstores ein, erhalte XP & Rabatte via Geofencing.",
     category: "geo",
     xp: 250,
     tags: ["Store", "GeoFence"],
     thumbnailUrl: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&q=80&w=1600",
-    thumbnailAlt: "Städtischer Store mit Neonlicht"
+    thumbnailAlt: "Städtischer Store mit Neonlicht",
+    status: "published"
   },
   {
     id: "selfie-landmark",
+    slug: "selfie-landmark",
     title: "Selfie @ Landmark",
     description: "Kreatives Selfie an einem Wahrzeichen & Hashtags posten.",
     category: "photo",
     xp: 280,
     tags: ["Tour", "UGC"],
     thumbnailUrl: "https://images.unsplash.com/photo-1541534401786-2077eed87a74?auto=format&q=80&w=1600",
-    thumbnailAlt: "Selfie in Neon-Stadt"
-  },
-  {
-    id: "food-quest",
-    title: "Mystery Menu Hunt",
-    description: "Finde das versteckte Pop-Up & poste dein Lieblingsgericht.",
-    category: "city-clash",
-    xp: 320,
-    tags: ["Food", "Rally"],
-    thumbnailUrl: "https://images.unsplash.com/photo-1526312426976-593c2b999a20?auto=format&q=80&w=1600",
-    thumbnailAlt: "Neon Food Szene"
+    thumbnailAlt: "Selfie in Neon-Stadt",
+    status: "published"
   },
   {
     id: "night-run",
+    slug: "night-run",
     title: "Neon Night Run",
     description: "5 km Night-Run Track – teile dein Finish-Foto.",
     category: "fitness",
     xp: 380,
     tags: ["Run", "City"],
     thumbnailUrl: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&q=80&w=1600",
-    thumbnailAlt: "Läufer bei Nacht"
-  },
-  {
-    id: "street-art",
-    title: "Street Art Bingo",
-    description: "Finde 5 Murals, fotografiere & poste ein Collage-Reel.",
-    category: "photo",
-    xp: 360,
-    tags: ["Art", "Hunt"],
-    thumbnailUrl: "https://images.unsplash.com/photo-1508182311256-e3f9f49427b1?auto=format&q=80&w=1600",
-    thumbnailAlt: "Neon Street Art"
+    thumbnailAlt: "Läufer bei Nacht",
+    status: "published"
   },
   {
     id: "ar-treasure",
+    slug: "ar-treasure",
     title: "AR Treasure Hunt",
     description: "Suche AR-Kisten auf der Map & sammle Tickets.",
     category: "ar",
     xp: 420,
     tags: ["AR", "Map"],
     thumbnailUrl: "https://images.unsplash.com/photo-1520975916090-3105956dac38?auto=format&q=80&w=1600",
-    thumbnailAlt: "AR-Overlay in Stadt"
+    thumbnailAlt: "AR-Overlay in Stadt",
+    status: "published"
   }
 ];
 
@@ -264,6 +302,8 @@ export const fetchFeedData = async (): Promise<FeedItemType[]> => {
     comments: [],
     hashtags: challenge.tags || [],
     type: 'challenge' as const,
+    // Map category properly
+    category: challenge.category === 'city-clash' ? 'City Clash' : challenge.category,
     challengeInfo: {
       title: challenge.title,
       reward: `${challenge.xp} XP`,
