@@ -8,6 +8,10 @@ import fitnessTransformationImage from '@/assets/templates/fitness-transformatio
 import travelWanderlustImage from '@/assets/templates/travel-wanderlust.jpg';
 import retailUnboxingImage from '@/assets/templates/retail-unboxing.jpg';
 
+// City Clash template images
+const qrCodeChallengeImage = 'https://images.unsplash.com/photo-1558898499-98b1b19b1c36?auto=format&q=80&w=1600';
+const cityCheckinChallengeImage = 'https://images.unsplash.com/photo-1506377295352-e3154d43ea9b?auto=format&q=80&w=1600';
+
 export const challengeTemplates: ChallengeTemplate[] = [
   {
     id: 'ootd-fashion',
@@ -212,6 +216,55 @@ export const challengeTemplates: ChallengeTemplate[] = [
       minConversions: 12,
       rewardTypes: ['discounts', 'coins', 'badges']
     }
+  },
+  // City Clash Templates
+  {
+    id: 'qr-code-scan-challenge',
+    title: 'QR-Code Scan Challenge',
+    description: 'Scanne versteckte QR-Codes in der Stadt und sammle Coins.',
+    image: qrCodeChallengeImage,
+    industry: 'City Clash',
+    challengeType: 'QR Scan',
+    duration: 7,
+    budget: 300,
+    data: {
+      type: ['qr_scan'],
+      title: 'QR-Code Scan Challenge',
+      description: 'Scanne versteckte QR-Codes in der Stadt und sammle Coins. Entdecke neue Orte und verdiene Rewards!',
+      contentFormats: ['photo'],
+      platforms: ['jillr'],
+      hashtags: ['QRScan', 'Explore', 'City', 'CityClash'],
+      kpis: ['scans', 'locations_visited', 'coins_earned'],
+      minViews: 0,
+      minLikes: 0,
+      minComments: 0,
+      minConversions: 5,
+      rewardTypes: ['coins', 'xp']
+    }
+  },
+  {
+    id: 'city-checkin-challenge',
+    title: 'City Check-in Challenge',
+    description: 'Checke an Partner-Locations ein und unlocke Belohnungen.',
+    image: cityCheckinChallengeImage,
+    industry: 'City Clash',
+    challengeType: 'Location Check-in',
+    duration: 7,
+    budget: 250,
+    data: {
+      type: ['geofencing'],
+      title: 'City Check-in Challenge',
+      description: 'Checke an Partner-Locations ein und unlocke Belohnungen. Sammle Punkte an verschiedenen Orten in der Stadt!',
+      contentFormats: ['photo'],
+      platforms: ['jillr'],
+      hashtags: ['CheckIn', 'City', 'Locations', 'CityClash'],
+      kpis: ['checkins', 'locations_visited', 'rewards_unlocked'],
+      minViews: 0,
+      minLikes: 0,
+      minComments: 0,
+      minConversions: 3,
+      rewardTypes: ['coins', 'discounts', 'xp']
+    }
   }
 ];
 
@@ -263,5 +316,11 @@ export const templateCategories: TemplateCategory[] = [
     name: 'City',
     icon: 'Building2',
     templates: challengeTemplates.filter(t => t.industry === 'City')
+  },
+  {
+    id: 'city-clash',
+    name: 'City Clash',
+    icon: 'Zap',
+    templates: challengeTemplates.filter(t => t.industry === 'City Clash')
   }
 ];

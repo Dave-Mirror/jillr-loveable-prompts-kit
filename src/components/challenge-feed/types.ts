@@ -25,6 +25,7 @@ export interface FeedItem {
   comments: Comment[];
   hashtags: string[];
   type: 'challenge' | 'ugc' | 'cause';
+  category?: string; // Add category field
   challengeInfo?: {
     title: string;
     reward: string;
