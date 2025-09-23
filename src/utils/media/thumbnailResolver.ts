@@ -2,6 +2,7 @@
 
 export interface MediaItem {
   id?: string;
+  slug?: string;
   title?: string;
   category?: string;
   mediaType?: 'image' | 'video' | null;
@@ -10,8 +11,59 @@ export interface MediaItem {
   thumbnailUrl?: string | null;
 }
 
+// Slug-specific thumbnail mapping (highest priority)
+const slugThumbMap: Record<string, string> = {
+  "qr-code-scan-challenge": "https://images.unsplash.com/photo-1617196033578-6e0a2f8f6b32?auto=format&q=80&w=1600",
+  "qr-code-checkpoint-race": "https://images.unsplash.com/photo-1617196033578-6e0a2f8f6b32?auto=format&q=80&w=1600",
+  "qr-code-scan": "https://images.unsplash.com/photo-1617196033578-6e0a2f8f6b32?auto=format&q=80&w=1600",
+  "check-in-challenge": "https://images.unsplash.com/photo-1505238680356-667803448bb6?auto=format&q=80&w=1600",
+  "city-check-in-challenge": "https://images.unsplash.com/photo-1505238680356-667803448bb6?auto=format&q=80&w=1600",
+  "check-in": "https://images.unsplash.com/photo-1505238680356-667803448bb6?auto=format&q=80&w=1600",
+  "public-transport": "https://images.unsplash.com/photo-1605732445886-3baf2d9f13c5?auto=format&q=80&w=1600",
+  "selfie-challenge": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&q=80&w=1600",
+  "selfie": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&q=80&w=1600",
+  "street-art-bingo": "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?auto=format&q=80&w=1600",
+  "easter-egg": "https://images.unsplash.com/photo-1587691592099-230de206b7a3?auto=format&q=80&w=1600",
+  "clan-battle": "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&q=80&w=1600",
+  "influencer-battle": "https://images.unsplash.com/photo-1520975916090-3105956dac38?auto=format&q=80&w=1600"
+};
+
+// Category-specific thumbnail mapping
+const categoryThumbMap: Record<string, string> = {
+  "city-clash": "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&q=80&w=1600",
+  "ugc": "https://images.unsplash.com/photo-1520975916090-3105956dac38?auto=format&q=80&w=1600",
+  "video": "https://images.unsplash.com/photo-1520975916090-3105956dac38?auto=format&q=80&w=1600"
+};
+
 /**
- * Get default thumbnail URL based on title/category keywords
+ * Get effective thumbnail using priority: posterUrl → thumbnailUrl → slugThumbMap → categoryThumbMap
+ */
+export function getEffectiveThumb(item: MediaItem): string | null {
+  // For videos, posterUrl takes priority
+  if (item.mediaType === 'video' && item.posterUrl) {
+    return item.posterUrl;
+  }
+  
+  // Use existing thumbnailUrl if available
+  if (item.thumbnailUrl) {
+    return item.thumbnailUrl;
+  }
+  
+  // Check slug-specific mapping
+  if (item.slug && slugThumbMap[item.slug]) {
+    return slugThumbMap[item.slug];
+  }
+  
+  // Check category mapping
+  if (item.category && categoryThumbMap[item.category]) {
+    return categoryThumbMap[item.category];
+  }
+  
+  return null;
+}
+
+/**
+ * Get default thumbnail URL based on title/category keywords (legacy fallback)
  */
 export function defaultThumbFor(item: MediaItem): string | null {
   const title = (item.title || "").toLowerCase();
@@ -19,71 +71,61 @@ export function defaultThumbFor(item: MediaItem): string | null {
 
   // Title-based matching (most specific)
   if (title.includes("qr") || title.includes("scan")) {
-    return "https://images.unsplash.com/photo-1617196033578-6e0a2f8f6b32?auto=format&q=80&w=1600"; // QR close-up
+    return "https://images.unsplash.com/photo-1617196033578-6e0a2f8f6b32?auto=format&q=80&w=1600";
   }
 
   if (title.includes("check-in") || title.includes("check in")) {
-    return "https://images.unsplash.com/photo-1505238680356-667803448bb6?auto=format&q=80&w=1600"; // check-in at venue
+    return "https://images.unsplash.com/photo-1505238680356-667803448bb6?auto=format&q=80&w=1600";
   }
 
   if (title.includes("public transport") || title.includes("transport")) {
-    return "https://images.unsplash.com/photo-1605732445886-3baf2d9f13c5?auto=format&q=80&w=1600"; // e-scooter/wearable
+    return "https://images.unsplash.com/photo-1605732445886-3baf2d9f13c5?auto=format&q=80&w=1600";
   }
 
   if (title.includes("selfie")) {
-    return "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&q=80&w=1600"; // selfie with neon
+    return "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&q=80&w=1600";
   }
 
   if (title.includes("easter egg") || title.includes("hunt")) {
-    return "https://images.unsplash.com/photo-1587691592099-230de206b7a3?auto=format&q=80&w=1600"; // easter eggs urban
+    return "https://images.unsplash.com/photo-1587691592099-230de206b7a3?auto=format&q=80&w=1600";
   }
 
   if (title.includes("street art") || title.includes("bingo")) {
-    return "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?auto=format&q=80&w=1600"; // street art neon
+    return "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?auto=format&q=80&w=1600";
   }
 
   if (title.includes("clan battle") || title.includes("battle")) {
-    return "https://images.unsplash.com/photo-1520975916090-3105956dac38?auto=format&q=80&w=1600"; // group celebration
+    return "https://images.unsplash.com/photo-1520975916090-3105956dac38?auto=format&q=80&w=1600";
   }
 
   if (title.includes("influencer") || title.includes("reels")) {
-    return "https://images.unsplash.com/photo-1520975916090-3105956dac38?auto=format&q=80&w=1600"; // creator portrait neon
+    return "https://images.unsplash.com/photo-1520975916090-3105956dac38?auto=format&q=80&w=1600";
   }
 
   // Category-based fallbacks
   if (category.includes("city-clash")) {
-    return "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&q=80&w=1600"; // neon city scene
+    return "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&q=80&w=1600";
   }
 
   if (category.includes("video") || category.includes("ugc")) {
-    return "https://images.unsplash.com/photo-1520975916090-3105956dac38?auto=format&q=80&w=1600"; // video/creator theme
+    return "https://images.unsplash.com/photo-1520975916090-3105956dac38?auto=format&q=80&w=1600";
   }
 
   if (category.includes("photo")) {
-    return "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&q=80&w=1600"; // photo theme
+    return "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&q=80&w=1600";
   }
 
-  return null; // No default found
+  return null;
 }
 
 /**
  * Resolve the best thumbnail URL for display with proper fallback order
+ * Priority: posterUrl → thumbnailUrl → slugThumbMap → categoryThumbMap → hologram
  * @param item - Media item with potential thumbnail sources
  * @returns string - Best available thumbnail URL or empty string for hologram fallback
  */
 export function resolveThumbnailUrl(item: MediaItem): string {
-  // For videos: posterUrl → thumbnailUrl → category default → hologram
-  if (item.mediaType === 'video') {
-    return item.posterUrl || item.thumbnailUrl || defaultThumbFor(item) || '';
-  }
-
-  // For images: thumbnailUrl → mediaUrl → category default → hologram  
-  if (item.mediaType === 'image') {
-    return item.thumbnailUrl || item.mediaUrl || defaultThumbFor(item) || '';
-  }
-
-  // For unknown/null mediaType: thumbnailUrl → category default → hologram
-  return item.thumbnailUrl || defaultThumbFor(item) || '';
+  return getEffectiveThumb(item) || '';
 }
 
 /**
@@ -180,7 +222,7 @@ export function getItemsNeedingThumbnails(items: MediaItem[]): MediaItem[] {
 }
 
 /**
- * Apply category defaults to items missing thumbnails
+ * Apply slug/category defaults to items missing thumbnails
  */
 export function applyDefaultThumbnails(items: MediaItem[]): { updated: MediaItem[]; count: number } {
   let updateCount = 0;
@@ -190,9 +232,9 @@ export function applyDefaultThumbnails(items: MediaItem[]): { updated: MediaItem
     const currentThumbnail = resolveThumbnailUrl(normalized);
     
     if (!currentThumbnail) {
-      const defaultThumb = defaultThumbFor(normalized);
-      if (defaultThumb) {
-        normalized.thumbnailUrl = defaultThumb;
+      const effectiveThumb = getEffectiveThumb(normalized);
+      if (effectiveThumb) {
+        normalized.thumbnailUrl = effectiveThumb;
         updateCount++;
       }
     }

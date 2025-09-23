@@ -161,6 +161,7 @@ const fetchCityChallenges = async (): Promise<CityChallenge[]> => {
     {
       id: 'challenge-city-2',
       title: 'QR-Code Checkpoint Race',
+      slug: 'qr-code-checkpoint-race',
       description: 'Scanne alle 5 QR-Codes in der Innenstadt so schnell wie möglich und gewinne attraktive Preise.',
       type: 'secret_society',
       category: 'mystery',
@@ -173,12 +174,13 @@ const fetchCityChallenges = async (): Promise<CityChallenge[]> => {
       startDate: '2025-05-16T14:00:00Z',
       endDate: '2025-05-16T18:00:00Z',
       imageUrl: '/placeholder.svg',
-      thumbnailUrl: 'https://images.unsplash.com/photo-1617196033578-6e0a2f8f6b32?auto=format&q=80&w=1600',
+      thumbnailUrl: '', // Will be resolved via slug mapping
       thumbnailAlt: 'Smartphone scannt QR-Code'
     },
     {
       id: 'challenge-city-3',
       title: 'City Check-in Challenge',
+      slug: 'city-check-in-challenge',
       description: 'Checke an Partner-Locations ein und unlocke Belohnungen durch Geofencing.',
       type: 'time_rush',
       category: 'location',
@@ -191,7 +193,7 @@ const fetchCityChallenges = async (): Promise<CityChallenge[]> => {
       startDate: '2025-05-17T09:00:00Z',
       endDate: '2025-05-17T21:00:00Z',
       imageUrl: '/placeholder.svg',
-      thumbnailUrl: 'https://images.unsplash.com/photo-1506377295352-e3154d43ea9b?auto=format&q=80&w=1600',
+      thumbnailUrl: '', // Will be resolved via slug mapping
       thumbnailAlt: 'City location check-in interface'
     }
   ];
@@ -209,6 +211,7 @@ const convertCityChallengesToFeedItems = (cityChallenges: CityChallenge[]): Feed
     caption: challenge.description,
     mediaUrl: challenge.thumbnailUrl || challenge.imageUrl || '/placeholder.svg',
     mediaType: 'image' as const,
+    slug: (challenge as any).slug, // Pass through slug for thumbnail resolution
     liked: false,
     likes: challenge.participants + Math.floor(Math.random() * 100),
     views: challenge.participants * 3 + Math.floor(Math.random() * 500),
@@ -253,6 +256,7 @@ export const fetchFeedData = async (): Promise<FeedItemType[]> => {
     // Auto-generate poster URLs for video challenges
     posterUrl: challenge.category === 'video' ? challenge.thumbnailUrl : undefined,
     thumbnailUrl: challenge.thumbnailUrl,
+    slug: challenge.slug, // Include slug for thumbnail resolution
     liked: false,
     likes: Math.floor(Math.random() * 500) + 100,
     views: Math.floor(Math.random() * 2000) + 500,

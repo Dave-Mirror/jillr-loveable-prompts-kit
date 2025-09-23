@@ -4,6 +4,7 @@ import { toast } from '@/hooks/use-toast';
 // Define types for City Clash data
 export interface CityChallenge {
   id: string;
+  slug?: string; // Added for thumbnail resolution
   title: string;
   description: string;
   type: 'time_rush' | 'team_battle' | 'digital_heist' | 'mystery_card' | 'shadow_quest' | 'secret_society' | 'urban_legend';
