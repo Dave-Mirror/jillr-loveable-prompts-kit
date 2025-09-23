@@ -19,10 +19,7 @@ const ChallengeCard = ({
   const navigate = useNavigate();
   
   // Normalize media fields for consistent handling
-  const normalizedChallenge = normalizeMediaFields({
-    ...challenge,
-    slug: challenge.slug
-  });
+  const normalizedChallenge = normalizeMediaFields(challenge);
   const thumbnailUrl = resolveThumbnailUrl(normalizedChallenge);
   const isVideo = normalizedChallenge.mediaType === 'video';
   
@@ -93,9 +90,8 @@ const ChallengeCard = ({
               // Hologram gradient fallback (no gray slab)
               <div className="w-full h-full bg-gradient-to-br from-cyan-400/20 via-purple-500/20 to-pink-500/20 flex items-center justify-center border border-white/10">
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="opacity-80 text-white/60">
-                  <rect x="3" y="5" width="18" height="14" rx="2" ry="2"/>
-                  <circle cx="8.5" cy="11.5" r="1.5"/>
-                  <path d="M21 15l-5-5L5 21"/>
+                  <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/>
+                  <circle cx="12" cy="13" r="3"/>
                 </svg>
               </div>
             )}

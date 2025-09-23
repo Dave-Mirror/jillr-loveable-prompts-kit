@@ -12,7 +12,6 @@ export interface Comment {
 export interface FeedItem {
   id: string;
   challengeId?: string;
-  slug?: string; // Added for thumbnail resolution
   userId: string;
   username: string;
   userAvatar: string;
