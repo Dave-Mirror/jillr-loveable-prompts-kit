@@ -28,6 +28,7 @@ export interface FeedItem {
   category?: string; // Add category field
   challengeInfo?: {
     title: string;
+    subtitle?: string;
     reward: string;
     brandLogo?: string;
   };
