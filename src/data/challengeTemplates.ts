@@ -361,6 +361,58 @@ export const challengeTemplates: ChallengeTemplate[] = [
       minConversions: 5,
       rewardTypes: ['coins', 'xp', 'badges']
     }
+  },
+  {
+    id: 'public-transport-challenge',
+    title: 'Public Transport Challenge',
+    description: 'Nutze Bus, Bahn oder E-Scooter und poste ein Foto/Video von deinem Ride.',
+    image: 'https://images.unsplash.com/photo-1605732445886-3baf2d9f13c5?auto=format&q=80&w=1600',
+    industry: 'City Clash',
+    challengeType: 'Photo/Video Upload',
+    duration: 7,
+    budget: 350,
+    data: {
+      type: ['photo', 'video', 'city-clash'],
+      title: 'Public Transport Challenge',
+      description: 'Nutze heute ein öffentliches Verkehrsmittel (Bus, Bahn, Tram) oder einen E-Scooter/Bikesharing. Mache ein Selfie oder eine kurze Aufnahme mit Ticket/Wearable/Helm. Teile deinen Weg zur Arbeit, Uni oder Freizeit. Extra XP für nachhaltige Routen.',
+      location: {
+        location_required: true,
+        locations: []
+      },
+      contentFormats: ['photo', 'video'],
+      platforms: ['instagram', 'tiktok', 'jillr'],
+      hashtags: ['Transport', 'Eco', 'CityClash', 'Mobility', 'PublicTransport', 'EcoRide'],
+      kpis: ['submissions', 'completion_rate', 'avg_xp', 'distance_to_station', 'time_of_day'],
+      minViews: 150,
+      minLikes: 25,
+      minComments: 5,
+      minConversions: 10,
+      rewardTypes: ['xp', 'badge']
+    }
+  },
+  {
+    id: 'influencer-battle',
+    title: 'Influencer Battle',
+    description: 'Drehe ein 10–20s Reel zu einem vorgegebenen Thema und sammle Votes.',
+    image: 'https://images.unsplash.com/photo-1520975916090-3105956dac38?auto=format&q=80&w=1600',
+    industry: 'Content',
+    challengeType: 'Video Battle',
+    duration: 7,
+    budget: 400,
+    data: {
+      type: ['video', 'ugc', 'battle'],
+      title: 'Influencer Battle',
+      description: 'Creator treten in Runden gegeneinander an. Jede Runde hat ein Thema (z. B. Streetwear Fit, Coffee POV, City Secret). Poste dein Reel mit Hook + Trend-Sound. Community vote entscheidet – Gewinner erhält Extra-XP & Badge.',
+      contentFormats: ['video', 'reels'],
+      platforms: ['instagram', 'tiktok'],
+      hashtags: ['UGC', 'Video', 'Battle', 'Influencer', 'InfluencerBattle', 'Reels', 'CityClash'],
+      kpis: ['entries_per_round', 'votes', 'engagement_rate', 'watch_through', 'win_rate'],
+      minViews: 500,
+      minLikes: 100,
+      minComments: 20,
+      minConversions: 15,
+      rewardTypes: ['xp', 'badge', 'voting']
+    }
   }
 ];
 
@@ -418,5 +470,11 @@ export const templateCategories: TemplateCategory[] = [
     name: 'City Clash',
     icon: 'Zap',
     templates: challengeTemplates.filter(t => t.industry === 'City Clash')
+  },
+  {
+    id: 'content',
+    name: 'Content',
+    icon: 'Video',
+    templates: challengeTemplates.filter(t => t.industry === 'Content')
   }
 ];
