@@ -265,6 +265,102 @@ export const challengeTemplates: ChallengeTemplate[] = [
       minConversions: 3,
       rewardTypes: ['coins', 'discounts', 'xp']
     }
+  },
+  {
+    id: 'selfie-spot-challenge',
+    title: 'Selfie Spot Challenge',
+    description: 'Mache ein Selfie an markanten Orten und teile es mit der Community.',
+    image: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&q=80&w=1600',
+    industry: 'City Clash',
+    challengeType: 'Photo Upload',
+    duration: 7,
+    budget: 200,
+    data: {
+      type: ['photo'],
+      title: 'Selfie Spot Challenge',
+      description: 'Mache ein Selfie an markanten Orten und teile es mit der Community.',
+      contentFormats: ['photo'],
+      platforms: ['jillr'],
+      hashtags: ['Selfie', 'Photo', 'Fun', 'CityClash'],
+      kpis: ['ugc_uploads', 'engagement', 'locations_visited'],
+      minViews: 0,
+      minLikes: 0,
+      minComments: 0,
+      minConversions: 2,
+      rewardTypes: ['coins', 'xp']
+    }
+  },
+  {
+    id: 'transport-explorer-challenge',
+    title: 'Public Transport Explorer',
+    description: 'Fahre mit Bus, Bahn oder Tram und dokumentiere deine Reise.',
+    image: 'https://images.unsplash.com/photo-1506629082955-511b1aa562c8?auto=format&q=80&w=1600',
+    industry: 'City Clash',
+    challengeType: 'Photo Upload',
+    duration: 10,
+    budget: 220,
+    data: {
+      type: ['photo'],
+      title: 'Public Transport Explorer',
+      description: 'Fahre mit Bus, Bahn oder Tram und dokumentiere deine Reise.',
+      contentFormats: ['photo'],
+      platforms: ['jillr'],
+      hashtags: ['Transport', 'Eco', 'Explore', 'CityClash'],
+      kpis: ['ugc_uploads', 'engagement', 'routes_explored'],
+      minViews: 0,
+      minLikes: 0,
+      minComments: 0,
+      minConversions: 3,
+      rewardTypes: ['coins', 'xp', 'badges']
+    }
+  },
+  {
+    id: 'street-art-hunt-challenge',
+    title: 'Street Art Hunt',
+    description: 'Entdecke Graffiti oder Street Art und lade ein Foto hoch.',
+    image: 'https://images.unsplash.com/photo-1508264165352-258859e62245?auto=format&q=80&w=1600',
+    industry: 'City Clash',
+    challengeType: 'Photo Upload',
+    duration: 14,
+    budget: 280,
+    data: {
+      type: ['photo'],
+      title: 'Street Art Hunt',
+      description: 'Entdecke Graffiti oder Street Art und lade ein Foto hoch.',
+      contentFormats: ['photo'],
+      platforms: ['jillr'],
+      hashtags: ['Art', 'Graffiti', 'Explore', 'CityClash'],
+      kpis: ['ugc_uploads', 'engagement', 'discoveries'],
+      minViews: 0,
+      minLikes: 0,
+      minComments: 0,
+      minConversions: 4,
+      rewardTypes: ['coins', 'xp', 'badges']
+    }
+  },
+  {
+    id: 'easter-egg-challenge',
+    title: 'Hidden Easter Egg Challenge',
+    description: 'Finde versteckte Objekte oder Hinweise in der Stadt.',
+    image: 'https://images.unsplash.com/photo-1522206024047-9c9254216757?auto=format&q=80&w=1600',
+    industry: 'City Clash',
+    challengeType: 'Photo Upload',
+    duration: 5,
+    budget: 320,
+    data: {
+      type: ['photo'],
+      title: 'Hidden Easter Egg Challenge',
+      description: 'Finde versteckte Objekte oder Hinweise in der Stadt.',
+      contentFormats: ['photo'],
+      platforms: ['jillr'],
+      hashtags: ['Hunt', 'Puzzle', 'City', 'CityClash'],
+      kpis: ['ugc_uploads', 'engagement', 'discoveries'],
+      minViews: 0,
+      minLikes: 0,
+      minComments: 0,
+      minConversions: 5,
+      rewardTypes: ['coins', 'xp', 'badges']
+    }
   }
 ];
 
